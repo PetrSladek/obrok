@@ -197,9 +197,9 @@
             {var $canceled => $me->group->getUnconfirmedParticipants()}
             {if count($canceled)}
             <strong>Účastníci kteří nepřijedou: </strong>
-            {foreach $canceled->fetchAll() as $participant}
+            {foreach $canceled as $participant}
                 {$participant->fullname}
-                <small n:if="$openRegistrationParticipants && $open && $me->isAdmin()"><a class="--ajax" href="{plink goBack! $participant->id}">Vrátit</a></small>
+                <small n:if="$openRegistrationParticipants && $open && $me->isAdmin()"><a class="ajax" href="{plink goBack! $participant->id}">Vrátit</a></small>
                 {*<small n:if="$open && $me->isAdmin() && $participant->payment_recieved && ($group->getStatus()->id == Group::STATUS_REGISTRED || $group->getStatus()->id == Group::STATUS_DONTKNOW)"><a class="ajax" href="{link usePayment! $participant->id}" title="Jeho platba se převede na prvního aktivního učastníka, za nějž ještě nebylo zaplaceno">ZAPLACEN - použít jeho platbu</a></small>*}
                 {sep}, {/sep}
             {/foreach}

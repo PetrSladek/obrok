@@ -4,6 +4,7 @@ namespace  App\Module\Front\Serviceteam\Presenters;
 
 use App\FrontBasePresenter;
 use App\Hydrators\SkautisHydrator;
+use App\Model\Entity\Person;
 use App\Repositories\ServiceteamRepository;
 use App\ServiceteamBasePresenter;
 use App\Model\Entity\Serviceteam;
@@ -39,6 +40,23 @@ class RegistrationPresenter extends \App\Module\Front\Presenters\FrontBasePresen
      */
     public $skautisHydrator;
 
+    public function startup()
+    {
+        parent::startup();
+
+        if(!$this->user->isLoggedIn()) {
+            $this['skautisLogin']->open(); // otevre prihlasovaci formular skautisu a pak presmeruje zpet sem
+        }
+        if($this->user->isInRole(Person::ROLE_PARTICIPANT)) {
+            $this->flashMessage('Už si zaregistrovaný jako účastník. Nemůžeš se registrovat znovu!', 'warning');
+            $this->redirect(':Front:Participants:Homepage:');
+        }
+        elseif($this->user->isInRole(Person::ROLE_SERVICETEAM)) {
+            $this->flashMessage('Už si zaregistrovaný jako Servisák. Nemůžeš se registrovat znovu!', 'warning');
+            $this->redirect('Homepage:');
+        }
+
+    }
 
 
     public function actionDefault() {

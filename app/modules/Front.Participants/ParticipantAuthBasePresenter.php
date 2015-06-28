@@ -3,6 +3,7 @@
 namespace App\Module\Front\Participants\Presenters;
 
 use App\Model\Entity\Participant;
+use App\Model\Entity\Person;
 
 abstract class ParticipantAuthBasePresenter extends  \App\Module\Front\Presenters\FrontBasePresenter
 {
@@ -17,12 +18,12 @@ abstract class ParticipantAuthBasePresenter extends  \App\Module\Front\Presenter
 
         parent::startup();
 
-        if(!$this->user->isLoggedIn()) {
+        if(!$this->user->isLoggedIn() || !$this->user->isInRole(Person::ROLE_PARTICIPANT)) {
             if($this->link('this') != $this->link("Homepage:")) {
                 $this->flashMessage("Musíte být přihlášení");
-                $this->redirect(":Login:", array('back'=> $this->storeRequest()));
+                $this->redirect(":Front:Login:", array('back'=> $this->storeRequest()));
             }
-            $this->redirect(":Login:");
+            $this->redirect(":Front:Login:");
         }
 
         /** @var Participant */

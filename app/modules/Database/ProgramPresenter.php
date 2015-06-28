@@ -49,8 +49,8 @@ class ProgramPresenter extends DatabaseBasePresenter
         $grid = new Datagrid();
 
         $grid->setRowPrimaryKey('id');
-        $grid->addCellsTemplate(__DIR__.'/../templates/grid.layout.latte');
-        $grid->addCellsTemplate(__DIR__.'/../templates/Program/grid.cols.latte');
+        $grid->addCellsTemplate(__DIR__.'/templates/grid.layout.latte');
+        $grid->addCellsTemplate(__DIR__.'/templates/Program/grid.cols.latte');
 
         $grid->addColumn('id', 'ID')->enableSort();
         $grid->addColumn('section', 'Sekce')->enableSort();

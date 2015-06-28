@@ -26,12 +26,10 @@ class LoginPresenter extends FrontBasePresenter
     public function actionDefault() {
 
         if($this->user->isInRole(Person::ROLE_PARTICIPANT)) {
-            $this->flashMessage('Byl jsi úspěšně přihlášen', 'warning');
-//            $this->redirect(':Participants:Homepage:');
+            $this->redirect(':Front:Participants:Homepage:');
         }
         elseif($this->user->isInRole(Person::ROLE_SERVICETEAM)) {
-//            $this->flashMessage('Byl jsi úspěšně přihlášen', 'warning');
-            $this->redirect(':Serviceteam:Homepage:');
+            $this->redirect(':Front:Serviceteam:Homepage:');
         }
 
     }

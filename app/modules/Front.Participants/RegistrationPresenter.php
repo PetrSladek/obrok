@@ -59,7 +59,7 @@ class RegistrationPresenter extends \App\Module\Front\Presenters\FrontBasePresen
         }
         elseif($this->user->isInRole(Person::ROLE_SERVICETEAM)) {
             $this->flashMessage('Už si zaregistrovaný jako Servisák. Nemůžeš se registrovat znovu!', 'warning');
-            $this->redirect('Serviceteam:Homepage:');
+            $this->redirect(':Front:Serviceteam:Homepage:');
         }
 
     }

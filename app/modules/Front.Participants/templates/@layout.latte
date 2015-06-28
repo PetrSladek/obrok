@@ -1,3 +1,6 @@
+{layout ../../Front/templates/@layout.latte}
+
+{*
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -67,7 +70,9 @@
 
     <link href="{$storageUrl}/serviceteam/css/datetimepicker.css" type="text/css" rel="stylesheet">
 
-    {*<link href='http://fonts.googleapis.com/css?family=PT+Sans+Narrow:400,700&amp;subset=latin,latin-ext,cyrillic' rel='stylesheet' type='text/css'>*}
+    *}
+{*<link href='http://fonts.googleapis.com/css?family=PT+Sans+Narrow:400,700&amp;subset=latin,latin-ext,cyrillic' rel='stylesheet' type='text/css'>*}{*
+
     <link rel="shortcut icon" href="/favicon.png" type="image/x-icon" />
 
 <script type="text/javascript">
@@ -107,12 +112,14 @@
                             <a href="http://www.obrok15.cz/registrace/">Registrace</a>
                             <ul class="sub-menu">
                                 <li><a href="http://www.obrok15.cz/registrace/faq/">FAQ</a></li>
-                                {*
+                                *}
+{*
                                 <li n:if="$openRegistrationParticipants" n:class="$presenter->isLinkCurrent(':Participants:Registration:') ? active"><a href="{plink :Participants:Registration:}">Zaregistrovat novou skupinu</a></li>
                                 <li n:class="$presenter->isLinkCurrent(':Participants:Homepage:') ? active"><a href="{plink :Participants:Homepage:}">Vstup do systému pro účastníky</a></li>
                                 <li n:if="$openRegistrationServiceteam" n:class="$presenter->isLinkCurrent(':Serviceteam:Registration:') ? active"><a href="{plink :Serviceteam:Registration:}">Zaregistrovat se do servis týmu</a></li>
                                 <li n:class="$presenter->isLinkCurrent(':Serviceteam:Homepage:') ? active"><a href="{plink :Serviceteam:Homepage:}">Vstup do systému pro servis tým</a></li>
-                                *}
+                                *}{*
+
                             </ul>
                         </li>
                         <li><a href="http://www.obrok15.cz/download/">Download</a></li>
@@ -160,7 +167,8 @@
 
                                {include #content}
                        </div>
-                       {*<div class="col-md-4">
+                       *}
+{*<div class="col-md-4">
 
 
 
@@ -187,7 +195,8 @@
                             <p class="text-right">
                                <a href="#">celý článek</a>
                             </p>
-                       </div>*}
+                       </div>*}{*
+
                    </div>
                </div>
            </div>
@@ -204,9 +213,12 @@
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    {*<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>*}
+    *}
+{*<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>*}{*
+
 </body>
 </html>
 
 
+*}

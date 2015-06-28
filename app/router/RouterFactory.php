@@ -20,7 +20,7 @@ class RouterFactory
 //		return $router;
 
         $router = new RouteList();
-        $router[] = new Route('index.php', 'Front:Default:default', Route::ONE_WAY);
+        $router[] = new Route('index.php', 'Front:Login:default', Route::ONE_WAY);
 
         $router[] = $databaseRouter = new RouteList('Database');
         $databaseRouter[] = new Route('database/<presenter>/<action>', 'Dashboard:default');

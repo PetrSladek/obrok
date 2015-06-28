@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use Myann\ImageServiceException;
 use Nette\Http\FileUpload;
 use Nette\InvalidArgumentException;
 use Nette\Object;
@@ -173,16 +172,6 @@ class ImageService extends Object
         return $dir . '/' . $filename;
     }
 }
-namespace Myann;
-
-
-use Nette\Application\BadRequestException;
-use Nette\Http\FileUpload;
-use Nette\InvalidArgumentException;
-use Nette\Object;
-use Nette\Utils\Image;
-use Tracy\Debugger;
-
 
 class ImageServiceException extends \Exception {
 

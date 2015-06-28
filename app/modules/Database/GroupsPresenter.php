@@ -107,8 +107,8 @@ class GroupsPresenter extends DatabaseBasePresenter
 
         $grid = new Datagrid();
         $grid->setRowPrimaryKey('id');
-        $grid->addCellsTemplate(__DIR__.'/../templates/grid.layout.latte');
-        $grid->addCellsTemplate(__DIR__.'/../templates/Groups/grid.cols.latte');
+        $grid->addCellsTemplate(__DIR__.'/templates/grid.layout.latte');
+        $grid->addCellsTemplate(__DIR__.'/templates/Groups/grid.cols.latte');
 
         $grid->addColumn('varSymbol', 'ID / VS')->enableSort();;
         $grid->addColumn('name', 'Název')->enableSort();;

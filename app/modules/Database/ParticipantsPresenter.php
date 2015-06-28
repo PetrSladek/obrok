@@ -53,8 +53,8 @@ class ParticipantsPresenter extends DatabaseBasePresenter
         $grid = new Datagrid();
 
         $grid->setRowPrimaryKey('id');
-        $grid->addCellsTemplate(__DIR__.'/../templates/grid.layout.latte');
-        $grid->addCellsTemplate(__DIR__.'/../templates/Participants/grid.cols.latte');
+        $grid->addCellsTemplate(__DIR__.'/templates/grid.layout.latte');
+        $grid->addCellsTemplate(__DIR__.'/templates/Participants/grid.cols.latte');
 
         $grid->addColumn('id', 'Id')->enableSort();
         $grid->addColumn('fullname', 'Jméno')->enableSort();

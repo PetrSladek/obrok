@@ -257,14 +257,14 @@ class Group extends Doctrine\Entities\BaseEntity {
 //        return  $this->getParticipantsCountByStatus('paid') > $this->getConfirmedParticipantsCountByStatus('paid');
 //    }
 
-//    /**
-//     * Je zaplaceno alespon castecne?
-//     * Zaplaceno za cast skupiny ale ne za vsechny
-//     * @return bool
-//     */
-//    public function isPartlyPaid() {
-//        return $this->getConfirmedParticipantsCountByStatus('paid') > 0 && !$this->isPaid();
-//    }
+    /**
+     * Je zaplaceno alespon castecne?
+     * Zaplaceno za cast skupiny ale ne za vsechny
+     * @return bool
+     */
+    public function isPartlyPaid() {
+        return $this->getConfirmedParticipantsCountByStatus('paid') > 0 && !$this->isPaid();
+    }
 
 //    /**
 //     * Neni zaplaceno za nikoho
