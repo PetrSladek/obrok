@@ -1,0 +1,444 @@
+{block content}
+
+
+<div class="container" id="program">
+    <div class="containerContent clearfix">
+		<h2>Program <small><small>pro {$Participant->getName()}</small></small></h2>
+		{form frmChangeUser  class=>'changeuser'}
+			{label id_participant /}
+			{input id_participant onChange=>'this.form.submit()'}
+			{input send class=>hide}
+		{/form}
+
+		{if !$registrationActive}
+		<p>Registrace se spouští <strong data-countdownto="{$registrationActiveFrom->format("U")}" data-link="{link refresh!}">{$registrationActiveFrom->format("j.n.Y H:i")}</strong> <em>(poté se stránka sama obnoví)</em></p>
+		{/if}
+
+		{*
+		<h3>Noční hra</h3>
+		{snippet nightgame}
+		<div class="participants">
+			<table class="work table table-bordered">
+				{foreach $nightgames as $nightgame}
+					<tr n:class="$Participant->program_id_nightgame == $nightgame->id ? cell-pink">
+						<td><h4>{$nightgame->name}</h4></td>
+						<td>{$nightgame->day}<br />{$nightgame->time}</td>
+						<td>
+							Obsazeno: {$nightgame->getCountRegisteredPeople()} / {$nightgame->people_max}
+						</td>
+						<td width="1">
+							{if !$registrationActive}
+								<span class="btn disabled">Registrace uzavřená</span>
+								{else}
+								{if $Participant->program_id_nightgame == $nightgame->id}
+									<span class="btn btn-primary disabled">Zaregistrováno</span>
+									{elseif $nightgame->isFull()}
+									<span class="btn disabled">Obsazeno</span>
+									{else}
+									{if $allowed}
+										<a class="btn ajax" href="{link registredNightgame! $Participant->id, $nightgame->id}">Registrovat</a>
+										{else}
+										<span class="btn disabled">Registrovat</span>
+									{/if}
+								{/if}
+							{/if}
+						</td>
+					</tr>
+				{/foreach}
+			</table>
+			{if !$registrationActive}
+				<span class="btn disabled">Odregistrovat si Noční hru</span>
+				{else}
+				{if $allowed}
+					<a class="btn" onclick="return confirm('Opravdu chcete odregistrovat Noční hru?')" href="{link registredNightgame! $Participant->id, 0}">Odregistrovat si LARP</a>
+					{else}
+					<span class="btn disabled">Odregistrovat si Noční hru</span>
+				{/if}
+			{/if}
+		</div>
+		{/snippet}
+		*}
+
+		{*
+		<h3>Skautské století</h3>
+			{snippet workshops}
+			<div class="participants">
+				<table class="work table table-bordered">
+					{foreach $workshops as $workshop}
+						{var $col = "program_id_workshop".$workshop->id}
+						<tr n:class="$Participant->$col == $workshop->id ? cell-pink : ($workshop->isFull() ? cell-gray)">
+							<td>
+								<h4>{$workshop->name}</h4>
+								<div>
+									<small>
+										<a href="javascript: void;" class="more toggle-popover" data-container="body" data-placement="bottom" data-html="true" data-title="{$workshop->name}" data-content="{$workshop->anotation}">Více informací</a>
+									</small>
+								</div>
+							</td>
+							<td>{$workshop->day}<br />{$workshop->time}</td>
+							<td>
+								Obsazeno: {$workshop->getCountRegisteredPeople()} / {$workshop->people_max}
+							</td>
+							<td width="1">
+								{if !$registrationActive}
+									<span class="btn disabled">Registrace uzavřená</span>
+									{else}
+									{if $Participant->$col == $workshop->id}
+
+										<span class="btn btn-primary disabled">Zaregistrováno</span>
+										{if !$registrationActive}
+											<span class="btn disabled">Odregistrovat</span>
+											{else}
+											{if $allowed}
+												<a class="btn" onclick="return confirm('Opravdu chcete odregistrovat?')" href="{link registredWorkshop! $Participant->id, $workshop->id, false}">Odregistrovat</a>
+												{else}
+												<span class="btn disabled">Odregistrovat</span>
+											{/if}
+										{/if}
+
+									{elseif $workshop->isFull()}
+										<span class="btn disabled">Obsazeno</span>
+									{else}
+										{if $allowed}
+											<a class="btn ajax" href="{link registredWorkshop! $Participant->id, $workshop->id}">Registrovat</a>
+											{else}
+											<span class="btn disabled">Registrovat</span>
+										{/if}
+									{/if}
+								{/if}
+							</td>
+						</tr>
+					{/foreach}
+				</table>
+			</div>
+			{/snippet}
+
+		<br />
+		<br />
+		*}
+
+		<h3>Služba</h3>
+
+		{snippet works}
+		<div class="participants">
+		{if $works}
+		<table class="work table table-bordered">
+		{foreach $works as $work}
+			{capture $moreInfos}
+				<p>{$work->anotation}</p>
+				<p style="font-size: small; padding-top: 20px">
+					<strong>Místo: </strong> {$work->place}<br/>
+					<strong>Čas: </strong> {$work->time}<br/>
+					<strong>Co sebou?: </strong> {$work->properties}<br/>
+					{if $work->special_requirements}<strong>Speciální požadavky: </strong> {$work->special_requirements}<br/>{/if}
+					{if $work->physically_demanding}<strong>Fyzicky náročné!</strong><br/>{/if}
+					{if $work->necessary_preparation}<strong>Nutná příprava předem!</strong><br/>{/if}
+				</p>
+			{/capture}
+			<tr n:class="$Participant->program_id_work == $work->id ? cell-pink : ($work->isFull() ? cell-gray)">
+				<td>
+					<h4>{$work->name}</h4>
+					<div><span>{$work->place}</span></div>
+					<div>
+						<small>
+							<a href="javascript: void;" class="more toggle-popover" data-container="body" data-placement="bottom" data-html="true" data-title="{$work->name}" data-content="{$moreInfos}">Více informací</a>
+						</small>
+					</div>
+				</td>
+				<td>
+					Čtvrtek<br />
+					{$work->time}
+				</td>
+				<td width="50">{$work->getCountRegisteredPeople()} / {$work->people_max}</td>
+				<td width="1">
+						{if !$registrationActive}
+							<span class="btn disabled">Registrace uzavřená</span>
+						{else}
+							{if $Participant->program_id_work == $work->id}
+							<span class="btn btn-primary disabled">Zaregistrováno</span>
+							{elseif $work->isFull()}
+							<span class="btn disabled">Obsazeno</span>
+							{else}
+								{if $allowed}
+								<a class="btn ajax registration" data-registration="work-{$work->id}" href="{link registredWork! $Participant->id, $work->id}">Registrovat</a>
+								{else}
+								<span class="btn disabled">Registrovat</span>
+								{/if}
+							{/if}
+						{/if}
+				</td>
+			</tr>
+		{/foreach}
+		</table>
+		{else}
+			<p><em>- v databázi není žádná služba -</em></p>
+		{/if}
+
+
+		{if !$registrationActive}
+			<span class="btn disabled">Odregistrovat si službu</span>
+		{else}
+			{if $allowed}
+			<a class="btn" onclick="return confirm('Opravdu chcete odregistrovat Službu? Odregistrují se tím i všechny vaše VaPra a Prohlídka!!!')" href="{link registredWork! $Participant->id, 0}">Odregistrovat si službu</a>
+			{else}
+			<span class="btn disabled">Odregistrovat si službu</span>
+			{/if}
+		{/if}
+		</div>
+		{/snippet}
+		<br />
+		<br />
+
+		<h3>Prohlídky</h3>
+		{snippet tour}
+		<div class="participants">
+			<table class="work table table-bordered">
+				<tr n:class="$Participant->program_id_tour ? cell-pink">
+					<td><h4>Prohlídka hradu</h4></td>
+					<td>Čtvrtek<br />Vstupné na prohlídku je 20 Kč</td>
+					</td>
+					<td width="1">
+						{if !$registrationActive}
+							<span class="btn disabled">Registrace uzavřená</span>
+						{else}
+							{if $Participant->program_id_tour}
+								<span class="btn btn-primary disabled">Zaregistrováno</span>
+								{if !$registrationActive}
+									<span class="btn disabled">Odregistrovat si prohlídku</span>
+								{else}
+									{if $allowed}
+										<a class="btn" onclick="return confirm('Opravdu chcete odregistrovat Prohlídku?')" href="{link registredTour! $Participant->id, 0}">Odregistrovat si prohlídku</a>
+									{else}
+										<span class="btn disabled">Odregistrovat si prohlídku</span>
+									{/if}
+								{/if}
+							{else}
+								{if $allowed}
+									<a class="btn ajax registration" data-registration="tour" href="{link registredTour! $Participant->id, 1}">Registrovat</a>
+								{else}
+									<span class="btn disabled">Registrovat</span>
+								{/if}
+							{/if}
+						{/if}
+					</td>
+				</tr>
+			</table>
+		</div>
+		{/snippet}
+
+		{*snippet tour}
+		<div class="participants">
+			<table class="work table table-bordered">
+				{foreach $tours as $tour}
+					<tr n:class="$Participant->program_id_tour == $tour->id ? cell-pink : ($tour->isFull() ? cell-gray)">
+						<td><h4>Prohlídka hradu</h4></td>
+						<td>Čtvrtek<br />{$tour->time}</td>
+						<td>
+							Obsazeno: {$tour->getCountRegisteredPeople()} / {$tour->people_max}
+						</td>
+						<td width="1">
+							{if !$registrationActive}
+								<span class="btn disabled">Registrace uzavřená</span>
+								{else}
+								{if $Participant->program_id_tour == $tour->id}
+									<span class="btn btn-primary disabled">Zaregistrováno</span>
+								{elseif $tour->isFull()}
+									<span class="btn disabled">Obsazeno</span>
+								{else}
+									{if $allowed}
+										<a class="btn ajax" href="{link registredTour! $Participant->id, $tour->id}">Registrovat</a>
+									{else}
+										<span class="btn disabled">Registrovat</span>
+									{/if}
+								{/if}
+							{/if}
+						</td>
+					</tr>
+				{/foreach}
+			</table>
+			{if !$registrationActive}
+				<span class="btn disabled">Odregistrovat si prohlídku</span>
+				{else}
+				{if $allowed}
+					<a class="btn" onclick="return confirm('Opravdu chcete odregistrovat Prohlídku?')" href="{link registredTour! $Participant->id, 0}">Odregistrovat si prohlídku</a>
+					{else}
+					<span class="btn disabled">Odregistrovat si prohlídku</span>
+				{/if}
+			{/if}
+
+		</div>
+		{/snippet*}
+		<br />
+		<br />
+
+
+		{*
+		<h3>LARPy</h3>
+		{snippet larp}
+		<div class="participants">
+			<table class="work table table-bordered">
+			{foreach $larps as $larp}
+
+				{capture $moreInfos}
+					<p>{!$larp->anotation|escape|nl2br}</p>
+					<p style="font-size: small; padding-top: 20px">
+						<strong>Organizátor: </strong> {$larp->lecturer}<br/>
+						<strong>Prostor: </strong> {$larp->place}<br/>
+						<strong>Co sebou?: </strong> {if $larp->properties}{$larp->properties}{else}- nic -{/if}<br/>
+					</p>
+				{/capture}
+
+				<tr n:class="$Participant->program_id_larp == $larp->id ? cell-pink : ($Participant->isMale() && $larp->isFullMale() || $Participant->isFemale() && $larp->isFullFemale() ? cell-gray)">
+					<td>
+						<h4>{$larp->name}</h4>
+						<div>
+							<small>
+								<a href="javascript: void;" class="more toggle-popover" data-container="body" data-placement="bottom" data-html="true" data-title="{$larp->name}" data-content="{$moreInfos}">Více informací</a>
+							</small>
+						</div>
+					</td>
+
+					<td>{$larp->day}<br />{$larp->time}</td>
+					<td>
+						Mužů: {$larp->getCountRegisteredMale()} / {$larp->people_max_male}<br />
+						Žen: {$larp->getCountRegisteredFemale()} / {$larp->people_max_female}
+					</td>
+					<td width="1">
+						{if !$registrationActive}
+							<span class="btn disabled">Registrace uzavřená</span>
+						{else}
+							{if $Participant->program_id_larp == $larp->id}
+								<span class="btn btn-primary disabled">Zaregistrováno</span>
+							{elseif $Participant->isMale() && $larp->isFullMale()}
+								<span class="btn disabled">Obsazeno</span>
+							{elseif $Participant->isFemale() && $larp->isFullFemale()}
+								<span class="btn disabled">Obsazeno</span>
+							{else}
+								{if $allowed}
+									<a class="btn ajax" href="{link registredLarp! $Participant->id, $larp->id}">Registrovat</a>
+									{else}
+									<span class="btn disabled">Registrovat</span>
+								{/if}
+							{/if}
+						{/if}
+					</td>
+				</tr>
+			{/foreach}
+			</table>
+			{if !$registrationActive}
+				<span class="btn disabled">Odregistrovat si LARP</span>
+				{else}
+				{if $allowed}
+					<a class="btn" onclick="return confirm('Opravdu chcete odregistrovat LARP?')" href="{link registredLarp! $Participant->id, 0}">Odregistrovat si LARP</a>
+					{else}
+					<span class="btn disabled">Odregistrovat si LARP</span>
+				{/if}
+			{/if}
+		</div>
+		{/snippet}
+
+		<br />
+		<br />
+		*}
+
+		<h3>VaPro</h3>
+		{snippet vapro}
+		<div class="participants">
+			<table class="work table table-bordered">
+				<tr>
+					<th>Název / Přednášející</th>
+					<th n:class="center, !empty($Participant->program_id_vapro_block1) ? cell-pink"><div>1. blok</div><small>Sobota 8:30-10:15</small></th>
+					<th n:class="center, !empty($Participant->program_id_vapro_block2) ? cell-pink"><div>2. blok</div><small>Sobota 10:30-12:15</small></th>
+					<th n:class="center, !empty($Participant->program_id_vapro_block3) ? cell-pink"><div>3. blok</div><small>Sobota 14:00-15:45</small></th>
+					<th n:class="center, !empty($Participant->program_id_vapro_block4) ? cell-pink"><div>4. blok</div><small>Sobota 16:15-18:00</small></th>
+				</tr>
+				{foreach $vapros as $vapro}
+					<tr>
+						<td>
+							<h4>{$vapro->name}</h4>
+							<div><span>{$vapro->lecturer}</span></div>
+							<div>
+								<small>
+									<a href="javascript: void;" class="more toggle-popover" data-container="body" data-placement="bottom" data-title="{$vapro->name} /{$vapro->lecturer}/" data-content="{$vapro->anotation}">Více informací</a>
+								</small>
+							</div>
+						</td>
+						{for $i=1; $i<=Vapro::BLOCKS; $i++}
+							{var $block = $i}
+							{var $col = "program_id_vapro_block".$block}
+
+							<td n:class="center, !empty($Participant->$col) ? cell-pink">
+								{if $vapro->isInBlock($i)}
+									{if $Participant->$col == $vapro->id}
+										<span class="btn btn-primary disabled">Zaregistrováno</span>
+									{elseif $vapro->isFull($block) && $registrationActive}
+										<span class="btn disabled">Obsazeno</span>
+									{elseif $registrationActive}
+										{if $allowed}
+											<a class="btn ajax registration" data-registration="vapro-{$block}-{$vapro->id}" href="{link registredVapro! $block, $Participant->id, $vapro->id}">Registrovat</a>
+											{else}
+											<span class="btn disabled">Registrovat</span>
+										{/if}
+									{else}
+										<span class="btn disabled">Registrace uzavřená</span>
+									{/if}
+
+
+									<div>
+										<small>{$vapro->getCountRegisteredPeople($block)} / {$vapro->people_max}</small>
+									</div>
+									{var $continuesIn = $vapro->getBlockContinuesIn($block)}
+									{if !empty($continuesIn)}
+										<div><strong>Pozor: Pokračuje v Bloku {$continuesIn|implode:','}</strong></div>
+									{/if}
+								{elseif $vapro->getBlockContinuesHere($block)}
+									{if $Participant->$col == $vapro->id}
+										<span class="btn btn-primary disabled">Zaregistrováno</span>
+										<div><small>&nbsp;</small></div>
+									{/if}
+									Zde pokračuje<br /> Blok {$vapro->getBlockContinuesHere($block)}
+								{else}
+									<small><em>- neprobíhá -</em></small>
+								{/if}
+							</td>
+						{/for}
+					</tr>
+				{/foreach}
+				<tr>
+					<td></td>
+					{for $i=1; $i<=Vapro::BLOCKS; $i++}
+						{var $block = $i}
+						<td>
+							{if !$registrationActive}
+								<span class="btn disabled">Odregistrovat</span>
+								{else}
+								{if $allowed}
+									<a class="btn" onclick="return confirm('Opravdu chcete odregistrovat tento programový blok? tzn. nechystáte se na něj přijít?')" href="{link registredVapro! $block, $Participant->id, 0}">Odregistrovat</a>
+									{else}
+									<span class="btn disabled">Odregistrovat</span>
+								{/if}
+							{/if}
+						</td>
+					{/for}
+				</tr>
+			</table>
+		</div>
+		{/snippet}
+
+	</div>
+</div>
+
+	<script type="text/javascript">
+
+		$(function() {
+			$('a.registration').live('click',function(){
+				// console.log('registration: ' + $(this).attr('data-registration'));
+				ga('send', 'event', 'registrace', $(this).attr('data-registration'));
+			});
+		});
+
+	</script>
+
+
+{/block}
+

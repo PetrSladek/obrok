@@ -1,0 +1,32 @@
+{var $title = 'Zaregistrovat se dp skupiny '. $group->name . " - " . $group->city}
+
+{block #ogMeta}
+    <meta property="og:title" content="{$title} | Obrok 2015" />
+    <meta property="og:description" content="Přidat se ke skupině {$group->name} - {$group->city} na Obrok 2015" />
+    <meta name="description" content="Přidat se ke skupině {$group->name} - {$group->city} na Obrok 2015" />
+{/block}
+
+
+{block content}
+
+<div class="row">
+    <div class="col-md-12">
+        <h1>Zaregistovat se do skupiny</h1>
+
+        <div class="clearfix togroup">
+            {*<img class="pull-left" width="80" src="{link Image: (expand) $group->getAvatarType($group::AVATAR_TYPE_DBDETAIL)}" alt="foto" />*}
+            <h2>{$group->name}<br /><small>{$group->city}</small></h2>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="row">
+    <div class="col-md-6">
+            {control frmNewParticipant}
+    </div>
+</div>
+
+
+{/block}

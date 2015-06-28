@@ -1,0 +1,116 @@
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+	<title>Potvrzení</title>
+	<style>
+		body {
+			font-family: Arial;
+			font-size: 11px;
+		}
+		table { width: 100%; border-collapse: collapse;}
+		table td,
+		table th {
+			text-align: left;
+			padding: 1px 6px;
+		}
+		table tr.boss { background: #cccccc; }
+
+		table thead th {
+			font-size: 1.2em;
+			font-weight: normal;
+		}
+
+		p,li { text-align: justify; }
+
+		h1 { font-size: 16px; }
+		hr { display: block; margin: 10px 0; border: 0; height: 1px; background: black; }
+
+		.no {
+			list-style-type: none;
+			margin: 0;
+			padding: 0;
+		}
+		.flt-l { float: left; }
+		.flt-r { float: right; }
+		.cls { clear: both; }
+
+		.w50 { width: 50%; }
+	</style>
+</head>
+<body>
+
+{foreach $list as $group}
+
+<div class="group-confirmation">
+
+
+	<table>
+		<tr>
+			<td style="text-align: left">
+				<h1>
+					<em>#{$group->id}</em> {$group->name}<br /><small>({$group->city} | {$group->region})</small>
+				</h1>
+			</td>
+			<td style="text-align: right">
+				<img class="logo" src="/storage/logo_small.png" alt="Obrok 2015" height="3em" />
+			</td>
+		</tr>
+	</table>
+
+	<hr />
+
+	<table class="table-bordered" border="1">
+		<thead>
+			<tr>
+				<th></th>
+				<th>Jméno</th>
+				<th>Telefon</th>
+				<th>Narozen</th>
+				<th>Adresa</th>
+			</tr>
+		</thead>
+		<tbody>
+            {foreach $group->getActiveParticipants() as $participant}
+            <tr{if $participant->isBossIn($group)} class="boss"{/if}>
+                <td>{$iterator->getCounter()}.</td>
+                <td>{$participant->getFullName()}</td>
+                <td>{$participant->phone}</td>
+                <td>{$participant->birthdate->format('j.n.Y')}</td>
+                <td>
+                    {$participant->addressStreet}<br />
+                    {$participant->addressPostcode} {$participant->addressCity}
+                </td>
+            </tr>
+            {/foreach}
+
+			{for $i=0; $i < 4; $i++}
+				<tr>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td>
+						&nbsp;<br />
+						&nbsp;
+					</td>
+				</tr>
+			{/for}
+		</tbody>
+	</table>
+
+	<h2>Potvrzení</h2>
+	<p>
+		Potvrzuji, že moje skupina přijela na celostátní roverské setkání Obrok 2015 ve výše vypsaném složení a že všechny uvedené údaje jsou správné.
+		Za tyto osoby nesu jako plnoletý vedoucí skupiny během celé akce zodpovědnost.
+		Zároveň souhlasím s podmínkami a pravidly Obroku 2015.
+	</p>
+	<p>
+		Podpis vedoucího skupiny: .............................
+	</p>
+</div>
+
+<pagebreak />
+
+{/foreach}
+</body>
+</html>
+

@@ -1,0 +1,13 @@
+{block content}
+
+<div class="center">
+    <h2>Vstoupit do skupiny</h2>
+    <p>
+        Ahoj <strong>{$item->fullname}</strong>, je toto  tvoje jméno?<br />
+        Jestli ano a opravdu jsi členem skupiny <strong>{$item->group->name}</strong>, vyplň a odešli následující formulář.<br /><br />
+        Jestli ne, pravděpodobně někdo použil tvůj email.
+    </p>
+    {control frmInvitation}
+</div>
+
+{/block}

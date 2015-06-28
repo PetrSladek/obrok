@@ -1,0 +1,176 @@
+{block content}
+
+
+<div class="container">
+{*{snippet detail}*}
+
+    <div class="row">
+        <div class="pull-left">
+           {if $item->nickName}
+               <h1>{$item->nickName} <small>/{$item->firstName} {$item->lastName}/</small></h1>
+           {else}
+               <h1>{$item->firstName} {$item->lastName}</h1>
+           {/if}
+        </div>
+        <div class="pull-right">
+           <a n:href="edit $item->id" class="btn btn-warning ajax">Editovat údaje</a>
+        </div>
+    </div>
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="active"><a href="#info" role="tab" data-toggle="tab">Info</a></li>
+        <li><a href="#program" role="tab" data-toggle="tab">Program</a></li>
+    </ul>
+
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div class="tab-pane active" id="info">
+        {form frmEdit data-object-id=>$item->id, data-edit-link=>$control->link('ajaxEdit!')}
+            <div class="row">
+                <div class="col-md-4">
+                    <h4 n:class="$acl->edit ? ajax-edit">
+                        <small>Ulice a č.p.</small><br />
+                        <div class="ajax-edit-val">{snippet addressStreet}{$item->addressStreet}{/snippet}</div>
+                        <div class="ajax-edit-target" n:if="$acl->edit">{input addressStreet}</div>
+                    </h4>
+                    <h4 n:class="$acl->edit ? ajax-edit">
+                        <small>Město</small><br />
+                        <div class="ajax-edit-val">{snippet addressCity}{$item->addressCity}{/snippet}</div>
+                        <div class="ajax-edit-target" n:if="$acl->edit">{input addressCity}</div>
+                    </h4>
+                    <h4 n:class="$acl->edit ? ajax-edit">
+                        <small>PSČ</small><br />
+                        <div class="ajax-edit-val">{snippet addressPostcode}{$item->addressPostcode}{/snippet}</div>
+                        <div class="ajax-edit-target" n:if="$acl->edit">{input addressPostcode}</div>
+                    </h4>
+
+                </div>
+                <div class="col-md-4">
+                    <h4 n:class="$acl->edit ? ajax-edit">
+                        <small>E-mail</small><br />
+                        <div class="ajax-edit-val">{snippet email}{$item->email}{/snippet}</div>
+                        <div class="ajax-edit-target" n:if="$acl->edit">{input email}</div>
+                    </h4>
+                    <h3 n:class="$acl->edit ? ajax-edit">
+                        <small>telefon:</small><br />
+                        <div class="ajax-edit-val">{snippet phone}{!$item->getPhone()|phone}{/snippet}</div>
+                        <div class="ajax-edit-target" n:if="$acl->edit">{input phone class=>span2}</div>
+                    </h3>
+                    <h4 n:class="$acl->edit ? ajax-edit">
+                        <small>věk na O15</small><br />
+                        <div class="ajax-edit-val">{snippet birthdate}<abbr title="datum narození: {$item->birthdate->format('j.n.Y')}">{$item->getAge($ageInDate)} let</abbr>{/snippet}</div>
+                        <div class="ajax-edit-target" n:if="$acl->edit">{input birthdate}</div>
+                    </h4>
+                </div>
+
+                <div class="col-md-4">
+                    <h4>
+                        <small>Skautis Person ID</small><br />
+                        {if $item->skautisPersonId}{$item->skautisPersonId}{else}<em>- nemá -{/if}
+                    </h4>
+                    <h4>
+                        <small>Poslední přihlášení</small><br />
+                        {if $item->lastLogin}{$item->lastLogin->format('j.n.Y H:i:s')}{else}-{/if}
+                    </h4>
+                </div>
+
+                {*<div class="col-md-3">
+                    <h4>
+                        <small>Stav</small>
+                        <div class="btn-group" n:snippet="status">
+                            <a class="btn btn-large btn-block disabled" href="#">
+                                <span class="ficon ficon-participant-status-{$item->getStatus()->id}"></span>
+                                {!$item->getStatus()->name}
+                                <span class="caret"></span>
+                            </a>
+                        </div>
+                    </h4>
+                    {snippet history}
+                    {foreach $item->getStatusHistory() as $history}
+                    {if $iterator->getCounter() < 6}
+                    <div class="ficon ficon-participant-status-{$history->status} cls">
+                        {$item->getMapper()->statuses[$history->status]->name}
+                        <small class="tipsy flt-r" title="{$history->date->format('j.n.Y H:i:s')}">[ {$history->date->format('j.n. v H:i')} ]</small>
+                    </div>
+                    {/if}
+                    {if $iterator->getCounter() >= 6}
+                        {if $iterator->getCounter() == 6}<div class="iconlist">{/if}
+                        <span class="ficon ficon-participant-status-{$history->status} tipsy" title="{$item->getMapper()->statuses[$history->status]->name} [ {$history->date->format('j.n.Y v H:i')} ]">
+                        </span>
+                        {if $iterator->isLast()}</div>{/if}
+                    {/if}
+                    {/foreach}
+                    {/snippet}
+                </div>*}
+
+
+            </div>
+            <div class="row">
+                &nbsp;
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <table class="table table-bordered table-condensed">
+                        <tr><th>Zdravotní omezení</th></tr>
+                        <tr>
+                            <td>
+                                <div n:class="$acl->edit ? ajax-edit, wh">
+                                    <div class="ajax-edit-val">{snippet health}{if $item->health}{!$item->health|escape|nl2br}{else}- není -{/if}{/snippet}</div>
+                                    <div class="ajax-edit-target" n:if="$acl->edit">{input health}</div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr><th>Interní poznámka</th></tr>
+                        <tr>
+                            <td>
+                                <div n:class="$acl->edit ? ajax-edit">
+                                    <div class="ajax-edit-val">{snippet noteInternal}{if $item->noteInternal}{!$item->noteInternal|escape|nl2br}{else}- není -{/if}{/snippet}</div>
+                                    <div class="ajax-edit-target" n:if="$acl->edit">{input noteInternal}</div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        {/form}
+        </div>
+
+        <div class="tab-pane" id="program">
+            <h3>Programy</h3>
+
+            {snippet programs}
+
+                {if $programs}
+                    <table class="table table-bordered table-striped">
+                        {foreach $programs as $program}
+                        <tr>
+                            <td>
+                                <strong>{$program->programSection} <small n:ifcontent>{$program->programSubSection}</small></strong> {$program->start|day} {$program->start->format('j.n. H:i')}-{$program->end->format('H:i')}:<br />
+                                <strong>{$program->name}</strong> <small n:if="$program->lector && $program->lector != '-'"><em>{$program->lector}</em></small>
+                            </td>
+                            <td>
+                                <a n:href="deleteProgram! $program->program_id" class="btn btn-xs btn-danger ajax">Odregistrovat</a>
+                            </td>
+                        </tr>
+                        {/foreach}
+                    </table>
+                {else}
+                    <div>
+                        <em> - zatím nemá zaregistrovaný žádný program - </em>
+                    </div>
+                {/if}
+
+
+                {form frmAddProgram class=>"form-horizontal ajax"}
+                    <div><select class="form-control" n:name="program" /></div>
+                    <button class="btn btn-primary" n:name="send">Zaregistrovat program</button>
+                {/form}
+
+            {/snippet}
+        </div>
+    </div>
+
+{*{/snippet}*}
+</div>
+{/block}

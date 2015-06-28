@@ -1,0 +1,10 @@
+{var $title => "Účastníci"}
+
+{block content}
+
+{control tblGrid}
+
+
+<a n:href="edit" n:if="$user->isInRole('groups-edit')" class="btn btn-success">Přidat nového učastníka</a>
+
+{/block}

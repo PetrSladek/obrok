@@ -1,0 +1,98 @@
+{define col-varSymbol}
+<td>
+    #{$row->id}<br />
+    <small>{$row->varSymbol}</small>
+</td>
+{/define}
+{define col-fullname}
+<td>
+    {*<img src="{plink Image: (expand) $row->getAvatarType($row::AVATAR_TYPE_DBROW)}" alt="foto" style="float: left;margin-right: 10px;" />*}
+    {if $row->nickName}
+        <strong>{$row->nickName}</strong>
+        <br /><small>{$row->firstName} {$row->lastName|upper}</small>
+    {else}
+        <strong>{$row->firstName} {$row->lastName|upper}</strong>
+        <br /><small></small>
+    {/if}
+</td>
+{/define}
+{define col-address}
+<td>
+    {$row->addressCity}{*<br />
+    <small>{$row->birthdate->format("j.n.Y")}</small>*}
+</td>
+{/define}
+{define col-age}
+<td>
+    {$row->getAge('8.6.2015')} let<br />
+    <small>{$row->birthdate->format("j.n.Y")}</small>
+</td>
+{/define}
+{define col-group}
+<td>
+    {if $row->workgroup}
+        {$row->workgroup->name}
+    {/if}
+    <br /><small n:if="$row->job">{$row->job->name}</small>
+</td>
+{/define}
+{define col-team}
+<td>
+    {if $row->team}
+        {$row->team->abbr}
+        <br /><small>{$row->team->name}</small>
+    {/if}
+</td>
+{/define}
+{define col-contact}
+<td>
+    {$row->getPhone()|phone}
+    <br /><small>{$row->email}</small>
+</td>
+{/define}
+{define col-tshirtSize}
+<td>
+    {$row->tshirtSizeName}
+</td>
+{/define}
+
+{define col-confirmed}
+<td n:class="$row->confirmed ? cell-flag-blue, cell-flag">
+    {*<a n:tag-if="$acl->edit" class="ajax" href="{plink status! id=>$row->id, 'confirmed', !$row->confirmed}">*}
+        <i n:class="$row->confirmed ? ficon-flag-blue : ficon-flag-gray"></i>
+    {*</a>*}
+</td>
+{/define}
+{define col-paid}
+<td n:class="$row->paid ? cell-flag-green, cell-flag">
+    {*<a n:tag-if="$acl->edit" class="ajax" href="{plink status! id=>$row->id, 'paid', !$row->paid}">*}
+        <i n:class="$row->paid ? ficon-flag-green : ficon-flag-gray"></i>
+    {*</a>*}
+</td>
+{/define}
+{define col-arrived}
+<td n:class="$row->arrived ? cell-flag-pink, cell-flag">
+    {*<a n:tag-if="$acl->edit" class="ajax" href="{plink status! id=>$row->id, 'arrived', !$row->arrived}">*}
+        <i n:class="$row->arrived ? ficon-flag-pink : ficon-flag-gray"></i>
+    {*</a>*}
+</td>
+{/define}
+{define col-left}
+<td n:class="$row->left ? cell-flag-yellow, cell-flag">
+    {*<a n:tag-if="$acl->edit" class="ajax" href="{plink status! id=>$row->id, 'left', !$row->left}">*}
+        <i n:class="$row->left ? ficon-flag-yellow : ficon-flag-gray"></i>
+    {*</a>*}
+</td>
+{/define}
+
+{define col-filter-team}
+	{input $column->name class=>"input-sm multiselect", size=>2}
+{/define}
+{define col-filter-tshirtSize}
+	{input $column->name class=>"input-sm multiselect", size=>2}
+{/define}
+
+
+{define row-actions}
+    <a class="btn btn-default"  data-ajax-modal="detail" href="{plink detail $primary}">Otevřít</a>
+{/define}

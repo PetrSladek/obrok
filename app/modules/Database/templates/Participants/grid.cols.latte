@@ -1,0 +1,79 @@
+{redefine col-id}
+<td width="60">
+    #{$row->id}
+</td>
+{/redefine}
+{redefine col-fullname}
+<td>
+    {*<img n:if="$row->group" src="{plink Image: (expand) $row->group->getAvatarType('dbrow')}" alt="foto" style="float: left;margin-right: 10px;" />*}
+    {if $row->nickName}
+        <strong>{$row->nickName}</strong>
+        <br /><small>{$row->firstName} {$row->lastName|upper}</small>
+    {else}
+        <strong>{$row->firstName} {$row->lastName|upper}</strong>
+        <br /><small></small>
+    {/if}
+</td>
+{/redefine}
+{redefine col-age}
+<td>
+    {$row->getAge($ageInDate)} let<br />
+    <small>{$row->birthdate->format("j.n.Y")}</small>
+</td>
+{/redefine}
+{redefine col-group}
+<td>
+    {var $groupName => "{$row->group->name} {$row->group->city}"}
+    <div class="pull-right text-right">
+        <a class="btn btn-xs btn-default ajax" href="{plink Groups:detail $row->group->id}">Otevřít</a><br />
+        <a class="btn btn-xs btn-default" n:href="this filter=>['group'=>$groupName]">Vyfiltrovat</a>
+    </div>
+
+    <strong n:if="$row->group">{$row->group->name}</strong>
+    <br /><small n:if="$row->group">{$row->group->city}</small>
+
+
+</td>
+{/redefine}
+{redefine col-contact}
+<td>
+    {$row->getPhone()|phone}
+    <br /><small>{$row->email}</small>
+</td>
+{/redefine}
+{redefine col-address}
+<td>
+    {$row->addressStreet}
+    <br /><small>{$row->addressCity} {$row->addressPostcode}</small>
+</td>
+{/redefine}
+
+{define col-confirmed}
+<td n:class="$row->confirmed ? cell-flag-blue, cell-flag">
+    {*<a n:tag-if="$acl->edit" class="ajax" href="{plink status! id=>$row->id, 'confirmed', !$row->confirmed}">*}
+        <i n:class="$row->confirmed ? ficon-flag-blue : ficon-flag-gray"></i>
+    {*</a>*}
+</td>
+{/define}
+{define col-paid}
+<td n:class="$row->paid ? cell-flag-green, cell-flag">
+    {*<a n:tag-if="$acl->edit" class="ajax" href="{plink status! id=>$row->id, 'paid', !$row->paid}">*}
+        <i n:class="$row->paid ? ficon-flag-green : ficon-flag-gray"></i>
+    {*</a>*}
+</td>
+{/define}
+{define col-arrived}
+<td n:class="$row->arrived ? cell-flag-pink, cell-flag">
+    {*<a n:tag-if="$acl->edit" class="ajax" href="{plink status! id=>$row->id, 'arrived', !$row->arrived}">*}
+        <i n:class="$row->arrived ? ficon-flag-pink : ficon-flag-gray"></i>
+    {*</a>*}
+</td>
+{/define}
+{define col-left}
+<td n:class="$row->left ? cell-flag-yellow, cell-flag">
+    {*<a n:tag-if="$acl->edit" class="ajax" href="{plink status! id=>$row->id, 'left', !$row->left}">*}
+        <i n:class="$row->left ? ficon-flag-yellow : ficon-flag-gray"></i>
+    {*</a>*}
+</td>
+{/define}
+

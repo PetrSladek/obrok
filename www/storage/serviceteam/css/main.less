@@ -1,0 +1,454 @@
+/*
+Theme Name: Obrok15
+Theme URI: http://www.obrok15.cz
+Author URI: http://wordpress.org/
+Description: Šablona pro Obrok15
+Version: 1.0
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Tags: black, brown, orange, tan, white, yellow, light, one-column, two-columns, right-sidebar, flexible-width, custom-header, custom-menu, editor-style, featured-images, microformats, post-formats, rtl-language-support, sticky-post, translation-ready
+Text Domain: obrok15
+
+This theme, like WordPress, is licensed under the GPL.
+Use it to make something cool, have fun, and share what you've learned with others.
+*/
+
+
+//@import url(http://fonts.googleapis.com/css?family=Montserrat:400,700);
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Montserrat-Regular'), url('../fonts/montserratce-bold.otf') /*format('otf')*/;
+}
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Montserrat-Bold'), url('../fonts/montserratce-bold.otf') /*format('otf')*/;
+}
+
+@import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro&subset=latin,latin-ext);
+
+@import "bootstrap/bootstrap";
+@icon-font-path: "../fonts/";
+//@import "bootstrap/normalize.less";
+//@import "bootstrap/mixins.less";
+//@import "bootstrap/utilities";
+//@import "bootstrap/variables";
+//@import "bootstrap/mixins";
+//@import "bootstrap/grid";
+//@import "bootstrap/carousel";
+
+
+@input-border-focus: #353567;
+@btn-primary-bg: #eb292d;
+
+
+html {
+  height: 100%;
+}
+
+body {
+  font-family: 'Source Sans Pro';
+  font-size: 14px;
+
+  position: relative;
+  min-height: 100%;
+  padding-bottom: 100px;
+}
+
+h1,h2,h3,h4,h5 {
+  font-family: "Montserrat";
+}
+h2 {
+  font-size: 36px;
+}
+h3 {
+  font-size: 20px;
+}
+a {
+  color: #ff3333;
+  transition: color 0.4s ease;
+  &:hover {
+    color: #333366;
+  }
+}
+
+
+//.page {
+//  max-width: 1600px;
+//  margin: 0 auto;
+//}
+
+.container-non-responsive {
+  /* Margin/padding copied from Bootstrap */
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 15px;
+  padding-right: 15px;
+
+  /* Set width to your desired site width */
+  width: 1170px;
+}
+
+
+
+.navbar {
+  min-height: 118px;
+  margin-bottom: 0;
+
+  &-toggle {
+    background: #333366;
+    &:hover {
+      background: #eb292d;
+    }
+
+    .icon-bar {
+      background-color: white;
+    }
+  }
+
+  &-brand {
+    height: 117px;
+    padding: 0;
+//    margin-left: 10px !important;
+//    @media (min-width: @screen-sm-min) {
+//      margin-left: -4px !important;
+//    }
+
+    img {
+      display: inline-block;
+      margin: 0;
+      padding: 0;
+    }
+  }
+
+  &-nav {
+
+    float: none;
+    font-family: "Montserrat";
+    margin-top: 10px;
+    font-size: 16px;
+//    max-width: 500px;
+
+    @media (min-width: @grid-float-breakpoint) {
+      float: right;
+    }
+
+    & > li {
+      position: relative;
+
+      &.active {
+        & > a {
+          color: #333366;
+          &:hover { text-decoration: underline; }
+        }
+      }
+      & > a {
+        color: #eb292d;
+        transition: color 0.4s ease;
+
+        z-index: 11;
+        border: 1px solid transparent;
+
+        &:hover {
+          background: none;
+          color: #333366;
+          text-decoration: underline;
+        }
+      }
+
+      // submenu
+      & > ul {
+
+        display: block;
+        opacity: 1;
+        transition: all 0.4s ease;
+        list-style-type: square;
+
+        padding: 0 0 0 50px;
+        margin: 0;
+
+        @media (min-width: @grid-float-breakpoint) {
+          list-style-type: none;
+
+          position: absolute;
+          display: none;
+          opacity: 0;
+
+          min-width: 200px;
+          border: 1px solid #ccc;
+          padding: 0;
+          margin: -1px 0 0 0;
+
+          z-index: 10;
+          box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2);
+          background: white;
+        }
+
+        > li {
+          white-space: nowrap;
+        }
+
+        a {
+          display: block;
+          padding: 10px 15px;
+        }
+
+        /*@media (max-width: @screen-sm-max) {
+          position: static;
+          display: block;
+          opacity: 1;
+        } */
+      }
+
+      &:hover {
+        & > ul {
+          @media (min-width: @grid-float-breakpoint) {
+            display: block;
+            opacity: 1;
+          }
+        }
+      }
+
+      &.with-submenu:hover {
+        & > a {
+          @media (min-width: @grid-float-breakpoint) {
+            border: 1px solid #ccc;
+            border-bottom-color: white;
+          }
+        }
+      }
+    }
+  }
+}
+
+
+
+.breadcrumb {
+  border-radius: 0;
+  background: none;
+  padding: 0;
+  margin: 0;
+
+  .active {
+    font-weight: bold;
+    color: #000000;
+  }
+}
+
+/* CUSTOMIZE THE CAROUSEL
+-------------------------------------------------- */
+
+/* Carousel base class */
+.carousel {
+  height: 425px;
+
+  /* Since positioning the image, we need to help out the caption */
+  &-caption {
+    z-index: 10;
+    padding: 0px;
+
+    bottom: auto;
+    top: 30px;
+
+
+    h1 {
+      color: #fff;
+      float: right;
+      font-family: "Montserrat";
+      font-size: 58px;
+      line-height: 80px;
+      margin: 0;
+      text-align: left;
+
+      span {
+        background-color: #333366;
+        padding: 2px 14px;
+      }
+    }
+  }
+
+  /* Declare heights because of positioning of img element */
+  .item {
+    height: 425px;
+    background-color: #777;
+  }
+
+  &-inner > .item > img {
+
+    left: 50%;
+    margin-left: -960px;
+    position: absolute;
+    top: 0;
+    width: 1920px;
+    max-width: 1920px;
+    min-height: 415px;
+  }
+}
+
+
+
+.newsfeed {
+  background: url(../img/newsfeed-bg.png) repeat-x top center;
+  padding-top: 117px;
+  position: relative;
+  margin-top: -30px;
+  &-inner {
+    background: #eb292d;
+    color: white;
+    padding-bottom: 70px;
+  }
+
+  a {
+    color: white;
+    text-decoration: underline;
+    &:hover {text-decoration: none;}
+  }
+  p.more { text-align: right; }
+
+  .img {
+/////*    width: 130px;
+////    height: 130px;
+////    display: table-cell;
+////    text-align: center;
+////    vertical-align: middle;
+//    background: white;
+//    padding: 3px;*/
+
+    background: none repeat scroll 0 0 white;
+    border: 3px solid white;
+    display: block;
+    height: 130px;
+    overflow: hidden;
+    width: 130px;
+
+    img {
+      display: inline-block;
+      min-width: 130px;
+      min-height: 130px;
+    }
+  }
+  div.pull-left {
+    margin-right: 10px;
+    margin-bottom: 10px;
+  }
+}
+.carousel + .newsfeed {
+  margin-top: -50px;
+}
+
+.social {
+  background: url(../img/social-bg.png) repeat-x top center;
+  padding-top: 140px;
+  margin-top: -55px;
+  position: relative;
+  color: #666666;
+
+  &-inner {
+    background: #ffffff;
+    padding-bottom: 70px;
+  }
+
+  &-icons {
+    margin: 25px 0 35px;
+  }
+
+  .instagram {
+    margin-right: 10px;
+    margin-top: -40px;
+  }
+  .youtube {
+    margin-top: -47px;
+  }
+
+  h2 {
+    color: #333366;
+    font-weight: normal;
+    font-size: 34px;
+  }
+  h3 {
+    font-weight: normal;
+  }
+}
+
+
+.content {
+  background: url(../img/content-bg.png) repeat-x top center;
+  padding-top: 117px;
+  position: relative;
+  margin-top: -30px;
+  &-inner {
+    background: #white;
+    padding-bottom: 70px;
+  }
+
+  h2 {
+    font-size: 30px;
+  }
+  h3 {
+    font-size: 20px;
+  }
+
+  h1.page-title,
+  h2.page-title{
+    font-size: 48px;
+    color: #333366;
+    margin-bottom: 30px;
+  }
+  h1.sidebar-title,
+  h2.sidebar-title{
+    font-size: 36px;
+    color: #333366;
+  }
+
+
+  .page-content {
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+  }
+
+  h2.pull-left + a.pull-right {
+    margin-top: 35px;
+  }
+
+}
+
+
+.page {
+  &-footer {
+    background: url(../img/footer-bg.png) repeat-x top center;
+    padding-top: 85px;
+
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+  }
+}
+
+
+.cell-flag-blue { color: #012785 !important; background-color: #BCE5FF !important; }
+.cell-flag-green { color: #4F8A10 !important; background-color: #DFF2BF !important; }
+.cell-flag-pink { color: #5B0257 !important; background-color: #F3C8FE !important; }
+.cell-flag-yellow { color: #8B6E00 !important; background-color: #FFF071 !important; }
+.cell-flag-red { color: #D8000C !important; background-color: #FFBABA !important; }
+
+
+.togroup {
+  background: #F5F5F5;
+  margin: 25px 0;
+  h2 {
+    margin-left: 95px;
+    margin-top: 8px;
+    margin-bottom: 0;
+  }
+}
+
+#frm-frmRegistration-location-search {
+  position: absolute;
+  margin-left: 170px;
+  margin-top: -396px;
+}

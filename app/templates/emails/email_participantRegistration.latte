@@ -1,0 +1,19 @@
+{include 'head.latte'}
+<h1>Právě si byl zaregistrován jako účastník na Obrok 2015</h1>
+
+{if $first}
+<p>Právě si zaregistroval novou skupinu na Obrok 2015</p>
+<p>Ostatní účastníky můžeš přidat po přihlášení do systému, a poté jim zaslat pozvánku, kde si vytvoří vlastní přístupové údaje.</p>
+{/if}
+
+<h2>Přihlašovací údaje</h2>
+<p>
+    Login: <strong>{$email}</strong><br />
+    Heslo: <strong>vaše tajné heslo</strong><br />
+    Vstup do systému: <a href="http://ucastnici.obrok15.cz/">http://ucastnici.obrok15.cz/</a>
+</p>
+<h2>Zrušení účasti</h2>
+<p>
+    Pokud by se vaše skupina, nebo kdokoli z ní, nemohl na obrok dostavit, zrušte jeho účast (nebo celé skupiny) v registračním systému na adrese výše.
+</p>
+{include 'foot.latte'}

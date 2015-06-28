@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta name="author" content="">
+    <link rel="icon" href="favicon.png">
+
+    <title>{ifset $title}{$title} | {/ifset} Registrační systém Servis týmu | Obrok 2015</title>
+
+    <meta property="og:locale" content="cs_CZ" />
+    <meta property="og:type" content="object" />
+    <meta property="og:site_name" content="Obrok 2015" />
+    <meta property="og:url" content="{link //this}" />
+
+    <link rel="image_src" href="{$storageUrl}/logo_oranzove.png" />
+    <meta property="og:image" content="{$storageUrl}/logo_oranzove.png" />
+
+
+    {block #ogMeta}
+    <meta property="og:title" content="Registrační systém | Obrok 2015" />
+    <meta property="og:description" content="Registrační systém Servis týmu" />
+    <meta name="description" content="Registrační systém Servis týmu" />
+    {/block}
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js" type="text/javascript"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"  type="text/javascript"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js" type="text/javascript"></script>
+
+
+
+    <script src="{$storageUrl}/database/vendor/nette.ajax/nette.ajax.js" type="text/javascript"></script>
+    <script src="{$storageUrl}/database/vendor/nette.ajax/extensions/spinner.ajax.js" type="text/javascript"></script>
+    <script src="{$storageUrl}/database/vendor/jquery.livequery.min.js" type="text/javascript"></script>
+
+    <script src="{$storageUrl}/database/vendor/jquery.serializefullarray.js" type="text/javascript"></script>
+
+    <link  href="{$storageUrl}/database/vendor/bootstrap-multiselect.css" rel="stylesheet">
+    <script src="{$storageUrl}/database/vendor/bootstrap-multiselect.js" type="text/javascript"></script>
+
+    <link  href="{$storageUrl}/database/vendor/qqUploader.css" rel="stylesheet">
+    <script src="{$storageUrl}/database/vendor/qqUploader.js" type="text/javascript"></script>
+
+    <link  href="{$storageUrl}/database/vendor/jquery.jcrop/jquery.jcrop.css" rel="stylesheet">
+    <script src="{$storageUrl}/database/vendor/jquery.jcrop/jquery.jcrop.js" type="text/javascript"></script>
+
+    <script src="{$storageUrl}/database/vendor/myann/formcontrols.cropimage.js" type="text/javascript"></script>
+
+
+    <script src="{$storageUrl}/serviceteam/js/jquery.scrollTo.min.js" type="text/javascript"></script>
+    <script src="{$storageUrl}/serviceteam/js/bootstrap-datetimepicker.js" type="text/javascript"></script>
+    <script src="{$storageUrl}/serviceteam/js/bootstrap-datetimepicker.cs.js" type="text/javascript"></script>
+    <script src="{$storageUrl}/serviceteam/js/nextras.datetimepicker.init.js" type="text/javascript"></script>
+    <script src="{$storageUrl}/serviceteam/js/netteForms.js" type="text/javascript"></script>
+
+    <link href="{$storageUrl}/serviceteam/css/datetimepicker.css" type="text/css" rel="stylesheet">
+
+    {*<link href='https://fonts.googleapis.com/css?family=PT+Sans+Narrow:400,700&amp;subset=latin,latin-ext,cyrillic' rel='stylesheet' type='text/css'>*}
+    <link rel="shortcut icon" href="/favicon.png" type="image/x-icon" />
+
+<script type="text/javascript">
+    $(function(){
+        $.nette.init();
+    });
+</script>
+
+    {block head}{/block}
+
+    <!-- Custom styles for this template -->
+    <link href="{$storageUrl}/serviceteam/css/main.css" rel="stylesheet">
+</head>
+<!-- NAVBAR
+================================================== -->
+<body>
+    <div class="page">
+
+        <div class="navbar" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Menu</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="{plink Homepage:}"><img src="{$storageUrl}/serviceteam/img/logo.png" alt="Obrok 2015" /></a>
+                </div>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+
+                        <li><a href="/">Úvod</a></li>
+                        <li><a href="http://www.obrok15.cz/obrok15/">Info</a></li>
+                        <li><a href="http://www.obrok15.cz/program/">Program</a></li>
+                        <li><a href="http://www.obrok15.cz/eshop/">E-Shop</a></li>
+                        <li class="active with-submenu">
+                            <a href="http://www.obrok15.cz/registrace/">Registrace</a>
+                            <ul class="sub-menu">
+                                <li><a href="http://www.obrok15.cz/registrace/faq/">FAQ</a></li>
+                                <li n:if="$openRegistrationParticipants" n:class="$presenter->isLinkCurrent(':Participants:Registration:') ? active"><a href="{plink :Participants:Registration:}">Zaregistrovat novou skupinu</a></li>
+                                <li n:class="$presenter->isLinkCurrent(':Participants:Homepage:') ? active"><a href="{plink :Participants:Homepage:}">Vstup do systému pro účastníky</a></li>
+                                <li n:if="$openRegistrationServiceteam" n:class="$presenter->isLinkCurrent(':Serviceteam:Registration:') ? active"><a href="{plink :Serviceteam:Registration:}">Zaregistrovat se do servis týmu</a></li>
+                                <li n:class="$presenter->isLinkCurrent(':Serviceteam:Homepage:') ? active"><a href="{plink :Serviceteam:Homepage:}">Vstup do systému pro servis tým</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="http://www.obrok15.cz/download/">Download</a></li>
+                        <li><a href="http://www.obrok15.cz/tym/">Tým</a></li>
+                        <li><a href="http://www.obrok15.cz/press/">Press</a></li>
+                        <li><a href="http://www.obrok15.cz/partneri/">Partneři</a></li>
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+
+       <div class="content">
+           <div class="content-inner">
+
+                <div style="border-bottom: 1px solid #dddddd; margin-bottom: 20px; padding-bottom: 10px;">
+                    <div class="container">
+                        <div class="pull-left">
+                            {block breadcrumb}
+                            <ol class="breadcrumb">
+                                <li class="active">Registrační systém pro servis tým</li>
+                            </ol>
+                            {/block}
+                        </div>
+                        <div class="pull-right">
+                        {if $user->isLoggedIn() && isset($me)}
+                            <strong>{$me->fullname}</strong> - {$me->email} |
+                            {if !$me->skautisUserId}
+                            <a href="{link editLogin}">Změnit přihlašovací údaje</a> |
+                            <a href="{link skautisLogin!}" class="btn btn-success btn-xs">Spárovat účet se SkautISem</a> |
+                            {/if}
+                            {if $user->isInRole('database')}
+                            <a href="{link :Database:Dashboard:}">Vstup do databáze</a> |
+                            {/if}
+                            <a href="{link logout!}">Odhlásit se</a>
+                        {/if}
+                        </div>
+                    </div>
+                </div>
+
+               <div class="container">
+                   <div class="row">
+                       <div class="col-md-12">
+                              {snippet flash}
+                               <div n:foreach="$flashes as $flash" class="alert alert-{$flash->type}">
+                                   <button type="button" class="close" data-dismiss="alert">×</button>
+                                   {$flash->message}
+                               </div>
+                               {/snippet}
+
+
+                               {include #content}
+                       </div>
+                       {*<div class="col-md-4">
+
+
+
+                            <h2 class="sidebar-title">Nadpis sidebaru</h2>
+                            <h3>Lorem ipsum</h3>
+                            <p>
+                                Your bones don't break, mine do. That's clear. Your cells react to bacteria and viruses differently than mine. You don't get sick, I do. That's also clear. But for some reason, you and I react the exact same way to water. We swallow it too fast, we choke. We get some in our lungs, we drown. However unreal it may seem, we are connected, you and I. We're on the same curve, just on opposite ends.
+                            </p>
+                            <p class="text-right">
+                                <a href="#">celý článek</a>
+                            </p>
+                            <h3>Lorem ipsum</h3>
+                            <p>
+                               Your bones don't break, mine do. That's clear. Your cells react to bacteria and viruses differently than mine. You don't get sick, I do. That's also clear. But for some reason, you and I react the exact same way to water. We swallow it too fast, we choke. We get some in our lungs, we drown. However unreal it may seem, we are connected, you and I. We're on the same curve, just on opposite ends.
+                            </p>
+                            <p class="text-right">
+                               <a href="#">celý článek</a>
+                            </p>
+                            <h2 class="sidebar-title">Naspis strany</h2>
+                            <h3>Lorem ipsum</h3>
+                            <p>
+                               Your bones don't break, mine do. That's clear. Your cells react to bacteria and viruses differently than mine. You don't get sick, I do. That's also clear. But for some reason, you and I react the exact same way to water. We swallow it too fast, we choke. We get some in our lungs, we drown. However unreal it may seem, we are connected, you and I. We're on the same curve, just on opposite ends.
+                            </p>
+                            <p class="text-right">
+                               <a href="#">celý článek</a>
+                            </p>
+                       </div>*}
+                   </div>
+               </div>
+           </div>
+       </div>
+
+        <!-- FOOTER -->
+        <footer class="page-footer">
+            <!--<div class="container">
+                <p class="pull-right"><a href="#">Back to top</a></p>
+                <p>&copy; 2014 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
+            </div><!-- /.container -->
+        </footer>
+    </div>
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    {*<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>*}
+</body>
+</html>
+

@@ -1,0 +1,217 @@
+{block content}
+
+<div class="container">
+{*{snippet detail}*}
+    <div class="row">
+        <div class="pull-left">
+            {if $item->nickName}
+                <h1>{$item->nickName} <small>/{$item->firstName} {$item->lastName}/</small></h1>
+            {else}
+                <h1>{$item->firstName} {$item->lastName}</h1>
+            {/if}
+        </div>
+        <div class="pull-right">
+            <a n:href="edit $item->id" class="btn btn-warning ajax">Editovat údaje</a>
+        </div>
+    </div>
+
+{*<div class="modal fade in">
+<div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            {if $item->nickName}
+                <h3 class="modal-title">{$item->nickName} <small>/{$item->firstName} {$item->lastName}/</small></h3>
+            {else}
+                <h3 class="modal-title">{$item->firstName} {$item->lastName}</h3>
+            {/if}
+        </div>
+        <div class="modal-body">*}
+            {form frmEdit data-object-id=>$item->id, data-edit-link=>$control->link('ajaxEdit!')}
+                <div class="row">
+                    <div class="col-md-4">
+                        {*<div n:class="$acl->edit ? ajax-edit">
+                            <div class="ajax-edit-val">
+                                {snippet avatar}
+                                <img src="{link Image: (expand) $item->getAvatarType($item::AVATAR_TYPE_DBDETAIL)}" alt="foto" />
+                                {/snippet}
+                            </div>
+                            <div class="ajax-edit-target" n:if="$acl->edit">
+                                {input avatar}
+                                <button class="btn btn-success pull-right cropimage-save" role="save" type="button">Uložit</button>
+                            </div>
+                        </div>*}
+                    </div>
+                    <div class="col-md-5">
+                        <h4 n:class="$acl->edit ? ajax-edit">
+                            <small>spadá pod tým:</small><br />
+                            <div class="ajax-edit-val">{snippet team}{if $item->team}{$item->team->abbr} - {$item->team->name}{else}- nazařazen -{/if}{/snippet}</div>
+                            <div class="ajax-edit-target" n:if="$acl->edit">{input team}</div>
+                        </h4>
+                        <h3 n:class="$acl->edit ? ajax-edit">
+                            <small>do prac.skupiny</small><br />
+                            <div class="ajax-edit-val">{snippet workgroup}{if $item->workgroup}{$item->workgroup->name}{else}- nazařazen -{/if}{/snippet}</div>
+                            {*<div class="ajax-edit-target" n:if="$acl->edit">{input workgroup class=>"typeahead", data-sourcelink=>$presenter->link('typehead','workgroups')}</div>*}
+                        </h3>
+                        <h4 n:class="$acl->edit ? ajax-edit">
+                            <small>je v pozici:</small><br />
+                            <div class="ajax-edit-val">{snippet job}{if $item->job}{$item->job->name}{else}- nazařazen -{/if}{/snippet}</div>
+                            {*<div class="ajax-edit-target" n:if="$acl->edit">{input job class=>"typeahead", data-sourcelink=>$presenter->link('typehead','jobs')}</div>*}
+                        </h4>
+                    </div>
+                    <div class="col-md-3">
+                        <h4 n:class="$acl->edit ? ajax-edit">
+                            <small>email</small><br />
+                            <div class="ajax-edit-val">{snippet email}{$item->email}{/snippet}</div>
+                            <div class="ajax-edit-target" n:if="$acl->edit">{input email}</div>
+                        </h4>
+                        <h3 n:class="$acl->edit ? ajax-edit">
+                            <small>telefon:</small><br />
+                            <div class="ajax-edit-val">{snippet phone}{$item->getPhone()|phone}{/snippet}</div>
+                            <div class="ajax-edit-target" n:if="$acl->edit">{input phone}</div>
+
+                        </h3>
+
+                            <h5 n:class="$acl->edit ? ajax-edit">
+                                <small>z města</small><br />
+                                <div class="ajax-edit-val">{snippet addressCity}{$item->addressCity}{/snippet}</div>
+                                <div class="ajax-edit-target" n:if="$acl->edit">{input addressCity}</div>
+                            </h5>
+                            <h5 n:class="$acl->edit ? ajax-edit">
+                                <small>věk na O15</small><br />
+                                <div class="ajax-edit-val">{snippet birthdate}<abbr title="datum narození: {$item->birthdate->format('j.n.Y')}">{$item->getAge($ageInDate)} let</abbr>{/snippet}</div>
+                                <div class="ajax-edit-target" n:if="$acl->edit">{input birthdate}</div>
+                            </h5>
+
+                    </div>
+                </div>
+                <div class="row">
+                    &nbsp;
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <table class="table table-bordered table-condensed">
+                            <tr><th>Zdravotní omezení</th></tr>
+                            <tr>
+                                <td>
+                                    <div n:class="$acl->edit ? ajax-edit, wh">
+                                        <div class="ajax-edit-val">{snippet health}{if $item->health}{!$item->health|escape|nl2br}{else}- není -{/if}{/snippet}</div>
+                                        <div class="ajax-edit-target" n:if="$acl->edit">{input health}</div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr><th>Zkušenosi / Dovednosti</th></tr>
+                            <tr>
+                                <td>
+                                <div n:class="$acl->edit ? ajax-edit, wh">
+                                    <div class="ajax-edit-val">{snippet experience}{if $item->experience}{!$item->experience|escape|nl2br}{else}- není -{/if}{/snippet}</div>
+                                    <div class="ajax-edit-target" n:if="$acl->edit">{input experience}</div>
+                                </div>
+                                </td>
+                            </tr>
+                            <tr><th>Poznámka při registraci / Omezení (diety)</th></tr>
+                            <tr>
+                                <td>
+                                <div n:class="$acl->edit ? ajax-edit, wh">
+                                    <div class="ajax-edit-val">{snippet note}{if $item->note}{!$item->note|escape|nl2br}{else}- není -{/if}{/snippet}</div>
+                                    <div class="ajax-edit-target" n:if="$acl->edit">{input note}</div>
+                                </div>
+                                </td>
+                            </tr>
+                            <tr><th>Interní poznámka</th></tr>
+                                                        <tr>
+                                                            <td>
+                                                            <div n:class="$acl->edit ? ajax-edit">
+                                                                <div class="ajax-edit-val">{snippet noteInternal}{if $item->noteInternal}{!$item->noteInternal|escape|nl2br}{else}- není -{/if}{/snippet}</div>
+                                                                <div class="ajax-edit-target" n:if="$acl->edit">{input noteInternal}</div>
+                                                            </div>
+                                                            </td>
+                                                        </tr>
+                        </table>
+                    </div>
+                    <div class="col-md-5">
+
+                        <table class="table table-little">
+                            <tr>
+                                <td>
+                                    {if $item->helpPreparation}
+                                    <div class="text-success"><i class="ficon-accept"></i> Má zájem pomoct s přípravami</div>
+                                    {else}
+                                    <div class="text-error"><i class="ficon-delete"></i> Nemá zájem pomoct s přípravami</div>
+                                    {/if}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    {if $item->arrivesToBuilding == 0}
+                                    <div class="text-success"><i class="ficon-accept"></i> Prijede na stavecku</div>
+                                    {else}
+                                    <div class="text-error"><i class="ficon-delete"></i> Prijede az na akci</div>
+                                    {/if}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div><i class="ficon-user"></i> Velikost trika: <strong>{$item->tshirtSizeName}</strong></div>
+                                </td>
+                            </tr>
+
+                        </table>
+
+                    </div>
+
+                    <div class="col-md-3">
+
+                        <div class="btn-group-vertical btn-block" data-toggle="buttons" n:snippet="flags">
+
+                                <span n:tag-if="!$acl->edit" class="disabled btn btn-default">
+                                <a n:tag-if="$acl->edit" class="ajax btn btn-default" n:href="status! 'confirmed', !$item->confirmed">
+                                    <i n:class="$item->confirmed ? ficon-flag-blue : ficon-flag-gray"></i> Přijede
+                                </a>
+                                </span>
+
+                                <span n:tag-if="!$acl->edit" class="disabled btn btn-default">
+                                <a n:tag-if="$acl->edit" class="ajax btn btn-default" n:href="status! 'paid', !$item->paid">
+                                    <i n:class="$item->paid ? ficon-flag-green : ficon-flag-gray"></i> Zaplatil
+                                </a>
+                                </span>
+
+                                <span n:tag-if="!$acl->edit" class="disabled btn btn-default">
+                                <a n:tag-if="$acl->edit" class="ajax btn btn-default" n:href="status! 'arrived', !$item->arrived">
+                                    <i n:class="$item->arrived ? ficon-flag-pink : ficon-flag-gray"></i> Přijel
+                                </a>
+                                </span>
+
+                                <span n:tag-if="!$acl->edit" class="disabled btn btn-default">
+                                <a n:tag-if="$acl->edit" class="ajax btn btn-default" n:href="status! 'left', !$item->left">
+                                    <i n:class="$item->left ? ficon-flag-yellow : ficon-flag-gray"></i> Odjel
+                                </a>
+                                </span>
+
+                        </div>
+
+                    </div>
+
+
+                    {*
+                    <div class="col-md-3">
+                        <table class="table table-little">
+                            <tr><th>Historie plateb</th></tr>
+                            <tr><td class="text-error"><strong>- 1500,-</strong> Proplacení cesťáku</td></tr>
+                            <tr><td class="text-success"><strong>+ 150,-</strong> hotově na místě (ST poplatku)</td></tr>
+                            <tr><td class="text-error"><strong>- 150,-</strong> z účtu (vrácení ST poplatku)</td></tr>
+                            <tr><td class="text-success"><strong>+ 150,-</strong> na účet (ST poplatek)</td></tr>
+                        </table>
+                        <a class="btn btn-small pull-right">Přidat platbu</a>
+                    </div>
+            *}
+                </div>
+            {/form}
+{*        </div>
+    </div>
+</div>
+</div>*}
+{*{/snippet}*}
+</div>
+
+{/block}

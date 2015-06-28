@@ -1,0 +1,99 @@
+{define row-actions}
+    <!-- Split button -->
+    {*<div class="btn-group"*}{* style="min-width: 100px"*}{*>*}
+      <a class="btn btn-default ajax"  {*data-ajax-modal="detail"*} href="{plink detail $primary}">Otevřít</a>
+      {*<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+        <span class="caret"></span>
+        <span class="sr-only">Toggle Dropdown</span>
+      </button>*}
+      {*<ul class="dropdown-menu" role="menu">*}
+        {*<li><a class="ajax" href="{plink delete! $primary}">Smazat</a></li>*}
+      {*</ul>*}
+    {*</div>*}
+{/define}
+
+
+{redefine table-open-tag}
+<div class="table-responsive">
+	<table class="table table-bordered table-condensed table-striped table-hover">
+{/redefine}
+{redefine table-close-tag}
+	</table>
+</div>
+{/redefine}
+
+{redefine row-head-colums}
+	<tr class="grid-columns">
+		{foreach $columns as $column}
+			<th class="grid-col-{$column->name}">
+				{if $column->canSort()}
+					<a href="{link sort! orderColumn => $column->getNewState() ? $column->name : NULL, orderType => $column->getNewState()}" class="ajax">{$column->label}</a>
+
+					<span class="positioner">
+					    <a href="{link sort! orderColumn => $column->name, orderType => desc}" n:class="ajax, $column->isAsc() ? active"><span class="up"></span></a>
+					    <a href="{link sort! orderColumn => $column->name, orderType => asc}" n:class="ajax, $column->isDesc() ? active"><span class="down"></span></a>
+                    </span>
+
+		            {*{if $column->isAsc()}
+						<span class="grid-sort-symbol grid-sort-symbol-asc"><em>&#9650;</em></span>
+					{elseif $column->isDesc()}
+						<span class="grid-sort-symbol grid-sort-symbol-desc"><em>&#9660;</em></span>
+					{else}
+						<span class="grid-sort-symbol grid-sort-symbol-no"></span>
+					{/if}*}
+				{else}
+					{$column->label}
+				{/if}
+			</th>
+		{/foreach}
+		{if $template->hasActionsColumn}
+			<th class="grid-col-actions">{ifset #global-actions}{include #global-actions}{/ifset}</th>
+		{/if}
+	</tr>
+{/redefine}
+
+
+{redefine global-filter-actions}
+	<button n:name="filter" class="btn btn-primary btn-sm" title="Filtrovat"><i class="fa fa-filter"></i></button>
+	{if $showCancel}
+		{*{input cancel class => "btn btn-default btn-sm"}*}
+		<button n:name="cancel" class="btn btn-default btn-sm" title="Zrušit filtr"><i class="fa fa-times"></i></button>
+	{/if}
+{/redefine}
+
+{redefine col-filter}
+	{input $column->name class=>"form-control input-sm"}
+{/redefine}
+
+{redefine row-actions-edit}
+	{input save class => "btn btn-primary btn-xs"}
+	{input cancel class => "btn btn-default btn-xs"}
+{/redefine}
+
+{redefine row-actions-edit-link}
+	<a href="{link edit! $primary}" data-datagrid-edit class="ajax btn btn-primary btn-xs">{$control->translate(Edit)}</a>
+{/redefine}
+
+{redefine pagination}
+<ul class="pagination" n:if="$paginator->pageCount > 1">
+{if $paginator->isFirst()}
+	<li class="disabled"><a>« První}</a></li>
+	<li class="disabled"><a>« Předchozí</a></li>
+{else}
+	<li><a href="{link paginate!, 'page' => 1}" class="ajax">« První</a></li>
+	<li><a href="{link paginate!, 'page' => $paginator->page - 1}" class="ajax">« Předchozí</a></li>
+{/if}
+
+<li class="active">
+	<a><strong>{$paginator->page}</strong> / {$paginator->pageCount}</a>
+</li>
+
+{if $paginator->isLast()}
+	<li class="disabled"><a>Další »</a></li>
+	<li class="disabled"><a>Poslední »</a></li>
+{else}
+	<li><a href="{link paginate!, 'page' => $paginator->page + 1}" class="ajax">Další »</a></li>
+	<li><a href="{link paginate!, 'page' => $paginator->pageCount}" class="ajax">Poslední »</a></li>
+{/if}
+</ul>
+{/redefine}

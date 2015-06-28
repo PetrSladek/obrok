@@ -1,0 +1,134 @@
+# WARNING: it is CRITICAL that this file & directory are NOT accessible directly via a web browser!
+# http://nette.org/security-warning
+
+parameters:
+	app:
+		name: 'Obrok15'
+		hashKey:  #nastavit pri instalaci a pak uz nemenit (je kvuli vztvareni heshu pro zvaci url atd..)
+
+		storageUrl: '/storage'
+		storageDir: %wwwDir%/storage/
+		webimagesUploadDir: %appDir%/../www/storage/webimages/
+		webimagesCacheDir: %appDir%/../www/storage/webimages/cache/
+		webimagesCacheUrl: /storage/webimages/cache/
+
+		emailDefaultFrom: "Obrok15.cz <registrace@obrok15.cz>"
+		emailTemplateDir: %appDir%/templates/emails/
+		emailSubjectFormat: '[Obrok15.cz] %'
+		emailToRegistration: registrace@obrok15.cz
+
+
+php:
+	date.timezone: Europe/Prague
+
+extensions:
+	console: Kdyby\Console\DI\ConsoleExtension
+	events: Kdyby\Events\DI\EventsExtension
+	annotations: Kdyby\Annotations\DI\AnnotationsExtension
+	doctrine: Kdyby\Doctrine\DI\OrmExtension
+	skautis: Skautis\Nette\SkautisExtension
+	skautislogin: PetrSladek\SkautIS\DI\SkautISExtension
+	gpspicker: VojtechDobes\NetteForms\GpsPickerExtension
+	ajaxHistory: VojtechDobes\NetteAjax\HistoryExtension
+
+skautis:
+	applicationId:
+
+doctrine:
+	user:
+	password:
+	dbname:
+	metadata:
+		App: %appDir%
+	dql:
+		datetime:
+#			date: DoctrineExtensions\Query\Mysql\Date
+#			date_format: DoctrineExtensions\Query\Mysql\DateFormat
+#			dateadd: DoctrineExtensions\Query\Mysql\DateAdd
+#			datediff: DoctrineExtensions\Query\Mysql\DateDiff
+#			day: DoctrineExtensions\Query\Mysql\Day
+#			dayname: DoctrineExtensions\Query\Mysql\DayName
+#			last_day: DoctrineExtensions\Query\Mysql\LastDay
+#			minute: DoctrineExtensions\Query\Mysql\Minute
+#			second: DoctrineExtensions\Query\Mysql\Second
+#			strtodate: DoctrineExtensions\Query\Mysql\StrToDate
+#			time: DoctrineExtensions\Query\Mysql\Time
+#			timestampadd: DoctrineExtensions\Query\Mysql\TimestampAdd
+			timestampdiff: DoctrineExtensions\Query\Mysql\TimestampDiff
+#			week: DoctrineExtensions\Query\Mysql\Week
+#			weekday: DoctrineExtensions\Query\Mysql\WeekDay
+#			year: DoctrineExtensions\Query\Mysql\Year
+
+#		numeric:
+#			acos: DoctrineExtensions\Query\Mysql\Acos
+#			asin: DoctrineExtensions\Query\Mysql\Asin
+#			atan2: DoctrineExtensions\Query\Mysql\Atan2
+#			atan: DoctrineExtensions\Query\Mysql\Atan
+#			cos: DoctrineExtensions\Query\Mysql\Cos
+#			cot: DoctrineExtensions\Query\Mysql\Cot
+#			hour: DoctrineExtensions\Query\Mysql\Hour
+#			pi: DoctrineExtensions\Query\Mysql\Pi
+#			power: DoctrineExtensions\Query\Mysql\Power
+#			quarter: DoctrineExtensions\Query\Mysql\Quarter
+#			rand: DoctrineExtensions\Query\Mysql\Rand
+#			round: DoctrineExtensions\Query\Mysql\Round
+#			sin: DoctrineExtensions\Query\Mysql\Sin
+#			std: DoctrineExtensions\Query\Mysql\Std
+#			tan: DoctrineExtensions\Query\Mysql\Tan
+
+#		string:
+#			binary: DoctrineExtensions\Query\Mysql\Binary
+#			char_length: DoctrineExtensions\Query\Mysql\CharLength
+#			concat_ws: DoctrineExtensions\Query\Mysql\ConcatWs
+#			countif: DoctrineExtensions\Query\Mysql\CountIf
+#			crc32: DoctrineExtensions\Query\Mysql\Crc32
+#			degrees: DoctrineExtensions\Query\Mysql\Degrees
+#			field: DoctrineExtensions\Query\Mysql\Field
+#			find_in_set: DoctrineExtensions\Query\Mysql\FindInSet
+#			group_concat: DoctrineExtensions\Query\Mysql\GroupConcat
+#			ifelse: DoctrineExtensions\Query\Mysql\IfElse
+			ifnull: DoctrineExtensions\Query\Mysql\IfNull
+#			match_against: DoctrineExtensions\Query\Mysql\MatchAgainst
+#			md5: DoctrineExtensions\Query\Mysql\Md5
+#			month: DoctrineExtensions\Query\Mysql\Month
+#			monthname: DoctrineExtensions\Query\Mysql\MonthName
+#			nullif: DoctrineExtensions\Query\Mysql\NullIf
+#			radians: DoctrineExtensions\Query\Mysql\Radians
+#			regexp: DoctrineExtensions\Query\Mysql\Regexp
+#			replace: DoctrineExtensions\Query\Mysql\Replace
+#			sha1: DoctrineExtensions\Query\Mysql\Sha1
+#			sha2: DoctrineExtensions\Query\Mysql\Sha2
+#			soundex: DoctrineExtensions\Query\Mysql\Soundex
+#			uuid_short: DoctrineExtensions\Query\Mysql\UuidShort
+application:
+	errorPresenter: Error
+	mapping:
+#		*: App\*Module\Presenters\*Presenter
+		*: App\Module\*\Presenters\*Presenter
+
+latte:
+	macros:
+#		- Nextras\Forms\Bridges\Latte\Macros\BS3InputMacros
+		- Nextras\Latte\Macros\RedefineMacro
+session:
+	expiration: 14 days
+
+
+services:
+
+	images: App\Services\ImageService(%app.webimagesUploadDir%, %app.webimagesCacheDir%, %app.webimagesCacheUrl%)
+	emails:
+		class: App\Services\EmailsService(@nette.mailer, %app.emailTemplateDir%)
+		setup:
+			- setDefaultFrom(%app.emailDefaultFrom%)
+			- setSubjectFormat(%app.emailSubjectFormat%)
+	router: App\RouterFactory::createRouter
+
+	- App\Repositories\GroupsRepository( @doctrine.default.entityManager, @doctrine.default.entityManager::getClassMetadata('App\Model\Entity\Group') )
+	- App\Repositories\ParticipantsRepository( @doctrine.default.entityManager,  @doctrine.default.entityManager::getClassMetadata('App\Model\Entity\Participant') )
+	- App\Repositories\ServiceteamRepository( @doctrine.default.entityManager, @doctrine.default.entityManager::getClassMetadata('App\Model\Entity\Serviceteam') )
+	- App\Repositories\JobsRepository( @doctrine.default.entityManager, @doctrine.default.entityManager::getClassMetadata('App\Model\Entity\Job') )
+	- App\Repositories\TeamsRepository( @doctrine.default.entityManager, @doctrine.default.entityManager::getClassMetadata('App\Model\Entity\Team') )
+	- App\Repositories\WorkgroupsRepository( @doctrine.default.entityManager, @doctrine.default.entityManager::getClassMetadata('App\Model\Entity\Workgroup') )
+
+	- App\Hydrators\SkautisHydrator

@@ -1,0 +1,356 @@
+{block content}
+
+
+
+<div class="row">
+	<div class="col-md-4">
+
+		<table class="table table-bordered table-condensed table-striped table-hover">
+
+		    <thead>
+                <tr>
+                    <th colspan="999">Přehled</th>
+                </tr>
+            </thead>
+			<tr>
+				<td></td>
+				<td class="cell-flag-blue cell-flag"><i class="ficon-flag-blue tipsy" title="Registrováni"></i></td>
+				<td class="cell-flag-green cell-flag"><i class="ficon-flag-green tipsy" title="Platící"></i></td>
+				<td class="cell-flag-pink cell-flag"><i class="ficon-flag-pink tipsy" title="Přijeli"></i></td>
+				<td class="cell-flag-yellow cell-flag"><i class="ficon-flag-yellow tipsy" title="Odjeli"></i></td>
+			</tr>
+			<tr>
+				<td>Servis tým</td>
+				<td class="cell-flag-blue cell-flag">{$serviceteam->confirmed}</td>
+				<td class="cell-flag-green cell-flag">{$serviceteam->paid}</td>
+				<td class="cell-flag-pink cell-flag">{$serviceteam->arrived}</td>
+				<td class="cell-flag-yellow cell-flag">{$serviceteam->left}</td>
+			</tr>
+			<tr>
+				<td>Skupiny</td>
+				<td class="cell-flag-blue cell-flag">{$groups->confirmed}</td>
+				<td class="cell-flag-green cell-flag">{$groups->paid}</td>
+				<td class="cell-flag-pink cell-flag">{$groups->arrived}</td>
+				<td class="cell-flag-yellow cell-flag">{$groups->left}</td>
+			</tr>
+			<tr>
+				<td>Účastníci</td>
+				<td class="cell-flag-blue cell-flag">{$participants->confirmed}</td>
+				<td class="cell-flag-green cell-flag">{$participants->paid}</td>
+				<td class="cell-flag-pink cell-flag">{$participants->arrived}</td>
+				<td class="cell-flag-yellow cell-flag">{$participants->left}</td>
+			</tr>
+		</table>
+
+	</div>
+
+	<div class="col-md-4">
+        <table class="table table-bordered table-condensed table-striped table-hover">
+            <thead>
+                <tr>
+                    <th colspan="999">Registrace účastníků</th>
+                </tr>
+            </thead>
+            <tr>
+                {if $openRegistrationParticipants}
+                <td class="success">
+                    <div class="text-success">Registrace je práve <strong>otevřena <span class="glyphicon glyphicon-ok" aria-hidden="true"></span></strong></div>
+                    <a n:href="closeParticipantRegistration!" class="btn btn-warning">Uzavřít registraci</a>
+                </td>
+                {else}
+                <td class="danger">
+                    <div class="text-danger">Registrace je práve <strong>uzavřena <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></strong></div>
+                    <a n:href="openParticipantRegistration!" class="btn btn-warning">Otevřít registraci</a>
+                </td>
+                {/if}
+            </tr>
+        </table>
+
+        <table class="table table-bordered table-condensed table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th colspan="999">Registrace servis týmu</th>
+                        </tr>
+                    </thead>
+                    <tr>
+                        {if $openRegistrationServiceteam}
+                        <td class="success">
+                            <div class="text-success">Registrace je práve <strong>otevřena <span class="glyphicon glyphicon-ok" aria-hidden="true"></span></strong></div>
+                            <a n:href="closeServiceteamRegistration!" class="btn btn-warning">Uzavřít registraci</a>
+                        </td>
+                        {else}
+                        <td class="danger">
+                            <div class="text-danger">Registrace je práve <strong>uzavřena <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></strong></div>
+                            <a n:href="openServiceteamRegistration!" class="btn btn-warning">Otevřít registraci</a>
+                        </td>
+                        {/if}
+                    </tr>
+                </table>
+    </div>
+
+    <div class="col-md-4">
+        <table class="table table-bordered table-condensed table-striped table-hover">
+
+		    <thead>
+                <tr>
+                    <th colspan="999">Počet triček pro potvrzené ST</th>
+                </tr>
+                <tr>
+                    <th>Velikost trička</th>
+                    <th>Počet</th>
+                </tr>
+            </thead>
+            {foreach $tshirts as $name => $count}
+			<tr>
+				<td>{$name}</td>
+				<td>{$count} ks</td>
+			</tr>
+			{/foreach}
+		</table>
+    </div>
+</div>
+
+
+
+<div class="row">
+    <div class="col-md-4">
+        <table class="table table-bordered table-condensed table-striped table-hover">
+            <thead>
+                <tr>
+                    <th colspan="99">Poslední registrování servisáci</th>
+                </tr>
+            </thead>
+            <tbody>
+                {foreach $lastServiceteam as $row}
+                <tr>
+                    <td width="60">
+                        #{$row->id}<br />
+                        <small>{$row->varSymbol}</small>
+                    </td>
+                    <td>
+                        {*<img src="{plink Image: (expand) $row->getAvatarType($row::AVATAR_TYPE_DBROW)}" alt="foto" style="float: left;margin-right: 10px;" />*}
+                        {if $row->nickName}
+                            <strong>{$row->nickName}</strong>
+                            <br /><small>{$row->firstName} {$row->lastName|upper}</small>
+                        {else}
+                            <strong>{$row->firstName} {$row->lastName|upper}</strong>
+                            <br /><small></small>
+                        {/if}
+                    </td>
+                    <td>
+                        {$row->getAge($ageInDate)} let<br />
+                        <small>{$row->birthdate->format("j.n.Y")}</small>
+                    </td>
+                </tr>
+                {/foreach}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="col-md-4">
+        <table class="table table-bordered table-condensed table-striped table-hover">
+            <thead>
+                <tr>
+                    <th colspan="99">Poslední registrováné skupiny</th>
+                </tr>
+            </thead>
+            <tbody>
+                {foreach $lastGroups as $row}
+                <tr>
+                    <td width="60">
+                        #{$row->id}<br />
+                        <small>{$row->varSymbol}</small>
+                    </td>
+                    <td>
+                        {*<img src="{plink Image: (expand) $row->getAvatarType($row::AVATAR_TYPE_DBROW)}" alt="foto" style="float: left;margin-right: 10px;" />*}
+                        <strong>{$row->name}</strong>
+                        <br /><small>{$row->city}</small>
+                    </td>
+
+                </tr>
+                {/foreach}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="col-md-4">
+            <table class="table table-bordered table-condensed table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th colspan="99">Poslední registrování účastníci</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {foreach $lastParticipants as $row}
+                    <tr>
+                        <td width="60">
+                            #{$row->id}<br />
+                        </td>
+                        <td>
+                            {*<img n:if="$row->group" src="{plink Image: (expand) $row->group->getAvatarType('dbrow')}" alt="foto" style="float: left;margin-right: 10px;" />*}
+                            {if $row->nickName}
+                                <strong>{$row->nickName}</strong>
+                                <br /><small>{$row->firstName} {$row->lastName|upper}</small>
+                            {else}
+                                <strong>{$row->firstName} {$row->lastName|upper}</strong>
+                                <br /><small></small>
+                            {/if}
+                        </td>
+                        <td>
+                            <strong n:if="$row->group">{$row->group->name}</strong>
+                            <br /><small n:if="$row->group">{$row->group->city}</small>
+                        </td>
+                        <td>
+                            {$row->getAge($ageInDate)} let<br />
+                            <small>{$row->birthdate->format("j.n.Y")}</small>
+                        </td>
+                    </tr>
+                    {/foreach}
+                </tbody>
+            </table>
+        </div>
+
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <div id="chartServiceteamTeams" style="width: 100%; height: 400px;"></div>
+    </div>
+    <div class="col-md-4">
+        <div id="chartGroupsRegions" style="width: 100%; height: 400px;"></div>
+    </div>
+    <div class="col-md-4">
+        <div id="chartParticipantsRegions" style="width: 100%; height: 400px;"></div>
+    </div>
+</div>
+
+
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript">
+    google.load("visualization", "1", {
+        packages:["corechart"]
+    });
+    google.setOnLoadCallback(drawChart);
+    function drawChart() {
+
+        // Servistym podle tymu
+
+        var data = google.visualization.arrayToDataTable([
+            ['Tým', 'Počet servisáků'],
+            {foreach $chartServiceteam as $data}
+                [{$data['name']}, {$data['count']}]{sep},{/sep}
+            {/foreach}
+        ]);
+        var options = {
+            title: 'Servisáci podle rozdělení do týmů'
+        };
+        var chart = new google.visualization.PieChart(document.getElementById('chartServiceteamTeams'));
+        chart.draw(data, options);
+
+
+        // Skupiny podle kraju
+
+        var data = google.visualization.arrayToDataTable([
+            ['Kraj', 'Počet skupin'],
+            {foreach $chartRegions as $data}
+            [{$data['name']}, {$data['count']}]{sep},{/sep}
+            {/foreach}
+        ]);
+        var options = {
+            title: 'Skupiny podle Krajů'
+        };
+        var chart = new google.visualization.PieChart(document.getElementById('chartGroupsRegions'));
+        chart.draw(data, options);
+
+
+
+        // Ucastnici podle kraju
+
+         var data = google.visualization.arrayToDataTable([
+            ['Kraj', 'Počet účastíků'],
+            {foreach $chartRegions as $data}
+            [{$data['name']}, {$data['count_participants']}]{sep},{/sep}
+            {/foreach}
+        ]);
+        var options = {
+            title: 'Účastníci podle Krajů'
+        };
+        var chart = new google.visualization.PieChart(document.getElementById('chartParticipantsRegions'));
+        chart.draw(data, options);
+
+    }
+</script>
+
+
+<div class="row">
+
+<div class="col-md-4">
+        <table class="table table-bordered table-condensed table-striped table-hover">
+        {define tr}
+        <tr>
+            <td width="60">
+                #{$row->id}<br />
+                <small>{$row->varSymbol}</small>
+            </td>
+            <td>
+                {*<img src="{plink Image: (expand) $row->getAvatarType($row::AVATAR_TYPE_DBROW)}" alt="foto" style="float: left;margin-right: 10px;" />*}
+                <strong>{$row->name}</strong>
+                <br /><small>{$row->city}</small>
+            </td>
+            <td>
+                {$row->participantsCount} členů
+                <br /><small>Zaplaceno za: {$row->paidFor}</small>
+            </td>
+        </tr>
+        {/define}
+            <thead>
+                <tr>
+                    <th colspan="99">Málo účastníků</th>
+                </tr>
+            </thead>
+            <tbody>
+                {foreach $warningGroups->fewParticipants as $row}
+                    {include #tr}
+                {/foreach}
+            </tbody>
+
+            <thead>
+                <tr>
+                    <th colspan="99">Nemají vedoucího</th>
+                </tr>
+            </thead>
+            <tbody>
+                {foreach $warningGroups->noBoss as $row}
+                    {include #tr}
+                {/foreach}
+            </tbody>
+
+
+            <thead>
+                <tr>
+                    <th colspan="99">Nedoplacený</th>
+                </tr>
+            </thead>
+            <tbody>
+                {foreach $warningGroups->underPaid as $row}
+                    {include #tr}
+                {/foreach}
+            </tbody>
+
+            <thead>
+                <tr>
+                    <th colspan="99">Přeplacený</th>
+                </tr>
+            </thead>
+            <tbody>
+                {foreach $warningGroups->overPaid as $row}
+                    {include #tr}
+                {/foreach}
+            </tbody>
+
+        </table>
+    </div>
+
+</div>
+
+{/block}

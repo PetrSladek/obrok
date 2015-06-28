@@ -1,0 +1,335 @@
+{block content}
+
+{var $group = $me->group}
+{var $boss = $me->group->boss}
+
+<div class="row">
+
+    <div class="col-md-3">
+        {*{if $me->isAdmin()}
+        <a n:tag-if="$open" href="{plink Homepage:editGroup}">
+            <img style="width: 100%" src="{link Image: (expand) $group->getAvatarType($group::AVATAR_TYPE_DBDETAIL)}" alt="foto" border="0" />
+        </a>
+        {else}
+        <img style="width: 100%" src="{link Image: (expand) $group->getAvatarType($group::AVATAR_TYPE_DBDETAIL)}" alt="foto" />
+        {/if}*}
+    </div>
+    <div class="col-md-6">
+        <h2 class="pull-left"><strike n:tag-if="!$group->confirmed">{$group->name} <small>{$group->city}</small></strike></h2>
+        <a n:tag-if="$open" class="pull-right" href="{plink Homepage:editGroup}">editovat údaje skupiny</a>
+
+        <table class="table">
+            <tr>
+                <td>ID skupiny</td>
+                <td>
+                    <strong>#{$group->id}</strong>
+                    &nbsp;&nbsp;&nbsp;<small class="help" title="Identifikační číslo vaší skupiny">(?)</small>
+                </td>
+            </tr>
+            <tr>
+                <td>Zodpovědný vedoucí (18+)</td>
+                <td>
+                    <strong>{if $boss}{$boss->fullname}{else}<a n:tag-if="$me->isAdmin()" href="{plink editGroup}">- doplňtě -</a>{/if}</strong>
+                    &nbsp;&nbsp;&nbsp;<small class="help" title="zodpovídá za účastníky ve skupině v průběhu Obroku 2015">(?)</small>
+                </td>
+            </tr>
+            {if $boss}
+            <tr>
+                <td>Kontaktní telefon</td>
+                <td><strong>{$boss->getPhone()|phone}&nbsp;&nbsp;&nbsp;<small class="help" title="Kontaktní telefon na vedoucího skupiny, který musí mít sebou v době konání Obrok 2015">(?)</small></td>
+            </tr>
+            {/if}
+            <tr>
+            {var $adms = $group->getAdministrators()}
+            {if count($adms)>1}<td>Administrátoři skupiny</td>{else}<td>Administrátor skupiny</td>{/if}
+                <td>
+                    {foreach $adms as $adm}
+                    <strong>{$adm->fullname}</strong>{sep} ,{/sep}
+                    {/foreach}
+                    &nbsp;&nbsp;&nbsp;<small class="help" title="má oprávnění měnit údaje skupiny i všech jejích účastníků v tomto systému">(?)</small>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <h4>Tvůj program</h4>
+        {if $programs}
+        <table class="table table-bordered table-striped">
+            {foreach $programs as $program}
+            <tr>
+                <td>
+                    <strong>{$program->programSection} <small n:ifcontent>{$program->programSubSection}</small></strong> {$program->start|day} {$program->start->format('j.n. H:i')}-{$program->end->format('H:i')}:<br />
+                    <strong>{$program->name}</strong> <small n:if="$program->lector && $program->lector != '-'"><em>{$program->lector}</em></small>
+                </td>
+            </tr>
+            {/foreach}
+        </table>
+        {else}
+            <em>- nemáš nic zaregistrováno -</em>
+        {/if}
+
+    </div>
+</div>
+
+<br /><br />
+
+<div class="row">
+    <div class="col-md-12">
+    <h4>Účastníci ve skupině</h4>
+    {*<p>Po odebrání účastníka ho můžete kdykoli vrátit, nebo vyměnit za někoho jiného</p>*}
+
+    {*{if $group->isPartlyPaid() > 0}
+    <div class="row">
+    <div class="col-md-12">
+        <br />
+        <div class="alert alert-danger">
+            <strong>Máte ve skupině
+            {if $group->getParticipantsCount() == 0 || $group->getParticipantsCount() >= 5}
+                {$group->getParticipantsCount()} účastníků
+            {elseif $group->getParticipantsCount() == 0}
+                {$group->getParticipantsCount()} učastníka
+            {else}
+                {$group->getParticipantsCount()} učastníky
+            {/if}
+                , ale zaplatili jste jen za {$group->getPaidFor()}!
+            </strong><br />
+            Musíte některé účastníky ze skupiny odebrat, nebo doplatit zbytek peněz!<br />
+            Účastníky můžete v rámci zaplaceného počtu kdykoliv vyměnit, ale nemůže jich být víc než máte zaplaceno<br />
+        </div>
+    </div>
+    </div>
+    {/if}*}
+
+    {snippet participants}
+        <div class="participants">
+            <table class="table table-bordered" id="participants">
+                <tbody>
+                {define #row}
+                    <tr n:class="$group->isPaid() ? cell-flag-green : ($group->isConfirmed() ? cell-flag-blue)" id="pariticpant-{$participant->id}">
+                        <td>
+                            {$participant->fullname}<br />
+                            <small>
+                                {if ($me->isAdmin() || $user->id == $participant->id) && $open}<a class="edit" href="{plink participant $participant->id}">Editovat údaje</a>{/if}
+                                {if $me->isAdmin() && $open} | <a class="ajax" href="{plink goOut! $participant->id}">Odebrat</a>{/if}
+                            </small>
+                        </td>
+                        <td>
+                            {if empty($participant->addressStreet) || empty($participant->addressCity)}
+                                {if $me->isAdmin() || $user->id == $participant->id}
+                                <strong class="missing"><a href="{plink participant $participant->id}">Doplňte bydliště!</a></strong>
+                                {else}
+                                <strong class="missing">Doplňte bydliště!</strong>
+                                {/if}
+                            {else}
+                                {$participant->addressStreet},<br />{$participant->addressCity}  {$participant->addressPostcode}
+                            {/if}
+
+                        </td>
+                        <td>
+                            {if empty($participant->birthdate)}
+                                <strong class="missing">Doplňte!</strong>
+                            {else}
+                                {$participant->birthdate->format('j.n.Y')}<br />
+                                <small>na Obroku {$participant->getAge($ageInDate)} let</small>
+                            {/if}
+                        </td>
+                        <td>
+                            {!$participant->getPhone()|phone}<br />
+                            {$participant->email}
+                        </td>
+                        <td>
+                            {if $participant->lastLogin}
+                                <small>naposledy přihlášen</small><br />
+                                {$participant->lastLogin->format('j.n.Y v H:i')}
+
+                            {*{elseif $participant->loginInvitation && $me->isAdmin()}
+                                Pozvánka zaslána<br />
+                                <small><a class="ajax" href="{plink sendInvitation! $participant->id}">zaslat znovu</a></small>
+                            {else}
+                                <a class="ajax" href="{plink sendInvitation! $participant->id}">Zaslat pozvánku<br /><small>na přístup do skupiny</small></a>*}
+                            {/if}
+                        </td>
+                    </tr>
+                    {*{if $me->isAdmin() || $user->id == $participant->id}
+                    <tr class="row-edit cell-status-*}{*$participant->getStatus()->id*}{*" data-defaults="*}{*$participant->getJson()*}{*">
+                        <td colspan="5" class="dark">
+                        </td>
+                    </tr>
+                    {/if}*}
+                {/define}
+
+                {foreach $me->group->getConfirmedParticipants() as $participant}
+                    {include #row group=>$me->group}
+                {/foreach}
+
+                {*{for $i=0; $i < $me->group->getOverPaidPlaces(); $i++}*}
+                    {*<tr class="cell-flag-green">*}
+                        {*<td colspan="5" class="text-center">*}
+                        {*- Volné zaplacené místo -*}
+                        {*{if $openRegistrationParticipants}*}
+                            {*<br />&nbsp;*}
+                            {*<small>Můžete přidat nového účastníka skupiny, nebo obnovit někoho zrušeného a použije se již zaplacená platba za někoho z vyřazených</small>&nbsp;*}
+                        {*{/if}*}
+                        {*</td>*}
+                    {*</tr>*}
+                {*{/for}*}
+
+                </tbody>
+            </table>
+
+           {* {if $me->isAdmin() && $open}
+                *}{*{if $group->possibleSetPaidParticipants() || $group->getStatus()->id == Group::STATUS_REGISTRED || $group->getStatus()->id == Group::STATUS_DONTKNOW}*}{*
+                    <a href="{plink participant}" class="btn btn-primary" id="addParticipantButton">Přidat nového účastníka</a>
+                *}{*{else}*}{*
+                    *}{*<span class="btn disabled">Přidat nového účastníka</span> <small>Jestli chcete vyměnit některého účastníka, musíte nejdříve jiného odebrat</small>*}{*
+                *}{*{/if}*}{*
+            {else}
+                <span class="btn disabled">Přidat nového účastníka</span> <small>Přidávat účastníky do skupiny může jen administrátor skupiny</small>
+            {/if}*}
+
+        </div>
+
+        <div>
+            {var $canceled => $me->group->getUnconfirmedParticipants()}
+            {if count($canceled)}
+            <strong>Účastníci kteří nepřijedou: </strong>
+            {foreach $canceled->fetchAll() as $participant}
+                {$participant->fullname}
+                <small n:if="$openRegistrationParticipants && $open && $me->isAdmin()"><a class="--ajax" href="{plink goBack! $participant->id}">Vrátit</a></small>
+                {*<small n:if="$open && $me->isAdmin() && $participant->payment_recieved && ($group->getStatus()->id == Group::STATUS_REGISTRED || $group->getStatus()->id == Group::STATUS_DONTKNOW)"><a class="ajax" href="{link usePayment! $participant->id}" title="Jeho platba se převede na prvního aktivního učastníka, za nějž ještě nebylo zaplaceno">ZAPLACEN - použít jeho platbu</a></small>*}
+                {sep}, {/sep}
+            {/foreach}
+            {/if}
+        </div>
+
+        {/snippet}
+
+    </div>
+</div>
+
+<br /><br />
+
+
+<div class="row">
+    <div class="col-md-6">
+        <h4>Jak přidat lidi do skupiny?</h4>
+        <ol>
+           <li>Novému účastníkovi je potřeba poslat <strong>zvací odkaz</strong>. To můžete udělat buď vyplneném emailu ve formuláři vpravo, nebo mu jakoliv jinak zaslat zvací odkaz</li>
+           <li>Nový účastník po kliknutí na <strong>zvací odkaz</strong> musí vyplnit své údaje</li>
+           <li>A to je vše! Poté už bude zvaná osoba vidět zde, a bude členem této skupiny</li>
+        </ol>
+    </div>
+    <div class="col-md-6">
+    {*{if $openRegistrationParticipants || $group->getFreePlaces()}*}
+    {if $openRegistrationParticipants}
+        <h4>Zvací odkaz</h4>
+        <strong><a href="{link //Registration:toGroup $group->id, $group->getInvitationHash($config->hashKey)}">{link //Registration:toGroup $group->id, $group->getInvitationHash($config->hashKey)}</a></strong>
+        <h4>Zvací formulář</h4>
+        {control frmSendInvitationLink}
+    {else}
+        <div class="alert alert-warning">
+            <h4>Nelze pozvat lidi do skupiny</h4>
+            <p>Registrace je již uzavřena z kapacitních důvodů</p>
+        </div>
+    {/if}
+    </div>
+</div>
+
+<br /><br />
+
+<div class="row">
+    <div class="col-md-12">
+    <h4>Informace k platbě</h4>
+    </div>
+    <div class="col-md-5">
+        <table  class="table">
+            {*<tr n:if="$group->getPaidFor() > 0" class="text-success">
+               <td colspan="2">Aktuálně je zaplaceno za
+                <strong>
+                    {if $group->getPaidFor() == 0 || $group->getPaidFor() >= 5}
+                    {$group->getPaidFor()} účastníků
+                    {elseif $group->getPaidFor() == 1}
+                    {$group->getPaidFor()} účastníka
+                    {elseif $group->getPaidFor() >= 2}
+                    {$group->getPaidFor()} účastníky
+                    {/if}
+                </strong>
+               </td>
+           </tr>*}
+           <tr>
+               <td>Částka:</td>
+               <td><strong>600 Kč za každého účastníka</strong></td>
+           </tr>
+           <tr>
+               <td>Číslo účtu</td>
+               <td><strong>2100437022/2010</strong></td>
+           </tr>
+           <tr>
+               <td>Variabilní symbol</td>
+               <td><strong>{$group->getVarSymbol()}</strong></td>
+           </tr>
+           <tr>
+               <td>Poznámka pro příjemce</td>
+               <td><strong>Obrok 2015</strong></td>
+           </tr>
+       </table>
+    </div>
+    <div class="col-md-5">
+        Platbu provádějte až budete mít splněné všechny podmínky učasti!<br />
+        <strong>Zaplaťte prosím za všechny registrované účastníky najednou.</strong><br />
+        V případě, že později budete chtít někoho přidat. Zaplaťte pouze za něj (se stejným Var.Symbolem)
+    </div>
+</div>
+
+
+{if $group->confirmed}
+<div class="cancel">
+    {if $me->isAdmin()}
+    <a href="{plink cancel}">Zrušit registraci skupiny</a>
+    {else}
+    Zrušit registraci skupiny (Může pouze administrátor skupiny)
+    {/if}
+</div>
+{else}
+<div class="text-danger">
+    <strong>Aktuálně se s Vámi na Obroku NEPOČÍTÁ!</strong><br />
+    Buď jste svoji účast sami zrušili, nebo Vám byla zrušena týmem Registrace.<br />
+    V případě jakýchkoli nejasností napište prosím na email dole.
+</div>
+{/if}
+
+
+
+
+<p class="center">
+    V případě jakýchkoliv dotazů či změn (které zde nejdou provést) napiště na email <a href="mailto:{$config->emailToRegistration}">{$config->emailToRegistration}</a>
+</p>
+
+
+
+
+{*{if $registrationActiveView}
+<div class="container vizitka">
+	<div class="containerContent clearfix">
+		<h3>Registrace programů</h3>
+		<p>Ještě před akcí, si zde můžete zaregistrovat některé programy (Službu, Vapro, Prohlídku).</p>
+		<p>Jak se říkává, nejdříve práce, potom odměna, takže si nejprve musíte zaregistrovat Službu, a až potom si budete moci vybrat VaPro (pozor aby se vám nekryli). Další podmínkou je, že v jednom (právě v jednom) ze 4 bloků Vapra si musíte zaregistrovat Netradiční sporty!</p>
+		<p>Každý z programů se registruje individuálně. Administrátor skupiny (ten kdo jí zakládal), má možnost registrovat program těm, kteří nemají svůj přístup do tohoto systému. V případě, že ho chcete někomu vytvořit, musí mu administrátor skupiny správně vyplnit email a odkazem vedle jeho jména mu "poslat pozvánku" :-).</p>
+		<p>Pokud se vám nepodaří některý program zaregistrovat, nevěšte hlavu, s "lístky" bude možné ještě "kšeftovat" na Obroku ;-)</p>
+		<p n:if="$registrationActive">
+			<a class="btn btn-primary" href="{link Program:}">Registrovat si program</a>
+		</p>
+		<p n:if="!$registrationActive">
+			<strong>Registrace je zatím pouze k nahlédnutí, spuštěna bude {$registrationActiveFrom->format('j.n.Y \v\e H:i')}</strong><br />
+			<a class="btn btn-primary" href="{link Program:}">Nahlédnout do registrace</a>
+		</p>
+	</div>
+</div>
+{/if}*}
+
+
+

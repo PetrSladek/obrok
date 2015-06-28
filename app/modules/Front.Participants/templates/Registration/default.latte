@@ -1,0 +1,36 @@
+{var $title = 'Zaregistrovat novou skupinu'}
+
+{block #ogMeta}
+    <meta property="og:title" content="{$title} | Obrok 2015" />
+    <meta property="og:description" content="Vytvořit novou účastnickou skupinu na Obrok 2015" />
+    <meta name="description" content="Vytvořit novou účastnickou skupinu na Obrok 2015" />
+{/block}
+
+
+{block breadcrumb}
+<ol class="breadcrumb">
+    <li><a n:href="Homepage:">Registrační systém pro účastniky</a></li>
+    <li class="active">Zaregistrovat novou skupinu</li>
+</ol>
+{/block}
+
+
+{block content}
+
+
+{if $openRegistrationParticipants}
+<h2>Zaregistrovat novou skupinu</h2>
+<div class="row">
+
+	<div class="col-md-8">
+        {control frmRegistration}
+    </div>
+
+</div>
+{else}
+<h2>Registrace skupin je ukončena</h2>
+<p>Z důvodu plné kapacity</p>
+{/if}
+
+
+{/block}

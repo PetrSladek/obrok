@@ -1,0 +1,84 @@
+{var $title = 'Mapa roveringu'}
+
+{block #ogMeta}
+    <meta property="og:title" content="{$title} | Obrok 2015" />
+    <meta property="og:description" content="Mapa skupin přihlášených na Obrok 2015" />
+    <meta name="description" content="Mapa skupin přihlášených na Obrok 2015" />
+{/block}
+
+
+{block breadcrumb}
+<ol class="breadcrumb">
+    <li><a n:href="Homepage:">Registrační systém pro účastniky</a></li>
+    <li class="active">Mapa roveringu</li>
+</ol>
+{/block}
+
+
+{block content}
+
+<h2>Mapa zeregistrovaných roverských skupin</h2>
+<div class="row">
+	<div class="col-md-8">
+        <div id="map-canvas" style="width: 100%; height: 500px;"></div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-8">
+        {foreach $groups as $group}
+        <h3>{$group->name} <small>{$group->city}</small></h3>
+        <p>{$group->note}</p>
+        <p>
+            Ve složení:
+            {foreach $group->getActiveParticipants() as $participant}
+                {if $participant->nickname}{$participant->nickname}{else}{$participant->firstname}{/if}{sep}, {/sep}
+            {/foreach}
+        </p>
+        {/foreach}
+    </div>
+</div>
+    <script type="text/javascript" src="https://googlemaps.github.io/js-marker-clusterer/src/markerclusterer.js" />
+    <script type="text/javascript">
+
+        var markers = [];
+        function addMarker(map, name, city, locationLat, locationLng) {
+            var marker = new google.maps.Marker({
+                {*map: map,*}
+                position: new google.maps.LatLng( locationLat, locationLng ),
+                title: name + " - " + city
+              });
+
+             {* // Construct a new InfoWindow.
+              var infowindow = new google.maps.InfoWindow({
+                content: "<strong>"+name+"</strong> <small>"+city+"</small>"
+              });
+
+              // Opens the InfoWindow when marker is clicked.
+              marker.addListener('click', function() {
+                infowindow.open(map, marker);
+              });*}
+
+            markers.push(marker);
+        }
+
+      function initialize() {
+        var mapOptions = {
+          center: { lat: 49.8037633, lng: 15.4749126 },
+          zoom: 7
+        };
+        var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+
+        {foreach $groups as $group}
+        addMarker(map, {=json_encode($group->name)},  {=json_encode($group->city)}, {$group->locationLat}, {$group->locationLng});
+        {/foreach}
+
+        var markerCluster = new MarkerClusterer(map, markers);
+      }
+
+      google.maps.event.addDomListener(window, 'load', initialize);
+    </script>
+
+
+</div>
+
+{/block}

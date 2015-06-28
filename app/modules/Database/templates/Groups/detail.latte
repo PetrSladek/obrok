@@ -1,0 +1,306 @@
+{block content}
+{*
+<style>
+.modal {
+    bottom: auto;
+    display: block;
+    left: auto;
+    position: relative;
+    right: auto;
+    top: auto;
+    z-index: 1;
+}
+</style>
+*}
+<div class="container">
+{*{snippet detail}*}
+
+<div class="row">
+    <div class="pull-left">
+        <h1>{$item->name} <small>/{$item->city}/</small></h1>
+    </div>
+
+    <div class="pull-right">
+        <a n:href="edit $item->id" class="btn btn-warning ajax">Editovat údaje</a>
+    </div>
+</div>
+<!-- Nav tabs -->
+<ul class="nav nav-tabs" role="tablist">
+  <li class="active"><a href="#group" role="tab" data-toggle="tab">Skupina</a></li>
+  <li><a href="#participants" role="tab" data-toggle="tab">Členové</a></li>
+  {*<li><a href="#payments" role="tab" data-toggle="tab">Platby</a></li>*}
+</ul>
+
+{*<div class="modal fade in">
+<div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        <div class="modal-header clearfix">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h3 class="modal-title pull-left">{$item->name} <small>/{$item->city}/</small></h3>
+
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs" role="tablist" style=" bottom: -8px; float: right; margin-bottom: -8px; position: relative;">
+              <li class="active"><a href="#group" role="tab" data-toggle="tab">Skupina</a></li>
+              <li><a href="#participants" role="tab" data-toggle="tab">Členové</a></li>
+              <li><a href="#payments" role="tab" data-toggle="tab">Platby</a></li>
+              *}{*<li><a href="#settings" role="tab" data-toggle="tab">Settings</a></li>*}{*
+            </ul>
+
+        </div>*}
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+
+            <div class="modal-body tab-pane active" id="group">
+                {form frmEdit data-object-id=>$item->id, data-edit-link=>$control->link('ajaxEdit!')}
+                <div class="row">
+                    <div class="col-md-4">
+                        {*<div n:class="$acl->edit ? ajax-edit">
+                            <div class="ajax-edit-val">
+                                {snippet avatar}
+                                <img src="{link Image: (expand) $item->getAvatarType($item::AVATAR_TYPE_DBDETAIL)}" alt="foto" />
+                                {/snippet}
+                            </div>
+                            <div class="ajax-edit-target" n:if="$acl->edit">
+                                {input avatar}
+                                <button class="btn btn-success pull-right cropimage-save" role="save" type="button">Uložit</button>
+                            </div>
+                        </div>*}
+                    </div>
+                    <div class="col-md-5">
+                        <h4 n:class="$acl->edit ? ajax-edit">
+                            <small>Vedoucí skupiny (18+ let)</small><br />
+                            <div class="ajax-edit-val">
+                            {snippet boss}
+                                {if $item->boss}{$item->boss->fullname} <small>{$item->boss->getAge($ageInDate)} let</small>{else}- není -{/if}
+                            {/snippet}
+                            </div>
+                            <div class="ajax-edit-target" n:if="$acl->edit">{input boss}</div>
+                        </h4>
+                        <h3>
+                            <small>Kontaktní telefon</small><br />
+                            {snippet phone}
+                                {if $item->boss}{$item->boss->getPhone()|phone}{else}- není vedoucí skupiny  -{/if}
+                            {/snippet}
+                        </h3>
+
+                    </div>
+                    <div class="col-md-3">
+                        <h4>
+                            <small>Počet potvrzených účastníků</small><br />
+                            {$item->getConfirmedParticipantsCount()} osob
+                        </h4>
+                        {*<h4 n:class="$acl->edit ? ajax-edit">
+                            <small>Zaplaceno za</small><br />
+                            <div class="ajax-edit-val">{snippet paidFor}{if $item->getPaidFor()}{$item->getPaidFor()} osob{else}- nezaplaceno -{/if}{/snippet}</div>
+                            <div class="ajax-edit-target" n:if="$acl->edit">{input paidFor}</div>
+                        </h4>*}
+                    </div>
+                </div>
+                <div class="row">
+                    &nbsp;
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <h5 n:class="$acl->edit ? ajax-edit">
+                            <small>O skupině</small><br />
+                            <div class="ajax-edit-val">
+                            {snippet note}
+                                {if $item->note}{$item->note}{else}- není -{/if}
+                            {/snippet}
+                            </div>
+                            <div class="ajax-edit-target" n:if="$acl->edit">{input note}</div>
+                        </h5>
+                    </div>
+                    <div class="col-md-5">
+                        <h5 n:class="$acl->edit ? ajax-edit">
+                            <small>Interní poznámka</small><br />
+                            <div class="ajax-edit-val">
+                            {snippet noteInternal}
+                                {if $item->noteInternal}{$item->noteInternal}{else}- není -{/if}
+                            {/snippet}
+                            </div>
+                            <div class="ajax-edit-target" n:if="$acl->edit">{input noteInternal}</div>
+                        </h5>
+                    </div>
+                    <div class="col-md-3">
+
+                        <div class="btn-group-vertical btn-block" data-toggle="buttons" n:snippet="flags">
+                               <span n:tag-if="!$acl->edit" class="disabled btn btn-default">
+                               <a n:tag-if="$acl->edit" class="ajax btn btn-default" n:href="status! 'confirmed', !$item->confirmed">
+                                   <i n:class="$item->confirmed ? ficon-flag-blue : ficon-flag-gray"></i> Přijedou
+                               </a>
+                               </span>
+
+                               <span n:tag-if="!$acl->edit" class="disabled btn btn-default">
+                               <a n:tag-if="$acl->edit" class="ajax btn btn-default" n:href="status! 'paid', !$item->paid">
+                                   <i n:class="$item->paid ? ficon-flag-green : ficon-flag-gray"></i> Zaplatili
+                               </a>
+                               </span>
+
+                               <span n:tag-if="!$acl->edit" class="disabled btn btn-default">
+                               <a n:tag-if="$acl->edit" class="ajax btn btn-default" n:href="status! 'arrived', !$item->arrived">
+                                   <i n:class="$item->arrived ? ficon-flag-pink : ficon-flag-gray"></i> Přijeli
+                               </a>
+                               </span>
+
+                               <span n:tag-if="!$acl->edit" class="disabled btn btn-default">
+                               <a n:tag-if="$acl->edit" class="ajax btn btn-default" n:href="status! 'left', !$item->left">
+                                   <i n:class="$item->left ? ficon-flag-yellow : ficon-flag-gray"></i> Odjeli
+                               </a>
+                               </span>
+                        </div>
+
+                    </div>
+                </div>
+                {/form}
+            </div>
+            <div class="tab-pane modal-body" id="participants" >
+
+
+                <div class="row">
+                    <div class="col-md-12">
+                    <h4>Účastníci ve skupině</h4>
+                    {*<p>Po odebrání účastníka ho můžete kdykoli vrátit, nebo vyměnit za někoho jiného</p>*}
+
+                   {* {if $item->isPartlyPaid()}
+                    <div class="row">
+                    <div class="col-md-12">
+                        <br />
+                        <div class="alert alert-danger">
+                            <strong>Máte ve skupině
+                            {if $item->getConfirmedParticipantsCount() == 0 || $item->getConfirmedParticipantsCount() >= 5}
+                                {$item->getConfirmedParticipantsCount()} účastníků
+                            {elseif $item->getConfirmedParticipantsCount() == 0}
+                                {$item->getConfirmedParticipantsCount()} učastníka
+                            {else}
+                                {$item->getConfirmedParticipantsCount()} učastníky
+                            {/if}
+                                , ale zaplatili jste jen za {$item->getPaidFor()}!
+                            </strong><br />
+                            Musíte některé účastníky ze skupiny odebrat, nebo doplatit zbytek peněz!<br />
+                            Účastníky můžete v rámci zaplaceného počtu kdykoliv vyměnit, ale nemůže jich být víc než máte zaplaceno<br />
+                        </div>
+                    </div>
+                    </div>
+                    {/if}*}
+
+                    {snippet participants}
+
+                        {*{if $acl->edit}
+                            <a n:if="!$item->arrived" n:href="groupArrive! $item->id, true" class="ajax btn btn-primary">Označit celou skupinu jako PŘIJELI</a>
+                            <a n:if="$item->arrived" n:href="groupArrive! $item->id, false" class="ajax btn btn-default">Označit celou skupinu jako NEPŘIJELI</a>
+                            <br /><br />
+                        {/if}*}
+
+                        <div class="participants">
+                            <table class="table table-bordered">
+                                <tbody>
+                                {define #row}
+                                    <tr n:class="$participant->left ? cell-flag-yellow : ($participant->arrived ? cell-flag-pink : ($participant->paid ? cell-flag-green : ($participant->confirmed ? cell-flag-blue)))">
+                                        <td width="300">
+                                            <div class="pull-right">
+                                                <a class="btn btn-default btn-xs" n:href="Participants:detail $participant->id">Otevřít</a><br />
+                                                <a n:if="$acl->edit" class="btn btn-default btn-xs" n:href="Participants:edit $participant->id">Editovat</a>
+                                            </div>
+
+                                             {if $participant->nickName}
+                                                <strong>{$participant->nickName}</strong>
+                                                <br /><small>{$participant->firstName} {$participant->lastName|upper}</small>
+                                            {else}
+                                                <strong>{$participant->firstName} {$participant->lastName|upper}</strong>
+                                                <br /><small></small>
+                                            {/if}
+                                        </td>
+                                        <td>
+                                            {if empty($participant->addressStreet) || empty($participant->addressCity)}
+                                                {if $acl->edit || $user->id == $participant->id}
+                                                <strong class="missing"><a href="{plink participant $participant->id}">Doplňte bydliště!</a></strong>
+                                                {else}
+                                                <strong class="missing">Doplňte bydliště!</strong>
+                                                {/if}
+                                            {else}
+                                                {$participant->addressStreet},<br />{$participant->addressCity}  {$participant->addressPostcode}
+                                            {/if}
+
+                                        </td>
+                                        <td>
+                                            {if empty($participant->birthdate)}
+                                                <strong class="missing">Doplňte!</strong>
+                                            {else}
+                                                {$participant->birthdate->format('j.n.Y')}<br />
+                                                <small>na Obroku {$participant->getAge($ageInDate)} let</small>
+                                            {/if}
+                                        </td>
+                                        <td>
+                                            {$participant->getPhone()|phone}<br />
+                                            {$participant->email}
+                                        </td>
+                                        <td class="text-right">
+                                            <div class="btn-group" role="group" aria-label="Stav účastníka" n:if="$acl->edit">
+                                                <a class="btn btn-default btn-xs ajax" n:href="participantStatus! $participant->id, 'confirmed', !$participant->confirmed">
+                                                    <i n:class="$participant->confirmed ? ficon-flag-blue : ficon-flag-gray"></i> Přijede
+                                                </a>
+                                                <a class="btn btn-default btn-xs ajax" n:href="participantStatus! $participant->id, 'paid', !$participant->paid">
+                                                    <i n:class="$participant->paid ? ficon-flag-green : ficon-flag-gray"></i> Zaplatil
+                                                </a>
+                                                <a class="btn btn-default btn-xs ajax" n:href="participantStatus! $participant->id, 'arrived', !$participant->arrived">
+                                                    <i n:class="$participant->arrived ? ficon-flag-pink : ficon-flag-gray"></i> Přijel
+                                                </a>
+                                                <a class="btn btn-default btn-xs ajax" n:href="participantStatus! $participant->id, 'left', !$participant->left">
+                                                    <i n:class="$participant->left ? ficon-flag-yellow : ficon-flag-gray"></i> Odjel
+                                                </a>
+                                            </div>
+
+                                        </td>
+                                    </tr>
+                                {/define}
+
+                                {foreach $activeParticipants as $participant}
+                                    {include #row}
+                                {/foreach}
+
+                                {*{for $i=0; $i < $item->getOverPaidPlaces(); $i++}
+                                    <tr class="cell-flag-green">
+                                        <td colspan="5" class="text-center">
+                                        - Volné zaplacené místo -<br />&nbsp;
+                                        <small>Můžete přidat nového účastníka skupiny, nebo obnovit někoho zrušeného a použije se již zaplacená platba za někoho z vyřazených</small>&nbsp;
+                                        </td>
+                                    </tr>
+                                {/for}*}
+
+                                </tbody>
+                            </table>
+
+                        </div>
+
+                        {if $canceledParticipants}
+                        <div class="participants">
+                            <table class="table table-bordered">
+                                <tbody>
+                                    <strong>Účastníci kteří nepřijedou: </strong>
+                                    {foreach $canceledParticipants as $participant}
+                                        {include #row}
+                                    {/foreach}
+                                </tbody>
+                            </table>
+                        </div>
+                        {/if}
+
+                    {/snippet}
+                    </div>
+                </div>
+
+            </div>
+            {*<div class="tab-pane modal-body" id="payments" >
+                {control tblPayments}
+            </div>*}
+        </div>
+{*    </div>
+</div>
+</div>*}
+{*{/snippet}*}
+
+</div>
+
+{/block}

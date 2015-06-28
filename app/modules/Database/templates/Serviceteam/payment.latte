@@ -1,0 +1,134 @@
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+	<title>Potvrzení</title>
+	<style>
+		body {
+			font-family: Arial;
+			font-size: 11px;
+		}
+		table { width: 100%; border-collapse: collapse; }
+		table td,
+		table th {
+			text-align: left;
+			padding: 1px 6px;
+		}
+		table tr.boss { background: #cccccc; }
+
+		table thead th {
+			font-size: 1.2em;
+			font-weight: normal;
+		}
+
+		p,li { text-align: justify; }
+
+		h1 { font-size: 16px; }
+		hr { margin: 0px 0; }
+
+		.no {
+			list-style-type: none;
+			margin: 0;
+			padding: 0;
+		}
+		.flt-l { float: left; }
+		.flt-r { float: right; }
+		.cls { clear: both; }
+
+		.w50 { width: 50%; }
+	</style>
+</head>
+<body>
+
+{foreach $list as $item}
+	<div class="group-confirmation">
+
+		<table>
+			<tr>
+				<td style="text-align: left">
+					<h1>
+						Potvrzení o zaplacení účastnického poplatku člena servis týmu
+					</h1>
+					{*
+					<h2>
+						<em>#{$item->id}</em> {$item->name}<br /><small>({$item->city} | {$item->region})</small>
+					</h2>
+					*}
+				</td>
+				<td style="text-align: right">
+					<img class="logo" src="/db/img/logo_small.png" alt="Obrok 2015" />
+				</td>
+			</tr>
+		</table>
+		<hr />
+
+		<p>
+			Potvrzuji, že <strong>{$item->getName()}</strong> (#{$item->id}) uhradil(a) poplatek, ve výši <strong>300 Kč</strong> za účast na akci
+			Obrok 2015 {*v termínu 18.-22.9.2013 na vodním hradě Švihov, Plzeňský kraj.*}
+		</p>
+
+		<div class="cls"></div>
+
+
+		<p style="text-align: right">
+			Ve Vesci, dne 18.9.2013
+		</p>
+		<p style="text-align: right">
+			&nbsp;<br />
+			&nbsp;<br />
+			Jan Tobek<br />
+			Ředitel akce Obrok 2013<br />
+			Junák - svaz skautů a skautek ČR
+		</p>
+	</div>
+
+	<pagebreak />
+
+	<table>
+		<tr>
+			<td style="text-align: left">
+				<h1>
+					<em>#{$item->id}</em> {$item->getName()}<br /><small>({$item->city})</small>
+				</h1>
+			</td>
+			<td style="text-align: right">
+				<img class="logo" src="/db/img/logo_small.png" alt="Obrok 2015" />
+			</td>
+		</tr>
+	</table>
+	<hr />
+
+	<p>
+	Všichni členové skupiny:
+	</p>
+	<ul>
+		<li>Souhlasí s nakládáním pořízených audiovizuálních metriálů ve prospěch Junáka.</li>
+		<li>Souhlasí se zpracováním osobních údajů.</li>
+		<li>Berou na vědomí pravidla akce Obrok 2013, která byla předem odeslána prostřednictvím bookletu a jsou uvedena v handbooku. Účastníci si jsou vědomi následků spojených s jejich porušením.</li>
+		<li>Souhlasí, že veškeré údaje uvedené v registraci před akcí Obrok 2013 jsou pravdivé, platné a odpovídají skutečnosti.</li>
+		<li>Souhlasí s tím, že vedení akce Obrok 2013 není zodpovědné za osobní majetek účastníků.</li>
+	</ul>
+
+	<p>Všichni členové skupiny berou na vědomí a souhlasí s těmito povinnostmi:</p>
+	<ul>
+		<li>Veškerá zranění je nutno neprodleně hlásit u zdravotníků akce.</li>
+		<li>Veškeré neoznačené osoby je nutné neprodleně hlásit členům SOS nebo Servis Týmu.</li>
+		<li>V případě nenadálích situací jsou všichnu povinni dbát bezpečnosti své i ostatních a řídit se výhradně pokyny, viditelně označené pověřené osoby.</li>
+	</ul>
+	<p><strong>Vedoucí skupiny přebírá veškerou zodpovědnost za konání všech členů skupiny.</strong></p>
+
+	<p></p><p></p><p></p>
+
+	<p style="text-align: right">
+		Ve Vesci, dne 18.9.2013
+	</p>
+	<p style="text-align: right">
+		...........................................
+		<br />
+		{$item->getName()}, člen servis týmu
+	</p>
+
+	<pagebreak />
+
+{/foreach}
+</body>
+</html>
+

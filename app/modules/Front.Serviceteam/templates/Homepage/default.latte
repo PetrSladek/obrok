@@ -1,0 +1,102 @@
+{block content}
+
+        <div class="row">
+
+            <div class="col-md-3">
+                {*<img style="width: 100%" src="{link Image: (expand) $me->getAvatarType($me::AVATAR_TYPE_DBDETAIL)}" alt="foto" />*}
+            </div>
+            <div class="col-md-9">
+                <h2 class="pull-left">
+                    <strike n:tag-if="!$me->confirmed">
+                    {if $me->nickName}
+                        {$me->nickName} <small>{$me->firstName} {$me->lastName}</small>
+                    {else}
+                        {$me->firstName} {$me->lastName}
+                    {/if}
+                    </strike>
+                </h2>
+                <a class="pull-right" href="{plink Homepage:edit}">editovat své údaje</a>
+
+                <table class="table">
+                    <tr>
+                        <td>Kontaktní email</td>
+                        <td><strong>{$me->email}</strong></td>
+                    </tr>
+                    <tr>
+                        <td>Kontaktní telefon</td>
+                        <td><strong>{!$me->getPhone()|phone}</strong></td>
+                    </tr>
+                    <tr>
+                        <td>Velikost trička</td>
+                        <td><strong>{$me->getTshirtSizeName()}</strong></td>
+                    </tr>
+                    <tr>
+                        <td>Příjezd</td>
+                        <td><strong>{$me->getArriveText()}</strong></td>
+                    </tr>
+                </table>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-md-3">
+                {if $me->paid}
+                <table  class="table">
+                    <tr>
+                        <td colspan="2"><h4>Informace k platbě</h4></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><strong class="text-success">Účastnický poplatek byl úspěšně přijat</strong></td>
+                    </tr>
+                </table>
+                {else}
+                <table  class="table">
+                    <tr>
+                        <td colspan="2"><h4>Informace k platbě</h4></td>
+                    </tr>
+                    <tr>
+                        <td>Částka:</td>
+                        <td><strong>300 Kč</strong></td>
+                    </tr>
+                    <tr>
+                        <td>Číslo účtu</td>
+                        <td><strong>2100437022/2010</strong></td>
+                    </tr>
+                    <tr>
+                        <td>Variabilní symbol</td>
+                        <td><strong>{$me->getVarSymbol()}</strong></td>
+                    </tr>
+                    <tr>
+                        <td>Poznámka pro příjemce</td>
+                        <td><strong>Obrok 2015</strong></td>
+                    </tr>
+                </table>
+                {/if}
+            </div>
+        </div>
+        
+        {if $me->confirmed}
+        <div class="cancel">
+            <a href="{plink cancel}">Zrušit svou registraci</a>
+        </div>
+        {else}
+        <div class="text-danger">
+            <strong>Aktuálně se s Vámi na Obroku NEPOČÍTÁ!</strong><br />
+            Buď jste svoji účast sám zrušil(a), nebo Vám byla zrušena týmem Registrace.<br />
+            V případě jakýchkoli nejasností napište prosím na email dole.
+        </div>
+        {/if}
+        {*{else}*}
+        {*<div class="cancel">*}
+            {*Chceš li svou účast znovu obnovit nepiš na email dole*}
+        {*</div>*}
+        {*{/if}*}
+
+<p class="center">
+    V případě jakýchkoliv dotazů či změn (které zde nejdou provést) napiště na email <a href="mailto:{$config->emailToRegistration}">{$config->emailToRegistration}</a>
+</p>
+
+
+{/block}
+
