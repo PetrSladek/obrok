@@ -329,6 +329,33 @@ $(function(){
 });
 
 
+/**
+ * Czech translation for bootstrap-datetimepicker
+ * Matěj Koubík <matej@koubik.name>
+ * Fixes by Michal Remiš <michal.remis@gmail.com>
+ */
+;(function($){
+    $.fn.datetimepicker.dates['cs'] = {
+        days: ["Neděle", "Pondělí", "Úterý", "Středa", "Čtvrtek", "Pátek", "Sobota", "Neděle"],
+        daysShort: ["Ned", "Pon", "Úte", "Stř", "Čtv", "Pát", "Sob", "Ned"],
+        daysMin: ["Ne", "Po", "Út", "St", "Čt", "Pá", "So", "Ne"],
+        months: ["Leden", "Únor", "Březen", "Duben", "Květen", "Červen", "Červenec", "Srpen", "Září", "Říjen", "Listopad", "Prosinec"],
+        monthsShort: ["Led", "Úno", "Bře", "Dub", "Kvě", "Čer", "Čnc", "Srp", "Zář", "Říj", "Lis", "Pro"],
+        today: "Dnes",
+        suffix: [],
+        meridiem: []
+    };
+}(jQuery));
+
+/**
+ * This file is part of the Nextras community extensions of Nette Framework
+ *
+ * @license    MIT
+ * @link       https://github.com/nextras/forms
+ * @author     Jan Skrasek
+ */
+
+
 
 /**
  * This file is part of the Nextras community extensions of Nette Framework
@@ -339,19 +366,20 @@ $(function(){
  */
 
 jQuery(function($) {
-//    $('.date, .datetime-local').each(function(i, el) {
-//        el = $(el);
-//        el.get(0).type = 'text';
-//        el.datetimepicker({
-//            startDate: el.attr('min'),
-//            endDate: el.attr('max'),
-//            weekStart: 1,
-//            minView: el.is('.date') ? 'month' : 'hour',
-//            format: el.is('.date') ? 'd. m. yyyy' : 'd. m. yyyy - hh:ii', // for seconds support use 'd. m. yyyy - hh:ii:ss'
-//            autoclose: true
-//        });
-//        el.attr('value') && el.datetimepicker('setValue');
-//    });
+    $('input.date, input.datetime-local').livequery(function(i, el) {
+        el = $(el);
+        el.get(0).type = 'text';
+        el.datetimepicker({
+            language: 'cs',
+            startDate: el.attr('min'),
+            endDate: el.attr('max'),
+            weekStart: 1,
+            minView: el.is('.date') ? 'month' : 'hour',
+            format: el.is('.date') ? 'd. m. yyyy' : 'd. m. yyyy - hh:ii', // for seconds support use 'd. m. yyyy - hh:ii:ss'
+            autoclose: true
+        });
+        el.attr('value') && el.datetimepicker('setValue');
+    });
 });
 
 /**
@@ -372,3 +400,5 @@ jQuery(function($) {
         });
     });
 });
+
+

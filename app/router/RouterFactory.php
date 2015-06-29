@@ -23,7 +23,7 @@ class RouterFactory
         $router[] = new Route('index.php', 'Front:Login:default', Route::ONE_WAY);
 
         $router[] = $databaseRouter = new RouteList('Database');
-        $databaseRouter[] = new Route('database/<presenter>/<action>', 'Dashboard:default');
+        $databaseRouter[] = new Route('database/<presenter>/<action>[/<id>]', 'Dashboard:default');
 
         $router[] = $frontParticipantsRouter = new RouteList('Front:Participants');
         $frontParticipantsRouter[] = new Route('pozvanka/<hash>-<id>', 'Registration:toGroup');

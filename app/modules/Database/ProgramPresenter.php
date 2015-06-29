@@ -2,45 +2,37 @@
 
 namespace App\Module\Database\Presenters;
 
-use App\Group;
-use App\GroupsRepository;
-use App\Participant;
-use App\ParticipantsRepository;
-use App\PaymentsRepository;
-use App\Serviceteam;
-use App\ServiceteamRepository;
-use Myann\CropImage;
-use MyAnn\Form;
-use Myann\ImageService;
+
+use App\Forms\Form;
+use App\Model\Entity\Program;
+use App\Query\ProgramsQuery;
+use App\Repositories\ProgramsRepository;
+use App\Repositories\ProgramsSectionsRepository;
 use Nette\Forms\Container;
-use Nette\Forms\Controls\Button;
-use Nette\Security\Passwords;
+use Nette\Http\IResponse;
 use Nette\Utils\DateTime;
 use Nette\Utils\Paginator;
-use Nette\Utils\Random;
 use Nextras\Datagrid\Datagrid;
-use Nextras\Orm\Collection\ICollection;
-use Nextras\Orm\Entity\IEntity;
-use PdfResponse\PdfResponse;
-use Tracy\Debugger;
 
 class ProgramPresenter extends DatabaseBasePresenter
 {
 
+    /** @var ProgramsRepository @inject */
+    public $repository;
 
-    /** @var array|NULL
-     * @persistent
+    /**
+     * @var ProgramsSectionsRepository @inject
      */
-    public $filter = [];
+    public $sections;
 
-    public function renderDefault() {
 
-    }
+    /** @var Program */
+    public $item;
 
-    public function beforeRender()
+    public function startup()
     {
-        parent::beforeRender();
-        $this['tblGrid']->template->registerHelper('day' , callback($this, 'day'));
+        parent::startup();
+        $this->acl->edit = $this->user->isInRole('database'); // todo program-edit
     }
 
 
@@ -55,10 +47,10 @@ class ProgramPresenter extends DatabaseBasePresenter
         $grid->addColumn('id', 'ID')->enableSort();
         $grid->addColumn('section', 'Sekce')->enableSort();
 
-        $grid->addColumn('time', 'Čas')->enableSort();
+        $grid->addColumn('time', 'Den a čas')->enableSort();
 
         $grid->addColumn('name', 'Název')->enableSort();
-        $grid->addColumn('capacity', 'Kapacita')->enableSort();
+        $grid->addColumn('capacity', 'Obsazeno');//->enableSort();
 
 
         $grid->setFilterFormFactory(function() {
@@ -67,25 +59,21 @@ class ProgramPresenter extends DatabaseBasePresenter
                 ->addCondition(Form::FILLED)
                 ->addRule(Form::INTEGER);
 
-//            $frm->addMultiSelect('section', null, array(
-//                'cesta' => 'Cesta',
-//                'sluzba' => 'Služba',
-//                'zivly' => 'Živly',
-//                'vapro1' => 'Vapro 1.blok',
-//                'vapro2' => 'Vapro 2.blok',
-//                'vaproM' => 'Vapro přesobědový meziblok',
-//                'vapro3' => 'Vapro 3.blok',
-//                'vapro4' => 'Vapro 4.blok',
-//            ));
+            $sections = [];
+            foreach($this->sections->findAll() as $section)
+                $sections[$section->id] = $section->title . ($section->subTitle ? " - {$section->subTitle}" : null);
+            $frm->addMultiSelect('section', null, $sections);
 
             $frm->addText('name')
                 ->addCondition(Form::FILLED)
                 ->addRule(Form::INTEGER);
 
+            $frm->addSelect('capacity', null, array(1=>'Plné', 0=>'Volné'))->setPrompt('--');
+
 
             // these buttons are not compulsory
-            $frm->addSubmit('filter', 'Vyfiltrovat')->getControlPrototype()->class = 'btn btn-primary';
-            $frm->addSubmit('cancel', 'Zrušit')->getControlPrototype()->class = 'btn';
+            $frm->addSubmit('filter', 'Vyfiltrovat');
+            $frm->addSubmit('cancel', 'Zrušit');
 
 //            $form->setDefaults($this->filter);
 
@@ -93,65 +81,146 @@ class ProgramPresenter extends DatabaseBasePresenter
         });
 
 
-        $grid->setDatasourceCallback(function($filter, $order, Paginator $paginator = null) { // filter pouzivam ze svyho externiho formu
+        $grid->setPagination($this->gridItemsPerPage, function($filter) {
+            $query = $this->getFilteredQuery($filter);
+            return $query->count($this->repository);
+        });
+        $grid->setDatasourceCallback(function($filter, $sorting, Paginator $paginator = null) {
 
-            $where = [];
-            $where[] = '1=1';
-            foreach($filter as $k => $v) {
-                if($k == 'id')
-                    $where[] = "p.id = '$v'"; // TODO SQL INJECTION
-                elseif($k == 'name')
-                    $where[] = "(b.name LIKE '%$v%' OR b.lectorExt LIKE '%$v%')"; // TODO SQL INJECTION
+            $query = $this->getFilteredQuery($filter);
 
-            }
+            $result = $this->repository->fetch($query);
 
-            $programs = $this->database->query("
-              SELECT
-                p.id as id,
-                p.start, DATE_ADD(p.start, INTERVAL b.duration*15 MINUTE) as end,
-                b.duration, b.name, b.tools, b.location, b.perex, b.lectorExt as lector,
-                b.capacity,
-                (SELECT COUNT(*) FROM program_user WHERE program_id = p.id) as occupied
-              FROM program p
-              JOIN block b ON b.id = p.block_id
-              WHERE ".implode(" AND ", $where)."
-              ORDER BY start ASC, name ASC
-            ")->fetchAll();
+            if($paginator)
+                $result->applyPaging($paginator->getOffset(), $paginator->getLength());
+//            if($sorting) {
+//                list($key, $val) = $sorting;
+//                $result->applySorting([$key => $val]);
+//            }
 
-            foreach($programs as &$program) {
-                if($program->start->format('Y-m-d H:i') == "2015-06-09 17:00") {
-                    $program->programSection = 'Cesta';
-                    $program->programSubSection = null;
-                } else if($program->start == DateTime::from("2015-06-11 8:00")) {
-                    $program->programSection = 'Služba';
-                    $program->programSubSection = null;
-                } else if($program->start >= DateTime::from("2015-06-11 13:45") && $program->start <= DateTime::from("2015-06-11 18:30")) {
-                    $program->programSection = 'Živly';
-                    $program->programSubSection = null;
-                } else if($program->start->format('Y-m-d H:i') == "2015-06-13 09:30") {
-                    $program->programSection = 'Vapro';
-                    $program->programSubSection = '1. blok';
-                } else if($program->start->format('Y-m-d H:i') == "2015-06-13 11:30") {
-                    $program->programSection = 'Vapro';
-                    $program->programSubSection = '2. blok';
-                } else if($program->start->format('Y-m-d H:i') == "2015-06-13 13:15") {
-                    $program->programSection = 'Vapro';
-                    $program->programSubSection = 'Obědový meziblok';
-                } else if($program->start->format('Y-m-d H:i') == "2015-06-13 15:00") {
-                    $program->programSection = 'Vapro';
-                    $program->programSubSection = '3. blok';
-                } else if($program->start->format('Y-m-d H:i') == "2015-06-13 17:00") {
-                    $program->programSection = 'Vapro';
-                    $program->programSubSection = '4. blok';
-                }
-            }
 
-            return $programs;
+            return $result;
         });
 
         return $grid;
     }
 
+
+    /**
+     * @param $filter
+     * @return ProgramsQuery
+     */
+    public function getFilteredQuery($filter) {
+        $query = new ProgramsQuery();
+
+        foreach($filter as $key=>$val) {
+            if($key == 'id')
+                $query->byId($val);
+            elseif($key == 'section')
+                $query->inSections($val);
+            elseif($key == 'name')
+                $query->searchName($val);
+            elseif($key == 'capacity')
+                $val ? $query->onlyFull() : $query->onlyNotFull();
+        }
+
+        return $query;
+    }
+
+
+
+    // DETAIL PROGRAMU
+
+    public function actionDetail($id) {
+        $this->item = $this->repository->find($id);
+        if(!$this->item)
+            $this->error("Item not found");
+
+        $this->template->item = $this->item;
+    }
+
+
+
+    public function actionEdit($id = null) {
+        if(!$this->acl->edit)
+            $this->error('Nemáte oprávnění', IResponse::S401_UNAUTHORIZED);
+
+        if($id) {
+            $this->item = $this->repository->find($id);
+            if (!$this->item)
+                $this->error("Item not found");
+        }
+        $this->template->item = $this->item;
+    }
+
+
+    public function createComponentFrmEdit() {
+        $frm = new Form();
+        $frm->setAjax();
+
+        $sections = [];
+        foreach($this->sections->findAll() as $section)
+            $sections[$section->id] = $section->title . ($section->subTitle ? " - {$section->subTitle}" : null);
+
+        $frm->addGroup('O programu');
+        $frm->addSelect('section', 'Sekce', $sections)
+            ->setDefaultValue($this->item ? $this->item->section->id : null)
+            ->addRule(Form::FILLED);
+
+        $frm->addText('name', 'Název')
+            ->setDefaultValue($this->item ? $this->item->name : null)
+            ->addRule(Form::FILLED);
+        $frm->addText('lector', 'Přednášející / Pořádající')
+            ->setDefaultValue($this->item ? $this->item->lector : null)
+            ->addRule(Form::FILLED);
+
+        $frm->addDateTimePicker('start', 'Začátek programu:') //DatePicker
+            ->setDefaultValue($this->item ? $this->item->start : null)
+            ->addRule(Form::FILLED);
+        $frm->addDateTimePicker('end', 'Konec programu:') //DatePicker
+            ->setDefaultValue($this->item ? $this->item->end : null)
+            ->addRule(Form::FILLED);
+
+        $frm->addText('capacity', 'Kapacita programu')
+            ->setDefaultValue($this->item ? $this->item->capacity : null)
+            ->addRule(Form::FILLED);
+
+        $frm->addGroup('Podrobnosti');
+        $frm->addTextArea('perex', 'Perex')
+            ->setDefaultValue($this->item ? $this->item->perex : null);
+        $frm->addTextArea('location', 'Místo')
+            ->setDefaultValue($this->item ? $this->item->location : null);
+        $frm->addTextArea('tools', 'Pomůcky a potřeby')
+            ->setDefaultValue($this->item ? $this->item->tools : null);
+
+        $frm->addSubmit('send', 'Uložit')->setAttribute('class', 'btn btn-success btn-lg btn-block');
+        $frm->onSuccess[] = [$this, 'frmEditSuccess'];
+
+        return $frm;
+    }
+
+
+    public function frmEditSuccess(Form $frm)
+    {
+        $values = $frm->getValues();
+
+        if(!$this->item) {
+            $this->item = new Program();
+            $this->em->persist($this->item);
+        }
+
+        foreach($values as $key => $value) {
+            if($key == 'section')
+                $value = $value ? $this->sections->find($value) : null;
+
+            $this->item->$key = $value;
+        }
+
+        $this->em->flush();
+
+        $this->flashMessage('Údaje úspěšně uloženy', 'success');
+        $this->redirect('detail', $this->item->id);
+    }
 
 
 

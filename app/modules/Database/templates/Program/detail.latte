@@ -1,0 +1,110 @@
+{var $title => "Program / ".$item->name}
+
+{block content}
+
+<div class="container">
+
+
+<div class="row">
+    <div class="pull-left">
+        <h1>{$item->name} <small n:if="$item->lector">/{$item->lector}/</small></h1>
+    </div>
+
+    <div class="pull-right">
+        <a n:href="edit $item->id" class="btn btn-warning ajax">Editovat údaje</a>
+    </div>
+</div>
+<!-- Nav tabs -->
+<ul class="nav nav-tabs" role="tablist">
+  <li class="active"><a href="#group" role="tab" data-toggle="tab">Program</a></li>
+  <li><a href="#participants" role="tab" data-toggle="tab">Účastníci</a></li>
+</ul>
+
+
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+
+            <div class="modal-body tab-pane active" id="group">
+                {form frmEdit data-object-id=>$item->id, data-edit-link=>$control->link('ajaxEdit!')}
+                <div class="row">
+                    <div class="col-md-9">
+                        <h4 n:class="$acl->edit ? ajax-edit">
+                            <small>Programová sekce</small><br />
+                            <div class="ajax-edit-val">
+                            {snippet section}
+                                {if $item->section}{$item->section->title} <small n:ifcontent>{$item->section->subTitle}</small>{else}- není -{/if}
+                            {/snippet}
+                            </div>
+                            <div class="ajax-edit-target" n:if="$acl->edit">{input section}</div>
+                        </h4>
+                        <h3>
+                            <small>Název programu</small><br />
+                            {snippet name}{$item->name}{/snippet}
+                        </h3>
+                        <h4>
+                            <small>Přednášející / Pořadatel</small><br />
+                            {snippet lector}{if $item->lector}{$item->lector}{else}- není -{/if}{/snippet}
+                        </h4>
+                    </div>
+                    <div class="col-md-3">
+                        <h4>
+                            <small>Počet přihlášenách účastníků</small><br />
+                            {$item->occupied} osobb
+                        </h4>
+                        <h4 n:class="$acl->edit ? ajax-edit">
+                            <small>Kapacita</small><br />
+                            <div class="ajax-edit-val">
+                                {snippet capacity}{$item->capacity} osob{/snippet}
+                            </div>
+                            <div class="ajax-edit-target" n:if="$acl->edit">{input capacity}</div>
+                        </h4>
+                    </div>
+                </div>
+                <div class="row">
+                    &nbsp;
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <h5 n:class="$acl->edit ? ajax-edit">
+                            <small>Perex</small><br />
+                            <div class="ajax-edit-val">
+                                {snippet perex}
+                                    {if $item->perex}{$item->perex}{else}- není -{/if}
+                                {/snippet}
+                            </div>
+                            <div class="ajax-edit-target" n:if="$acl->edit">{input perex}</div>
+                        </h5>
+                    </div>
+                    <div class="col-md-4">
+                        <h4 n:class="$acl->edit ? ajax-edit">
+                            <small>Umístění</small><br />
+                            <div class="ajax-edit-val">
+                                {snippet location}
+                                    {if $item->location}{$item->location}{else}- neznámo -{/if}
+                                {/snippet}
+                            </div>
+                            <div class="ajax-edit-target" n:if="$acl->edit">{input location}</div>
+                        </h4>
+                        <h4 n:class="$acl->edit ? ajax-edit">
+                            <small>Pomůcky a potřeby sebou</small><br />
+                            <div class="ajax-edit-val">
+                                {snippet tools}
+                                    {if $item->tools}{$item->tools}{else}- nic -{/if}
+                                {/snippet}
+                            </div>
+                            <div class="ajax-edit-target" n:if="$acl->edit">{input tools}</div>
+                        </h4>
+                    </div>
+                </div>
+                {/form}
+            </div>
+            <div class="tab-pane modal-body" id="participants">
+                <h4>Přihlášení účastníci</h4>
+            </div>
+        </div>
+
+
+</div>
+
+{/block}

@@ -1,10 +1,11 @@
 {block content}
 <div class="container">
     {if $item}
-    <h1>{$item->name} <small>/{$item->city}/</small></h1>
+        <h1>{$item->name} <small n:if="$item->lector">/{$item->lector}/</small></h1>
     {else}
-    <h1>Vytvořit novou skupnu <small>/prozatím prázdnou/</small></h1>
+        <h1>Přidat nový program</h1>
     {/if}
+
     <div class="row">
         <div class="col-md-8 col-md-offset-0">
             {control frmEdit}

@@ -4,7 +4,6 @@
 
 {control tblGrid}
 
-
-<a n:href="edit" n:if="$user->isInRole('groups-edit')" class="btn btn-success">Přidat nového učastníka</a>
+<a n:href="edit" n:if="$acl->edit" class="btn btn-success">Přidat nového učastníka</a>
 
 {/block}

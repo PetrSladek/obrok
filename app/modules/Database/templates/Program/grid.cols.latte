@@ -12,14 +12,14 @@
 {/redefine}
 {redefine col-section}
 <td>
-    {$row->programSection}
-    <br /><small>{$row->programSubSection}</small>
+    {$row->section->title}
+    <br /><small>{$row->section->subTitle}</small>
 </td>
 {/redefine}
 {redefine col-name}
 <td>
     {$row->name}
-    {if $row->lector && $row->lector != '-'}<br /><small>{$row->lector}</small>{/if}
+    {if $row->lector}<br /><small>{$row->lector}</small>{/if}
 </td>
 {/redefine}
 {redefine col-capacity}
@@ -29,5 +29,3 @@
 {/redefine}
 
 
-{redefine row-actions}
-{/redefine}

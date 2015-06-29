@@ -2,6 +2,7 @@
 app/config/config.local.neon
 log/*
 temp/*
+temp/cache/*
 www/storage/webimages/temp
 www/storage/webimages/cache
 composer.lock

@@ -425,3 +425,8 @@ body.modal-open #snippet--flashes {
   right: 28px;
   top: 28px;
 }
+
+
+tfoot ul.pagination {
+    margin: 0 0 -6px;
+}

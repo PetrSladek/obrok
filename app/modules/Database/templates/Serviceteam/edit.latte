@@ -1,9 +1,13 @@
 {block content}
 <div class="container">
-    {if $item->nickName}
-        <h1>{$item->nickName} <small>/{$item->firstName} {$item->lastName}/</small></h1>
+    {if $item}
+        {if $item->nickName}
+            <h1>{$item->nickName} <small>/{$item->firstName} {$item->lastName}/</small></h1>
+        {else}
+            <h1>{$item->firstName} {$item->lastName}</h1>
+        {/if}
     {else}
-        <h1>{$item->firstName} {$item->lastName}</h1>
+        <h1>Přidat nového servisáka</h1>
     {/if}
 
     <div class="row">

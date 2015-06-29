@@ -292,6 +292,11 @@ class ServiceteamPresenter extends DatabaseBasePresenter
             ->setDefaultValue($this->item ? $this->item->tshirtSize : null)
             ->setRequired();
 
+        $frm->addGroup('Přihlášení');
+        $frm->addText('skautisPersonId', 'Skautis PersonID')
+            ->addRule(Form::INTEGER)
+            ->setDefaultValue($this->item ? $this->item->skautisPersonId : null);
+
         $frm->addSubmit('send', 'Uložit')->setAttribute('class', 'btn btn-success btn-lg btn-block');
         $frm->onSuccess[] = [$this, 'frmEditSuccess'];
 
@@ -299,20 +304,22 @@ class ServiceteamPresenter extends DatabaseBasePresenter
     }
 
 
-    public function frmEditSuccess($frm)
+    public function frmEditSuccess(Form $frm)
     {
         $values = $frm->getValues();
 
-        if(!$this->item)
+        if(!$this->item) {
             $this->item = new Serviceteam();
+            $this->em->persist($this->item);
+        }
 
         foreach($values as $key => $value) {
             if($key == 'workgroup')
-                $value = $this->workgroups->checkByName($value);
+                $value = $value ? $this->workgroups->checkByName($value) : null;
             elseif($key == 'job')
-                $value = $this->jobs->checkByName($value);
+                $value = $value ? $this->jobs->checkByName($value) : null;
             elseif($key == 'team')
-                $value = $this->teams->find($value);
+                $value = $value ? $this->teams->find($value) : null;
 
             $this->item->$key = $value;
         }

@@ -330,6 +330,7 @@ class ParticipantsPresenter extends DatabaseBasePresenter
     public function createComponentFrmEdit() {
 
         $frm = new Form();
+        $frm->setAjax();
 
         $frm->addGroup('Skupina');
 
@@ -399,8 +400,12 @@ class ParticipantsPresenter extends DatabaseBasePresenter
         $frm->addTextarea('noteInternal', 'Interní poznámka')
             ->setDefaultValue($this->item ? $this->item->noteInternal : null);
 
-        $frm->addSubmit('send', 'Uložit údaje účastníka')
-            ->setAttribute('class','btn btn-primary');
+        $frm->addGroup('Přihlášení');
+        $frm->addText('skautisPersonId', 'Skautis PersonID')
+            ->addRule(Form::INTEGER)
+            ->setDefaultValue($this->item ? $this->item->skautisPersonId : null);
+
+        $frm->addSubmit('send', 'Uložit')->setAttribute('class', 'btn btn-success btn-lg btn-block');
 
         $frm->onSuccess[] = callback($this, 'frmEditSubmitted');
 
@@ -411,19 +416,18 @@ class ParticipantsPresenter extends DatabaseBasePresenter
     public function frmEditSubmitted(Form $frm) {
         $values = $frm->getValues();
 
-        if(!$this->item)
+        if(!$this->item) {
             $this->item = new Participant();
+            $this->em->persist($this->item);
+        }
 
         foreach($values as $key => $value) {
             if($key == 'group')
-                $value = $this->groups->find($value);
+                $value = $value ? $this->groups->find($value) : null;
 
             $this->item->$key = $value;
         }
 
-        $this->em->persist($this->item->group);
-
-        $this->em->persist($this->item);
         $this->em->flush();
 
         $this->flashMessage('Údaje úspěšně uloženy', 'success');

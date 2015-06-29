@@ -27,11 +27,6 @@ class Serviceteam extends Person {
     /** @Column(type="string", length=512, nullable=true) */
     protected $role;
 
-    /**
-     * Mesto pusobeni
-     * @Column(type="string", length=255)
-     */
-    protected $city;
 
     /**
      * Zkusenosti s podobnymi akcemi

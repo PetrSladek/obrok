@@ -230,6 +230,7 @@ class GroupsPresenter extends DatabaseBasePresenter
     
     public function createComponentFrmEdit() {
         $frm = new Form();
+        $frm->setAjax();
         
         $frm->addText('name', 'Název skupiny')
             ->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat %label')
@@ -244,7 +245,7 @@ class GroupsPresenter extends DatabaseBasePresenter
             ->setDefaultValue($this->item ? $this->item->noteInternal : null);
 
 
-        $frm->addSelect('boss','Vedoucí skupiny (18+)', $this->item->getPossibleBosses($this->ageInDate))
+        $frm->addSelect('boss','Vedoucí skupiny (18+)', $this->item ? $this->item->getPossibleBosses($this->ageInDate) : [])
             ->setDefaultValue($this->item && $this->item->getBoss() ? $this->item->getBoss()->id : null)
             ->setPrompt('- Vyberte vedoucího sk. -');
         
@@ -284,7 +285,7 @@ class GroupsPresenter extends DatabaseBasePresenter
 
         foreach($values as $key => $value) {
             if($key == 'boss')
-                $value = $this->participants->find($value);
+                $value = $value ? $this->participants->find($value) : null;
 
             $this->item->$key = $value;
         }

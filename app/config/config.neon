@@ -110,6 +110,15 @@ latte:
 	macros:
 #		- Nextras\Forms\Bridges\Latte\Macros\BS3InputMacros
 		- Nextras\Latte\Macros\RedefineMacro
+forms:
+	messages:
+		EQUAL: 'Prosím vyplňte %s.'
+		EMAIL: '%label musí být ve správném formátu'
+		FILLED: 'Prosím vyplňte pole %label.'
+		FLOAT: 'Pole %label musí být desetinné číslo.'
+		NUMERIC: 'Pole %label musí být celé číslo.'
+		MIN_LENGTH: 'Please enter a value of at least %d characters.'
+
 session:
 	expiration: 14 days
 
@@ -130,5 +139,6 @@ services:
 	- App\Repositories\JobsRepository( @doctrine.default.entityManager, @doctrine.default.entityManager::getClassMetadata('App\Model\Entity\Job') )
 	- App\Repositories\TeamsRepository( @doctrine.default.entityManager, @doctrine.default.entityManager::getClassMetadata('App\Model\Entity\Team') )
 	- App\Repositories\WorkgroupsRepository( @doctrine.default.entityManager, @doctrine.default.entityManager::getClassMetadata('App\Model\Entity\Workgroup') )
-
+	- App\Repositories\ProgramsRepository( @doctrine.default.entityManager, @doctrine.default.entityManager::getClassMetadata('App\Model\Entity\Program') )
+	- App\Repositories\ProgramsSectionsRepository( @doctrine.default.entityManager, @doctrine.default.entityManager::getClassMetadata('App\Model\Entity\ProgramSection') )
 	- App\Hydrators\SkautisHydrator

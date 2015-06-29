@@ -77,7 +77,7 @@
 {redefine pagination}
 <ul class="pagination" n:if="$paginator->pageCount > 1">
 {if $paginator->isFirst()}
-	<li class="disabled"><a>« První}</a></li>
+	<li class="disabled"><a>« První</a></li>
 	<li class="disabled"><a>« Předchozí</a></li>
 {else}
 	<li><a href="{link paginate!, 'page' => 1}" class="ajax">« První</a></li>
