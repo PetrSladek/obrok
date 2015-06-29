@@ -1,11 +1,11 @@
 
 {redefine col-id}
-<td>
+<td width="15">
     #{$row->id}
 </td>
 {/redefine}
 {redefine col-time}
-<td>
+<td width="90">
     {$row->start|day}
     <br /><small>{$row->start->format('H:i')} - {$row->end->format('H:i')}</small>
 </td>

@@ -4,8 +4,11 @@ namespace App\Module\Database\Presenters;
 
 
 use App\Forms\Form;
+use App\Model\Entity\Participant;
 use App\Model\Entity\Program;
+use App\Query\ParticipantsQuery;
 use App\Query\ProgramsQuery;
+use App\Repositories\ParticipantsRepository;
 use App\Repositories\ProgramsRepository;
 use App\Repositories\ProgramsSectionsRepository;
 use Nette\Forms\Container;
@@ -19,6 +22,9 @@ class ProgramPresenter extends DatabaseBasePresenter
 
     /** @var ProgramsRepository @inject */
     public $repository;
+
+    /** @var ParticipantsRepository @inject */
+    public $participants;
 
     /**
      * @var ProgramsSectionsRepository @inject
@@ -139,6 +145,39 @@ class ProgramPresenter extends DatabaseBasePresenter
         $this->template->item = $this->item;
     }
 
+    public function renderDetail() {
+
+        /** @var Datagrid $grid */
+        if($grid = $this->getComponent('tblAttendees', false)) {
+            /** @var Template $tpl */
+            $tpl = $grid->getTemplate();
+
+            $tpl->acl = $this->acl;
+            $tpl->ageInDate = $this->ageInDate;
+        }
+
+    }
+
+
+    public function handleUnattendeeParticipant($idParticipant) {
+
+        /** @var Participant $participant */
+        $participant = $this->participants->find($idParticipant);
+        if(!$participant)
+            $this->error('Ucastnik neexistuje');
+
+
+        $participant->unattendeeProgram($this->item);
+        $this->em->flush();
+
+        $this->flashMessage( 'Program úspěšně odhlášen.', 'success' );
+
+        if($this->isAjax()) {
+            $this->redrawControl();
+        } else {
+            $this->redirect('this');
+        }
+    }
 
 
     public function actionEdit($id = null) {
@@ -224,6 +263,95 @@ class ProgramPresenter extends DatabaseBasePresenter
 
 
 
+
+
+
+
+    protected function createComponentTblAttendees()
+    {
+        $grid = new Datagrid();
+
+        $grid->setRowPrimaryKey('id');
+        $grid->addCellsTemplate(__DIR__.'/templates/grid.layout.latte');
+        $grid->addCellsTemplate(__DIR__.'/templates/Participants/grid.cols.latte');
+        $grid->addCellsTemplate(__DIR__.'/templates/Program/attendees.cols.latte');
+
+        $grid->addColumn('id', 'Id')->enableSort();
+        $grid->addColumn('fullname', 'Jméno')->enableSort();
+        $grid->addColumn('group', 'Skupina')->enableSort();
+
+        $grid->addColumn('age', 'Věk')->enableSort();
+        $grid->addColumn('contact', 'Kontakt')->enableSort();
+
+        $grid->addColumn('confirmed', 'Přijede?')->enableSort();
+        $grid->addColumn('paid', 'Zaplatil?')->enableSort();
+        $grid->addColumn('arrived', 'Přijel?')->enableSort();
+        $grid->addColumn('left', 'Odjel?')->enableSort();
+
+
+        $grid->setFilterFormFactory(function() {
+
+            $form = new Container();
+            $form->addText('id');
+            $form->addText('fullname');
+            $form->addText('group');
+            $form->addText('age');
+            $form->addText('contact');
+            $form->addText('address');
+
+            $form->addSelect('confirmed', null, array(1=>'Ano', 0=>'Ne'))->setPrompt('--')->setDefaultValue(true);
+            $form->addSelect('paid', null, array(1=>'Ano', 0=>'Ne'))->setPrompt('--');
+            $form->addSelect('arrived', null, array(1=>'Ano', 0=>'Ne'))->setPrompt('--');
+            $form->addSelect('left', null, array(1=>'Ano', 0=>'Ne'))->setPrompt('--');
+
+            // these buttons are not compulsory
+            $form->addSubmit('filter', 'Vyfiltrovat');
+            $form->addSubmit('cancel', 'Zrušit');
+
+            return $form;
+        });
+
+        $grid->setPagination(false);
+        $grid->setDatasourceCallback(function($filter, $sorting, Paginator $paginator = null) {
+
+            $query = new ParticipantsQuery();
+            $query->inProgram($this->item);
+
+            foreach($filter as $key=>$val) {
+                if($key == 'id')
+                    $query->byId($val);
+                elseif($key == 'fullname')
+                    $query->searchFullname($val);
+                elseif($key == 'group')
+                    $query->searchGroup($val);
+                elseif($key == 'age')
+                    $query->byAge($val, $this->ageInDate);
+                elseif($key == 'contact')
+                    $query->searchContact($val);
+                elseif($key == 'address')
+                    $query->searchAddress($val);
+
+                elseif($key == 'confirmed')
+                    $val ? $query->onlyConfirmed() : $query->onlyNotConfirmed();
+                elseif($key == 'paid')
+                    $val ? $query->onlyPaid() : $query->onlyNotPaid();
+                elseif($key == 'arrived')
+                    $val ? $query->onlyArrived() : $query->onlyNotArrived();
+                elseif($key == 'left')
+                    $val ? $query->onlyLeft() : $query->onlyNotLeft();
+            }
+
+            // Pida do selectu zavislosti aby se pak nemuseli tahat solo
+            $query->withGroup();
+
+            $result = $this->repository->fetch($query);
+
+            return $result;
+        });
+
+
+        return $grid;
+    }
 
 }
 

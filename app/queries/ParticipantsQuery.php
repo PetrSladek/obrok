@@ -43,6 +43,16 @@ class ParticipantsQuery extends PersonsQuery {
     }
 
 
+    public function inProgram($program)
+    {
+        $this->filter[] = function (QueryBuilder $qb) use ($program) {
+            $qb->andWhere(':program MEMBER OF p.programs')
+                ->setParameter('program', $program);
+        };
+        return $this;
+    }
+
+
     public function searchGroup($group) {
         $this->filter[] = function (QueryBuilder $qb) use ($group) {
             $qb

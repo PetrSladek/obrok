@@ -92,8 +92,6 @@ abstract class DatabaseBasePresenter extends \App\Module\Base\Presenters\BasePre
 
             $tpl->acl = $this->acl;
             $tpl->ageInDate = $this->ageInDate;
-            $tpl->addFilter('day', $this->day);
-            $tpl->addFilter('phone', $this->phone);
         }
     }
 

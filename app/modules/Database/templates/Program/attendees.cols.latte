@@ -1,0 +1,20 @@
+{redefine col-fullname}
+<td>
+    <div class="pull-right text-right">
+        <a class="btn btn-xs btn-default ajax" href="{plink Participants:detail $row->id}">Otevřít</a><br />
+    </div>
+
+    {if $row->nickName}
+        <strong>{$row->nickName}</strong>
+        <br /><small>{$row->firstName} {$row->lastName|upper}</small>
+    {else}
+        <strong>{$row->firstName} {$row->lastName|upper}</strong>
+        <br /><small></small>
+    {/if}
+</td>
+{/redefine}
+
+{redefine row-actions}
+  <a class="btn btn-xs btn-danger ajax"  href="{plink unattendeeParticipant! $primary}">Vyhodit</a>
+{/redefine}
+

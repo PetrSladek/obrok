@@ -13,13 +13,7 @@ $(function(){
 
     $.nette.ext('fadeSnippets', {
         start: function (xhr, settings) {
-            //if(data = settings.nette.el.data('snippets')) {
-            //    this.snippets = data.slice(",");
-            //    for(i in this.snippets)
-            //        $("#snippet--".this.snippets[i]).fadeTo("slow", 0.5);
-            //} else {
             $("#snippet--content").fadeTo("slow", 0.5);
-            //}
         },
         complete: function () {
             $("#snippet--content").fadeTo("slow", 1);
@@ -27,6 +21,30 @@ $(function(){
     }, {
         snippets: {}
     });
+
+
+
+    $.nette.ext('keepActiveTab', {
+        before: function(xhr, settings) {
+            var tabs = [];
+            $('ul.nav > li.active > a[data-toggle=tab]').each(function() {
+                tabs.push( this.hash );
+            });
+            this.activeTabs = tabs;
+        },
+        success: function() {
+            var tabs = this.activeTabs;
+            if (tabs.length) {
+                for (t in tabs) {
+                    console.log(tabs[t]);
+                    $('ul.nav > li > a[data-toggle=tab][href="'+tabs[t]+'"]').tab('show');
+                }
+            }
+        }
+    }, {
+        activeTabs: null
+    });
+
 
    /* $.nette.ext('modal', {
         load: function(requestHandler) {

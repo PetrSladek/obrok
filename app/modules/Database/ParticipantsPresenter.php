@@ -6,12 +6,16 @@ use App\Forms\Form;
 use App\Model\Entity\Participant;
 use App\Model\Entity\Person;
 use App\Query\ParticipantsQuery;
+use App\Query\ProgramsQuery;
 use App\Repositories\GroupsRepository;
 use App\Repositories\ParticipantsRepository;
+use App\Repositories\ProgramsRepository;
+use App\Repositories\ProgramsSectionsRepository;
 use Nette\Forms\Container;
 use Nette\Forms\Controls\BaseControl;
 use Nette\Forms\IControl;
 use Nette\Http\IResponse;
+use Nette\InvalidStateException;
 use Nette\Security\Passwords;
 use Nette\Utils\DateTime;
 use Nette\Utils\Paginator;
@@ -28,10 +32,11 @@ class ParticipantsPresenter extends DatabaseBasePresenter
     public $groups;
 
 
-//    /** @var array|NULL
-//     * @persistent
-//     */
-//    public $filter = [];
+    /** @var ProgramsRepository @inject */
+    public $programs;
+    /** @var ProgramsSectionsRepository @inject */
+    public $sections;
+
 
     /** @var Participant */
     public $item;
@@ -48,7 +53,7 @@ class ParticipantsPresenter extends DatabaseBasePresenter
 
     
     // DataGrid Table
-    protected function createComponentTblGrid($name)
+    protected function createComponentTblGrid()
     {
         $grid = new Datagrid();
 
@@ -138,8 +143,8 @@ class ParticipantsPresenter extends DatabaseBasePresenter
 
             elseif($key == 'confirmed')
                 $val ? $query->onlyConfirmed() : $query->onlyNotConfirmed();
-//            elseif($key == 'paid')
-//                $val ? $query->onlyPaid() : $query->onlyNotPaid();
+            elseif($key == 'paid')
+                $val ? $query->onlyPaid() : $query->onlyNotPaid();
             elseif($key == 'arrived')
                 $val ? $query->onlyArrived() : $query->onlyNotArrived();
             elseif($key == 'left')
@@ -163,155 +168,55 @@ class ParticipantsPresenter extends DatabaseBasePresenter
 
 
 
-    public function createComponentFrmAddProgram() {
-
-//        $programs = $this->database->query("
-//          SELECT
-//            p.id as program_id,
-//            b.id as block_id,
-//            p.start, DATE_ADD(p.start, INTERVAL b.duration*15 MINUTE) as end,
-//            b.duration, b.name, b.tools, b.location, b.perex, b.lectorExt as lector,
-//            b.capacity,
-//            (SELECT COUNT(*) FROM program_user WHERE program_id = p.id) as occupied
-//          FROM program p
-//          JOIN block b ON b.id = p.block_id
-//          ORDER BY start ASC, name ASC
-//        ");
-//
-//
-        $select = [];
-//
-//        foreach($programs->fetchAll() as $program) {
-//            $day = $this->day($program->start);
-//            $startAt = $program->start->format('H:i');
-//            $endAt = $program->end->format('H:i');
-//            $lector = $program->lector && $program->lector != '-' ? "/{$program->lector}/" : null;
-//            $capacity = "({$program->occupied} / {$program->capacity})";
-//            $select[$program->program_id] = "[$day $startAt-$endAt] {$program->name} {$lector} {$capacity}";
-//        }
-
-        $frm = new Form();
-        $frm->getElementPrototype()->class('ajax form-horizontal');
-        $frm->addSelect('program', null, $select)
-            ->setPrompt('- vyberte program -');
-        $frm->addSubmit('send', 'Zaregistrovat program');
-
-
-        $frm->onSuccess[] = callback($this, 'frmAddProgramSuccess');
-
-
-        return $frm;
-    }
-
     public function handleDeleteProgram($idProgram) {
-        $this->database->query("DELETE FROM program_user WHERE participant_id = ? AND program_id = ?", $this->item->id, $idProgram);
+
+        $program = $this->programs->find($idProgram);
+        if(!$program)
+            $this->error('Program neexistuje');
+
+
+        $this->item->unattendeeProgram($program);
+        $this->em->flush();
 
         $this->flashMessage( 'Program úspěšně odhlášen.', 'success' );
         if($this->isAjax()) {
-            $this->redrawControl('detail', false);
             $this->redrawControl('programs');
             $this->redrawControl('flashes');
         } else $this->redirect('this');
 
     }
 
-    public function frmAddProgramSuccess(Form $frm) {
-        $values = $frm->getValues();
-        $program_id = $values->program;
+    public function handleAddProgram($idProgram) {
 
-        $program =  $this->database->query("
-          SELECT
-            p.id as program_id,
-            b.id as block_id,
-            p.start, DATE_ADD(p.start, INTERVAL b.duration*15 MINUTE) as end,
-            b.duration, b.name, b.tools, b.location, b.perex, b.lectorExt as lector,
-            b.capacity,
-            (SELECT COUNT(*) FROM program_user WHERE program_id = p.id) as occupied
-          FROM program p
-          LEFT JOIN block b ON b.id = p.block_id
-          WHERE p.id = ?
-        ", $program_id)->fetch();
+        $program = $this->programs->find($idProgram);
+        if(!$program)
+            $this->error('Program neexistuje');
+
 
         try {
-            if ($program == null)
-                throw new \Exception('Program s tímto id neexistuje');
+            $this->item->attendeeProgram($program);
 
-            if ($program->block_id == null)
-                throw new \Exception('Na blok, který nemá přiřazen žádný program se nelze přihlásit.');
+            $this->em->flush();
+            $this->flashMessage( 'Program úspěšně zaregistrovan.', 'success' );
 
-            if ($program->occupied >= $program->capacity)
-                throw new \Exception('Kapacita programu je již plná.');
-
-            $exist = $this->database->query("SELECT * FROM program_user WHERE participant_id = ? AND program_id = ?", $this->item->id, $program_id)->fetch();
-            if ($exist)
-                throw new \Exception('Uživatel je již přihlášen na tento program');
-
-            $otherProgram = $this->database->query("
-              SELECT
-                p.start,
-                DATE_ADD(p.start, INTERVAL b.duration*15 MINUTE) as end,
-                b.name
-              FROM program_user pu
-              JOIN program p ON (p.id = pu.program_id AND pu.participant_id = ?)
-              JOIN block b ON b.id = p.block_id
-              HAVING
-                start = ?
-                OR (start > ? AND start < ?)
-                OR (end > ? AND end < ?)
-                OR (start < ? AND end > ?)
-            ", $this->item->id,
-                $program->start,
-                $program->start, $program->end,
-                $program->start, $program->end,
-                $program->start, $program->end)->fetch();
-            $hasOtherProgram = $otherProgram ? true : false;
-
-            if ($hasOtherProgram)
-                throw new \Exception("V tuto dobu máte přihlášený již jiný program ({$otherProgram->name}).");
-
-//            if ($this->item->hasOtherProgramInSection($program, $this->basicBlockDuration))
-//                throw new \Exception("V sekci {$program->programSection} máte přihlášený již jiný program");
-
-            $this->database->query("INSERT INTO program_user (participant_id, program_id) VALUES (?, ?)", $this->item->id, $program_id);
-            $this->flashMessage( 'Program úspěšně přihlášen.', 'success' );
-
-        } catch (\Exception $e) {
-            $this->flashMessage( $e->getMessage(), 'danger' );
+        } catch(InvalidStateException $e) {
+            $this->flashMessage($e->getMessage(), 'danger');
         }
 
+
         if($this->isAjax()) {
-            $this->redrawControl('detail', false);
             $this->redrawControl('programs');
             $this->redrawControl('flashes');
+        } else
+            $this->redirect('this');
 
-        } else $this->redirect('this');
     }
-
-//    protected function hasUserOtherProgram($program) {
-//
-//        {
-//            foreach ($this->programs as $otherProgram) {
-//                if ($otherProgram->id == $program->id) continue;
-//                if ($otherProgram->start == $program->start) return true; // zacina stejne
-//                if ($otherProgram->start > $program->start && $otherProgram->start < $program->end) return true; // nebo zacina poydej ale driv nez tenhle skonci
-//                if ($otherProgram->end > $program->start && $otherProgram->end < $program->end return true; // konci po mmem porgtramu ale driv
-//                if ($otherProgram->start < $program->start && $otherProgram->countEnd($basicBlockDuration) > $program->countEnd($basicBlockDuration)) return true;
-//            }
-//            return false;
-//
-//    }
-
 
 
     public function renderDetail($id) {
 
-        $this->template->programs = []; //$this->getParticipantProgram($id);
         $this->template->item = $this->item;
     }
-
-
-
-
 
 
     public function actionEdit($id = null) {
@@ -454,6 +359,77 @@ class ParticipantsPresenter extends DatabaseBasePresenter
 
         $this->redirect(":Participants:Login:as", $id, $hash);
     }
+
+
+
+
+    public function createComponentTblPrograms()
+    {
+        $grid = new Datagrid();
+
+        $grid->setRowPrimaryKey('id');
+        $grid->addCellsTemplate(__DIR__.'/templates/grid.layout.latte');
+        $grid->addCellsTemplate(__DIR__.'/templates/Program/grid.cols.latte');
+        $grid->addCellsTemplate(__DIR__.'/templates/Participants/programs.cols.latte');
+
+        $grid->addColumn('id', 'ID');
+        $grid->addColumn('section', 'Sekce');
+        $grid->addColumn('time', 'Den a čas');
+        $grid->addColumn('name', 'Název');
+        $grid->addColumn('capacity', 'Obsazeno');//->enableSort();
+
+
+        $grid->setFilterFormFactory(function() {
+            $frm = new Container();
+            $frm->addText('id')
+                ->addCondition(Form::FILLED)
+                ->addRule(Form::INTEGER);
+
+            $sections = [];
+            foreach($this->sections->findAll() as $section)
+                $sections[$section->id] = $section->title . ($section->subTitle ? " - {$section->subTitle}" : null);
+            $frm->addMultiSelect('section', null, $sections);
+
+            $frm->addText('name')
+                ->addCondition(Form::FILLED)
+                ->addRule(Form::INTEGER);
+
+            $frm->addSelect('capacity', null, array(1=>'Plné', 0=>'Volné'))->setPrompt('--');
+
+
+            // these buttons are not compulsory
+            $frm->addSubmit('filter', 'Vyfiltrovat');
+            $frm->addSubmit('cancel', 'Zrušit');
+
+//            $form->setDefaults($this->filter);
+
+            return $frm;
+        });
+
+
+        $grid->setPagination(false);
+        $grid->setDatasourceCallback(function($filter, $sorting, Paginator $paginator = null) {
+
+            $query = new ProgramsQuery();
+            foreach($filter as $key=>$val) {
+                if($key == 'id')
+                    $query->byId($val);
+                elseif($key == 'section')
+                    $query->inSections($val);
+                elseif($key == 'name')
+                    $query->searchName($val);
+                elseif($key == 'capacity')
+                    $val ? $query->onlyFull() : $query->onlyNotFull();
+            }
+
+            $result = $this->repository->fetch($query);
+
+            return $result;
+        });
+
+        return $grid;
+    }
+
 
 
 

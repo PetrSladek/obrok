@@ -19,6 +19,7 @@ use Doctrine\ORM\Mapping\OrderBy;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\PersistentCollection;
 use Kdyby\Doctrine;
+use Nette\InvalidStateException;
 
 /**
  * @Entity(repositoryClass="App\Repositories\ParticipantsRepository")
@@ -129,6 +130,72 @@ class Participant extends Person {
 //        return $this;
 //    }
 
+    /***/
+    public function unattendeeProgram(Program $program)
+    {
+        $this->programs->removeElement($program);
+        $program->removeAttedee($this);
+        return $this;
+    }
+
+    public function attendeeProgram(Program $program) {
+
+        if ($program->occupied >= $program->capacity)
+            throw new InvalidStateException('Kapacita programu je již plná.', 10);
+
+        if($this->programs->contains($program))
+            throw new InvalidStateException('Uživatel je již přihlášen na tento program.', 20);
+
+        if($this->hasOtherProgramInTime($program))
+            throw new InvalidStateException("V tuto dobu máte přihlášený již jiný program.", 30);
+
+        if($this->hasOtherProgramInSection($program))
+            throw new InvalidStateException("V teto sekci máte přihlášený již jiný program.", 30);
+
+        $this->programs->add($program);
+        $program->addAttendee($this);
+
+        return $this;
+    }
+
+    /**
+     * Ma uz jiny program v case tohoto programu?
+     * @param Program $program
+     * @return bool
+     */
+    public function hasOtherProgramInTime(Program $program)
+    {
+        foreach ($this->programs as $otherProgram) {
+            if ($otherProgram->id == $program->id)
+                continue;
+            if ($otherProgram->start == $program->start)
+                return true;
+            if ($otherProgram->start > $program->start && $otherProgram->start < $program->end)
+                return true;
+            if ($otherProgram->end > $program->start && $otherProgram->end < $program->end)
+                return true;
+            if ($otherProgram->start < $program->start && $otherProgram->end > $program->end)
+                return true;
+        }
+        return false;
+    }
+
+    /**
+     * Ma uz jiny program ve stejne sekci jako tento program?
+     * @param Program $program
+     * @return bool
+     */
+    public function hasOtherProgramInSection(Program $program)
+    {
+        if($program->section === null)
+            return false;
+
+        foreach ($this->programs as $otherProgram)
+            if($program->section === $otherProgram->section)
+                return true;
+
+        return false;
+    }
 
 
     /**

@@ -94,6 +94,7 @@ class Program extends Doctrine\Entities\BaseEntity {
 
     /**
      * @ManyToMany(targetEntity="Participant", inversedBy="programs", cascade={"persist"})
+     * @var ArrayCollection
      */
     protected $attendees;
 
@@ -116,6 +117,14 @@ class Program extends Doctrine\Entities\BaseEntity {
         return $this->attendees->count();
     }
 
+    public function addAttendee(Participant $participant) {
+        $this->attendees->add($participant);
+        return $this;
+    }
+    public function removeAttedee(Participant $participant) {
+        $this->attendees->removeElement($participant);
+        return $this;
+    }
 
 
 

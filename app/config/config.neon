@@ -124,6 +124,15 @@ session:
 
 
 services:
+	nette.latteFactory:
+		setup:
+			- addFilter(month, App\LatteFilters::month)
+			- addFilter(day, App\LatteFilters::day)
+			- addFilter(implode, App\LatteFilters::implode)
+			- addFilter(date, App\LatteFilters::date)
+			- addFilter(phone, App\LatteFilters::phone)
+			- addFilter(bbcolumns, App\LatteFilters::bbcolumns)
+
 
 	images: App\Services\ImageService(%app.webimagesUploadDir%, %app.webimagesCacheDir%, %app.webimagesCacheUrl%)
 	emails:
