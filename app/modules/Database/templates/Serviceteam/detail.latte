@@ -2,7 +2,7 @@
 {block content}
 
 <div class="container">
-{*{snippet detail}*}
+
     <div class="row">
         <div class="pull-left">
             {if $item->nickName}
@@ -16,18 +16,7 @@
         </div>
     </div>
 
-{*<div class="modal fade in">
-<div class="modal-dialog modal-lg">
-    <div class="modal-content">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            {if $item->nickName}
-                <h3 class="modal-title">{$item->nickName} <small>/{$item->firstName} {$item->lastName}/</small></h3>
-            {else}
-                <h3 class="modal-title">{$item->firstName} {$item->lastName}</h3>
-            {/if}
-        </div>
-        <div class="modal-body">*}
+    <div class="row">
             {form frmEdit data-object-id=>$item->id, data-edit-link=>$control->link('ajaxEdit!')}
                 <div class="row">
                     <div class="col-md-4">
@@ -208,11 +197,7 @@
             *}
                 </div>
             {/form}
-{*        </div>
     </div>
-</div>
-</div>*}
-{*{/snippet}*}
 </div>
 
 {/block}

@@ -1,21 +1,9 @@
 {var $title => "Skupiny / ".$item->name ." - ".$item->city}
 
 {block content}
-{*
-<style>
-.modal {
-    bottom: auto;
-    display: block;
-    left: auto;
-    position: relative;
-    right: auto;
-    top: auto;
-    z-index: 1;
-}
-</style>
-*}
+
 <div class="container">
-{*{snippet detail}*}
+
 
 <div class="row">
     <div class="pull-left">
@@ -26,29 +14,15 @@
         <a n:href="edit $item->id" class="btn btn-warning ajax">Editovat údaje</a>
     </div>
 </div>
-<!-- Nav tabs -->
-<ul class="nav nav-tabs" role="tablist">
-  <li class="active"><a href="#group" role="tab" data-toggle="tab">Skupina</a></li>
-  <li><a href="#participants" role="tab" data-toggle="tab">Členové</a></li>
-  {*<li><a href="#payments" role="tab" data-toggle="tab">Platby</a></li>*}
-</ul>
 
-{*<div class="modal fade in">
-<div class="modal-dialog modal-lg">
-    <div class="modal-content">
-        <div class="modal-header clearfix">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h3 class="modal-title pull-left">{$item->name} <small>/{$item->city}/</small></h3>
+<div class="row">
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" role="tablist">
+      <li class="active"><a href="#group" role="tab" data-toggle="tab">Skupina</a></li>
+      <li><a href="#participants" role="tab" data-toggle="tab">Členové</a></li>
+      {*<li><a href="#payments" role="tab" data-toggle="tab">Platby</a></li>*}
+    </ul>
 
-            <!-- Nav tabs -->
-            <ul class="nav nav-tabs" role="tablist" style=" bottom: -8px; float: right; margin-bottom: -8px; position: relative;">
-              <li class="active"><a href="#group" role="tab" data-toggle="tab">Skupina</a></li>
-              <li><a href="#participants" role="tab" data-toggle="tab">Členové</a></li>
-              <li><a href="#payments" role="tab" data-toggle="tab">Platby</a></li>
-              *}{*<li><a href="#settings" role="tab" data-toggle="tab">Settings</a></li>*}{*
-            </ul>
-
-        </div>*}
 
         <!-- Tab panes -->
         <div class="tab-content">
@@ -159,41 +133,12 @@
             </div>
             <div class="tab-pane modal-body" id="participants" >
 
-
                 <div class="row">
                     <div class="col-md-12">
                     <h4>Účastníci ve skupině</h4>
-                    {*<p>Po odebrání účastníka ho můžete kdykoli vrátit, nebo vyměnit za někoho jiného</p>*}
 
-                   {* {if $item->isPartlyPaid()}
-                    <div class="row">
-                    <div class="col-md-12">
-                        <br />
-                        <div class="alert alert-danger">
-                            <strong>Máte ve skupině
-                            {if $item->getConfirmedParticipantsCount() == 0 || $item->getConfirmedParticipantsCount() >= 5}
-                                {$item->getConfirmedParticipantsCount()} účastníků
-                            {elseif $item->getConfirmedParticipantsCount() == 0}
-                                {$item->getConfirmedParticipantsCount()} učastníka
-                            {else}
-                                {$item->getConfirmedParticipantsCount()} učastníky
-                            {/if}
-                                , ale zaplatili jste jen za {$item->getPaidFor()}!
-                            </strong><br />
-                            Musíte některé účastníky ze skupiny odebrat, nebo doplatit zbytek peněz!<br />
-                            Účastníky můžete v rámci zaplaceného počtu kdykoliv vyměnit, ale nemůže jich být víc než máte zaplaceno<br />
-                        </div>
-                    </div>
-                    </div>
-                    {/if}*}
 
                     {snippet participants}
-
-                        {*{if $acl->edit}
-                            <a n:if="!$item->arrived" n:href="groupArrive! $item->id, true" class="ajax btn btn-primary">Označit celou skupinu jako PŘIJELI</a>
-                            <a n:if="$item->arrived" n:href="groupArrive! $item->id, false" class="ajax btn btn-default">Označit celou skupinu jako NEPŘIJELI</a>
-                            <br /><br />
-                        {/if}*}
 
                         <div class="participants">
                             <table class="table table-bordered">
@@ -298,10 +243,7 @@
                 {control tblPayments}
             </div>*}
         </div>
-{*    </div>
-</div>
-</div>*}
-{*{/snippet}*}
+    </div>
 
 </div>
 
