@@ -3,6 +3,8 @@
 namespace App\Module\Front\Presenters;;
 
 use App\Model\Entity\Participant;
+use App\Model\Entity\Person;
+use App\Model\Entity\Serviceteam;
 use App\Repositories\ParticipantsRepository;
 use App\Repositories\ServiceteamRepository;
 use PetrSladek\SkautIS\Dialog\LoginDialog;
@@ -40,19 +42,21 @@ abstract class FrontBasePresenter extends \App\Module\Base\Presenters\BasePresen
                 return;
             }
 
+            $skautisPersonId = (int) $skautis->getPersonId();
+
 //            try {
 
             // Pokud existuje jako Ucastnik
-            if($participant = $this->em->getRepository(Participant::class)->findOneBy(['skautisPersonId'=> (int) $skautis->getPersonId()]) ) {
+            if($participant = $this->em->getRepository(Participant::class)->findOneBy(['skautisPersonId'=> $skautisPersonId]) ) {
                 $this->getUser()->login( $participant->toIdentity() );
             }
             // Pokud existuje jako ST
-            elseif ($serviceteam = $this->em->getRepository(Serviceteam::class)->findOneBy(['skautisPersonId'=> (int) $skautis->getPersonId()])) {
+            elseif ($serviceteam = $this->em->getRepository(Serviceteam::class)->findOneBy(['skautisPersonId'=> $skautisPersonId])) {
                 $this->getUser()->login( $serviceteam->toIdentity() );
             }
             else {
                 // Prihlasim ho jako HOSTA
-                $this->getUser()->login(new \Nette\Security\Identity(null, Person::ROLE_GUEST, []));
+                $this->getUser()->login(new \Nette\Security\Identity(null, Person::ROLE_GUEST, ['skautisPersonId'=> $skautisPersonId]));
             }
 
 

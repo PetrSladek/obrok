@@ -33,7 +33,7 @@ class HomepagePresenter extends ParticipantAuthBasePresenter
 
     public function renderDefault() {
 
-        $this->template->programs = $this->getParticipantProgram( $this->me->id );
+        $this->template->programs = $this->me->programs;
     }
 
 

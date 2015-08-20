@@ -112,8 +112,6 @@ class RegistrationPresenter extends \App\Module\Front\Presenters\FrontBasePresen
         $group->name = $values->name;
         $group->city = $values->city;
         $group->note = $values->note;
-        $group->confirmed = false; // zatim nepotvrzena
-
 
         $group->locationLat = $values->location->lat;
         $group->locationLng = $values->location->lng;
@@ -156,7 +154,7 @@ class RegistrationPresenter extends \App\Module\Front\Presenters\FrontBasePresen
 
         // aktualni data ze skautisu
         $this->participant = new Participant();
-        $this->skautisHydrator->hydrate($this->participant, $this->skautis->getPersonId());
+        $this->skautisHydrator->hydrate($this->participant, $this->user->getIdentity()->skautisPersonId);
   }
 
 
@@ -239,7 +237,6 @@ class RegistrationPresenter extends \App\Module\Front\Presenters\FrontBasePresen
 
         if(!$this->group->hasAdmin()) {
             $this->participant->setAdmin();
-            $this->group->confirmed = true;
         }
 
         $this->participant->setGroup( $this->group );

@@ -2,7 +2,7 @@
 
 {block content}
 
-<div class="row">
+<div class="row" n:if="!$user->isLoggedIn()">
     <div class="col-sm-6">
         <a n:href="skautisLogin-open!" class="btn btn-success btn-block btn-lg">Prihlasit se pres Skautis</a>
     </div>

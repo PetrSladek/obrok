@@ -20,6 +20,7 @@ use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\PersistentCollection;
 use Kdyby\Doctrine;
 use Nette\InvalidStateException;
+use Nette\Utils\DateTime;
 
 /**
  * @Entity(repositoryClass="App\Repositories\ParticipantsRepository")
@@ -56,6 +57,7 @@ class Participant extends Person {
 
     public function __construct()
     {
+        parent::__construct();
         $this->programs = new ArrayCollection();
     }
 
