@@ -6,7 +6,7 @@
  * Time: 14:21
  */
 
-namespace App\Repositories;
+namespace App\Model\Repositories;
 
 
 use Kdyby\Doctrine\EntityDao;

@@ -8,8 +8,8 @@ use App\Model\Entity\Participant;
 use App\Model\Entity\Person;
 
 use App\Forms\Form;
-use App\Repositories\GroupsRepository;
-use App\Repositories\ParticipantsRepository;
+use App\Model\Repositories\GroupsRepository;
+use App\Model\Repositories\ParticipantsRepository;
 use Nette\Utils\ArrayHash;
 use Nette\Utils\DateTime;
 use Nette\Utils\Html;
@@ -53,11 +53,11 @@ class RegistrationPresenter extends \App\Module\Front\Presenters\FrontBasePresen
         if(!$this->user->isLoggedIn()) {
             $this['skautisLogin']->open(); // otevre prihlasovaci formular skautisu a pak presmeruje zpet sem
         }
-        if($this->user->isInRole(Person::ROLE_PARTICIPANT)) {
+        if($this->user->isInRole(Person::TYPE_PARTICIPANT)) {
             $this->flashMessage('Už si zaregistrovaný jako účastník. Nemůžeš se registrovat znovu!', 'warning');
             $this->redirect('Homepage:');
         }
-        elseif($this->user->isInRole(Person::ROLE_SERVICETEAM)) {
+        elseif($this->user->isInRole(Person::TYPE_SERVICETEAM)) {
             $this->flashMessage('Už si zaregistrovaný jako Servisák. Nemůžeš se registrovat znovu!', 'warning');
             $this->redirect(':Front:Serviceteam:Homepage:');
         }

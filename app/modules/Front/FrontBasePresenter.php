@@ -5,8 +5,8 @@ namespace App\Module\Front\Presenters;;
 use App\Model\Entity\Participant;
 use App\Model\Entity\Person;
 use App\Model\Entity\Serviceteam;
-use App\Repositories\ParticipantsRepository;
-use App\Repositories\ServiceteamRepository;
+use App\Model\Repositories\ParticipantsRepository;
+use App\Model\Repositories\ServiceteamRepository;
 use PetrSladek\SkautIS\Dialog\LoginDialog;
 use PetrSladek\SkautIS\SkautIS;
 
@@ -56,7 +56,7 @@ abstract class FrontBasePresenter extends \App\Module\Base\Presenters\BasePresen
             }
             else {
                 // Prihlasim ho jako HOSTA
-                $this->getUser()->login(new \Nette\Security\Identity(null, Person::ROLE_GUEST, ['skautisPersonId'=> $skautisPersonId]));
+                $this->getUser()->login(new \Nette\Security\Identity(null, Person::TYPE_GUEST, ['skautisPersonId'=> $skautisPersonId]));
             }
 
 

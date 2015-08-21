@@ -9,6 +9,7 @@ use Kdyby\Doctrine\Entities\BaseEntity;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\MappedSuperclass;
 use Doctrine\ORM\Mapping\DiscriminatorMap;
+use Doctrine\ORM\Mapping\DiscriminatorColumn;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\InheritanceType;
 use Doctrine\ORM\Mapping\ManyToOne;
@@ -18,7 +19,14 @@ use Nette\Utils\DateTime;
 /**
  * @author Petr /Peggy/ Sládek <petr.sladek@skaut.cz>
  *
- * @MappedSuperclass
+ * @Entity
+ * @InheritanceType("SINGLE_TABLE")
+ * @DiscriminatorMap({
+ *  Person::TYPE_PARTICIPANT = "Participant",
+ *  Person::TYPE_SERVICETEAM = "Serviceteam",
+ *  Person::TYPE_GUEST = "Guest"
+ * })
+ * @DiscriminatorColumn(name="type", columnDefinition="ENUM('participant', 'serviceteam', 'guest')"))
  *
  * @property \DateTime $createdAt
  * @property string $role
@@ -49,9 +57,9 @@ abstract class Person extends BaseEntity {
     const GENDER_MALE = 'male';
     const GENDER_FEMALE = 'female';
 
-    const ROLE_GUEST = 'guest'; // pred zaregistrovanim
-    const ROLE_PARTICIPANT = 'participant'; // zaregistrovan jako ucastnik
-    const ROLE_SERVICETEAM = 'serviceteam'; // zaregistrovan jako servisak
+    const TYPE_GUEST = 'guest'; // pred zaregistrovanim, ale uz se prihlasil pres skautis
+    const TYPE_PARTICIPANT = 'participant'; // zaregistrovan jako ucastnik
+    const TYPE_SERVICETEAM = 'serviceteam'; // zaregistrovan jako servisak
 
     /**
      * Datum vytvoreni

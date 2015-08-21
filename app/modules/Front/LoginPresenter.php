@@ -25,10 +25,10 @@ class LoginPresenter extends FrontBasePresenter
 
     public function actionDefault() {
 
-        if($this->user->isInRole(Person::ROLE_PARTICIPANT)) {
+        if($this->user->isInRole(Person::TYPE_PARTICIPANT)) {
             $this->redirect(':Front:Participants:Homepage:');
         }
-        elseif($this->user->isInRole(Person::ROLE_SERVICETEAM)) {
+        elseif($this->user->isInRole(Person::TYPE_SERVICETEAM)) {
             $this->redirect(':Front:Serviceteam:Homepage:');
         }
 
@@ -41,11 +41,11 @@ class LoginPresenter extends FrontBasePresenter
         if(!$this->user->isLoggedIn())
             $this->redirect('Login:');
 
-        if($this->user->isInRole(Person::ROLE_SERVICETEAM)) {
+        if($this->user->isInRole(Person::TYPE_SERVICETEAM)) {
             $this->flashMessage('Jste zaregistrován jako člen servistýmu. Podruhé se registrovat nemůžete!');
             $this->redirect(":Serviceteam:Homepage:");
         }
-        if($this->user->isInRole(Person::ROLE_PARTICIPANT)) {
+        if($this->user->isInRole(Person::TYPE_PARTICIPANT)) {
             $this->flashMessage('Jste zaregistrován jako účastník. Podruhé se registrovat nemůžete!');
             $this->redirect(":Serviceteam:Homepage:");
         }

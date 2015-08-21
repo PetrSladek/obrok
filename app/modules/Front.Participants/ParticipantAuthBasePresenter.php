@@ -18,7 +18,7 @@ abstract class ParticipantAuthBasePresenter extends  \App\Module\Front\Presenter
 
         parent::startup();
 
-        if(!$this->user->isLoggedIn() || !$this->user->isInRole(Person::ROLE_PARTICIPANT)) {
+        if(!$this->user->isLoggedIn() || !$this->user->isInRole(Person::TYPE_PARTICIPANT)) {
             if($this->link('this') != $this->link("Homepage:")) {
                 $this->flashMessage("Musíte být přihlášení");
                 $this->redirect(":Front:Login:", array('back'=> $this->storeRequest()));

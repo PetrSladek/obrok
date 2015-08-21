@@ -5,7 +5,7 @@ namespace App\Module\Database\Presenters;
 use App\BasePresenter;
 use App\Forms\Form;
 use App\Model\Entity\Serviceteam;
-use App\Repositories\ServiceteamRepository;
+use App\Model\Repositories\ServiceteamRepository;
 use Kdyby\Doctrine\EntityDao;
 use Kdyby\Doctrine\EntityManager;
 use Nette\Bridges\ApplicationLatte\Template;

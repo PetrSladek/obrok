@@ -228,7 +228,7 @@ class Serviceteam extends Person {
      * Vrati objekt s nette identitou
      */
     public function toIdentity() {
-        return new \Nette\Security\Identity($this->id, array_merge([Person::ROLE_SERVICETEAM], explode(" ", $this->role)));
+        return new \Nette\Security\Identity($this->id, array_merge([Person::TYPE_SERVICETEAM], explode(" ", $this->role)));
     }
 
 

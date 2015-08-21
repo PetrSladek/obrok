@@ -204,7 +204,7 @@ class Participant extends Person {
      * Vrati objekt s nette identitou
      */
     public function toIdentity() {
-        return new \Nette\Security\Identity($this->id, Person::ROLE_PARTICIPANT);
+        return new \Nette\Security\Identity($this->id, Person::TYPE_PARTICIPANT);
     }
 
 

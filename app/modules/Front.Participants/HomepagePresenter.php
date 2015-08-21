@@ -4,7 +4,7 @@ namespace App\Module\Front\Participants\Presenters;
 use App\Model\Entity\Group;
 use App\Model\Entity\Participant;
 use App\Forms\Form;
-use App\Repositories\GroupsRepository;
+use App\Model\Repositories\GroupsRepository;
 use App\Services\ImageService;
 use Nette\Utils\AssertionException;
 use Nette\Utils\DateTime;
