@@ -19,14 +19,14 @@ use Nette\Utils\DateTime;
 /**
  * @author Petr /Peggy/ Sládek <petr.sladek@skaut.cz>
  *
- * @Entity
+ * @Entity(repositoryClass="App\Model\Repositories\PersonsRepository")
  * @InheritanceType("SINGLE_TABLE")
  * @DiscriminatorMap({
  *  Person::TYPE_PARTICIPANT = "Participant",
  *  Person::TYPE_SERVICETEAM = "Serviceteam",
- *  Person::TYPE_GUEST = "Guest"
+ *  Person::TYPE_UNSPECIFIED = "Unspecified"
  * })
- * @DiscriminatorColumn(name="type", columnDefinition="ENUM('participant', 'serviceteam', 'guest')"))
+ * @DiscriminatorColumn(name="type", columnDefinition="ENUM('unspecified', 'participant', 'serviceteam')"))
  *
  * @property \DateTime $createdAt
  * @property string $role
@@ -57,7 +57,7 @@ abstract class Person extends BaseEntity {
     const GENDER_MALE = 'male';
     const GENDER_FEMALE = 'female';
 
-    const TYPE_GUEST = 'guest'; // pred zaregistrovanim, ale uz se prihlasil pres skautis
+    const TYPE_UNSPECIFIED = 'unspecified'; // pred zaregistrovanim, ale uz se prihlasil pres skautis
     const TYPE_PARTICIPANT = 'participant'; // zaregistrovan jako ucastnik
     const TYPE_SERVICETEAM = 'serviceteam'; // zaregistrovan jako servisak
 
@@ -272,7 +272,21 @@ abstract class Person extends BaseEntity {
         return new Address($this->addressStreet, $this->addressCity, $this->addressPostcode);
     }
 
+    public function setAddress(Address $address)
+    {
+        $this->addressStreet = $address->street;
+        $this->addressCity = $address->city;
+        $this->addressPostcode = $address->postalCode;
+    }
 
+
+
+    /**
+     * Vrati objekt s nette identitou
+     */
+    public function toIdentity() {
+        return new \Nette\Security\Identity($this->id, self::TYPE_UNSPECIFIED);
+    }
 
 
 

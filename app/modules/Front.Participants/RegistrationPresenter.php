@@ -10,12 +10,13 @@ use App\Model\Entity\Person;
 use App\Forms\Form;
 use App\Model\Repositories\GroupsRepository;
 use App\Model\Repositories\ParticipantsRepository;
+use App\Module\Front\Presenters\GuestAuthBasePresenter;
 use Nette\Utils\ArrayHash;
 use Nette\Utils\DateTime;
 use Nette\Utils\Html;
 
 
-class RegistrationPresenter extends \App\Module\Front\Presenters\FrontBasePresenter
+class RegistrationPresenter extends GuestAuthBasePresenter
 {
 
 
@@ -45,24 +46,7 @@ class RegistrationPresenter extends \App\Module\Front\Presenters\FrontBasePresen
     /** @var ArrayHash */
     public $defaults;
 
-    public function startup()
-    {
-        parent::startup();
 
-
-        if(!$this->user->isLoggedIn()) {
-            $this['skautisLogin']->open(); // otevre prihlasovaci formular skautisu a pak presmeruje zpet sem
-        }
-        if($this->user->isInRole(Person::TYPE_PARTICIPANT)) {
-            $this->flashMessage('Už si zaregistrovaný jako účastník. Nemůžeš se registrovat znovu!', 'warning');
-            $this->redirect('Homepage:');
-        }
-        elseif($this->user->isInRole(Person::TYPE_SERVICETEAM)) {
-            $this->flashMessage('Už si zaregistrovaný jako Servisák. Nemůžeš se registrovat znovu!', 'warning');
-            $this->redirect(':Front:Serviceteam:Homepage:');
-        }
-
-    }
 
 
     // REGISTRACE NOVE SKUPINY
@@ -135,15 +119,6 @@ class RegistrationPresenter extends \App\Module\Front\Presenters\FrontBasePresen
         if($this->group->getInvitationHash(  $this->config->hashKey ) !== $hash)
             $this->error("Pokus o napadeni");
 
-        // Poku sem vleze ST nebo ucastnik tak ho odhlasime
-//        if(!$this->user->isInRole(Person::ROLE_GUEST))
-//            $this->user->logout(true);
-
-
-
-
-
-
 
 //        if(!$this->openRegistrationParticipants/* && !$this->group->getFreePlaces()*/) {
 //            $this->flashMessage('Nelze registrovat nové učastníky. Kapacita je již zaplněná', 'warning');
@@ -151,10 +126,6 @@ class RegistrationPresenter extends \App\Module\Front\Presenters\FrontBasePresen
 //        }
 
         $this->template->group = $this->group;
-
-        // aktualni data ze skautisu
-        $this->participant = new Participant();
-        $this->skautisHydrator->hydrate($this->participant, $this->user->getIdentity()->skautisPersonId);
   }
 
 
@@ -165,38 +136,38 @@ class RegistrationPresenter extends \App\Module\Front\Presenters\FrontBasePresen
 
         $frm->addText('firstName', 'Jméno')
             ->setDisabled()
-            ->setDefaultValue($this->participant->firstName);
+            ->setDefaultValue($this->me->firstName);
         $frm->addText('lastName', 'Příjmení')
             ->setDisabled()
-            ->setDefaultValue($this->participant->lastName);
+            ->setDefaultValue($this->me->lastName);
 
         $frm->addText('nickName', 'Přezdívka')
-            ->setDefaultValue($this->participant->nickName);
+            ->setDefaultValue($this->me->nickName);
 
         $frm->addDatepicker('birthdate', 'Datum narození:')
-            ->setDefaultValue($this->participant->birthdate)
+            ->setDefaultValue($this->me->birthdate)
             ->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat Datum narození nebo je ve špatném formátu (musí být dd.mm.yyyy)')
             ->addRule(Form::RANGE, 'Podle data narození vám 1.6.2015 ještě nebude 15 let (což porušuje podmínky účasti)', array(null, DateTime::from('1.6.2015')->modify('-15 years')) )
             ->addRule(Form::RANGE, 'Podle data narození vám 10.6.2015 bude už více než 25 let (což porušuje podmínky účasti)', array(DateTime::from('10.6.2015')->modify('-25 years'), null) );
 
         $frm->addRadioList('gender', 'Pohlaví', [Person::GENDER_MALE=>'muž',Person::GENDER_FEMALE=>'žena'])
-            ->setDefaultValue($this->participant->gender)
+            ->setDefaultValue($this->me->gender)
             ->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat %label');
 
         $frm->addGroup('Trvalé bydliště');
         $frm->addText('addressStreet', 'Ulice a čp.')
-            ->setDefaultValue($this->participant->addressStreet)
+            ->setDefaultValue($this->me->addressStreet)
             ->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat %label');
         $frm->addText('addressCity', 'Město')
-            ->setDefaultValue($this->participant->addressCity)
+            ->setDefaultValue($this->me->addressCity)
             ->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat %label');
         $frm->addText('addressPostcode', 'PSČ')
-            ->setDefaultValue($this->participant->addressPostcode)
+            ->setDefaultValue($this->me->addressPostcode)
             ->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat %label');
 
         $frm->addGroup('Kontaktní údaje');
         $frm->addText('phone', 'Mobilní telefon')
-            ->setDefaultValue($this->participant->phone)
+            ->setDefaultValue($this->me->phone)
             ->setEmptyValue('+420')
             ->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat Mobilní telefon')
             ->addRule([$frm,'isPhoneNumber'], 'Telefonní číslo je ve špatném formátu')
@@ -204,13 +175,13 @@ class RegistrationPresenter extends \App\Module\Front\Presenters\FrontBasePresen
 //        $frm->addCheckbox('phoneIsSts', 'je v STS?')
 //            ->setAttribute('description','Je toto telefoní číslo v Skautské telefoní síti?');
         $frm->addText('email', 'E-mail:')
-            ->setDefaultValue($this->participant->email)
+            ->setDefaultValue($this->me->email)
             ->addRule(Form::FILLED, 'Zadejte E-mail')
             ->setOption('description','Tvůj email na který ti budou chodit informace');
 
         $frm->addGroup('Zdravotní omezení');
         $frm->addTextarea('health', 'Zdravotní omezení a alergie')
-            ->setDefaultValue($this->participant->health);
+            ->setDefaultValue($this->me->health);
 
 
         $frm->addGroup(null);
@@ -231,32 +202,35 @@ class RegistrationPresenter extends \App\Module\Front\Presenters\FrontBasePresen
 
         $values = $frm->getValues();
 
+        $this->persons->changePersonTypeTo($this->me, Person::TYPE_PARTICIPANT);
+
         // Prednactenej ze SkautISu;
         foreach($values as $key => $value)
-            $this->participant->$key = $value;
+            $this->me->$key = $value;
 
         if(!$this->group->hasAdmin()) {
-            $this->participant->setAdmin();
+            $this->me->setAdmin();
         }
 
-        $this->participant->setGroup( $this->group );
+        $this->me->setGroup( $this->group );
 
 
         // Pokud skupina nema sefa a tomuhle ucastnikovi je nad 18, tak z nej udaleme sefa
-        if(!$this->group->hasBoss() && $this->participant->getAge( $this->ageInDate ) >= 18) {
-            $this->group->setBoss( $this->participant );
+        if(!$this->group->hasBoss() && $this->me->getAge( $this->ageInDate ) >= 18) {
+            $this->group->setBoss( $this->me );
         }
 
-        $this->em->persist($this->participant);
-        $this->em->persist($this->group);
+//        $this->em->persist($this->me);
+//        $this->em->persist($this->group);
         $this->em->flush();
 
 
         $mail = $this->emails->create('participantFirstInfo', 'První informace');
-        $mail->addTo($this->participant->email);
+        $mail->addTo($this->me->email);
         $this->emails->send($mail);
 
-        $this->user->login($this->participant->toIdentity());
+        // Zmenila se mi role
+        $this->user->login($this->me->toIdentity());
 
         $this->redirect('Homepage:');
     }

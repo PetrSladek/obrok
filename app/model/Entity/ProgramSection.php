@@ -22,7 +22,7 @@ use Kdyby\Doctrine;
 use Nette\NotImplementedException;
 
 /**
- * @Entity(repositoryClass="App\Repositories\ProgramsSectionsRepository")
+ * @Entity(repositoryClass="App\Model\Repositories\ProgramsSectionsRepository")
  *
  * @property string $title
  * @property string $subTitle

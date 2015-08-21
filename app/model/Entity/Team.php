@@ -17,7 +17,7 @@ use Doctrine\ORM\PersistentCollection;
 use Kdyby\Doctrine;
 
 /**
- * @Entity(repositoryClass="App\Repositories\TeamsRepository")
+ * @Entity(repositoryClass="App\Model\Repositories\TeamsRepository")
  * @Table(name="teams")
  */
 class Team extends Doctrine\Entities\BaseEntity {

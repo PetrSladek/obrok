@@ -2,7 +2,9 @@
 
 namespace  App\Module\Front\Serviceteam\Presenters;
 
+use App\Model\Entity\Person;
 use App\Model\Entity\Serviceteam;
+use App\Model\Repositories\PersonsRepository;
 
 abstract class ServiceteamAuthBasePresenter extends \App\Module\Front\Presenters\FrontBasePresenter
 {
@@ -10,23 +12,30 @@ abstract class ServiceteamAuthBasePresenter extends \App\Module\Front\Presenters
     /** @var Serviceteam */
     public $me;
 
-    public $repository;
+    /** @var PersonsRepository @inject */
+    public $persons;
 
     public function startup () {
         parent::startup();
 
-        $this->repository = $this->em->getRepository(Serviceteam::class);
 
+        // Kdyz neni prihlaseny vubec => donutime ho se prihlasit
         if(!$this->getUser()->isLoggedIn()) {
-            if($this->link('this') != $this->link("Homepage:")) {
-                $this->flashMessage("Musíte být přihlášení");
-                $this->redirect(":Login:", array('back'=> $this->storeRequest()));
-            }
-            $this->redirect(":Login:");
+            $this->redirect(":Front:Login:", array('back'=> $this->storeRequest()));
+        }
+        // Pokud je ucatnik => presmerujeme na jeho Homepage
+        elseif($this->user->isInRole(Person::TYPE_PARTICIPANT)) {
+            $this->flashMessage('Už si zaregistrovaný jako účastník. Nemůžeš se registrovat znovu!', 'warning');
+            $this->redirect(':Front:Participants:Homepage:');
+        }
+        // Pokud je servisak => presmerujeme na jeho Homepage
+        elseif($this->user->isInRole(Person::TYPE_UNSPECIFIED)) {
+            $this->flashMessage('Ještě nemáš zvoleno čím budeš!', 'warning');
+            $this->redirect(':Front:Unspecified:');
         }
 
         /** @var Serviceteam */
-        $me = $this->repository->find( $this->getUser()->getId() );
+        $me = $this->persons->find( $this->getUser()->getId() );
         $this->me = $me;
         $this->template->me = $this->me;
     }

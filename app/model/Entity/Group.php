@@ -21,7 +21,7 @@ use Kdyby\Doctrine;
 use Nette\NotImplementedException;
 
 /**
- * @Entity(repositoryClass="App\Repositories\GroupsRepository")
+ * @Entity(repositoryClass="App\Model\Repositories\GroupsRepository")
  * @Table(name="groups")
  *
  * @property \DateTime $createdAt

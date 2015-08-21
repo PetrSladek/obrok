@@ -2,6 +2,8 @@
 
 namespace App\Module\Front\Presenters;;
 
+use App\Hydrators\SkautisHydrator;
+use App\Model\Entity\Unspecified;
 use App\Model\Entity\Participant;
 use App\Model\Entity\Person;
 use App\Model\Entity\Serviceteam;
@@ -21,13 +23,11 @@ abstract class FrontBasePresenter extends \App\Module\Base\Presenters\BasePresen
     /** @var ServiceteamRepository @inject */
     public $serviceteams;
 
-
-    /**
-     * @var SkautIS @inject
-     */
+    /** @var SkautIS @inject */
     public $skautis;
 
-
+    /** @var SkautisHydrator @inject */
+    public $skautisHydrator;
 
     /** @return LoginDialog */
     protected function createComponentSkautisLogin()
@@ -42,21 +42,27 @@ abstract class FrontBasePresenter extends \App\Module\Base\Presenters\BasePresen
                 return;
             }
 
-            $skautisPersonId = (int) $skautis->getPersonId();
+            $skautisPersonId = (int)$skautis->getPersonId();
 
 //            try {
 
-            // Pokud existuje jako Ucastnik
-            if($participant = $this->em->getRepository(Participant::class)->findOneBy(['skautisPersonId'=> $skautisPersonId]) ) {
-                $this->getUser()->login( $participant->toIdentity() );
+            $person = $this->em->getRepository(Person::class)->findOneBy(['skautisPersonId' => $skautisPersonId]);
+
+            // Pokud existuje jako ucastnik, servisak nebo guest (jeste si nezvolil co bude)
+            if ($person) {
+                $this->getUser()->login($person->toIdentity());
             }
-            // Pokud existuje jako ST
-            elseif ($serviceteam = $this->em->getRepository(Serviceteam::class)->findOneBy(['skautisPersonId'=> $skautisPersonId])) {
-                $this->getUser()->login( $serviceteam->toIdentity() );
-            }
+            // Jinak ho zaregistruju ho jako GUEST
             else {
-                // Prihlasim ho jako HOSTA
-                $this->getUser()->login(new \Nette\Security\Identity(null, Person::TYPE_GUEST, ['skautisPersonId'=> $skautisPersonId]));
+
+                // vytvori uzivatele podle skautis udaju
+                $person = new Unspecified();
+                $this->skautisHydrator->hydrate($person, $skautisPersonId);
+
+                $this->em->persist($person);
+                $this->em->flush();
+
+                $this->getUser()->login($person->toIdentity());
             }
 
 

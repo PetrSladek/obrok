@@ -15,7 +15,7 @@ use Doctrine\ORM\Mapping\JoinColumn;
 use Kdyby\Doctrine;
 
 /**
- * @Entity(repositoryClass="App\Repositories\ServiceteamRepository")
+ * @Entity(repositoryClass="App\Model\Repositories\ServiceteamRepository")
  *
  * @property Team|null $team
  * @property Job|null $job

@@ -23,7 +23,7 @@ use Nette\InvalidStateException;
 use Nette\Utils\DateTime;
 
 /**
- * @Entity(repositoryClass="App\Repositories\ParticipantsRepository")
+ * @Entity(repositoryClass="App\Model\Repositories\ParticipantsRepository")
  * @property bool $admin
  * @property Group|null $group
  */

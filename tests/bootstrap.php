@@ -1,13 +1,5 @@
 <?php
 
-/**
- * This file is part of the Kdyby (http://www.kdyby.org)
- *
- * Copyright (c) 2008 Filip Procházka (filip@prochazka.su)
- *
- * For the full copyright and license information, please view the file license.md that was distributed with this source code.
- */
-
 if (@!include __DIR__ . '/../vendor/autoload.php') {
     echo 'Install Nette Tester using `composer update --dev`';
     exit(1);
@@ -37,79 +29,23 @@ function run(Tester\TestCase $testCase) {
 }
 
 
+$configurator = new Nette\Configurator;
+$configurator->setDebugMode(false);
+$configurator->setTempDirectory(TEMP_DIR);
+$configurator->createRobotLoader()
+    ->addDirectory(__DIR__ . '/../app')
+    ->register();
+$configurator->addParameters([
+    'appDir' => __DIR__ . '/../app',
+    'wwwDir' => __DIR__ . '/../www',
+]);
 
-class HttpServer extends Nette\Object
-{
+$configurator->addConfig(__DIR__ . '/../app/config/config.neon');
+$configurator->addConfig(__DIR__ . '/../app/config/config.local.neon');
+$configurator->addConfig(__DIR__ . '/config.local.neon');
 
-    /**
-     * @var array
-     */
-    private $pipes = array();
+//var_dump($configurator);
+//php_ini_loaded_file();
 
-    /**
-     * @var resource
-     */
-    private $process;
 
-    private static $spec = array(
-        0 => array("pipe", "r"), // stdin is a pipe that the child will read from
-        1 => array("pipe", "w"), // stdout is a pipe that the child will write to
-        2 => array("pipe", "w"), // errors
-    );
-
-    public function __destruct()
-    {
-        $this->slaughter();
-    }
-
-    public function start($router, $port = NULL, $ip = '127.0.0.1')
-    {
-        $this->slaughter();
-
-        if ($port === NULL) {
-            do {
-                $port = rand(8000, 10000);
-                if (isset($lock)) @fclose($lock);
-                $lock = fopen(TEMP_DIR . '/server-' . $port . '.lock', 'w');
-            } while (!flock($lock, LOCK_EX | LOCK_NB, $wouldBlock) || $wouldBlock);
-        }
-
-        $cmd = sprintf('php -S %s:%d %s', $ip, $port, escapeshellarg($router));
-        if (!is_resource($this->process = proc_open($cmd, self::$spec, $this->pipes))) {
-            throw new \RuntimeException("Could not execute: `$cmd`");
-        }
-
-        sleep(1); // give him some time to boot up
-
-        return 'http://' . $ip .':' . $port;
-    }
-
-    public function slaughter()
-    {
-        if (!is_resource($this->process)) {
-            return;
-        }
-
-        $status = proc_get_status($this->process);
-        if ($status['running'] == true) {
-            fclose($this->pipes[1]); //stdout
-            fclose($this->pipes[2]); //stderr
-
-            //get the parent pid of the process we want to kill
-            $pPid = $status['pid'];
-
-            //use ps to get all the children of this process, and kill them
-            foreach (array_filter(preg_split('/\s+/', `ps -o pid --no-heading --ppid $pPid`)) as $pid) {
-                if (is_numeric($pid)) {
-                    posix_kill($pid, 9); // SIGKILL signal
-                }
-            }
-        }
-
-        fclose($this->pipes[0]);
-        proc_close($this->process);
-
-        $this->process = NULL;
-    }
-
-}
+return $configurator->createContainer();

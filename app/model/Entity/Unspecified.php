@@ -23,15 +23,15 @@ use Nette\InvalidStateException;
 use Nette\Utils\DateTime;
 
 /**
- * @Entity(repositoryClass="App\Repositories\GuestRepository")
+ * @Entity(repositoryClass="App\Model\Repositories\UnspecifiedsRepository")
  */
-class Guest extends Person {
+class Unspecified extends Person {
 
     /**
      * Vrati objekt s nette identitou
      */
     public function toIdentity() {
-        return new \Nette\Security\Identity($this->id, Person::TYPE_GUEST);
+        return new \Nette\Security\Identity($this->id, Person::TYPE_UNSPECIFIED);
     }
 
 

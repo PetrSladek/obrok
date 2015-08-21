@@ -139,7 +139,10 @@
                             {/block}
                         </div>
                         <div class="pull-right">
-
+                            {if $user->isLoggedIn()}
+                                Přihlášen: <strong>{$me->getFullname()}</strong> |
+                                <a n:href="logout!">Odhlásit se</a>
+                            {/if}
                         </div>
                     </div>
                 </div>

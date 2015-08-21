@@ -5,7 +5,9 @@ namespace  App\Module\Front\Serviceteam\Presenters;
 use App\FrontBasePresenter;
 use App\Hydrators\SkautisHydrator;
 use App\Model\Entity\Person;
+use App\Model\Repositories\PersonsRepository;
 use App\Model\Repositories\ServiceteamRepository;
+use App\Module\Front\Presenters\GuestAuthBasePresenter;
 use App\ServiceteamBasePresenter;
 use App\Model\Entity\Serviceteam;
 use App\Forms\Form;
@@ -20,19 +22,13 @@ use Nette\Utils\Html;
  * @package    Obrok15
  */
 
-class RegistrationPresenter extends \App\Module\Front\Presenters\FrontBasePresenter
+class RegistrationPresenter extends GuestAuthBasePresenter
 {
 
     /**
-     * @var ServiceteamRepository @inject
+     * @var PersonsRepository @inject
      */
-    public $serviceteams;
-
-
-    /**
-     * @var Serviceteam
-     */
-    public $serviceteam;
+    public $persons;
 
     /**
      * @var SkautisHydrator
@@ -40,29 +36,7 @@ class RegistrationPresenter extends \App\Module\Front\Presenters\FrontBasePresen
      */
     public $skautisHydrator;
 
-    public function startup()
-    {
-        parent::startup();
 
-        if(!$this->user->isLoggedIn()) {
-            $this['skautisLogin']->open(); // otevre prihlasovaci formular skautisu a pak presmeruje zpet sem
-        }
-        if($this->user->isInRole(Person::TYPE_PARTICIPANT)) {
-            $this->flashMessage('Už si zaregistrovaný jako účastník. Nemůžeš se registrovat znovu!', 'warning');
-            $this->redirect(':Front:Participants:Homepage:');
-        }
-        elseif($this->user->isInRole(Person::TYPE_SERVICETEAM)) {
-            $this->flashMessage('Už si zaregistrovaný jako Servisák. Nemůžeš se registrovat znovu!', 'warning');
-            $this->redirect('Homepage:');
-        }
-
-    }
-
-
-    public function actionDefault() {
-        $this->serviceteam = new Serviceteam();
-        $this->skautisHydrator->hydrate($this->serviceteam, $this->skautis->getPersonId());
-    }
 
     public function createComponentFrmRegistration() {
         
@@ -72,27 +46,27 @@ class RegistrationPresenter extends \App\Module\Front\Presenters\FrontBasePresen
 
         $frm->addText('firstName', 'Jméno')
             ->setDisabled()
-            ->setDefaultValue($this->serviceteam->firstName);
+            ->setDefaultValue($this->me->firstName);
         $frm->addText('lastName', 'Příjmení')
             ->setDisabled()
-            ->setDefaultValue($this->serviceteam->lastName);
+            ->setDefaultValue($this->me->lastName);
         $frm->addText('nickName', 'Přezdívka')
-            ->setDefaultValue($this->serviceteam->nickName);
+            ->setDefaultValue($this->me->nickName);
 
         $frm->addDatepicker('birthdate', 'Datum narození')
-            ->setDefaultValue($this->serviceteam->birthdate)
+            ->setDefaultValue($this->me->birthdate)
             ->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat Datum narození nebo je ve špatném formátu')
             ->addRule(Form::RANGE, 'Podle data narození vám 1.6.2015 ještě nebude 18 let (což porušuje podmínky účasti)', array(null, DateTime::from('1.6.2015')->modify('-18 years')) )
             ->setAttribute('description','Tvoje Datum narození ve formátu dd.mm.yyyy');
         $frm->addText('addressCity', 'Město')
-            ->setDefaultValue($this->serviceteam->addressCity)
+            ->setDefaultValue($this->me->addressCity)
             ->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat Město')
             ->setAttribute('description','Město, kde aktuálně bydlíš nebo skautuješ');
             
             
         $frm->addGroup('Kontaktní údaje');
         $frm->addText('phone', 'Mobilní telefon')
-            ->setDefaultValue($this->serviceteam->phone)
+            ->setDefaultValue($this->me->phone)
             ->setEmptyValue('+420')
             ->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat Mobilní telefon')
             ->addRule([$frm,'isPhoneNumber'], 'Telefonní číslo je ve špatném formátu')
@@ -100,7 +74,7 @@ class RegistrationPresenter extends \App\Module\Front\Presenters\FrontBasePresen
             ->setAttribute('description','Mobilní telefon, na kterém budeš k zastižení během celé akce');
 
         $frm->addText('email', 'E-mail')
-            ->setDefaultValue($this->serviceteam->email)
+            ->setDefaultValue($this->me->email)
             ->setEmptyValue('@')
             ->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat E-mail')
             ->addRule(Form::EMAIL, 'E-mailová adresa není platná')
@@ -124,20 +98,23 @@ class RegistrationPresenter extends \App\Module\Front\Presenters\FrontBasePresen
     public function frmRegistrationSubmitted(Form $frm) {
         $values = $frm->getValues();
 
+        // Zmenim na Servisaka
+        $this->persons->changePersonTypeTo($this->me, Person::TYPE_SERVICETEAM);
 
         foreach($values as $key => $value) {
-            $this->serviceteam->$key = $value;
+            $this->me->$key = $value;
         }
 
-        $this->em->persist($this->serviceteam);
+        $this->em->persist($this->me);
         $this->em->flush();
 
         $mail = $this->emails->create('serviceteamFirstInfo', 'První informace');
-        $mail->addTo($this->serviceteam->email);
+        $mail->addTo($this->me->email);
         $this->emails->send($mail);
-        
-        $this->user->login($this->serviceteam->toIdentity());
-        
+
+        // Zmenila se mi role
+        $this->user->login($this->me->toIdentity());
+
         $this->flashMessage('Byl jsi úspěšně zařazen do Servisteamu','success');
         $this->redirect('Homepage:additional');
     }

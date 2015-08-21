@@ -11,6 +11,6 @@ namespace App\Model\Repositories;
 
 use Kdyby\Doctrine\EntityDao;
 
-class GuestRepository extends EntityDao {
+class UnspecifiedsRepository extends EntityDao {
 
 }
