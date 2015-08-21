@@ -5,10 +5,10 @@ namespace App\Module\Database\Presenters;
 use App\Forms\Form;
 use App\Model\Entity\Serviceteam;
 use App\Query\ServiceteamQuery;
-use App\Repositories\JobsRepository;
-use App\Repositories\ServiceteamRepository;
-use App\Repositories\TeamsRepository;
-use App\Repositories\WorkgroupsRepository;
+use App\Model\Repositories\JobsRepository;
+use App\Model\Repositories\ServiceteamRepository;
+use App\Model\Repositories\TeamsRepository;
+use App\Model\Repositories\WorkgroupsRepository;
 use App\Services\ImageService;
 
 use Nette\Forms\Container;

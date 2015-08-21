@@ -3,6 +3,7 @@
 namespace App\Module\Front\Serviceteam\Presenters;
 
 use App\Forms\Form;
+use App\Model\Entity\Person;
 use App\Model\Entity\Serviceteam;
 use App\Services\ImageService;
 use Kdyby\Doctrine\EntityRepository;
@@ -170,6 +171,15 @@ class HomepagePresenter extends ServiceteamAuthBasePresenter
         $this->redirect('Homepage:');
     }
 
+
+    public function handleToUnspecified() {
+
+        $this->persons->changePersonTypeTo($this->me, Person::TYPE_UNSPECIFIED);
+        $this->user->login($this->me->toIdentity());
+
+        $this->flashMessage('Tvá účast v ST je zrušena');
+        $this->redirect(":Front:Unspecified:");
+    }
 
 
 

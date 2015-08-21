@@ -16,7 +16,7 @@ use Doctrine\ORM\Mapping\JoinColumn;
 use Kdyby\Doctrine;
 
 /**
- * @Entity(repositoryClass="App\Repositories\WorkgroupsRepository")
+ * @Entity(repositoryClass="App\Model\Repositories\WorkgroupsRepository")
  * @Table(name="workgroups")
  * @property string $name
  */

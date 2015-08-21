@@ -15,7 +15,7 @@ use Doctrine\ORM\Mapping\JoinColumn;
 use Kdyby\Doctrine;
 
 /**
- * @Entity(repositoryClass="App\Repositories\ServiceteamRepository")
+ * @Entity(repositoryClass="App\Model\Repositories\ServiceteamRepository")
  *
  * @property Team|null $team
  * @property Job|null $job
@@ -228,7 +228,7 @@ class Serviceteam extends Person {
      * Vrati objekt s nette identitou
      */
     public function toIdentity() {
-        return new \Nette\Security\Identity($this->id, array_merge([Person::ROLE_SERVICETEAM], explode(" ", $this->role)));
+        return new \Nette\Security\Identity($this->id, array_merge([Person::TYPE_SERVICETEAM], explode(" ", $this->role)));
     }
 
 

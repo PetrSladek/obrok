@@ -17,7 +17,7 @@ use Doctrine\ORM\PersistentCollection;
 use Kdyby\Doctrine;
 
 /**
- * @Entity(repositoryClass="App\Repositories\JobsRepository")
+ * @Entity(repositoryClass="App\Model\Repositories\JobsRepository")
  * @Table(name="jobs")
  * @property string $name
  */

@@ -22,7 +22,7 @@ use Kdyby\Doctrine;
 use Nette\NotImplementedException;
 
 /**
- * @Entity(repositoryClass="App\Repositories\ProgramsRepository")
+ * @Entity(repositoryClass="App\Model\Repositories\ProgramsRepository")
  *
  * @property string $name
  * @property string $lector

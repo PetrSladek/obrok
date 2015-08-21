@@ -4,7 +4,7 @@ namespace App\Module\Database\Presenters;
 
 
 use App\Model\Entity\Serviceteam;
-use App\Repositories\ServiceteamRepository;
+use App\Model\Repositories\ServiceteamRepository;
 use Nette;
 use PetrSladek\SkautIS\Dialog\LoginDialog;
 

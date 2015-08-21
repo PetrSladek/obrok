@@ -23,7 +23,7 @@ use Nette\InvalidStateException;
 use Nette\Utils\DateTime;
 
 /**
- * @Entity(repositoryClass="App\Repositories\ParticipantsRepository")
+ * @Entity(repositoryClass="App\Model\Repositories\ParticipantsRepository")
  * @property bool $admin
  * @property Group|null $group
  */
@@ -204,7 +204,7 @@ class Participant extends Person {
      * Vrati objekt s nette identitou
      */
     public function toIdentity() {
-        return new \Nette\Security\Identity($this->id, Person::ROLE_PARTICIPANT);
+        return new \Nette\Security\Identity($this->id, Person::TYPE_PARTICIPANT);
     }
 
 

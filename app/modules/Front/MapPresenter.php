@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Module\Front\Presenters;
-use App\Repositories\GroupsRepository;
+use App\Model\Repositories\GroupsRepository;
 
 
 class MapPresenter extends FrontBasePresenter
