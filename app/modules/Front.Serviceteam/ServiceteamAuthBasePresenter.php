@@ -31,7 +31,7 @@ abstract class ServiceteamAuthBasePresenter extends \App\Module\Front\Presenters
         // Pokud je servisak => presmerujeme na jeho Homepage
         elseif($this->user->isInRole(Person::TYPE_UNSPECIFIED)) {
             $this->flashMessage('Ještě nemáš zvoleno čím budeš!', 'warning');
-            $this->redirect(':Front:UnspecifiedPerson:');
+            $this->redirect(':Front:Unspecified:');
         }
 
         /** @var Serviceteam */

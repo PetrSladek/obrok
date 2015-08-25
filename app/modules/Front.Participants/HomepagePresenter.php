@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Module\Front\Participants\Presenters;
+use App\Forms\IGroupFormFactory;
 use App\Model\Entity\Group;
 use App\Model\Entity\Participant;
 use App\Forms\Form;
@@ -28,6 +29,8 @@ class HomepagePresenter extends ParticipantAuthBasePresenter
     /** @var Participant */
     public $participant;
 
+    /** @var IGroupFormFactory @inject */
+    public $groupFormFactory;
 
 
 
@@ -49,91 +52,21 @@ class HomepagePresenter extends ParticipantAuthBasePresenter
         $this->template->data = $this->me->group;
     }
 
+    /**
+     * Formulář pro editaci skupiny
+     * @return \App\Forms\GroupForm
+     */
     public function createComponentFrmEditGroup() {
 
-        $frm = new Form();
+        $control = $this->groupFormFactory->create( $this->me->group->id );
+        $control->setAgeInDate($this->ageInDate);
+        $control->onSave[] = function($control, Group $group) {
+            $this->flashMessage('Údaje úspěšně upraveny','success');
+            $this->redirect('default');
+        };
 
-        $frm->addGroup('Základní informace');
-        $frm->addText('name', 'Název skupiny')
-            ->setDefaultValue($this->me->group->name)
-            ->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat %label')
-            ->setAttribute('title','Název skupiny, pod kterým budete vystupovat (např. RK Másla)')
-            ->setAttribute('data-placement','right');
-        $frm->addText('city', 'Město')
-            ->setDefaultValue($this->me->group->city)
-            ->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat %label')
-            ->setAttribute('title','Město, ke kterému se skupina "hlásí", ve kterém funguje')
-            ->setAttribute('data-placement','right');
-        $frm->addTextarea('note', 'O skupině')
-            ->setDefaultValue($this->me->group->note)
-            ->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat %label')
-            ->setAttribute('class','input-xxlarge')
-            ->setAttribute('title','Napišt nám krátkou charakteristku vaší skupiny. Jste fungující kmen nebo skupina "jednotlivců"? Čím se zabýváte? Napiště něco, co by ostatní mohlo zajímat!')
-            ->setAttribute('data-placement','right');
-
-        $frm->addSelect('boss','Vedoucí skupiny (18+)', $this->me->group->getPossibleBosses( $this->ageInDate ))
-            ->setDefaultValue($this->me->group->boss ? $this->me->group->boss->id : null)
-            ->setPrompt('- Vyberte vedoucího skupiny -');
-//            ->addCondition(Form::FILLED)
-//                ->addRule(callback('Participant','validateBossAge'), 'Věk vedoucího skupiny Obroku 2015 musí být 18 let nebo více');
-
-        $frm->addGroup('Doplňující údaje');
-//        $frm->addCropImage('avatar', 'Obrázek skupiny')
-//            ->setAspectRatio( 1 )
-//            ->setUploadScript($this->link('Image:upload'))
-//            ->setCallbackImage(function(CropImage $cropImage) {
-//                return $this->images->getImage($cropImage->getFilename());
-//            })
-//            ->setCallbackSrc(function(CropImage $cropImage, $width, $height) {
-//                return $this->images->getImageUrl($cropImage->getFilename(), $width, $height);
-//            })
-//            ->setDefaultValue( new CropImage(Group::$defaultAvatar) );
-        $frm->addGpsPicker('location', 'Mapa roverských kmenů:', [
-            'zoom' => 11,
-            'size' => [
-                'x' => '100%',
-                'y' => '400',
-            ]])
-            ->setDefaultValue($this->me->group->locationLng !== null && $this->me->group->locationLng !== null ? [$this->me->group->locationLat, $this->me->group->locationLng] : null)
-            ->setOption('description', 'Píchnete špendlík vašho kmene do mapy, a pomozte tím vytvoření Mapy českého roveringu');
-
-        $frm->addSubmit('send', 'Uložit údaje skupiny')
-            ->setAttribute('class','btn btn-primary');
-
-        $frm->onSuccess[] = callback($this, 'frmEditGroupSubmitted');
-
-//        $defaults = $this->me->group->toArray(IEntity::TO_ARRAY_RELATIONSHIP_AS_ID);
-//        $defaults['avatar'] = $this->me->group->getAvatar();
-//        if($this->me->group->locationLat && $this->me->group->locationLng)
-//            $defaults['location'] = ['lat'=>$this->me->group->locationLat, 'lng'=>$this->me->group->locationLng ];
-//        $frm->setDefaults($defaults);
-
-        return $frm;
+        return $control;
     }
-
-    public function frmEditGroupSubmitted(Form $frm) {
-        $values = $frm->getValues();
-
-        $values->locationLat = $values->location->lat;
-        $values->locationLng = $values->location->lng;
-        unset($values->location);
-
-//        if($values->avatar && $values->avatar->hasUploadedFile())
-//            $values->avatar->filename = $this->images->saveImage( $values->avatar->getUploadedFile(), 'groups' );
-
-        foreach($values as $key=>$value) {
-            if($key == 'boss')
-                $value = $this->participants->find($value); // najdu entitu bosse
-            $this->me->group->$key = $value;
-        }
-
-        $this->em->persist($this->me->group);
-        $this->em->flush();
-
-        $this->flashMessage('Údaje úspěšně upraveny','success');
-        $this->redirect('default');
-    }
-
 
 
     public function handleGoBack($id) {
@@ -190,7 +123,6 @@ class HomepagePresenter extends ParticipantAuthBasePresenter
     public function createComponentFrmParticipant() {
 
         $frm = new Form();
-
         $frm->addGroup('Osobní informace');
 
         $frm->addText('firstName', 'Jméno')
@@ -380,7 +312,7 @@ class HomepagePresenter extends ParticipantAuthBasePresenter
         $this->user->login($this->me->toIdentity());
 
         $this->flashMessage('Tvá účast v ST je zrušena');
-        $this->redirect(":Front:UnspecifiedPerson:");
+        $this->redirect(":Front:Unspecified:");
     }
 
 

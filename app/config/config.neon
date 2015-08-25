@@ -158,3 +158,6 @@ services:
 	- App\Forms\IServiceteamFormFactory
 	- App\Forms\IServiceteamRegistrationFormFactory
 	- App\Forms\IServiceteamAdditionalFormFactory
+	- App\Forms\IGroupFormFactory
+	- App\Forms\IGroupRegistrationFormFactory
+	- App\Forms\IParticipantRegistrationFormFactory

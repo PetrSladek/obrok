@@ -103,7 +103,7 @@ class HomepagePresenter extends ServiceteamAuthBasePresenter
         $this->user->login($this->me->toIdentity());
 
         $this->flashMessage('Tvá účast v ST je zrušena');
-        $this->redirect(":Front:UnspecifiedPerson:");
+        $this->redirect(":Front:Unspecified:");
     }
     
 };

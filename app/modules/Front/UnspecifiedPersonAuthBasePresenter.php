@@ -14,7 +14,7 @@ use PetrSladek\SkautIS\Dialog\LoginDialog;
 use PetrSladek\SkautIS\SkautIS;
 
 
-abstract class GuestAuthBasePresenter extends \App\Module\Base\Presenters\BasePresenter
+abstract class UnspecifiedPersonAuthBasePresenter extends \App\Module\Base\Presenters\BasePresenter
 {
     /** @var UnspecifiedPerson */
     public $me;

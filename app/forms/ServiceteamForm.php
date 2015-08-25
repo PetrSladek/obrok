@@ -41,13 +41,13 @@ class ServiceteamForm extends Control
 
     /**
      * ServiceteamRegistrationForm constructor.
-     * @param ServiceteamRepository $serviceteams
+     * @param ServiceteamRepository $groups
      * @param int $id
      */
-    public function __construct(ServiceteamRepository $serviceteams, $id)
+    public function __construct(ServiceteamRepository $groups, $id)
     {
         parent::__construct();
-        $this->serviceteams  = $serviceteams;
+        $this->serviceteams  = $groups;
         $this->person   = $this->serviceteams->find($id);
         $this->em       = $this->serviceteams->getEntityManager();;
     }

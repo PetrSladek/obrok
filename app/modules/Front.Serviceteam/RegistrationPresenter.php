@@ -9,7 +9,7 @@ use App\Hydrators\SkautisHydrator;
 use App\Model\Entity\Person;
 use App\Model\Repositories\PersonsRepository;
 use App\Model\Repositories\ServiceteamRepository;
-use App\Module\Front\Presenters\GuestAuthBasePresenter;
+use App\Module\Front\Presenters\UnspecifiedPersonAuthBasePresenter;
 use App\ServiceteamBasePresenter;
 use App\Model\Entity\Serviceteam;
 use App\Forms\Form;
@@ -24,7 +24,7 @@ use Nette\Utils\Html;
  * @package    Obrok15
  */
 
-class RegistrationPresenter extends GuestAuthBasePresenter
+class RegistrationPresenter extends UnspecifiedPersonAuthBasePresenter
 {
 
 

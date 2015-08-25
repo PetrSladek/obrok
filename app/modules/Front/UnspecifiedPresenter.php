@@ -10,7 +10,7 @@ use Kdyby\Doctrine\EntityManager;
 use Nette;
 
 
-class UnspecifiedPresenter extends GuestAuthBasePresenter
+class UnspecifiedPresenter extends UnspecifiedPersonAuthBasePresenter
 {
 
 
