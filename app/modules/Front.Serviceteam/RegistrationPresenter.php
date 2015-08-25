@@ -34,6 +34,7 @@ class RegistrationPresenter extends GuestAuthBasePresenter
     public $serviceteamRegistrationFormFactory;
 
     /**
+     * Formulář pro registraci Servisáka (převedení nespecifikovaného na ST)
      * @return ServiceteamRegistrationForm
      */
     protected function createComponentFrmRegistration()
