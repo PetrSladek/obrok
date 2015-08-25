@@ -374,5 +374,15 @@ class HomepagePresenter extends ParticipantAuthBasePresenter
     }
 
 
+    public function handleToUnspecifiedPerson() {
+
+        $this->persons->changePersonTypeTo($this->me, Person::TYPE_UNSPECIFIED);
+        $this->user->login($this->me->toIdentity());
+
+        $this->flashMessage('Tvá účast v ST je zrušena');
+        $this->redirect(":Front:UnspecifiedPerson:");
+    }
+
+
     
 };

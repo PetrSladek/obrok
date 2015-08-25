@@ -152,4 +152,9 @@ services:
 	- App\Model\Repositories\WorkgroupsRepository( @doctrine.default.entityManager, @doctrine.default.entityManager::getClassMetadata('App\Model\Entity\Workgroup') )
 	- App\Model\Repositories\ProgramsRepository( @doctrine.default.entityManager, @doctrine.default.entityManager::getClassMetadata('App\Model\Entity\Program') )
 	- App\Model\Repositories\ProgramsSectionsRepository( @doctrine.default.entityManager, @doctrine.default.entityManager::getClassMetadata('App\Model\Entity\ProgramSection') )
+
 	- App\Hydrators\SkautisHydrator
+
+	- App\Forms\IServiceteamFormFactory
+	- App\Forms\IServiceteamRegistrationFormFactory
+	- App\Forms\IServiceteamAdditionalFormFactory

@@ -9,7 +9,7 @@
 namespace AppTests\App;
 
 use App\Model\Address;
-use App\Model\Entity\Unspecified;
+use App\Model\Entity\UnspecifiedPerson;
 use App\Model\Entity\Participant;
 use App\Model\Entity\Person;
 use App\Model\Entity\Serviceteam;
@@ -61,7 +61,7 @@ class PersonRepositoryTest extends Tester\TestCase
     public function testCastPerson()
     {
 
-        $person1 = new Unspecified();
+        $person1 = new UnspecifiedPerson();
         $person1->setFullName('Host','Hostovic','Hostov');
         $person1->setPhone('+420 123 456');
         $person1->setAddress(new Address("Tučníkova 11","Tučňákov","123 45"));
@@ -92,7 +92,7 @@ class PersonRepositoryTest extends Tester\TestCase
         foreach($all as $person)
             $types[] = get_class($person);
 
-        Assert::contains(Unspecified::class, $types);
+        Assert::contains(UnspecifiedPerson::class, $types);
         Assert::contains(Serviceteam::class, $types);
         Assert::contains(Participant::class, $types);
 

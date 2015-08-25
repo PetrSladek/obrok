@@ -4,7 +4,7 @@ namespace App\Module\Front\Presenters;;
 
 use App\BasePresenter;
 use App\Hydrators\SkautisHydrator;
-use App\Model\Entity\Unspecified;
+use App\Model\Entity\UnspecifiedPerson;
 use App\Model\Entity\Person;
 use Kdyby\Doctrine\EntityManager;
 use Nette;
@@ -34,7 +34,7 @@ class LoginPresenter extends FrontBasePresenter
         }  elseif($this->user->isInRole(Person::TYPE_SERVICETEAM)) {
             $this->redirect(':Front:Serviceteam:Homepage:');
         } elseif($this->user->isInRole(Person::TYPE_UNSPECIFIED)) {
-            $this->redirect(':Front:Unspecified:');
+            $this->redirect(':Front:UnspecifiedPerson:');
         }
 
     }

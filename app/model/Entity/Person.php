@@ -24,7 +24,7 @@ use Nette\Utils\DateTime;
  * @DiscriminatorMap({
  *  Person::TYPE_PARTICIPANT = "Participant",
  *  Person::TYPE_SERVICETEAM = "Serviceteam",
- *  Person::TYPE_UNSPECIFIED = "Unspecified"
+ *  Person::TYPE_UNSPECIFIED = "UnspecifiedPerson"
  * })
  * @DiscriminatorColumn(name="type", columnDefinition="ENUM('unspecified', 'participant', 'serviceteam')"))
  *

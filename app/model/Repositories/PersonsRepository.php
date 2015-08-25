@@ -25,4 +25,8 @@ class PersonsRepository extends EntityDao {
         $entity = $this->find($entity->id);
     }
 
+    public function findBySkautisPersonId($skautisPersonId) {
+        return $this->findOneBy(['skautisPersonId' => $skautisPersonId]);
+    }
+
 }

@@ -3,7 +3,7 @@
 namespace App\Module\Front\Presenters;;
 
 use App\Hydrators\SkautisHydrator;
-use App\Model\Entity\Unspecified;
+use App\Model\Entity\UnspecifiedPerson;
 use App\Model\Entity\Participant;
 use App\Model\Entity\Person;
 use App\Model\Entity\Serviceteam;
@@ -16,7 +16,7 @@ use PetrSladek\SkautIS\SkautIS;
 
 abstract class GuestAuthBasePresenter extends \App\Module\Base\Presenters\BasePresenter
 {
-    /** @var Unspecified */
+    /** @var UnspecifiedPerson */
     public $me;
 
     /** @var PersonsRepository @inject  */
@@ -41,7 +41,7 @@ abstract class GuestAuthBasePresenter extends \App\Module\Base\Presenters\BasePr
         }
 
 
-        /** @var Unspecified */
+        /** @var UnspecifiedPerson */
         $me = $this->persons->find( $this->getUser()->getId() );
         $this->me = $me;
         $this->template->me = $this->me;
