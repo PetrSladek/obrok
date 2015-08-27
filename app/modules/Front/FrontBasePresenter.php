@@ -3,11 +3,12 @@
 namespace App\Module\Front\Presenters;;
 
 use App\Hydrators\SkautisHydrator;
-use App\Model\Entity\Unspecified;
+use App\Model\Entity\UnspecifiedPerson;
 use App\Model\Entity\Participant;
 use App\Model\Entity\Person;
 use App\Model\Entity\Serviceteam;
 use App\Model\Repositories\ParticipantsRepository;
+use App\Model\Repositories\PersonsRepository;
 use App\Model\Repositories\ServiceteamRepository;
 use PetrSladek\SkautIS\Dialog\LoginDialog;
 use PetrSladek\SkautIS\SkautIS;
@@ -22,6 +23,9 @@ abstract class FrontBasePresenter extends \App\Module\Base\Presenters\BasePresen
 
     /** @var ServiceteamRepository @inject */
     public $serviceteams;
+
+    /** @var PersonsRepository @inject */
+    public $persons;
 
     /** @var SkautIS @inject */
     public $skautis;
@@ -44,32 +48,32 @@ abstract class FrontBasePresenter extends \App\Module\Base\Presenters\BasePresen
 
             $skautisPersonId = (int)$skautis->getPersonId();
 
-//            try {
+            try {
 
-            $person = $this->em->getRepository(Person::class)->findOneBy(['skautisPersonId' => $skautisPersonId]);
+                $person = $this->persons->findBySkautisPersonId($skautisPersonId);
 
-            // Pokud existuje jako ucastnik, servisak nebo guest (jeste si nezvolil co bude)
-            if ($person) {
-                $this->getUser()->login($person->toIdentity());
+                // Pokud existuje jako ucastnik, servisak nebo guest (jeste si nezvolil co bude)
+                if ($person) {
+                    $this->getUser()->login($person->toIdentity());
+                }
+                // Jinak ho zaregistruju ho jako UnspecifiedPerson person
+                else {
+
+                    // vytvori uzivatele podle skautis udaju
+                    $person = new UnspecifiedPerson();
+                    $this->skautisHydrator->hydrate($person, $skautisPersonId);
+
+                    $this->em->persist($person);
+                    $this->em->flush();
+
+                    $this->getUser()->login($person->toIdentity());
+                }
+
+
+            } catch (\Exception $e) {
+                \Tracy\Debugger::log($e, 'skautis');
+                $this->flashMessage("Přihlášení se nezdařilo.");
             }
-            // Jinak ho zaregistruju ho jako GUEST
-            else {
-
-                // vytvori uzivatele podle skautis udaju
-                $person = new Unspecified();
-                $this->skautisHydrator->hydrate($person, $skautisPersonId);
-
-                $this->em->persist($person);
-                $this->em->flush();
-
-                $this->getUser()->login($person->toIdentity());
-            }
-
-
-//            } catch (\Exception $e) {
-//                \Tracy\Debugger::log($e, 'skautis');
-//                $this->flashMessage("Přihlášení se nezdařilo.");
-//            }
 
 
             if($this->getParameter('back'))

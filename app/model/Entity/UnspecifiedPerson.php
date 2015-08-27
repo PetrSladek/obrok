@@ -25,7 +25,7 @@ use Nette\Utils\DateTime;
 /**
  * @Entity(repositoryClass="App\Model\Repositories\UnspecifiedsRepository")
  */
-class Unspecified extends Person {
+class UnspecifiedPerson extends Person {
 
     /**
      * Vrati objekt s nette identitou
