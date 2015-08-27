@@ -19,7 +19,7 @@ before_script:
 #  - mysql -u root testbase < tests/testbase.sql
 
 script:
-  - ./vendor/bin/tester -c ./tests/php.ini -s ./tests/
+  - ./vendor/bin/tester -s ./tests/
 
 after_failure:
   # Vytiskne obsah souborù *.actual
