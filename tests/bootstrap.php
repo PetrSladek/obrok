@@ -42,8 +42,12 @@ $configurator->addParameters([
 ]);
 
 $configurator->addConfig(__DIR__ . '/../app/config/config.neon');
-$configurator->addConfig(__DIR__ . '/../app/config/config.local.neon');
-$configurator->addConfig(__DIR__ . '/config.local.neon');
+if(is_file(__DIR__ . '/../app/config/config.local.neon')) {
+    $configurator->addConfig(__DIR__ . '/../app/config/config.local.neon');
+}
+if(is_file(__DIR__ . '/config.local.neon')) {
+    $configurator->addConfig(__DIR__ . '/config.local.neon');
+}
 
 //var_dump($configurator);
 //php_ini_loaded_file();
