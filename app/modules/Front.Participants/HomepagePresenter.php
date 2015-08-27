@@ -5,6 +5,7 @@ use App\Forms\IGroupFormFactory;
 use App\Model\Entity\Group;
 use App\Model\Entity\Participant;
 use App\Forms\Form;
+use App\Model\Entity\Person;
 use App\Model\Repositories\GroupsRepository;
 use App\Services\ImageService;
 use Nette\Utils\AssertionException;
@@ -307,11 +308,11 @@ class HomepagePresenter extends ParticipantAuthBasePresenter
 
 
     public function handleToUnspecifiedPerson() {
-
+        
         $this->persons->changePersonTypeTo($this->me, Person::TYPE_UNSPECIFIED);
         $this->user->login($this->me->toIdentity());
 
-        $this->flashMessage('Tvá účast v ST je zrušena');
+        $this->flashMessage('Tvá účast je zrušena');
         $this->redirect(":Front:Unspecified:");
     }
 

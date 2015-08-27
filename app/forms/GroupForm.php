@@ -36,7 +36,7 @@ class GroupForm extends Control
     /**
      * @var ParticipantsRepository
      */
-    private $pariticpants;
+    private $participants;
 
     /**
      * @var GroupsRepository
@@ -64,8 +64,8 @@ class GroupForm extends Control
     {
         parent::__construct();
 
-        $this->em           = $this->groups->getEntityManager();
-        $this->pariticpants = $this->em->getRepository(Participant::class);
+        $this->em           = $em;
+        $this->participants = $this->em->getRepository(Participant::class);
         $this->groups       = $this->em->getRepository(Group::class);;
         $this->group        = $this->groups->find($id);
 
@@ -162,7 +162,7 @@ class GroupForm extends Control
 //            $values->avatar->filename = $this->images->saveImage( $values->avatar->getUploadedFile(), 'groups' );
 
         foreach($values as $key=>$value) {
-            if($key == 'boss')
+            if($key == 'boss' && $value)
                 $value = $this->participants->find($value); // najdu entitu bosse
 
             $this->group->$key = $value;

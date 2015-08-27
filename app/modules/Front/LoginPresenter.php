@@ -34,7 +34,7 @@ class LoginPresenter extends FrontBasePresenter
         }  elseif($this->user->isInRole(Person::TYPE_SERVICETEAM)) {
             $this->redirect(':Front:Serviceteam:Homepage:');
         } elseif($this->user->isInRole(Person::TYPE_UNSPECIFIED)) {
-            $this->redirect(':Front:UnspecifiedPerson:');
+            $this->redirect(':Front:Unspecified:');
         }
 
     }

@@ -6,7 +6,7 @@
  * @author Petr Sladek <petr.sladek@skaut.cz>
  * @package App\Model\Repositories\PersonRepository
  */
-namespace AppTests\App;
+namespace AppTests\Model\Repositories;
 
 use App\Model\Address;
 use App\Model\Entity\UnspecifiedPerson;
@@ -52,7 +52,7 @@ class PersonRepositoryTest extends Tester\TestCase
         $metadata = $this->em->getMetadataFactory()->getAllMetadata();
         $schemaTool = new SchemaTool($this->em);
 //        $schemaTool->dropSchema($metadata);
-//        $schemaTool->dropDatabase();
+        $schemaTool->dropDatabase();
         $schemaTool->createSchema($metadata);
 
     }
@@ -115,14 +115,14 @@ class PersonRepositoryTest extends Tester\TestCase
 //        Assert::true(true);
 //    }
 
-    protected function tearDown()
-    {
-        // Smaze DB
+//    protected function tearDown()
+//    {
+//        // Smaze DB
 //        $metadata = $this->em->getMetadataFactory()->getAllMetadata();
-        $schemaTool = new SchemaTool($this->em);
+//        $schemaTool = new SchemaTool($this->em);
 //        $schemaTool->dropSchema($metadata);
-        $schemaTool->dropDatabase();
-    }
+//        $schemaTool->dropDatabase();
+//    }
 
 
 }
