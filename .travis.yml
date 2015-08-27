@@ -15,7 +15,7 @@ install:
   - composer install --no-interaction --prefer-source
 
 before_script:
-  - mysql -u root -e 'CREATE DATABASE obok-is-tests;'
+  - mysql -u root -e 'CREATE DATABASE obrok_is_tests CHARACTER SET utf8 COLLATE utf8_general_ci;';
 #  - mysql -u root testbase < tests/testbase.sql
 
 script:
