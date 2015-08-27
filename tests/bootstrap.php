@@ -11,6 +11,7 @@ class_alias('Tester\Assert', 'Assert');
 date_default_timezone_set('Europe/Prague');
 
 // create temporary directory
+@mkdir( __DIR__ . '/../temp/');
 define('TEMP_DIR', __DIR__ . '/../temp/' . (isset($_SERVER['argv']) ? md5(serialize($_SERVER['argv'])) : getmypid()));
 Tester\Helpers::purge(TEMP_DIR);
 
