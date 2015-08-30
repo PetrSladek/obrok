@@ -7,6 +7,7 @@ use App\Model\Entity\Group;
 use App\Model\Entity\Participant;
 use App\Model\Entity\Serviceteam;
 use App\Model\Entity\Workgroup;
+use App\Model\Repositories\SettingsRepository;
 use App\Query\GroupsQuery;
 use App\Model\Repositories\GroupsRepository;
 use App\Model\Repositories\ParticipantsRepository;
@@ -35,7 +36,7 @@ class DashboardPresenter extends DatabaseBasePresenter
     /** @var ServiceteamRepository @inject */
     public $serviceteams;
 
-    /** @var EntityRepository */
+    /** @var SettingsRepository @inject */
     public $settings;
 
 
@@ -146,7 +147,7 @@ class DashboardPresenter extends DatabaseBasePresenter
         if(!$this->user->isInRole('groups-edit'))
             $this->error('Nemáte oprávnění', IResponse::S401_UNAUTHORIZED);
 
-        $this->settings->set(self::OPEN_PARTICIPANT_REGISTRATION_KEY, true);
+        $this->settings->set(self::OPEN_PARTICIPANTS_REGISTRATION_KEY, true);
 
         $this->flashMessage("Registrace účastníků byla otevřena", "success");
         $this->isAjax() ? $this->redrawControl() : $this->redirect('this');
@@ -156,7 +157,7 @@ class DashboardPresenter extends DatabaseBasePresenter
         if(!$this->user->isInRole('groups-edit'))
             $this->error('Nemáte oprávnění', IResponse::S401_UNAUTHORIZED);
 
-        $this->settings->set(self::OPEN_PARTICIPANT_REGISTRATION_KEY, false);
+        $this->settings->set(self::OPEN_PARTICIPANTS_REGISTRATION_KEY, false);
 
         $this->flashMessage("Registrace účastníků byla uzavřena", "success");
         $this->isAjax() ? $this->redrawControl() : $this->redirect('this');

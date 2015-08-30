@@ -127,9 +127,7 @@ class ServiceteamRegistrationForm extends Control
             $this->person->$key = $value;
         }
 
-        $this->em->persist($this->person);
         $this->em->flush();
-
 
         $this->onServiceteamRegistered($this, $this->person);
     }

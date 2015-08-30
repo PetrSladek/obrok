@@ -186,7 +186,7 @@ class ParticipantRegistrationForm extends Control
             $this->person->$key = $value;
 
         // pridame ho do skupiny
-        $this->person->setGroup( $this->group );
+        $this->group->addParticipant($this->person);
 
         // pokud skupina nema admina, udelaho z nej
         if(!$this->group->hasAdmin())

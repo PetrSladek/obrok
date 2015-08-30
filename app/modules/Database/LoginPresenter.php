@@ -40,7 +40,7 @@ class LoginPresenter extends \App\Module\Base\Presenters\BasePresenter // Neover
             try {
 
                 // Pokud existuje jako ST
-                if ($serviceteam = $this->em->getRepository(Serviceteam::class)->findOneBy(['skautisPersonId'=> (int) $skautis->getPersonId()])) {
+                if ($serviceteam = $this->serviceteams->findOneBy(['skautisPersonId'=> (int) $skautis->getPersonId()])) {
                     $this->getUser()->login( $serviceteam->toIdentity() );
                 } else {
                     $this->flashMessage("Pod tímto skautis učtem neexistuje žádný ST.");

@@ -3,6 +3,7 @@
 namespace App\Module\Base\Presenters;
 
 use App\Model\Phone;
+use App\Model\Repositories\SettingsRepository;
 use Kdyby\Doctrine\EntityManager;
 use App\Services\EmailsService;
 use App\Services\ImageService;
@@ -33,11 +34,9 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
     /** @var SkautIS @inject */
     public $skautis;
 
-//    /** @var SettingsRepository @inject */
-//    public $settings;
+    /** @var SettingsRepository @inject */
+    public $settings;
 
-//    /** @var Connection @inject */
-//    public $database;
 
     /**
      * Je povoleno registrovat nové učastníky?
@@ -73,10 +72,10 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 
 
 
-        $this->openRegistrationParticipants = true; //$this->settings->get(self::OPEN_PARTICIPANTS_REGISTRATION_KEY, true); // default TRUE
+        $this->openRegistrationParticipants = $this->settings->get(self::OPEN_PARTICIPANTS_REGISTRATION_KEY, true); // default TRUE
         $this->template->openRegistrationParticipants = $this->openRegistrationParticipants;
 
-        $this->openRegistrationServiceteam = true; //$this->settings->get(self::OPEN_SERVICETEAM_REGISTRATION_KEY, true); // default TRUE
+        $this->openRegistrationServiceteam = $this->settings->get(self::OPEN_SERVICETEAM_REGISTRATION_KEY, true); // default TRUE
         $this->template->openRegistrationServiceteam = $this->openRegistrationServiceteam;
 	}
 

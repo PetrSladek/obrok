@@ -12,7 +12,7 @@
             {/if}
         </div>
         <div class="pull-right">
-            <a n:href="edit $item->id" class="btn btn-warning ajax">Editovat údaje</a>
+            <a n:if="$acl->edit" n:href="edit $item->id" class="btn btn-warning ajax">Editovat údaje</a>
         </div>
     </div>
 
