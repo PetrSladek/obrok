@@ -1,12 +1,15 @@
 <?php
 
-
 namespace PetrSladek\SkautIS\DI;
 
 use Nette\DI\CompilerExtension;
 use Nette;
 
-
+/**
+ * Class SkautISExtension
+ * @package PetrSladek\SkautIS\DI
+ * @author  psl <petr.sladek@webnode.com>
+ */
 class SkautISExtension extends CompilerExtension
 {
 
@@ -14,34 +17,32 @@ class SkautISExtension extends CompilerExtension
 	public $defaults = array(
 //		'appId' => NULL, // kdyby-style naming
 //		'testMode' => true,
-        'clearAllWithLogout' => true,
+		'clearAllWithLogout' => true,
 	);
 
 
-
+	/**
+	 * vztvori konfiguraci
+	 */
 	public function loadConfiguration()
 	{
 		$builder = $this->getContainerBuilder();
 		$config = $this->getConfig($this->defaults);
 
-
 		$builder->addDefinition($this->prefix('skautis'))
-			->setClass('\PetrSladek\SkautIS\SkautIS');
-
+				->setClass('\PetrSladek\SkautIS\SkautIS');
 
 		$builder->addDefinition($this->prefix('session'))
-			->setClass('PetrSladek\SkautIS\SessionStorage');
+				->setClass('PetrSladek\SkautIS\SessionStorage');
 
-
-		if ($config['clearAllWithLogout']) {
+		if ($config['clearAllWithLogout'])
+		{
 			$builder->getDefinition('user')
-				->addSetup('$sl = ?; ?->onLoggedOut[] = function () use ($sl) { $sl->getService(?)->clearAll(); }', array(
-					'@container', '@self', $this->prefix('session')
-				));
+					->addSetup('$sl = ?; ?->onLoggedOut[] = function () use ($sl) { $sl->getService(?)->clearAll(); }', array(
+						'@container', '@self', $this->prefix('session'),
+					));
 		}
 	}
-
-
 
 
 	/**
@@ -49,7 +50,8 @@ class SkautISExtension extends CompilerExtension
 	 */
 	public static function register(Nette\Configurator $configurator)
 	{
-		$configurator->onCompile[] = function ($config, Nette\DI\Compiler $compiler) {
+		$configurator->onCompile[] = function ($config, Nette\DI\Compiler $compiler)
+		{
 			$compiler->addExtension('skautis', new SkautISExtension());
 		};
 	}

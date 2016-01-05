@@ -1,6 +1,5 @@
 <?php
 
-
 namespace PetrSladek\SkautIS\Dialog;
 
 use PetrSladek\SkautIS\SessionStorage;
@@ -11,8 +10,6 @@ use Nette\Application\UI\PresenterComponent;
 use Nette\Http\UrlScript;
 use Nette;
 
-
-
 /**
  * @author Petr Sladek <petr.sladek@skaut.cz>
  *
@@ -21,97 +18,88 @@ use Nette;
 abstract class AbstractDialog extends PresenterComponent
 {
 
-    /**
-     * @var array of function(AbstractDialog $dialog)
-     */
-    public $onResponse = array();
+	/**
+	 * @var array of function(AbstractDialog $dialog)
+	 */
+	public $onResponse = array();
 
-    /**
-     * @var SkautIS
-     */
-    protected $skautis;
+	/**
+	 * @var SkautIS
+	 */
+	protected $skautis;
 
-    /**
-     * @var SessionStorage
-     */
-    protected $session;
+	/**
+	 * @var SessionStorage
+	 */
+	protected $session;
 
-    /**
-     * @var Application\UI\Link|UrlScript
-     */
-    protected $returnUri;
-
-
-
-    /**
-     * @param SkautIS $skautis
-     */
-    public function __construct(SkautIS $skautis)
-    {
-        $this->skautis = $skautis;
-        $this->session = $skautis->getSession();
-
-        parent::__construct();
-    }
+	/**
+	 * @var Application\UI\Link|UrlScript
+	 */
+	protected $returnUri;
 
 
+	/**
+	 * @param SkautIS $skautis
+	 */
+	public function __construct(SkautIS $skautis)
+	{
+		$this->skautis = $skautis;
+		$this->session = $skautis->getSession();
 
-    /**
-     * @return SkautIS
-     */
-    public function getSkautIS()
-    {
-        return $this->skautis;
-    }
-
-
-
-
-
-    /**
-     * @return UrlScript
-     */
-    abstract public function getUrl();
+		parent::__construct();
+	}
 
 
-
-    /**
-     * @throws Application\AbortException
-     */
-    public function open()
-    {
-        $this->session->last_request = $this->getPresenter()->storeRequest();
-        $this->session->signal_response_link = $this->link("response!");
-
-        $this->presenter->redirectUrl($this->getUrl());
-    }
+	/**
+	 * @return SkautIS
+	 */
+	public function getSkautIS()
+	{
+		return $this->skautis;
+	}
 
 
-
-    /**
-     * Opens the dialog.
-     */
-    public function handleOpen()
-    {
-        $this->open();
-    }
+	/**
+	 * @return UrlScript
+	 */
+	abstract public function getUrl();
 
 
+	/**
+	 * @throws Application\AbortException
+	 */
+	public function open()
+	{
+		$this->session->last_request = $this->getPresenter()->storeRequest();
+		$this->session->signal_response_link = $this->link("response!");
 
-    /**
-     * Signal called after redirect from SkautIS login page
-     * It automatically calls the onResponse event.
-     *
-     * You don't have to redirect, the request before the auth process will be restored automatically.
-     */
-    public function handleResponse()
-    {
+		$this->presenter->redirectUrl($this->getUrl());
+	}
 
-        unset($this->session->signal_response_link);
-        unset($this->session->last_request);
 
-        $this->onResponse($this);
+	/**
+	 * Opens the dialog.
+	 */
+	public function handleOpen()
+	{
+		$this->open();
+	}
 
+
+	/**
+	 * Signal called after redirect from SkautIS login page
+	 * It automatically calls the onResponse event.
+	 *
+	 * You don't have to redirect, the request before the auth process will be restored automatically.
+	 */
+	public function handleResponse()
+	{
+
+		unset($this->session->signal_response_link);
+		unset($this->session->last_request);
+
+		$this->onResponse($this);
 
 //        if (!empty($this->session->signal_response_link)) {
 //            unset($this->session->signal_response_link);
@@ -140,7 +128,7 @@ abstract class AbstractDialog extends PresenterComponent
 //            }
 //        }
 
-        $this->presenter->redirect('this', array('state' => NULL, 'code' => NULL));
-    }
+		$this->presenter->redirect('this', array('state' => null, 'code' => null));
+	}
 
 }
