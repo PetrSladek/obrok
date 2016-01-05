@@ -22,32 +22,34 @@ use Kdyby\Doctrine;
  * @property string $key
  * @property string $value
  */
-class Setting extends Doctrine\Entities\BaseEntity {
+class Setting extends Doctrine\Entities\BaseEntity
+{
 
-    use \Kdyby\Doctrine\Entities\Attributes\Identifier; // Using Identifier trait for id column
+	use \Kdyby\Doctrine\Entities\Attributes\Identifier; // Using Identifier trait for id column
 
-    /**
-     * Klíč
-     * @Column(name="`key`", type="string", length=255)
-     */
-    protected $key;
+	/**
+	 * Klíč
+	 * @Column(name="`key`", type="string", length=255)
+	 */
+	protected $key;
 
-    /**
-     * Hodnota
-     * @Column(type="string", length=255)
-     */
-    protected $value;
+	/**
+	 * Hodnota
+	 * @Column(type="string", length=255)
+	 */
+	protected $value;
 
-    /**
-     * Setting constructor.
-     * @param $key
-     * @param $value
-     */
-    public function __construct($key, $value)
-    {
-        $this->key = $key;
-        $this->value = $value;
-    }
 
+	/**
+	 * Setting constructor.
+	 *
+	 * @param $key
+	 * @param $value
+	 */
+	public function __construct($key, $value)
+	{
+		$this->key = $key;
+		$this->value = $value;
+	}
 
 }

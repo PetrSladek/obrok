@@ -1,36 +1,42 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Peggy
- * Date: 20.6.2015
- * Time: 10:27
- */
 
 namespace App\Model;
 
+/**
+ * Class Address
+ * @package App\Model
+ * @author  peggy <petr.sladek@skaut.cz>
+ */
+class Address
+{
 
-class Address {
+	public $street;
 
-    public $street;
+	public $city;
 
-    public $city;
+	public $postalCode;
 
-    public $postalCode;
-
-    public $country = 'Česká republika';
+	public $country = 'Česká republika';
 
 
-    public function __construct($street = null, $city = null, $postalCode = null, $country = null)
-    {
-        if($street)
-            $this->street = $street;
-        if($city)
-            $this->city = $city;
-        if($postalCode)
-            $this->postalCode = $postalCode;
-        if($country)
-            $this->country = $country;
-    }
-
+	public function __construct($street = null, $city = null, $postalCode = null, $country = null)
+	{
+		if ($street)
+		{
+			$this->street = $street;
+		}
+		if ($city)
+		{
+			$this->city = $city;
+		}
+		if ($postalCode)
+		{
+			$this->postalCode = $postalCode;
+		}
+		if ($country)
+		{
+			$this->country = $country;
+		}
+	}
 
 }

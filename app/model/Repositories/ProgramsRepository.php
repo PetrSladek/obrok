@@ -1,18 +1,15 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Peggy
- * Date: 23.6.2015
- * Time: 14:21
- */
-
 namespace App\Model\Repositories;
-
 
 use App\Model\Entity\Job;
 use Kdyby\Doctrine\EntityDao;
 
-class ProgramsRepository extends EntityDao {
-
+/**
+ * Class ProgramsRepository
+ * @package App\Model\Repositories
+ * @author  peggy <petr.sladek@skaut.cz>
+ */
+class ProgramsRepository extends EntityDao
+{
 
 }

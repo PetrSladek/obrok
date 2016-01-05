@@ -25,15 +25,15 @@ use Nette\Utils\DateTime;
 /**
  * @Entity(repositoryClass="App\Model\Repositories\UnspecifiedsRepository")
  */
-class UnspecifiedPerson extends Person {
+class UnspecifiedPerson extends Person
+{
 
-    /**
-     * Vrati objekt s nette identitou
-     */
-    public function toIdentity() {
-        return new \Nette\Security\Identity($this->id, Person::TYPE_UNSPECIFIED);
-    }
-
-
+	/**
+	 * Vrati objekt s nette identitou
+	 */
+	public function toIdentity()
+	{
+		return new \Nette\Security\Identity($this->id, Person::TYPE_UNSPECIFIED);
+	}
 
 }

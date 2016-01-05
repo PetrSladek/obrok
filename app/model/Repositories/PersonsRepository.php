@@ -1,38 +1,48 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Peggy
- * Date: 23.6.2015
- * Time: 14:21
- */
-
 namespace App\Model\Repositories;
-
 
 use App\Model\Entity\Person;
 use Kdyby\Doctrine\EntityDao;
 
-class PersonsRepository extends EntityDao {
+/**
+ * Class PersonsRepository
+ * @package App\Model\Repositories
+ * @author  peggy <petr.sladek@skaut.cz>
+ */
+class PersonsRepository extends EntityDao
+{
 
-    public function changePersonTypeTo(Person &$entity, $type) {
-        $em = $this->getEntityManager();
+	/**
+	 * @param Person $entity
+	 * @param        $type
+	 */
+	public function changePersonTypeTo(Person &$entity, $type)
+	{
+		$em = $this->getEntityManager();
 
-        $table = $this->getClassMetadata()->getTableName();
-        $em->getConnection()
-            ->executeUpdate("UPDATE {$table} SET type = ? WHERE id = ? LIMIT 1", [$type, $entity->id]);
-        $em->clear();
+		$table = $this->getClassMetadata()->getTableName();
+		$em->getConnection()
+		   ->executeUpdate("UPDATE {$table} SET type = ? WHERE id = ? LIMIT 1", [$type, $entity->id]);
+		$em->clear();
 
-        // vratim parametrem
-        $entity = $this->find($entity->id);
+		// vratim parametrem
+		$entity = $this->find($entity->id);
 
-        $em->persist($entity)
-            ->flush()
-            ->clear();
-        $em->getUnitOfWork()->computeChangeSets();
-    }
+		$em->persist($entity)
+		   ->flush()
+		   ->clear();
+		$em->getUnitOfWork()->computeChangeSets();
+	}
 
-    public function findBySkautisPersonId($skautisPersonId) {
-        return $this->findOneBy(['skautisPersonId' => $skautisPersonId]);
-    }
+
+	/**
+	 * @param $skautisPersonId
+	 *
+	 * @return mixed
+	 */
+	public function findBySkautisPersonId($skautisPersonId)
+	{
+		return $this->findOneBy(['skautisPersonId' => $skautisPersonId]);
+	}
 
 }

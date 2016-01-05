@@ -24,41 +24,41 @@ use Nette\NotImplementedException;
 /**
  * @Entity(repositoryClass="App\Model\Repositories\ProgramsSectionsRepository")
  *
- * @property string $title
- * @property string $subTitle
+ * @property string    $title
+ * @property string    $subTitle
  * @property Program[] $programs
  */
-class ProgramSection extends Doctrine\Entities\BaseEntity {
+class ProgramSection extends Doctrine\Entities\BaseEntity
+{
 
-    use \Kdyby\Doctrine\Entities\Attributes\Identifier; // Using Identifier trait for id column
+	use \Kdyby\Doctrine\Entities\Attributes\Identifier; // Using Identifier trait for id column
 
-    /**
-     * Nazev programove kategorie(bloku) - Vapro, Inspiro, Zivly, Sluzba, ...
-     * @Column(type="string", length=255)
-     */
-    protected $title;
+	/**
+	 * Nazev programove kategorie(bloku) - Vapro, Inspiro, Zivly, Sluzba, ...
+	 * @Column(type="string", length=255)
+	 */
+	protected $title;
 
-    /**
-     * Pod titul programove kategorie(bloku) - 1.blok, 2.blok, Ohen ,...
-     * @Column(type="string", length=255)
-     */
-    protected $subTitle;
+	/**
+	 * Pod titul programove kategorie(bloku) - 1.blok, 2.blok, Ohen ,...
+	 * @Column(type="string", length=255)
+	 */
+	protected $subTitle;
 
-    /**
-     * Programy v teto kategorii
-     * @OneToMany(targetEntity="Program", mappedBy="section", cascade={"persist"})
-     * @var Participant[]|ArrayCollection
-     **/
-    private $programs;
-
-
-    public function __construct()
-    {
-        $this->programs = new ArrayCollection();
-    }
+	/**
+	 * Programy v teto kategorii
+	 * @OneToMany(targetEntity="Program", mappedBy="section", cascade={"persist"})
+	 * @var Participant[]|ArrayCollection
+	 **/
+	private $programs;
 
 
-
-
+	/**
+	 * ProgramSection constructor.
+	 */
+	public function __construct()
+	{
+		$this->programs = new ArrayCollection();
+	}
 
 }

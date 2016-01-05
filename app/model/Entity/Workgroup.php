@@ -20,15 +20,15 @@ use Kdyby\Doctrine;
  * @Table(name="workgroups")
  * @property string $name
  */
-class Workgroup extends Doctrine\Entities\BaseEntity {
+class Workgroup extends Doctrine\Entities\BaseEntity
+{
 
-    use \Kdyby\Doctrine\Entities\Attributes\Identifier; // Using Identifier trait for id column
+	use \Kdyby\Doctrine\Entities\Attributes\Identifier; // Using Identifier trait for id column
 
-    /**
-     * Nazev pracovni skupiny
-     * @Column(type="string", length=255)
-     */
-    protected $name;
-
+	/**
+	 * Nazev pracovni skupiny
+	 * @Column(type="string", length=255)
+	 */
+	protected $name;
 
 }

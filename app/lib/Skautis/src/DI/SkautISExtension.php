@@ -8,7 +8,7 @@ use Nette;
 /**
  * Class SkautISExtension
  * @package PetrSladek\SkautIS\DI
- * @author  psl <petr.sladek@webnode.com>
+ * @author  peggy <petr.sladek@skaut.cz>
  */
 class SkautISExtension extends CompilerExtension
 {

@@ -9,7 +9,7 @@ use Nette\Utils\Html;
 /**
  * Class LatteFilters
  * @package App
- * @author  psl <petr.sladek@webnode.com>
+ * @author  peggy <petr.sladek@skaut.cz>
  */
 class LatteFilters
 {

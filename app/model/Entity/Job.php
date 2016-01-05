@@ -21,15 +21,15 @@ use Kdyby\Doctrine;
  * @Table(name="jobs")
  * @property string $name
  */
-class Job extends Doctrine\Entities\BaseEntity {
+class Job extends Doctrine\Entities\BaseEntity
+{
 
-    use \Kdyby\Doctrine\Entities\Attributes\Identifier; // Using Identifier trait for id column
+	use \Kdyby\Doctrine\Entities\Attributes\Identifier; // Using Identifier trait for id column
 
-    /**
-     * Nazev týmu
-     * @Column(type="string", length=255)
-     */
-    protected $name;
-
+	/**
+	 * Nazev týmu
+	 * @Column(type="string", length=255)
+	 */
+	protected $name;
 
 }

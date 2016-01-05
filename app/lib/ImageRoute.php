@@ -8,7 +8,7 @@ use Nette;
 /**
  * Class ImageRouter
  * @package Myann
- * @author  psl <petr.sladek@webnode.com>
+ * @author  peggy <petr.sladek@skaut.cz>
  */
 class ImageRouter implements \Nette\Application\IRouter
 {

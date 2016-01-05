@@ -20,22 +20,21 @@ use Kdyby\Doctrine;
  * @Entity(repositoryClass="App\Model\Repositories\TeamsRepository")
  * @Table(name="teams")
  */
-class Team extends Doctrine\Entities\BaseEntity {
+class Team extends Doctrine\Entities\BaseEntity
+{
 
-    use \Kdyby\Doctrine\Entities\Attributes\Identifier; // Using Identifier trait for id column
+	use \Kdyby\Doctrine\Entities\Attributes\Identifier; // Using Identifier trait for id column
 
+	/**
+	 * Zkratka týmu
+	 * @Column(type="string", length=255)
+	 */
+	protected $abbr;
 
-    /**
-     * Zkratka týmu
-     * @Column(type="string", length=255)
-     */
-    protected $abbr;
-
-    /**
-     * Nazev týmu
-     * @Column(type="string", length=255)
-     */
-    protected $name;
-
+	/**
+	 * Nazev týmu
+	 * @Column(type="string", length=255)
+	 */
+	protected $name;
 
 }
