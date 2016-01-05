@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Petr
- * Date: 25.08.2015
- * Time: 10:42
- */
 
 namespace App\Forms;
 
@@ -24,190 +18,219 @@ use Nette\Utils\Html;
 class ParticipantRegistrationForm extends Control
 {
 
-    /**
-     * @var callable[]
-     */
-    public $onParticipantRegistred;
+	/**
+	 * @var callable[]
+	 */
+	public $onParticipantRegistred;
+
+	/**
+	 * @var EntityManager
+	 */
+	private $em;
+
+	/**
+	 * @var PersonsRepository
+	 */
+	private $persons;
+
+	/**
+	 * @var Person
+	 */
+	private $person;
+
+	/**
+	 * @var GroupsRepository
+	 */
+	private $groups;
+
+	/**
+	 * @var Group
+	 */
+	private $group;
+
+	/**
+	 * @var DateTime
+	 */
+	private $ageInDate;
 
 
-    /**
-     * @var EntityManager
-     */
-    private $em;
-    /**
-     * @var PersonsRepository
-     */
-    private $persons;
+	/**
+	 * @param EntityManager $em
+	 * @param int           $id      ID Osoby ze ktere chceme udelat ucastnika
+	 * @param int           $groupId ID Skupiny do ktere cheme dat ucastnika
+	 */
+	public function __construct(EntityManager $em, $id, $groupId)
+	{
+		parent::__construct();
+		$this->persons = $em->getRepository(Person::class);
+		$this->person = $this->persons->find($id);
+		if (!$this->person)
+		{
+			throw new \InvalidArgumentException("Person #$id not found");
+		}
 
-    /**
-     * @var Person
-     */
-    private $person;
+		$this->groups = $em->getRepository(Group::class);
+		$this->group = $this->groups->find($groupId);
+		if (!$this->group)
+		{
+			throw new \InvalidArgumentException("Group #$id not found");
+		}
 
+		$this->em = $em;
 
-    /**
-     * @var GroupsRepository
-     */
-    private $groups;
-    /**
-     * @var Group
-     */
-    private $group;
-
-
-    /**
-     * @var DateTime
-     */
-    private $ageInDate;
-
-    /**
-     * @param EntityManager $em
-     * @param int $id ID Osoby ze ktere chceme udelat ucastnika
-     * @param int $groupId ID Skupiny do ktere cheme dat ucastnika
-     */
-    public function __construct(EntityManager $em, $id, $groupId)
-    {
-        parent::__construct();
-        $this->persons  = $em->getRepository(Person::class);
-        $this->person   = $this->persons->find($id);
-        if(!$this->person)
-            throw new \InvalidArgumentException("Person #$id not found");
-
-        $this->groups   = $em->getRepository(Group::class);
-        $this->group    = $this->groups->find($groupId);
-        if(!$this->group)
-            throw new \InvalidArgumentException("Group #$id not found");
-
-        $this->em       = $em;
-
-        $this->ageInDate = new DateTime('now');
-    }
-
-    /**
-     * @return DateTime
-     */
-    public function getAgeInDate()
-    {
-        return $this->ageInDate;
-    }
-
-    /**
-     * @param DateTime $ageInDate
-     */
-    public function setAgeInDate($ageInDate)
-    {
-        $this->ageInDate = $ageInDate;
-    }
+		$this->ageInDate = new DateTime('now');
+	}
 
 
+	/**
+	 * @return DateTime
+	 */
+	public function getAgeInDate()
+	{
+		return $this->ageInDate;
+	}
 
 
-    public function render() {
-        $this['form']->render();
-    }
+	/**
+	 * @param DateTime $ageInDate
+	 */
+	public function setAgeInDate($ageInDate)
+	{
+		$this->ageInDate = $ageInDate;
+	}
 
 
+	/**
+	 * Vykreslí komponentu s formulářem
+	 */
+	public function render()
+	{
+		$this['form']->render();
+	}
 
-    public function createComponentForm() {
 
-        $frm = new Form();
+	/**
+	 * Vytvoří formulář
+	 *
+	 * @return Form
+	 */
+	public function createComponentForm()
+	{
 
-        $frm->addGroup('Osobní informace');
+		$frm = new Form();
 
-        $frm->addText('firstName', 'Jméno')
-            ->setDisabled()
-            ->setDefaultValue($this->person->firstName);
-        $frm->addText('lastName', 'Příjmení')
-            ->setDisabled()
-            ->setDefaultValue($this->person->lastName);
+		$frm->addGroup('Osobní informace');
 
-        $frm->addText('nickName', 'Přezdívka')
-            ->setDefaultValue($this->person->nickName);
+		$frm->addText('firstName', 'Jméno')
+			->setDisabled()
+			->setDefaultValue($this->person->firstName);
+		$frm->addText('lastName', 'Příjmení')
+			->setDisabled()
+			->setDefaultValue($this->person->lastName);
 
-        $frm->addDatepicker('birthdate', 'Datum narození:')
-            ->setDefaultValue($this->person->birthdate)
-            ->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat Datum narození nebo je ve špatném formátu (musí být dd.mm.yyyy)')
-            ->addRule(Form::RANGE, 'Podle data narození vám 1.6.2015 ještě nebude 15 let (což porušuje podmínky účasti)', array(null, DateTime::from('1.6.2015')->modify('-15 years')) )
-            ->addRule(Form::RANGE, 'Podle data narození vám 10.6.2015 bude už více než 25 let (což porušuje podmínky účasti)', array(DateTime::from('10.6.2015')->modify('-25 years'), null) );
+		$frm->addText('nickName', 'Přezdívka')
+			->setDefaultValue($this->person->nickName);
 
-        $frm->addRadioList('gender', 'Pohlaví', [Person::GENDER_MALE=>'muž',Person::GENDER_FEMALE=>'žena'])
-            ->setDefaultValue($this->person->gender)
-            ->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat %label');
+		$frm->addDatepicker('birthdate', 'Datum narození:')
+			->setDefaultValue($this->person->birthdate)
+			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat Datum narození nebo je ve špatném formátu (musí být dd.mm.yyyy)')
+			->addRule(Form::RANGE, 'Podle data narození vám 1.6.2015 ještě nebude 15 let (což porušuje podmínky účasti)', array(null, DateTime::from('1.6.2015')->modify('-15 years')))
+			->addRule(Form::RANGE, 'Podle data narození vám 10.6.2015 bude už více než 25 let (což porušuje podmínky účasti)', array(DateTime::from('10.6.2015')->modify('-25 years'), null));
 
-        $frm->addGroup('Trvalé bydliště');
-        $frm->addText('addressStreet', 'Ulice a čp.')
-            ->setDefaultValue($this->person->addressStreet)
-            ->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat %label');
-        $frm->addText('addressCity', 'Město')
-            ->setDefaultValue($this->person->addressCity)
-            ->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat %label');
-        $frm->addText('addressPostcode', 'PSČ')
-            ->setDefaultValue($this->person->addressPostcode)
-            ->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat %label');
+		$frm->addRadioList('gender', 'Pohlaví', [Person::GENDER_MALE => 'muž', Person::GENDER_FEMALE => 'žena'])
+			->setDefaultValue($this->person->gender)
+			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat %label');
 
-        $frm->addGroup('Kontaktní údaje');
-        $frm->addText('phone', 'Mobilní telefon')
-            ->setDefaultValue($this->person->phone)
-            ->setEmptyValue('+420')
-            ->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat Mobilní telefon')
-            ->addRule([$frm,'isPhoneNumber'], 'Telefonní číslo je ve špatném formátu')
-            ->setAttribute('description','Mobilní telefon, na kterém budeš k zastižení během celé akce');
+		$frm->addGroup('Trvalé bydliště');
+		$frm->addText('addressStreet', 'Ulice a čp.')
+			->setDefaultValue($this->person->addressStreet)
+			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat %label');
+		$frm->addText('addressCity', 'Město')
+			->setDefaultValue($this->person->addressCity)
+			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat %label');
+		$frm->addText('addressPostcode', 'PSČ')
+			->setDefaultValue($this->person->addressPostcode)
+			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat %label');
+
+		$frm->addGroup('Kontaktní údaje');
+		$frm->addText('phone', 'Mobilní telefon')
+			->setDefaultValue($this->person->phone)
+			->setEmptyValue('+420')
+			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat Mobilní telefon')
+			->addRule([$frm, 'isPhoneNumber'], 'Telefonní číslo je ve špatném formátu')
+			->setAttribute('description', 'Mobilní telefon, na kterém budeš k zastižení během celé akce');
 //        $frm->addCheckbox('phoneIsSts', 'je v STS?')
 //            ->setAttribute('description','Je toto telefoní číslo v Skautské telefoní síti?');
-        $frm->addText('email', 'E-mail:')
-            ->setDefaultValue($this->person->email)
-            ->addRule(Form::FILLED, 'Zadejte E-mail')
-            ->setOption('description','Tvůj email na který ti budou chodit informace');
+		$frm->addText('email', 'E-mail:')
+			->setDefaultValue($this->person->email)
+			->addRule(Form::FILLED, 'Zadejte E-mail')
+			->setOption('description', 'Tvůj email na který ti budou chodit informace');
 
-        $frm->addGroup('Zdravotní omezení');
-        $frm->addTextarea('health', 'Zdravotní omezení a alergie')
-            ->setDefaultValue($this->person->health);
+		$frm->addGroup('Zdravotní omezení');
+		$frm->addTextarea('health', 'Zdravotní omezení a alergie')
+			->setDefaultValue($this->person->health);
+
+		$frm->addGroup(null);
+		$frm->addCheckbox('conditions', Html::el()->setHtml('Souhlasím s <a target="_blank" href="http://www.obrok15.cz/registrace/">podmínkami účasti na akci</a> a s <a target="_blank" href="http://www.obrok15.cz/obecna-ustanoveni-storno-podminky/">obecnými ustanoveními</a>'))
+			->addRule($frm::FILLED, 'Musíte souhlasit s podmínkami účasti')
+			->setOmitted();
+
+		$frm->addSubmit('send', 'Zaregistrovat se')
+			->setAttribute('class', 'btn btn-primary btn-block');
+
+		$frm->onSuccess[] = $this->processForm;
+
+		return $frm;
+	}
 
 
-        $frm->addGroup(null);
-        $frm->addCheckbox('conditions', Html::el()->setHtml('Souhlasím s <a target="_blank" href="http://www.obrok15.cz/registrace/">podmínkami účasti na akci</a> a s <a target="_blank" href="http://www.obrok15.cz/obecna-ustanoveni-storno-podminky/">obecnými ustanoveními</a>'))
-            ->addRule($frm::FILLED, 'Musíte souhlasit s podmínkami účasti')
-            ->setOmitted();
+	/**
+	 * Zpracování formuláře
+	 *
+	 * @param Form $form
+	 * @param      $values
+	 */
+	public function processForm(Form $form, $values)
+	{
 
-        $frm->addSubmit('send', 'Zaregistrovat se')
-            ->setAttribute('class','btn btn-primary btn-block');
+		// pretipujeme osobyu na Participant
+		$this->persons->changePersonTypeTo($this->person, Person::TYPE_PARTICIPANT);
 
-        $frm->onSuccess[] = $this->processForm;
+		foreach ($values as $key => $value)
+		{
+			$this->person->$key = $value;
+		}
 
-        return $frm;
-    }
+		// pridame ho do skupiny
+		$this->group->addParticipant($this->person);
 
-    public function processForm(Form $_, $values) {
+		// pokud skupina nema admina, udelaho z nej
+		if (!$this->group->hasAdmin())
+		{
+			$this->person->setAdmin();
+		}
 
-        // pretipujeme osobyu na Participant
-        $this->persons->changePersonTypeTo($this->person, Person::TYPE_PARTICIPANT);
+		// Pokud skupina nema sefa a tomuhle ucastnikovi je nad 18, tak z nej udaleme sefa
+		if (!$this->group->hasBoss() && $this->person->getAge($this->ageInDate) >= 18)
+		{
+			$this->group->setBoss($this->person);
+		}
 
-        foreach($values as $key => $value)
-            $this->person->$key = $value;
+		// skupina i uzivatel jsou v DB tak se nemusi persistovat
+		$this->em->flush();
 
-        // pridame ho do skupiny
-        $this->group->addParticipant($this->person);
-
-        // pokud skupina nema admina, udelaho z nej
-        if(!$this->group->hasAdmin())
-            $this->person->setAdmin();
-
-        // Pokud skupina nema sefa a tomuhle ucastnikovi je nad 18, tak z nej udaleme sefa
-        if(!$this->group->hasBoss() && $this->person->getAge( $this->ageInDate ) >= 18) {
-            $this->group->setBoss( $this->person );
-        }
-
-        // skupina i uzivatel jsou v DB tak se nemusi persistovat
-        $this->em->flush();
-
-        $this->onParticipantRegistred($this, $this->person, $this->group);
-    }
-
+		$this->onParticipantRegistred($this, $this->person, $this->group);
+	}
 
 }
 
+
+/**
+ * Interface IParticipantRegistrationFormFactory
+ * @package App\Forms
+ */
 interface IParticipantRegistrationFormFactory
 {
-    /** @return ParticipantRegistrationForm */
-    function create($id, $groupId);
+	/** @return ParticipantRegistrationForm */
+	function create($id, $groupId);
 }
