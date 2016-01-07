@@ -3,8 +3,8 @@
  * Test: App\Model\Repositories\PersonRepository.
  *
  * @testCase App\PersonRepositoryTest
- * @author Petr Sladek <petr.sladek@skaut.cz>
- * @package App\Model\Repositories\PersonRepository
+ * @author   Petr Sladek <petr.sladek@skaut.cz>
+ * @package  App\Model\Repositories\PersonRepository
  */
 namespace AppTests\Model\Repositories;
 
@@ -21,93 +21,98 @@ use Kdyby\Doctrine\EntityRepository;
 use Nette;
 use Tester;
 use Tester\Assert;
+
 $container = require_once __DIR__ . '/../../bootstrap.php';
+
 
 /**
  * @author Petr Sladek <petr.sladek@skaut.cz>
  */
 class PersonRepositoryTest extends Tester\TestCase
 {
-    private $container;
+	private $container;
 
-    /** @var EntityManager */
-    private $em;
+	/** @var EntityManager */
+	private $em;
 
-    /**
-     * PersonRepositoryTest constructor.
-     * @param $container
-     */
-    public function __construct(Nette\DI\Container $container)
-    {
-        $this->container = $container;
-        $this->em = $this->container->getByType(EntityManager::class);
-    }
 
-    public function setUp()
-    {
+	/**
+	 * PersonRepositoryTest constructor.
+	 *
+	 * @param $container
+	 */
+	public function __construct(Nette\DI\Container $container)
+	{
+		$this->container = $container;
+		$this->em = $this->container->getByType(EntityManager::class);
+	}
 
-        Tester\Environment::lock('db', dirname(TEMP_DIR));
 
-        // Smaye db a vytvori Vytvori cistou DB
-        $metadata = $this->em->getMetadataFactory()->getAllMetadata();
-        $schemaTool = new SchemaTool($this->em);
+	public function setUp()
+	{
+
+		Tester\Environment::lock('db', dirname(TEMP_DIR));
+
+		// Smaye db a vytvori Vytvori cistou DB
+		$metadata = $this->em->getMetadataFactory()->getAllMetadata();
+		$schemaTool = new SchemaTool($this->em);
 //        $schemaTool->dropSchema($metadata);
-        $schemaTool->dropDatabase();
-        $schemaTool->createSchema($metadata);
+		$schemaTool->dropDatabase();
+		$schemaTool->createSchema($metadata);
 
-    }
+	}
 
 
-    public function testCastPerson()
-    {
+	public function testCastPerson()
+	{
 
-        $person1 = new UnspecifiedPerson();
-        $person1->setFullName('Host','Hostovic','Hostov');
-        $person1->setPhone('+420 123 456');
-        $person1->setAddress(new Address("Tučníkova 11","Tučňákov","123 45"));
-        $this->em->persist($person1);
+		$person1 = new UnspecifiedPerson();
+		$person1->setFullName('Host', 'Hostovic', 'Hostov');
+		$person1->setPhone('+420 123 456');
+		$person1->setAddress(new Address("Tučníkova 11", "Tučňákov", "123 45"));
+		$this->em->persist($person1);
 
-        $person2 = new Serviceteam();
-        $person2->setFullName('Servisak','Servisákovič','Servisákov');
-        $person2->setPhone('+420 123 456');
-        $person2->setAddress(new Address("Ulice 14","Mesto","666 99"));
-        $this->em->persist($person2);
+		$person2 = new Serviceteam();
+		$person2->setFullName('Servisak', 'Servisákovič', 'Servisákov');
+		$person2->setPhone('+420 123 456');
+		$person2->setAddress(new Address("Ulice 14", "Mesto", "666 99"));
+		$this->em->persist($person2);
 
-        $person3 = new Participant();
-        $person3->setFullName('Ucastnik','Ucastnikovic','Ucastnikov');
-        $person3->setPhone('+420 123 456');
-        $person3->setAddress(new Address("Ulice 14","Mesto","666 99"));
-        $this->em->persist($person3);
+		$person3 = new Participant();
+		$person3->setFullName('Ucastnik', 'Ucastnikovic', 'Ucastnikov');
+		$person3->setPhone('+420 123 456');
+		$person3->setAddress(new Address("Ulice 14", "Mesto", "666 99"));
+		$this->em->persist($person3);
 
-        $this->em->flush();
+		$this->em->flush();
 
-        /** @var PersonsRepository $repo */
-        $repo = $this->em->getRepository(Person::class);
+		/** @var PersonsRepository $repo */
+		$repo = $this->em->getRepository(Person::class);
 
-        $all = $repo->findAll();
+		$all = $repo->findAll();
 
-        // musi tam byt vsichni tri
-        Assert::same(3, count($all));
-        $types = [];
-        foreach($all as $person)
-            $types[] = get_class($person);
+		// musi tam byt vsichni tri
+		Assert::same(3, count($all));
+		$types = [];
+		foreach ($all as $person)
+		{
+			$types[] = get_class($person);
+		}
 
-        Assert::contains(UnspecifiedPerson::class, $types);
-        Assert::contains(Serviceteam::class, $types);
-        Assert::contains(Participant::class, $types);
-
+		Assert::contains(UnspecifiedPerson::class, $types);
+		Assert::contains(Serviceteam::class, $types);
+		Assert::contains(Participant::class, $types);
 
 //        $person1->type = Person::TYPE_PARTICIPANT;
 //        $this->em->flush();
 
-
-        $repo->changePersonTypeTo($person1, Person::TYPE_PARTICIPANT);
-        Assert::type(Participant::class, $person1);
+		$repo->changePersonTypeTo($person1, Person::TYPE_PARTICIPANT);
+		Assert::type(Participant::class, $person1);
 
 //        $repo->changePersonTypeTo($person2, Person::TYPE_PARTICIPANT);
 //        Assert::type(Participant::class, $person);
 
-    }
+	}
 
 //    /***/
 //    public function testGuestCastToParticipant()
@@ -123,7 +128,6 @@ class PersonRepositoryTest extends Tester\TestCase
 //        $schemaTool->dropSchema($metadata);
 //        $schemaTool->dropDatabase();
 //    }
-
 
 }
 

@@ -3,8 +3,8 @@
  * Test: App\Model\Repositories\SettingsRepository.
  *
  * @testCase App\PersonRepositoryTest
- * @author Petr Sladek <petr.sladek@skaut.cz>
- * @package App\Model\Repositories\SettingsRepository
+ * @author   Petr Sladek <petr.sladek@skaut.cz>
+ * @package  App\Model\Repositories\SettingsRepository
  */
 namespace AppTests\Model\Repositories;
 
@@ -23,55 +23,58 @@ use Kdyby\Doctrine\EntityRepository;
 use Nette;
 use Tester;
 use Tester\Assert;
+
 $container = require_once __DIR__ . '/../../bootstrap.php';
+
 
 /**
  * @author Petr Sladek <petr.sladek@skaut.cz>
  */
 class SettingsRepositoryTest extends Tester\TestCase
 {
-    private $container;
+	private $container;
 
-    /** @var EntityManager */
-    private $em;
+	/** @var EntityManager */
+	private $em;
 
-    /**
-     * PersonRepositoryTest constructor.
-     * @param $container
-     */
-    public function __construct(Nette\DI\Container $container)
-    {
-        $this->container = $container;
-        $this->em = $this->container->getByType(EntityManager::class);
-    }
 
-    public function setUp()
-    {
+	/**
+	 * PersonRepositoryTest constructor.
+	 *
+	 * @param $container
+	 */
+	public function __construct(Nette\DI\Container $container)
+	{
+		$this->container = $container;
+		$this->em = $this->container->getByType(EntityManager::class);
+	}
 
-        Tester\Environment::lock('db', dirname(TEMP_DIR));
 
-        // Smaze db a vytvori Vytvori cistou DB
-        $metadata = $this->em->getMetadataFactory()->getAllMetadata();
-        $schemaTool = new SchemaTool($this->em);
+	public function setUp()
+	{
+
+		Tester\Environment::lock('db', dirname(TEMP_DIR));
+
+		// Smaze db a vytvori Vytvori cistou DB
+		$metadata = $this->em->getMetadataFactory()->getAllMetadata();
+		$schemaTool = new SchemaTool($this->em);
 //        $schemaTool->dropSchema($metadata);
-        $schemaTool->dropDatabase();
-        $schemaTool->createSchema($metadata);
+		$schemaTool->dropDatabase();
+		$schemaTool->createSchema($metadata);
 
-    }
-
-
-    public function testSaveBoolSetting()
-    {
-        $value = true;
-
-        /** @var SettingsRepository $repo */
-        $repo = $this->em->getRepository(Setting::class);
-        $repo->set('key1', $value);
-
-        Assert::equal($value, $repo->get('key1'));
-    }
+	}
 
 
+	public function testSaveBoolSetting()
+	{
+		$value = true;
+
+		/** @var SettingsRepository $repo */
+		$repo = $this->em->getRepository(Setting::class);
+		$repo->set('key1', $value);
+
+		Assert::equal($value, (bool) $repo->get('key1'));
+	}
 
 }
 
