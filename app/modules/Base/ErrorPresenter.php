@@ -5,13 +5,22 @@ namespace App\Presenters;
 use Nette,
 	Tracy\ILogger;
 
-
+/**
+ * Class ErrorPresenter
+ * @package App\Presenters
+ * @author  psl <petr.sladek@webnode.com>
+ */
 class ErrorPresenter extends Nette\Application\UI\Presenter
 {
 	/** @var ILogger */
 	private $logger;
 
 
+	/**
+	 * ErrorPresenter constructor.
+	 *
+	 * @param ILogger $logger
+	 */
 	public function __construct(ILogger $logger)
 	{
 		$this->logger = $logger;

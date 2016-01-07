@@ -12,109 +12,117 @@ use Nette\Utils\DateTime;
 use Nette\Utils\Html;
 use PetrSladek\SkautIS\SkautIS;
 
-
+/**
+ * Class BasePresenter
+ * @package App\Module\Base\Presenters
+ * @author  psl <petr.sladek@webnode.com>
+ */
 abstract class BasePresenter extends \Nette\Application\UI\Presenter
 {
 
-    /** @var ArrayHash */
+	/** @var ArrayHash */
 	protected $config;
 
-    /** @var ImageService @inject */
-    public $images;
+	/** @var ImageService @inject */
+	public $images;
 
-    /** @var EmailsService @inject */
-    public $emails;
+	/** @var EmailsService @inject */
+	public $emails;
 
-    /** @var EntityManager @inject */
-    public $em;
+	/** @var EntityManager @inject */
+	public $em;
 
+	public $ageInDate;
 
-    public $ageInDate;
+	/** @var SkautIS @inject */
+	public $skautis;
 
-    /** @var SkautIS @inject */
-    public $skautis;
+	/** @var SettingsRepository @inject */
+	public $settings;
 
-    /** @var SettingsRepository @inject */
-    public $settings;
+	/**
+	 * Je povoleno registrovat nové učastníky?
+	 * @var bool
+	 */
+	public $openRegistrationParticipants;
 
+	/**
+	 * Je povoleno registrovat nové Servisaky?
+	 * @var bool
+	 */
+	public $openRegistrationServiceteam;
 
-    /**
-     * Je povoleno registrovat nové učastníky?
-     * @var bool
-     */
-    public $openRegistrationParticipants;
+	const OPEN_PARTICIPANTS_REGISTRATION_KEY = 'openRegistrationParticipants';
 
-    /**
-     * Je povoleno registrovat nové Servisaky?
-     * @var bool
-     */
-    public $openRegistrationServiceteam;
-
-
-    const OPEN_PARTICIPANTS_REGISTRATION_KEY = 'openRegistrationParticipants';
-
-    const OPEN_SERVICETEAM_REGISTRATION_KEY = 'openRegistrationServiceteam';
+	const OPEN_SERVICETEAM_REGISTRATION_KEY = 'openRegistrationServiceteam';
 
 
-    protected function startup()
+	/**
+	 * @inheritdoc
+	 */
+	protected function startup()
 	{
 		parent::startup();
-//        $this->skautis->setStorage($_SESSION["__" . __CLASS__] = []);
 
-		$this->config = ArrayHash::from( $this->context->parameters['app'] );
+		$this->config = ArrayHash::from($this->context->parameters['app']);
 
-        // Sablona pro emaily
-        $this->emails->setTemplate($this->createTemplate());
+		// Sablona pro emaily
+		$this->emails->setTemplate($this->createTemplate());
 
+		$this->ageInDate = DateTime::from('8.6.2015');
+		$this->template->ageInDate = $this->ageInDate;
 
-        $this->ageInDate = DateTime::from('8.6.2015');
-        $this->template->ageInDate = $this->ageInDate;
+		$this->openRegistrationParticipants = $this->settings->get(self::OPEN_PARTICIPANTS_REGISTRATION_KEY, true); // default TRUE
+		$this->template->openRegistrationParticipants = $this->openRegistrationParticipants;
 
-
-
-        $this->openRegistrationParticipants = $this->settings->get(self::OPEN_PARTICIPANTS_REGISTRATION_KEY, true); // default TRUE
-        $this->template->openRegistrationParticipants = $this->openRegistrationParticipants;
-
-        $this->openRegistrationServiceteam = $this->settings->get(self::OPEN_SERVICETEAM_REGISTRATION_KEY, true); // default TRUE
-        $this->template->openRegistrationServiceteam = $this->openRegistrationServiceteam;
+		$this->openRegistrationServiceteam = $this->settings->get(self::OPEN_SERVICETEAM_REGISTRATION_KEY, true); // default TRUE
+		$this->template->openRegistrationServiceteam = $this->openRegistrationServiceteam;
 	}
 
 
-    public function beforeRender() {
-        // Variables
-        $this->template->config = $this->config;
-        $this->template->storageUrl = $this->config->storageUrl;
+	/**
+	 * @inheritdoc
+	 */
+	public function beforeRender()
+	{
+		// Variables
+		$this->template->config = $this->config;
+		$this->template->storageUrl = $this->config->storageUrl;
 
-        $this->template->user = $this->getUser();
+		$this->template->user = $this->getUser();
 
 	}
 
 
-
-
-
-
-	public function flashMessageFormatted($type, $format, $args=null) {
+	/**
+	 * Flashzpráva s formátovaným obsahem
+	 *
+	 * @param strng $type
+	 * @param string $format
+	 * @param $args
+	 *
+	 * @return \stdClass
+	 */
+	public function flashMessageFormatted($type, $format, $args = null)
+	{
 		$args = func_get_args();
 		array_shift($args);
 		array_shift($args);
+
 		return $this->flashMessage(vsprintf($format, $args), $type);
 	}
 
 
+	/**
+	 * Odhlášení uživatele
+	 */
+	public function handleLogout()
+	{
 
+		$this->getUser()->logout();
 
-
-
-
-
-
-    public function handleLogout() {
-
-        $this->getUser()->logout();
-
-        $this->flashMessage("Odhlášení proběhlo úspěšně");
-        $this->redirect('this');
-    }
+		$this->flashMessage("Odhlášení proběhlo úspěšně");
+		$this->redirect('this');
+	}
 
 }

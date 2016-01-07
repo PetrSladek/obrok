@@ -10,15 +10,39 @@ namespace App\Model;
 class Address
 {
 
+	/**
+	 * Ulice
+	 * @var string|null
+	 */
 	public $street;
 
+	/**
+	 * Mesto
+	 * @var string|null
+	 */
 	public $city;
 
+	/**
+	 * PSČ
+	 * @var string|null
+	 */
 	public $postalCode;
 
+	/**
+	 * Země
+	 * @var string
+	 */
 	public $country = 'Česká republika';
 
 
+	/**
+	 * Address constructor.
+	 *
+	 * @param null|string $street
+	 * @param null|string $city
+	 * @param null|string $postalCode
+	 * @param null|string $country
+	 */
 	public function __construct($street = null, $city = null, $postalCode = null, $country = null)
 	{
 		if ($street)
