@@ -22,416 +22,543 @@ use Nette\Utils\Paginator;
 use Nette\Utils\Random;
 use Nextras\Datagrid\Datagrid;
 
-
+/**
+ * Class ParticipantsPresenter
+ * @package App\Module\Database\Presenters
+ * @author  psl <petr.sladek@webnode.com>
+ */
 class ParticipantsPresenter extends DatabaseBasePresenter
 {
 
-    /** @var ParticipantsRepository @inject */
-    public $repository;
-    /** @var GroupsRepository @inject */
-    public $groups;
+	/** @var ParticipantsRepository @inject */
+	public $repository;
+
+	/** @var GroupsRepository @inject */
+	public $groups;
+
+	/** @var ProgramsRepository @inject */
+	public $programs;
+
+	/** @var ProgramsSectionsRepository @inject */
+	public $sections;
+
+	/** @var Participant */
+	public $item;
 
 
-    /** @var ProgramsRepository @inject */
-    public $programs;
-    /** @var ProgramsSectionsRepository @inject */
-    public $sections;
+	/**
+	 * @inheritdoc
+	 */
+	public function startup()
+	{
+		parent::startup();
+		$this->acl->edit = $this->user->isInRole('groups-edit');
+	}
 
 
-    /** @var Participant */
-    public $item;
+	/**
+	 * Továrna na komponentu tabulky
+	 *
+	 * @return Datagrid
+	 */
+	protected function createComponentTblGrid()
+	{
+		$grid = new Datagrid();
 
+		$grid->setRowPrimaryKey('id');
+		$grid->addCellsTemplate(__DIR__ . '/templates/grid.layout.latte');
+		$grid->addCellsTemplate(__DIR__ . '/templates/Participants/grid.cols.latte');
 
+		$grid->addColumn('id', 'Id')->enableSort();
+		$grid->addColumn('fullname', 'Jméno')->enableSort();
+		$grid->addColumn('group', 'Skupina')->enableSort();
 
-    public function startup()
-    {
-        parent::startup();
-        $this->acl->edit = $this->user->isInRole('groups-edit');
-    }
+		$grid->addColumn('age', 'Věk')->enableSort();
+		$grid->addColumn('contact', 'Kontakt')->enableSort();
+		$grid->addColumn('address', 'Adresa')->enableSort();
 
+		$grid->addColumn('confirmed', 'Přijede?')->enableSort();
+		$grid->addColumn('paid', 'Zaplatil?')->enableSort();
+		$grid->addColumn('arrived', 'Přijel?')->enableSort();
+		$grid->addColumn('left', 'Odjel?')->enableSort();
 
+		$grid->setFilterFormFactory(function ()
+		{
 
-    
-    // DataGrid Table
-    protected function createComponentTblGrid()
-    {
-        $grid = new Datagrid();
+			$form = new Container();
+			$form->addText('id');
+			$form->addText('fullname');
+			$form->addText('group');
+			$form->addText('age');
+			$form->addText('contact');
+			$form->addText('address');
 
-        $grid->setRowPrimaryKey('id');
-        $grid->addCellsTemplate(__DIR__.'/templates/grid.layout.latte');
-        $grid->addCellsTemplate(__DIR__.'/templates/Participants/grid.cols.latte');
+			$form->addSelect('confirmed', null, array(1 => 'Ano', 0 => 'Ne'))->setPrompt('--')->setDefaultValue(true);
+			$form->addSelect('paid', null, array(1 => 'Ano', 0 => 'Ne'))->setPrompt('--');
+			$form->addSelect('arrived', null, array(1 => 'Ano', 0 => 'Ne'))->setPrompt('--');
+			$form->addSelect('left', null, array(1 => 'Ano', 0 => 'Ne'))->setPrompt('--');
 
-        $grid->addColumn('id', 'Id')->enableSort();
-        $grid->addColumn('fullname', 'Jméno')->enableSort();
-        $grid->addColumn('group', 'Skupina')->enableSort();
+			// these buttons are not compulsory
+			$form->addSubmit('filter', 'Vyfiltrovat');
+			$form->addSubmit('cancel', 'Zrušit');
 
-        $grid->addColumn('age', 'Věk')->enableSort();
-        $grid->addColumn('contact', 'Kontakt')->enableSort();
-        $grid->addColumn('address', 'Adresa')->enableSort();
+			return $form;
+		});
 
-        $grid->addColumn('confirmed', 'Přijede?')->enableSort();
-        $grid->addColumn('paid', 'Zaplatil?')->enableSort();
-        $grid->addColumn('arrived', 'Přijel?')->enableSort();
-        $grid->addColumn('left', 'Odjel?')->enableSort();
+		$grid->setPagination($this->gridItemsPerPage, function ($filter)
+		{
+			$query = $this->getFilteredQuery($filter);
 
+			return $query->count($this->repository);
+		});
+		$grid->setDatasourceCallback(function ($filter, $sorting, Paginator $paginator = null)
+		{
 
-        $grid->setFilterFormFactory(function() {
+			$query = $this->getFilteredQuery($filter);
+			$result = $this->repository->fetch($query);
 
-            $form = new Container();
-            $form->addText('id');
-            $form->addText('fullname');
-            $form->addText('group');
-            $form->addText('age');
-            $form->addText('contact');
-            $form->addText('address');
-
-            $form->addSelect('confirmed', null, array(1=>'Ano', 0=>'Ne'))->setPrompt('--')->setDefaultValue(true);
-            $form->addSelect('paid', null, array(1=>'Ano', 0=>'Ne'))->setPrompt('--');
-            $form->addSelect('arrived', null, array(1=>'Ano', 0=>'Ne'))->setPrompt('--');
-            $form->addSelect('left', null, array(1=>'Ano', 0=>'Ne'))->setPrompt('--');
-
-            // these buttons are not compulsory
-            $form->addSubmit('filter', 'Vyfiltrovat');
-            $form->addSubmit('cancel', 'Zrušit');
-
-            return $form;
-        });
-
-        $grid->setPagination($this->gridItemsPerPage, function($filter) {
-            $query = $this->getFilteredQuery($filter);
-            return $query->count($this->repository);
-        });
-        $grid->setDatasourceCallback(function($filter, $sorting, Paginator $paginator = null) {
-
-            $query = $this->getFilteredQuery($filter);
-            $result = $this->repository->fetch($query);
-
-            if($paginator)
-                $result->applyPaging($paginator->getOffset(), $paginator->getLength());
+			if ($paginator)
+			{
+				$result->applyPaging($paginator->getOffset(), $paginator->getLength());
+			}
 //            if($sorting) {
 //                list($key, $val) = $sorting;
 //                $result->applySorting([$key => $val]);
 //            }
 
+			return $result;
+		});
 
-            return $result;
-        });
-
-
-        return $grid;
-    }
-    /**
-     * @param $filter
-     * @return ParticipantsQuery
-     */
-    public function getFilteredQuery($filter) {
-        $query = new ParticipantsQuery();
-
-        foreach($filter as $key=>$val) {
-            if($key == 'id')
-                $query->byId($val);
-            elseif($key == 'fullname')
-                $query->searchFullname($val);
-            elseif($key == 'group')
-                $query->searchGroup($val);
-            elseif($key == 'age')
-                $query->byAge($val, $this->ageInDate);
-            elseif($key == 'contact')
-                $query->searchContact($val);
-            elseif($key == 'address')
-                $query->searchAddress($val);
-
-            elseif($key == 'confirmed')
-                $val ? $query->onlyConfirmed() : $query->onlyNotConfirmed();
-            elseif($key == 'paid')
-                $val ? $query->onlyPaid() : $query->onlyNotPaid();
-            elseif($key == 'arrived')
-                $val ? $query->onlyArrived() : $query->onlyNotArrived();
-            elseif($key == 'left')
-                $val ? $query->onlyLeft() : $query->onlyNotLeft();
-        }
-
-        // Pida do selectu zavislosti aby se pak nemuseli tahat solo
-        $query->withGroup();
-
-        return $query;
-    }
-
-    
-    // DETAIL ÚĆASTNÍKA
-
-    public function actionDetail($id) {
-        $this->item = $this->repository->find($id);
-        if(!$this->item)
-            $this->error("Item not found");
-    }
+		return $grid;
+	}
 
 
+	/**
+	 * @param $filter
+	 *
+	 * @return ParticipantsQuery
+	 */
+	public function getFilteredQuery($filter)
+	{
+		$query = new ParticipantsQuery();
 
-    public function handleDeleteProgram($idProgram) {
+		foreach ($filter as $key => $val)
+		{
+			if ($key == 'id')
+			{
+				$query->byId($val);
+			}
+			elseif ($key == 'fullname')
+			{
+				$query->searchFullname($val);
+			}
+			elseif ($key == 'group')
+			{
+				$query->searchGroup($val);
+			}
+			elseif ($key == 'age')
+			{
+				$query->byAge($val, $this->ageInDate);
+			}
+			elseif ($key == 'contact')
+			{
+				$query->searchContact($val);
+			}
+			elseif ($key == 'address')
+			{
+				$query->searchAddress($val);
+			}
 
-        $program = $this->programs->find($idProgram);
-        if(!$program)
-            $this->error('Program neexistuje');
+			elseif ($key == 'confirmed')
+			{
+				$val ? $query->onlyConfirmed() : $query->onlyNotConfirmed();
+			}
+			elseif ($key == 'paid')
+			{
+				$val ? $query->onlyPaid() : $query->onlyNotPaid();
+			}
+			elseif ($key == 'arrived')
+			{
+				$val ? $query->onlyArrived() : $query->onlyNotArrived();
+			}
+			elseif ($key == 'left')
+			{
+				$val ? $query->onlyLeft() : $query->onlyNotLeft();
+			}
+		}
 
+		// Pida do selectu zavislosti aby se pak nemuseli tahat solo
+		$query->withGroup();
 
-        $this->item->unattendeeProgram($program);
-        $this->em->flush();
-
-        $this->flashMessage( 'Program úspěšně odhlášen.', 'success' );
-        if($this->isAjax()) {
-            $this->redrawControl('programs');
-            $this->redrawControl('flashes');
-        } else $this->redirect('this');
-
-    }
-
-    public function handleAddProgram($idProgram) {
-
-        $program = $this->programs->find($idProgram);
-        if(!$program)
-            $this->error('Program neexistuje');
-
-
-        try {
-            $this->item->attendeeProgram($program);
-
-            $this->em->flush();
-            $this->flashMessage( 'Program úspěšně zaregistrovan.', 'success' );
-
-        } catch(InvalidStateException $e) {
-            $this->flashMessage($e->getMessage(), 'danger');
-        }
-
-
-        if($this->isAjax()) {
-            $this->redrawControl('programs');
-            $this->redrawControl('flashes');
-        } else
-            $this->redirect('this');
-
-    }
-
-
-    public function renderDetail($id) {
-
-        $this->template->item = $this->item;
-    }
-
-
-    public function actionEdit($id = null) {
-
-        if(!$this->acl->edit)
-            $this->error('Nemáte oprávnění', IResponse::S401_UNAUTHORIZED);
-
-        if($id) {
-            $this->item = $this->repository->find($id);
-            if(!$this->item)
-                $this->error("Item not found");
-        }
-        $this->template->item = $this->item;
-    }
-
-    public function createComponentFrmEdit() {
-
-        $frm = new Form();
-        $frm->setAjax();
-
-        $frm->addGroup('Skupina');
-
-        $frm->addSelect('group', 'Skupina do které uživatel patří', $this->groups->findPairs("name"))
-            ->setDefaultValue($this->item ? $this->item->group->id : $this->getParameter('toGroup'))
-            ->setPrompt('- Vyberte skupinu -')
-            ->setRequired();
-
-        $frm->addGroup('Osobní informace');
-
-        $frm->addText('firstName', 'Jméno')
-            ->setDefaultValue($this->item ? $this->item->firstName : null)
-            ->setRequired();
-        $frm->addText('lastName', 'Příjmení')
-            ->setDefaultValue($this->item ? $this->item->lastName : null)
-            ->setRequired();
-        $frm->addText('nickName', 'Přezdívka')
-            ->setDefaultValue($this->item ? $this->item->lastName : null);
+		return $query;
+	}
 
 
-        $frm->addDatepicker('birthdate', 'Datum narození:')
-            ->setDefaultValue($this->item ? $this->item->birthdate->format('j.n.Y') : null)
-            ->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat Datum narození nebo je ve špatném formátu (musí být dd.mm.yyyy)')
-            ->addRule(Form::RANGE, 'Podle data narození vám 1.6.2015 ještě nebude 15 let (což porušuje podmínky účasti)', array(null, DateTime::from('1.6.2015')->modify('-15 years')) )
-            ->addRule(Form::RANGE, 'Podle data narození vám 10.6.2015 bude už více než 25 let (což porušuje podmínky účasti)', array(DateTime::from('10.6.2015')->modify('-25 years'), null) );
+	/**
+	 * Detail uřastníka
+	 *
+	 * @param $id
+	 *
+	 * @throws \Nette\Application\BadRequestException
+	 */
+	public function actionDetail($id)
+	{
+		$this->item = $this->repository->find($id);
+		if (!$this->item)
+		{
+			$this->error("Item not found");
+		}
+	}
+
+
+	/**
+	 * Příkaz smazání programu učastníkovi
+	 *
+	 * @param $idProgram
+	 *
+	 * @throws \Nette\Application\BadRequestException
+	 */
+	public function handleDeleteProgram($idProgram)
+	{
+
+		$program = $this->programs->find($idProgram);
+		if (!$program)
+		{
+			$this->error('Program neexistuje');
+		}
+
+		$this->item->unattendeeProgram($program);
+		$this->em->flush();
+
+		$this->flashMessage('Program úspěšně odhlášen.', 'success');
+		if ($this->isAjax())
+		{
+			$this->redrawControl('programs');
+			$this->redrawControl('flashes');
+		}
+		else
+		{
+			$this->redirect('this');
+		}
+
+	}
+
+
+	/**
+	 * Přidání programu učastníkovi
+	 *
+	 * @param $idProgram
+	 *
+	 * @throws \Nette\Application\BadRequestException
+	 */
+	public function handleAddProgram($idProgram)
+	{
+
+		$program = $this->programs->find($idProgram);
+		if (!$program)
+		{
+			$this->error('Program neexistuje');
+		}
+
+		try
+		{
+			$this->item->attendeeProgram($program);
+
+			$this->em->flush();
+			$this->flashMessage('Program úspěšně zaregistrovan.', 'success');
+
+		}
+		catch (InvalidStateException $e)
+		{
+			$this->flashMessage($e->getMessage(), 'danger');
+		}
+
+		if ($this->isAjax())
+		{
+			$this->redrawControl('programs');
+			$this->redrawControl('flashes');
+		}
+		else
+		{
+			$this->redirect('this');
+		}
+
+	}
+
+
+	/**
+	 * Vykreslení šavlony detailu učastníka
+	 *
+	 * @param $id
+	 */
+	public function renderDetail($id)
+	{
+
+		$this->template->item = $this->item;
+	}
+
+
+	/**
+	 * Editace učastníka
+	 *
+	 * @param null $id
+	 *
+	 * @throws \Nette\Application\BadRequestException
+	 */
+	public function actionEdit($id = null)
+	{
+
+		if (!$this->acl->edit)
+		{
+			$this->error('Nemáte oprávnění', IResponse::S401_UNAUTHORIZED);
+		}
+
+		if ($id)
+		{
+			$this->item = $this->repository->find($id);
+			if (!$this->item)
+			{
+				$this->error("Item not found");
+			}
+		}
+		$this->template->item = $this->item;
+	}
+
+
+	/**
+	 * Továrna na komponentu formuláře editace
+	 *
+	 * @return Form
+	 */
+	public function createComponentFrmEdit()
+	{
+
+		$frm = new Form();
+		$frm->setAjax();
+
+		$frm->addGroup('Skupina');
+
+		$frm->addSelect('group', 'Skupina do které uživatel patří', $this->groups->findPairs("name"))
+			->setDefaultValue($this->item ? $this->item->group->id : $this->getParameter('toGroup'))
+			->setPrompt('- Vyberte skupinu -')
+			->setRequired();
+
+		$frm->addGroup('Osobní informace');
+
+		$frm->addText('firstName', 'Jméno')
+			->setDefaultValue($this->item ? $this->item->firstName : null)
+			->setRequired();
+		$frm->addText('lastName', 'Příjmení')
+			->setDefaultValue($this->item ? $this->item->lastName : null)
+			->setRequired();
+		$frm->addText('nickName', 'Přezdívka')
+			->setDefaultValue($this->item ? $this->item->lastName : null);
+
+		$frm->addDatepicker('birthdate', 'Datum narození:')
+			->setDefaultValue($this->item ? $this->item->birthdate->format('j.n.Y') : null)
+			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat Datum narození nebo je ve špatném formátu (musí být dd.mm.yyyy)')
+			->addRule(Form::RANGE, 'Podle data narození vám 1.6.2015 ještě nebude 15 let (což porušuje podmínky účasti)', array(null, DateTime::from('1.6.2015')->modify('-15 years')))
+			->addRule(Form::RANGE, 'Podle data narození vám 10.6.2015 bude už více než 25 let (což porušuje podmínky účasti)', array(DateTime::from('10.6.2015')->modify('-25 years'), null));
 
 //            ->addRule(callback('Participant','validateAge'), 'Věk účastníka Obroku 2015 musí být od 15 do 24 let');
 
-        $frm->addRadioList('gender', 'Pohlaví',array(Person::GENDER_MALE=>'muž',Person::GENDER_FEMALE=>'žena'))
-            ->setDefaultValue($this->item ? $this->item->gender : null)
-            ->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat %label');
+		$frm->addRadioList('gender', 'Pohlaví', array(Person::GENDER_MALE => 'muž', Person::GENDER_FEMALE => 'žena'))
+			->setDefaultValue($this->item ? $this->item->gender : null)
+			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat %label');
 
-        $frm->addGroup('Trvalé bydliště');
-        $frm->addText('addressStreet', 'Ulice a čp.')
-            ->setDefaultValue($this->item ? $this->item->addressStreet : null)
-            ->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat %label');
-        $frm->addText('addressCity', 'Město')
-            ->setDefaultValue($this->item ? $this->item->addressCity : null)
-            ->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat %label');
-        $frm->addText('addressPostcode', 'PSČ')
-            ->setDefaultValue($this->item ? $this->item->addressPostcode : null)
-            ->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat %label');
+		$frm->addGroup('Trvalé bydliště');
+		$frm->addText('addressStreet', 'Ulice a čp.')
+			->setDefaultValue($this->item ? $this->item->addressStreet : null)
+			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat %label');
+		$frm->addText('addressCity', 'Město')
+			->setDefaultValue($this->item ? $this->item->addressCity : null)
+			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat %label');
+		$frm->addText('addressPostcode', 'PSČ')
+			->setDefaultValue($this->item ? $this->item->addressPostcode : null)
+			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat %label');
 
-        $frm->addGroup('Kontaktní údaje');
-        $frm->addText('email', 'E-mail')
-            ->setDefaultValue($this->item ? $this->item->email : null)
-            ->setEmptyValue('@')
-            ->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat E-mail')
-            ->addRule(Form::EMAIL, 'E-mailová adresa není platná')
-            ->setAttribute('title','E-mail, který pravidelně vybíráš a můžem Tě na něm kontaktovat. Budou Ti chodit informace atd..')
-            ->setAttribute('data-placement','right');
-        $frm->addText('phone', 'Mobilní telefon',null,13)
-            ->setDefaultValue($this->item ? $this->item->phone : null)
-            ->setEmptyValue('+420')
-            ->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat Mobilní telefon')
-            ->addRule([$frm, 'isPhoneNumber'], 'Telefonní číslo je ve špatném formátu')
-            ->setAttribute('title','Mobilní telefon, na kterém budeš k zastižení během celé akce')
-            ->setAttribute('data-placement','right');
+		$frm->addGroup('Kontaktní údaje');
+		$frm->addText('email', 'E-mail')
+			->setDefaultValue($this->item ? $this->item->email : null)
+			->setEmptyValue('@')
+			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat E-mail')
+			->addRule(Form::EMAIL, 'E-mailová adresa není platná')
+			->setAttribute('title', 'E-mail, který pravidelně vybíráš a můžem Tě na něm kontaktovat. Budou Ti chodit informace atd..')
+			->setAttribute('data-placement', 'right');
+		$frm->addText('phone', 'Mobilní telefon', null, 13)
+			->setDefaultValue($this->item ? $this->item->phone : null)
+			->setEmptyValue('+420')
+			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat Mobilní telefon')
+			->addRule([$frm, 'isPhoneNumber'], 'Telefonní číslo je ve špatném formátu')
+			->setAttribute('title', 'Mobilní telefon, na kterém budeš k zastižení během celé akce')
+			->setAttribute('data-placement', 'right');
 
-        $frm->addGroup('Zdravotní omezení');
-        $frm->addTextarea('health', 'Zdravotní omezení a alergie')
-            ->setDefaultValue($this->item ? $this->item->health : null);
+		$frm->addGroup('Zdravotní omezení');
+		$frm->addTextarea('health', 'Zdravotní omezení a alergie')
+			->setDefaultValue($this->item ? $this->item->health : null);
 
-        $frm->addCheckbox('admin','Administrátor skupiny')
-            ->setDefaultValue($this->item ? $this->item->isAdmin() : null);
+		$frm->addCheckbox('admin', 'Administrátor skupiny')
+			->setDefaultValue($this->item ? $this->item->isAdmin() : null);
 
-        $frm->addTextarea('noteInternal', 'Interní poznámka')
-            ->setDefaultValue($this->item ? $this->item->noteInternal : null);
+		$frm->addTextarea('noteInternal', 'Interní poznámka')
+			->setDefaultValue($this->item ? $this->item->noteInternal : null);
 
-        $frm->addGroup('Přihlášení');
-        $frm->addText('skautisPersonId', 'Skautis PersonID')
-            ->addRule(Form::INTEGER)
-            ->setDefaultValue($this->item ? $this->item->skautisPersonId : null);
+		$frm->addGroup('Přihlášení');
+		$frm->addText('skautisPersonId', 'Skautis PersonID')
+			->addRule(Form::INTEGER)
+			->setDefaultValue($this->item ? $this->item->skautisPersonId : null);
 
-        $frm->addSubmit('send', 'Uložit')->setAttribute('class', 'btn btn-success btn-lg btn-block');
+		$frm->addSubmit('send', 'Uložit')->setAttribute('class', 'btn btn-success btn-lg btn-block');
 
-        $frm->onSuccess[] = callback($this, 'frmEditSubmitted');
+		$frm->onSuccess[] = callback($this, 'frmEditSubmitted');
 
-
-        return $frm;
-    }
-
-    public function frmEditSubmitted(Form $frm) {
-        $values = $frm->getValues();
-
-        if(!$this->item) {
-            $this->item = new Participant();
-            $this->em->persist($this->item);
-        }
-
-        foreach($values as $key => $value) {
-            if($key == 'group')
-                $value = $value ? $this->groups->find($value) : null;
-
-            $this->item->$key = $value;
-        }
-
-        $this->em->flush();
-
-        $this->flashMessage('Údaje úspěšně uloženy', 'success');
-        $this->redirect('detail', $this->item->id);
-
-    }
+		return $frm;
+	}
 
 
+	/**
+	 * Akce po odeslání formuláře
+	 *
+	 * @param Form $frm
+	 */
+	public function frmEditSubmitted(Form $frm)
+	{
+		$values = $frm->getValues();
+
+		if (!$this->item)
+		{
+			$this->item = new Participant();
+			$this->em->persist($this->item);
+		}
+
+		foreach ($values as $key => $value)
+		{
+			if ($key == 'group')
+			{
+				$value = $value ? $this->groups->find($value) : null;
+			}
+
+			$this->item->$key = $value;
+		}
+
+		$this->em->flush();
+
+		$this->flashMessage('Údaje úspěšně uloženy', 'success');
+		$this->redirect('detail', $this->item->id);
+
+	}
 
 
-    public function actionLoginAs($id) {
-        if(!$this->acl->edit)
-            $this->error('Nemate opravneni', IResponse::S403_FORBIDDEN);
+	/**
+	 * Přihlásit se na FrontEnd jako účastník
+	 *
+	 * @param $id
+	 *
+	 * @throws \Nette\Application\BadRequestException
+	 */
+	public function actionLoginAs($id)
+	{
+		if (!$this->acl->edit)
+		{
+			$this->error('Nemate opravneni', IResponse::S403_FORBIDDEN);
+		}
 
-        $this->item = $this->repository->find($id);
-        if(!$this->item)
-            $this->error("Item not found");
+		$this->item = $this->repository->find($id);
+		if (!$this->item)
+		{
+			$this->error("Item not found");
+		}
 
-        $hash = Random::generate(22, '0-9A-Za-z./');
-        $this->item->quickLoginHash = Passwords::hash( $hash );
+		$hash = Random::generate(22, '0-9A-Za-z./');
+		$this->item->quickLoginHash = Passwords::hash($hash);
 
-        $this->em->persist($this->item);
-        $this->em->flush();
+		$this->em->persist($this->item);
+		$this->em->flush();
 
-        $this->redirect(":Participants:Login:as", $id, $hash);
-    }
-
-
-
-
-    public function createComponentTblPrograms()
-    {
-        $grid = new Datagrid();
-
-        $grid->setRowPrimaryKey('id');
-        $grid->addCellsTemplate(__DIR__.'/templates/grid.layout.latte');
-        $grid->addCellsTemplate(__DIR__.'/templates/Program/grid.cols.latte');
-        $grid->addCellsTemplate(__DIR__.'/templates/Participants/programs.cols.latte');
-
-        $grid->addColumn('id', 'ID');
-        $grid->addColumn('section', 'Sekce');
-        $grid->addColumn('time', 'Den a čas');
-        $grid->addColumn('name', 'Název');
-        $grid->addColumn('capacity', 'Obsazeno');//->enableSort();
+		$this->redirect(":Participants:Login:as", $id, $hash);
+	}
 
 
-        $grid->setFilterFormFactory(function() {
-            $frm = new Container();
-            $frm->addText('id')
-                ->addCondition(Form::FILLED)
-                ->addRule(Form::INTEGER);
+	/**
+	 * Továrna na komponentu tabulky programů
+	 * @return Datagrid
+	 */
+	public function createComponentTblPrograms()
+	{
+		$grid = new Datagrid();
 
-            $sections = [];
-            foreach($this->sections->findAll() as $section)
-                $sections[$section->id] = $section->title . ($section->subTitle ? " - {$section->subTitle}" : null);
-            $frm->addMultiSelect('section', null, $sections);
+		$grid->setRowPrimaryKey('id');
+		$grid->addCellsTemplate(__DIR__ . '/templates/grid.layout.latte');
+		$grid->addCellsTemplate(__DIR__ . '/templates/Program/grid.cols.latte');
+		$grid->addCellsTemplate(__DIR__ . '/templates/Participants/programs.cols.latte');
 
-            $frm->addText('name')
-                ->addCondition(Form::FILLED)
-                ->addRule(Form::INTEGER);
+		$grid->addColumn('id', 'ID');
+		$grid->addColumn('section', 'Sekce');
+		$grid->addColumn('time', 'Den a čas');
+		$grid->addColumn('name', 'Název');
+		$grid->addColumn('capacity', 'Obsazeno');//->enableSort();
 
-            $frm->addSelect('capacity', null, array(1=>'Plné', 0=>'Volné'))->setPrompt('--');
+		$grid->setFilterFormFactory(function ()
+		{
+			$frm = new Container();
+			$frm->addText('id')
+				->addCondition(Form::FILLED)
+				->addRule(Form::INTEGER);
 
+			$sections = [];
+			foreach ($this->sections->findAll() as $section)
+			{
+				$sections[$section->id] = $section->title . ($section->subTitle ? " - {$section->subTitle}" : null);
+			}
+			$frm->addMultiSelect('section', null, $sections);
 
-            // these buttons are not compulsory
-            $frm->addSubmit('filter', 'Vyfiltrovat');
-            $frm->addSubmit('cancel', 'Zrušit');
+			$frm->addText('name')
+				->addCondition(Form::FILLED)
+				->addRule(Form::INTEGER);
+
+			$frm->addSelect('capacity', null, array(1 => 'Plné', 0 => 'Volné'))->setPrompt('--');
+
+			// these buttons are not compulsory
+			$frm->addSubmit('filter', 'Vyfiltrovat');
+			$frm->addSubmit('cancel', 'Zrušit');
 
 //            $form->setDefaults($this->filter);
 
-            return $frm;
-        });
+			return $frm;
+		});
 
+		$grid->setPagination(false);
+		$grid->setDatasourceCallback(function ($filter, $sorting, Paginator $paginator = null)
+		{
 
-        $grid->setPagination(false);
-        $grid->setDatasourceCallback(function($filter, $sorting, Paginator $paginator = null) {
+			$query = new ProgramsQuery();
+			foreach ($filter as $key => $val)
+			{
+				if ($key == 'id')
+				{
+					$query->byId($val);
+				}
+				elseif ($key == 'section')
+				{
+					$query->inSections($val);
+				}
+				elseif ($key == 'name')
+				{
+					$query->searchName($val);
+				}
+				elseif ($key == 'capacity')
+				{
+					$val ? $query->onlyFull() : $query->onlyNotFull();
+				}
+			}
 
-            $query = new ProgramsQuery();
-            foreach($filter as $key=>$val) {
-                if($key == 'id')
-                    $query->byId($val);
-                elseif($key == 'section')
-                    $query->inSections($val);
-                elseif($key == 'name')
-                    $query->searchName($val);
-                elseif($key == 'capacity')
-                    $val ? $query->onlyFull() : $query->onlyNotFull();
-            }
+			$result = $this->repository->fetch($query);
 
-            $result = $this->repository->fetch($query);
+			return $result;
+		});
 
-            return $result;
-        });
-
-        return $grid;
-    }
-
-
-
+		return $grid;
+	}
 
 }
 
