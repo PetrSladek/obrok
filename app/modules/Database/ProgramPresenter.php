@@ -17,6 +17,11 @@ use Nette\Utils\DateTime;
 use Nette\Utils\Paginator;
 use Nextras\Datagrid\Datagrid;
 
+/**
+ * Class ProgramPresenter
+ * @package App\Module\Database\Presenters
+ * @author  psl <petr.sladek@webnode.com>
+ */
 class ProgramPresenter extends DatabaseBasePresenter
 {
 

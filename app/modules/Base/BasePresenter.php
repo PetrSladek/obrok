@@ -97,9 +97,9 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 	/**
 	 * Flashzpráva s formátovaným obsahem
 	 *
-	 * @param strng $type
+	 * @param string  $type
 	 * @param string $format
-	 * @param $args
+	 * @param        $args
 	 *
 	 * @return \stdClass
 	 */

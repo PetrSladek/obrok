@@ -369,6 +369,7 @@ class ServiceteamPresenter extends DatabaseBasePresenter
 
 	/**
 	 * Událost po uspěšném odeslání formuláře
+	 *
 	 * @param Form $frm
 	 */
 	public function frmEditSuccess(Form $frm)
@@ -524,6 +525,7 @@ class ServiceteamPresenter extends DatabaseBasePresenter
 
 	/**
 	 * Vykreslí PDF s platbami
+	 *
 	 * @param null $id
 	 */
 	public function renderPayment($id = null)

@@ -24,6 +24,11 @@ use Nette\Utils\Paginator;
 use Nette\Utils\Random;
 use Nextras\Datagrid\Datagrid;
 
+/**
+ * Class GroupsPresenter
+ * @package App\Module\Database\Presenters
+ * @author  psl <petr.sladek@webnode.com>
+ */
 class GroupsPresenter extends DatabaseBasePresenter
 {
 
@@ -227,6 +232,7 @@ class GroupsPresenter extends DatabaseBasePresenter
 
 	/**
 	 * Detail skupiny
+	 *
 	 * @param $id
 	 *
 	 * @throws \Nette\Application\BadRequestException
@@ -442,6 +448,7 @@ class GroupsPresenter extends DatabaseBasePresenter
 
 	/**
 	 * Ajaxová inline editace formuláře
+	 *
 	 * @param Form  $frm
 	 * @param array $data
 	 * @param       $snippet
@@ -532,6 +539,7 @@ class GroupsPresenter extends DatabaseBasePresenter
 
 	/**
 	 * Akce změna stavu učastníka
+	 *
 	 * @param        $participantId
 	 * @param string $status
 	 * @param bool   $value
@@ -581,6 +589,7 @@ class GroupsPresenter extends DatabaseBasePresenter
 
 	/**
 	 * Vykreslení PDF potvrzení příjezdu
+	 *
 	 * @param null $id
 	 */
 	public function renderConfirmations($id = null)
@@ -611,6 +620,7 @@ class GroupsPresenter extends DatabaseBasePresenter
 
 	/**
 	 * Vykreslené PDF potvrzení platby
+	 *
 	 * @param null $id
 	 */
 	public function renderPayment($id = null)
@@ -679,7 +689,6 @@ class GroupsPresenter extends DatabaseBasePresenter
 		echo "Hotovo\n";
 		$this->terminate();
 	}
-
 
 }
 

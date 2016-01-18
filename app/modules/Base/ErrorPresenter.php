@@ -29,21 +29,26 @@ class ErrorPresenter extends Nette\Application\UI\Presenter
 
 	/**
 	 * @param  \Exception
+	 *
 	 * @return void
 	 */
-	public function renderDefault($exception)
+	public function renŁderDefault($exception)
 	{
-		if ($exception instanceof Nette\Application\BadRequestException) {
+		if ($exception instanceof Nette\Application\BadRequestException)
+		{
 			$code = $exception->getCode();
 			$this->setView(in_array($code, [403, 404, 405, 410, 500]) ? $code : '4xx');
 
-		} else {
+		}
+		else
+		{
 			$this->setView('500');
 			$this->logger->log($exception, ILogger::EXCEPTION);
 		}
 
-		if ($this->isAjax()) {
-			$this->payload->error = TRUE;
+		if ($this->isAjax())
+		{
+			$this->payload->error = true;
 			$this->terminate();
 		}
 	}

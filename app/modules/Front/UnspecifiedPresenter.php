@@ -1,19 +1,15 @@
 <?php
 
-namespace App\Module\Front\Presenters;;
+namespace App\Module\Front\Presenters;
 
-use App\BasePresenter;
-use App\Hydrators\SkautisHydrator;
-use App\Model\Entity\UnspecifiedPerson;
-use App\Model\Entity\Person;
-use Kdyby\Doctrine\EntityManager;
 use Nette;
 
-
+/**
+ * Class UnspecifiedPresenter
+ * @package App\Module\Front\Presenters
+ * @author  psl <petr.sladek@webnode.com>
+ */
 class UnspecifiedPresenter extends UnspecifiedPersonAuthBasePresenter
 {
-
-
-
 
 }

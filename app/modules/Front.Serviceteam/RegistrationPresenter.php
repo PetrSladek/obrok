@@ -1,6 +1,6 @@
 <?php
 
-namespace  App\Module\Front\Serviceteam\Presenters;
+namespace App\Module\Front\Serviceteam\Presenters;
 
 use App\Forms\IServiceteamRegistrationFormFactory;
 use App\Forms\ServiceteamRegistrationForm;
@@ -16,51 +16,49 @@ use App\Forms\Form;
 use Nette\Utils\DateTime;
 use Nette\Utils\Html;
 
-
 /**
- * FrontEnd ServiceteamPresenter
- *
- * @author     Petr /Peggy/ Sládek
- * @package    Obrok15
+ * Class RegistrationPresenter
+ * @package App\Module\Front\Serviceteam\Presenters
+ * @author  psl <petr.sladek@webnode.com>
  */
-
 class RegistrationPresenter extends UnspecifiedPersonAuthBasePresenter
 {
 
+	/**
+	 * @var IServiceteamRegistrationFormFactory @inject
+	 */
+	public $serviceteamRegistrationFormFactory;
 
-    /**
-     * @var IServiceteamRegistrationFormFactory @inject
-     */
-    public $serviceteamRegistrationFormFactory;
 
-    /**
-     * Formulář pro registraci Servisáka (převedení nespecifikovaného na ST)
-     * @return ServiceteamRegistrationForm
-     */
-    protected function createComponentFrmRegistration()
-    {
-        $control = $this->serviceteamRegistrationFormFactory->create( $this->me->id );
+	/**
+	 * Formulář pro registraci Servisáka (převedení nespecifikovaného na ST)
+	 *
+	 * @return ServiceteamRegistrationForm
+	 */
+	protected function createComponentFrmRegistration()
+	{
+		$control = $this->serviceteamRegistrationFormFactory->create($this->me->id);
 
-        $control->onServiceteamRegistered[] = function($control, Serviceteam $me) {
+		$control->onServiceteamRegistered[] = function ($control, Serviceteam $me)
+		{
 
-            // $me === $this->me
-            $mail = $this->emails->create('serviceteamFirstInfo', 'První informace');
-            $mail->addTo($me->email);
-            $this->emails->send($mail);
+			// $me === $this->me
+			$mail = $this->emails->create('serviceteamFirstInfo', 'První informace');
+			$mail->addTo($me->email);
+			$this->emails->send($mail);
 
-            // Zmenila se mi role
-            $this->user->login($me->toIdentity());
+			// Zmenila se mi role
+			$this->user->login($me->toIdentity());
 
-            $this->flashMessage('Byl jsi úspěšně zařazen do Servisteamu','success');
-            $this->redirect('Homepage:additional');
+			$this->flashMessage('Byl jsi úspěšně zařazen do Servisteamu', 'success');
+			$this->redirect('Homepage:additional');
 
-        };
-        return $control;
-    }
-    
+		};
 
-    
-    
-    
-    
-};
+		return $control;
+	}
+
+}
+
+
+;
