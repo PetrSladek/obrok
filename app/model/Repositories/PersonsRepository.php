@@ -19,6 +19,7 @@ class PersonsRepository extends EntityDao
 	public function changePersonTypeTo(Person &$entity, $type)
 	{
 		$em = $this->getEntityManager();
+		$em->getUnitOfWork()->removeFromIdentityMap($entity);
 
 		$table = $this->getClassMetadata()->getTableName();
 		$em->getConnection()

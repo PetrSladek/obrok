@@ -87,6 +87,10 @@
                             </div>
                             <div class="ajax-edit-target" n:if="$acl->edit">{input note}</div>
                         </h5>
+                        <h5>
+                            <small>Zvací odkaz</small>
+                            <div>{$invitationLink}</div>
+                        </h5>
                     </div>
                     <div class="col-md-5">
                         <h5 n:class="$acl->edit ? ajax-edit">
