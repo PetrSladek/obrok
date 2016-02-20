@@ -23,15 +23,9 @@ class PersonsRepository extends EntityDao
 		$table = $this->getClassMetadata()->getTableName();
 		$em->getConnection()
 		   ->executeUpdate("UPDATE {$table} SET type = ? WHERE id = ? LIMIT 1", [$type, $entity->id]);
-		$em->clear();
 
 		// vratim parametrem
 		$entity = $this->find($entity->id);
-
-		$em->persist($entity)
-		   ->flush()
-		   ->clear();
-		$em->getUnitOfWork()->computeChangeSets();
 	}
 
 

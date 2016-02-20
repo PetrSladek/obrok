@@ -34,7 +34,7 @@ class ParticipantRegistrationForm extends Control
 	private $persons;
 
 	/**
-	 * @var Person
+	 * @var Person|Participant
 	 */
 	private $person;
 
@@ -193,7 +193,7 @@ class ParticipantRegistrationForm extends Control
 	public function processForm(Form $form, $values)
 	{
 
-		// pretipujeme osobyu na Participant
+		// pretypujeme osobu na Participant
 		$this->persons->changePersonTypeTo($this->person, Person::TYPE_PARTICIPANT);
 
 		foreach ($values as $key => $value)

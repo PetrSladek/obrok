@@ -47,6 +47,12 @@ abstract class UnspecifiedPersonAuthBasePresenter extends \App\Module\Base\Prese
 
 		/** @var UnspecifiedPerson */
 		$me = $this->persons->find($this->getUser()->getId());
+		if(!$me)
+		{
+			$this->getUser()->logout(true);
+			$this->redirect(":Front:Login:", array('back' => $this->storeRequest()));
+		}
+
 		$this->me = $me;
 		$this->template->me = $this->me;
 	}

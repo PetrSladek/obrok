@@ -141,6 +141,9 @@
                         <div class="pull-right">
                             {if $user->isLoggedIn()}
                                 Přihlášen: <strong>{$me->getFullname()}</strong> |
+                                {if $user->isInRole('serviceteam') && $user->isInRole('database')}
+                                <a n:href=":Database:Dashboard:">Vstup do databáze</a> |
+                                {/if}
                                 <a n:href="logout!">Odhlásit se</a>
                             {/if}
                         </div>
