@@ -36,6 +36,8 @@ use Nette\NotImplementedException;
  *
  * @property string        $capacity
  * @property Participant[] $attendees
+ *
+ * @property ProgramSection $section
  */
 class Program extends Doctrine\Entities\BaseEntity
 {
@@ -101,7 +103,7 @@ class Program extends Doctrine\Entities\BaseEntity
 	/**
 	 * Kategorie (Blok) do ktereho program patri
 	 * @ManyToOne(targetEntity="ProgramSection", inversedBy="programs", cascade={"persist"})
-	 * @JoinColumn(name="category_id", referencedColumnName="id")
+	 * @JoinColumn(name="section_id", referencedColumnName="id")
 	 *
 	 * @var ProgramSection
 	 **/
@@ -125,6 +127,15 @@ class Program extends Doctrine\Entities\BaseEntity
 		return $this->attendees->count();
 	}
 
+
+	/**
+	 * Je program už zaplněný?
+	 * @return bool
+	 */
+	public function isFull()
+	{
+		return $this->getOccupied() >= $this->capacity;
+	}
 
 	/**
 	 * @param Participant $participant

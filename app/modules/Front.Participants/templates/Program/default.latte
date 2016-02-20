@@ -3,16 +3,45 @@
 
 <div class="container" id="program">
     <div class="containerContent clearfix">
-		<h2>Program <small><small>pro {$Participant->getName()}</small></small></h2>
-		{form frmChangeUser  class=>'changeuser'}
-			{label id_participant /}
-			{input id_participant onChange=>'this.form.submit()'}
-			{input send class=>hide}
-		{/form}
+		<h2>Můj program</h2>
 
-		{if !$registrationActive}
+		{*{if !$registrationActive}
 		<p>Registrace se spouští <strong data-countdownto="{$registrationActiveFrom->format("U")}" data-link="{link refresh!}">{$registrationActiveFrom->format("j.n.Y H:i")}</strong> <em>(poté se stránka sama obnoví)</em></p>
-		{/if}
+		{/if}*}
+
+		{snippet sections}
+		{foreach $sections as $section}
+		<h3>{$section->title} <small n:ifcontent>{$section->subTitle}</small></h3>
+		<table class="table table-bordered">
+			<tbody>
+			{foreach $section->getPrograms() as $program}
+				<tr n:class="$me->isAtendeeProgram($program) ? bg-success : (!$program->isFull() ? bg-warning)">
+					<td>
+						<strong>{$program->name}</strong><br />
+						<em n:ifcontent>{$program->lector}</em>
+					</td>
+					<td>
+						{$program->start|day} {$program->start->format('j.n.')}<br />
+						{$program->start->format('H:i')} - {$program->end->format('H:i')}
+					</td>
+					<td>
+						{$program->getOccupied()} / {$program->getCapacity()}
+					</td>
+					<td width="1" class="text-right">
+						{if $me->isAtendeeProgram($program)}
+						<a n:href="unattendeeProgram! $program->id" class="btn btn-xs btn-danger ajax">Odregistrovat</a>
+						{elseif !$program->isFull()}
+						<a n:href="attendeeProgram! $program->id" class="btn btn-xs btn-success ajax">Zaregistrovat</a>
+						{else}
+						<span class="btn btn-xs btn-default disabled">Zaregistrovat</span>
+						{/if}
+					</td>
+				</tr>
+			{/foreach}
+			</tbody>
+		</table>
+		{/foreach}
+		{/snippet}
 
 		{*
 		<h3>Noční hra</h3>
@@ -117,6 +146,7 @@
 		<br />
 		*}
 
+		{*
 		<h3>Služba</h3>
 
 		{snippet works}
@@ -341,6 +371,7 @@
 		<br />
 		*}
 
+		{*
 		<h3>VaPro</h3>
 		{snippet vapro}
 		<div class="participants">
@@ -424,20 +455,21 @@
 			</table>
 		</div>
 		{/snippet}
+		*}
 
 	</div>
 </div>
 
-	<script type="text/javascript">
+	{*<script type="text/javascript">*}
 
-		$(function() {
-			$('a.registration').live('click',function(){
-				// console.log('registration: ' + $(this).attr('data-registration'));
-				ga('send', 'event', 'registrace', $(this).attr('data-registration'));
-			});
-		});
+		{*$(function() {*}
+			{*$('a.registration').live('click',function(){*}
+				{*// console.log('registration: ' + $(this).attr('data-registration'));*}
+				{*ga('send', 'event', 'registrace', $(this).attr('data-registration'));*}
+			{*});*}
+		{*});*}
 
-	</script>
+	{*</script>*}
 
 
 {/block}

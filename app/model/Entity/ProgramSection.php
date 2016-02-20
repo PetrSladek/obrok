@@ -26,7 +26,6 @@ use Nette\NotImplementedException;
  *
  * @property string    $title
  * @property string    $subTitle
- * @property Program[] $programs
  */
 class ProgramSection extends Doctrine\Entities\BaseEntity
 {
@@ -59,6 +58,14 @@ class ProgramSection extends Doctrine\Entities\BaseEntity
 	public function __construct()
 	{
 		$this->programs = new ArrayCollection();
+	}
+
+	/**
+	 * @return Program[]
+	 */
+	public function getPrograms()
+	{
+		return $this->programs->toArray();
 	}
 
 }

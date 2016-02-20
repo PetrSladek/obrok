@@ -5,6 +5,7 @@ namespace App\Module\Database\Presenters;
 use App\Forms\Form;
 use App\Model\Entity\Participant;
 use App\Model\Entity\Person;
+use App\Model\Entity\Program;
 use App\Query\ParticipantsQuery;
 use App\Query\ProgramsQuery;
 use App\Model\Repositories\GroupsRepository;
@@ -253,7 +254,7 @@ class ParticipantsPresenter extends DatabaseBasePresenter
 	 */
 	public function handleAddProgram($idProgram)
 	{
-
+		/** @var Program $program */
 		$program = $this->programs->find($idProgram);
 		if (!$program)
 		{

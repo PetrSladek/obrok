@@ -20,7 +20,7 @@
 		"nette/utils": "~2.3.0",
 		"latte/latte": "~2.3.0",
 		"tracy/tracy": "~2.3.0",
-		"kdyby/doctrine": "~2.3",
+		"kdyby/doctrine": "~3.0.0",
 		"skautis/nette": "~2.0.0",
 		"vojtech-dobes/nette-forms-gpspicker": "^1.3",
 		"nextras/forms": "^1.5",

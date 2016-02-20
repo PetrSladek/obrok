@@ -58,19 +58,22 @@
 <div class="row">
     <div class="col-md-12">
         <h4>Tvůj program</h4>
+
         {if $programs}
         <table class="table table-bordered table-striped">
             {foreach $programs as $program}
             <tr>
                 <td>
-                    <strong>{$program->programSection} <small n:ifcontent>{$program->programSubSection}</small></strong> {$program->start|day} {$program->start->format('j.n. H:i')}-{$program->end->format('H:i')}:<br />
+                    <strong>{$program->section->title} <small n:ifcontent>{$program->section->subTitle}</small></strong> {$program->start|day} {$program->start->format('j.n. H:i')}-{$program->end->format('H:i')}:<br />
                     <strong>{$program->name}</strong> <small n:if="$program->lector && $program->lector != '-'"><em>{$program->lector}</em></small>
                 </td>
             </tr>
             {/foreach}
         </table>
+        <a n:href="Program:" class="btn btn-success">Přeregistruj si svůj program!</a>
         {else}
-            <em>- nemáš nic zaregistrováno -</em>
+        <em>- nemáš nic zaregistrováno -</em>
+        <a n:href="Program:" class="btn btn-success">Zaregistruj si svůj program!</a>
         {/if}
 
     </div>

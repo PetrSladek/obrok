@@ -152,12 +152,12 @@ class Participant extends Person
 	public function attendeeProgram(Program $program)
 	{
 
-		if ($program->occupied >= $program->capacity)
+		if ($program->isFull())
 		{
 			throw new InvalidStateException('Kapacita programu je již plná.', 10);
 		}
 
-		if ($this->programs->contains($program))
+		if ($this->isAtendeeProgram($program))
 		{
 			throw new InvalidStateException('Uživatel je již přihlášen na tento program.', 20);
 		}
@@ -176,6 +176,12 @@ class Participant extends Person
 		$program->addAttendee($this);
 
 		return $this;
+	}
+
+
+	public function isAtendeeProgram(Program $program)
+	{
+		return $this->programs->contains($program);
 	}
 
 

@@ -122,7 +122,7 @@ class ProgramsQuery extends BaseQuery
 	protected function createBasicDql(Queryable $repository)
 	{
 		$qb = $repository->createQueryBuilder()
-						 ->select('p')// person
+						 ->select('p') // program
 						 ->from(Program::class, 'p');
 
 		$this->applyFilterTo($qb);
