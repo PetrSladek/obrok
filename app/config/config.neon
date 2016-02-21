@@ -30,6 +30,8 @@ extensions:
 	skautislogin: PetrSladek\SkautIS\DI\SkautISExtension
 	gpspicker: VojtechDobes\NetteForms\GpsPickerExtension
 	ajaxHistory: VojtechDobes\NetteAjax\HistoryExtension
+#	images: WebChemistry\Images\DI\Extension
+	images: Brabijan\Images\DI\ImagesExtension
 
 skautis:
 	applicationId:

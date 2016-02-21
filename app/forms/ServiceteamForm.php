@@ -10,8 +10,10 @@ namespace App\Forms;
 
 use App\Model\Entity\Serviceteam;
 use App\Model\Repositories\ServiceteamRepository;
+use Brabijan\Images\ImageStorage;
 use Doctrine\ORM\EntityManager;
 use Nette\Application\UI\Control;
+use Nette\Http\FileUpload;
 use Nette\Utils\DateTime;
 
 class ServiceteamForm extends Control
@@ -37,19 +39,26 @@ class ServiceteamForm extends Control
 	 */
 	private $person;
 
+	/**
+	 * @var ImageStorage
+	 */
+	private $imageStorage;
+
 
 	/**
 	 * ServiceteamRegistrationForm constructor.
 	 *
 	 * @param ServiceteamRepository $groups
+	 * @param ImageStorage          $imageStorage
 	 * @param int                   $id
 	 */
-	public function __construct(ServiceteamRepository $groups, $id)
+	public function __construct(ServiceteamRepository $groups, ImageStorage $imageStorage, $id)
 	{
 		parent::__construct();
 		$this->serviceteams = $groups;
 		$this->person = $this->serviceteams->find($id);
 		$this->em = $this->serviceteams->getEntityManager();;
+		$this->imageStorage = $imageStorage;
 	}
 
 
@@ -130,7 +139,9 @@ class ServiceteamForm extends Control
 			->setDefaultValue($this->person->note)
 			->setOption('description', 'Chceš nám něco vzkázat? Jsi už domluvený k někomu do týmu?');
 
-//        $frm->addGroup('Fotografie');
+        $frm->addGroup('Fotografie');
+		$frm->addUpload('avatar', 'Fotka');
+
 //        $frm->addCropImage('avatar', 'Fotka')
 //            ->setAspectRatio( 1 )
 //            ->setUploadScript($this->link('Image:upload'))
@@ -165,15 +176,28 @@ class ServiceteamForm extends Control
 	{
 		$values = $frm->getValues();
 
-//        if($values->avatar && $values->avatar->hasUploadedFile())
-//            $values->avatar->filename = $this->images->saveImage( $values->avatar->getUploadedFile(), 'avatars' );
+		// pokud jde o vytvoření nového servisáka, tak ho vytvoříme
+		if (!$this->person)
+		{
+			$this->person = new Serviceteam();
+			$this->em->persist($this->person);
+		}
 
+		// zpracujeme avatar
+		if ($values->avatar->isOk())
+		{
+			$image = $this->imageStorage->setNamespace(Serviceteam::getNamespace())
+										->upload($values->avatar);
+			$this->person->setAvatar($image);
+		}
+		unset($values->avatar);
+
+		// naplnime data
 		foreach ($values as $key => $value)
 		{
 			$this->person->$key = $value;
 		}
 
-		$this->em->persist($this->person);
 		$this->em->flush();
 
 		$this->onSave($this, $this->person);

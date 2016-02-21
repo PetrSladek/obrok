@@ -20,6 +20,8 @@ use Nette\Utils\DateTime;
 class HomepagePresenter extends ParticipantAuthBasePresenter
 {
 
+	use \Brabijan\Images\TImagePipe	;
+
 	/** @var ImageService @inject */
 	public $images;
 
@@ -50,7 +52,7 @@ class HomepagePresenter extends ParticipantAuthBasePresenter
 	{
 		if (!$this->me->isAdmin())
 		{
-			$this->flashMessage('Musíte být administrátorem skupiny, abyste mohl měnit její údaje!');
+			$this->flashMessage('Musíte být administrátorem skupiny, abyste mohl měnit její údaje!', 'danger');
 			$this->redirect('Homepage:');
 		}
 
@@ -411,7 +413,15 @@ class HomepagePresenter extends ParticipantAuthBasePresenter
 	 */
 	public function handleToUnspecifiedPerson()
 	{
+		$group = $this->me->group;
 
+		$group->removeParticipant($this->me);
+		$group->tryDefineBoss();
+		$group->tryDefineAdmin();
+
+		$this->em->flush();
+
+		// Zmenim typ na unspecified
 		$this->persons->changePersonTypeTo($this->me, Person::TYPE_UNSPECIFIED);
 		$this->user->login($this->me->toIdentity());
 

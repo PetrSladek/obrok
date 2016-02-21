@@ -5,19 +5,14 @@ namespace App\Module\Database\Presenters;
 use App\Forms\Form;
 use App\Model\Entity\Group;
 use App\Model\Entity\Participant;
-use App\Model\Entity\Serviceteam;
 use App\Query\GroupsQuery;
 use App\Model\Repositories\GroupsRepository;
 use App\Model\Repositories\ParticipantsRepository;
 use App\Model\Repositories\ServiceteamRepository;
 use App\Services\ImageService;
-use Kdyby\Doctrine\EntityRepository;
-use Myann\CropImage;
-use Nette\Application\UI\ITemplate;
-use Nette\Bridges\ApplicationLatte\Template;
+use Brabijan\Images\TImagePipe;
 use Nette\Forms\Container;
 use Nette\Forms\Controls\BaseControl;
-use Nette\Forms\Controls\Button;
 use Nette\Http\IResponse;
 use Nette\Security\Passwords;
 use Nette\Utils\Paginator;
@@ -31,6 +26,8 @@ use Nextras\Datagrid\Datagrid;
  */
 class GroupsPresenter extends DatabaseBasePresenter
 {
+
+	use TImagePipe;
 
 	/** @var ImageService @inject */
 	public $images;

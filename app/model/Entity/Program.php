@@ -39,10 +39,11 @@ use Nette\NotImplementedException;
  *
  * @property ProgramSection $section
  */
-class Program extends Doctrine\Entities\BaseEntity
+class Program
 {
 
 	use \Kdyby\Doctrine\Entities\Attributes\Identifier; // Using Identifier trait for id column
+	use \Kdyby\Doctrine\Entities\MagicAccessors;
 
 	/**
 	 * Nazev programu

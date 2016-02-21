@@ -7,13 +7,9 @@
 <div class="row">
 
     <div class="col-md-3">
-        {*{if $me->isAdmin()}
-        <a n:tag-if="$open" href="{plink Homepage:editGroup}">
-            <img style="width: 100%" src="{link Image: (expand) $group->getAvatarType($group::AVATAR_TYPE_DBDETAIL)}" alt="foto" border="0" />
+        <a n:tag-if="$open && $me->isAdmin()" href="{plink Homepage:editGroup}">
+            <img style="width: 100%" n:img="$group, 200x200, exact" alt="foto" />
         </a>
-        {else}
-        <img style="width: 100%" src="{link Image: (expand) $group->getAvatarType($group::AVATAR_TYPE_DBDETAIL)}" alt="foto" />
-        {/if}*}
     </div>
     <div class="col-md-6">
         <h2 class="pull-left"><strike n:tag-if="!$group->confirmed">{$group->name} <small>{$group->city}</small></strike></h2>

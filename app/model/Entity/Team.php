@@ -20,10 +20,11 @@ use Kdyby\Doctrine;
  * @Entity(repositoryClass="App\Model\Repositories\TeamsRepository")
  * @Table(name="teams")
  */
-class Team extends Doctrine\Entities\BaseEntity
+class Team
 {
 
 	use \Kdyby\Doctrine\Entities\Attributes\Identifier; // Using Identifier trait for id column
+	use \Kdyby\Doctrine\Entities\MagicAccessors;
 
 	/**
 	 * Zkratka týmu

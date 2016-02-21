@@ -7,6 +7,8 @@
 
 namespace App\Model\Entity;
 
+use Brabijan\Images\Image;
+use Brabijan\Images\ImageProvider;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
@@ -17,8 +19,6 @@ use Doctrine\ORM\Mapping\OneToMany;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\PersistentCollection;
-use Kdyby\Doctrine;
-use Nette\NotImplementedException;
 
 /**
  * @Entity(repositoryClass="App\Model\Repositories\GroupsRepository")
@@ -38,10 +38,11 @@ use Nette\NotImplementedException;
  * @property Participant|null $boss
  * @property Participant[]    $participants
  */
-class Group extends Doctrine\Entities\BaseEntity
+class Group implements ImageProvider
 {
 
 	use \Kdyby\Doctrine\Entities\Attributes\Identifier; // Using Identifier trait for id column
+	use \Kdyby\Doctrine\Entities\MagicAccessors;
 
 	/**
 	 * Datum vytvoreni
@@ -154,12 +155,39 @@ class Group extends Doctrine\Entities\BaseEntity
 	 */
 	public function tryDefineBoss()
 	{
-		foreach ($this->getConfirmedParticipants() as $participant)
+		if (!$this->hasBoss())
 		{
-			if ($participant->getAge() >= 18)
+			foreach ($this->getConfirmedParticipants() as $participant)
 			{
-				$this->setBoss($participant);
-				break;
+				if ($participant->getAge() >= 18)
+				{
+					$this->setBoss($participant);
+					break;
+				}
+			}
+		}
+
+		return $this;
+	}
+
+	/**
+	 * Pokusi se automaticky priradit vhodneho administratora
+	 */
+	public function tryDefineAdmin()
+	{
+		if (!$this->hasAdmin())
+		{
+			if ($this->hasBoss())
+			{
+				$this->getBoss()->setAdmin(true);
+			}
+			else
+			{
+				foreach ($this->getConfirmedParticipants() as $participant)
+				{
+					$this->setBoss($participant);
+					break;
+				}
 			}
 		}
 
@@ -223,8 +251,18 @@ class Group extends Doctrine\Entities\BaseEntity
 			throw new \InvalidArgumentException('Ucastnik neni v teto skupine');
 		}
 
-		$this->participants->remove($participant);
+		if ($participant->isAdmin())
+		{
+			$participant->setAdmin(false);
+		}
+
+		if ($this->isBoss($participant))
+		{
+			$this->setBoss(null);
+		}
+
 		$participant->setGroup(null);
+		$this->participants->remove($participant);
 	}
 
 
@@ -436,6 +474,17 @@ class Group extends Doctrine\Entities\BaseEntity
 
 
 	/**
+	 * Je zadany ucastnik vedoucím tehle skupiny?
+	 * @param Participant $participant
+	 *
+	 * @return bool
+	 */
+	public function isBoss(Participant $participant)
+	{
+		return $this->boss === $participant;
+	}
+
+	/**
 	 * @return string Vytvori hash pro pozvani ucastnika do skupiny
 	 */
 	public function getInvitationHash($key)
@@ -503,6 +552,34 @@ class Group extends Doctrine\Entities\BaseEntity
 		$id = $varSymbol - $base;
 
 		return (int) $id;
+	}
+
+
+	/**
+	 * @param Image $image
+	 */
+	public function setAvatar(Image $image)
+	{
+		$this->avatarFilename = basename($image->getFile());
+	}
+
+	// ---- ImageProvider Interface
+
+	/**
+	 * @return string
+	 */
+	public static function getNamespace()
+	{
+		return 'avatar/group';
+	}
+
+
+	/**
+	 * @return string
+	 */
+	public function getFilename()
+	{
+		return $this->avatarFilename;
 	}
 
 }

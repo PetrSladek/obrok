@@ -11,6 +11,7 @@ use App\Model\Repositories\TeamsRepository;
 use App\Model\Repositories\WorkgroupsRepository;
 use App\Services\ImageService;
 
+use Brabijan\Images\TImagePipe;
 use Nette\Forms\Container;
 use Nette\Forms\Controls\BaseControl;
 use Nette\Http\IResponse;
@@ -27,6 +28,7 @@ use Nextras\Datagrid\Datagrid;
  */
 class ServiceteamPresenter extends DatabaseBasePresenter
 {
+	use TImagePipe;
 
 	/** @var ServiceteamRepository @inject */
 	public $repository;

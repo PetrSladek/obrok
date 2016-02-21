@@ -8,6 +8,7 @@ use App\Model\Entity\Serviceteam;
 use App\Model\Repositories\GroupsRepository;
 use App\Model\Repositories\ParticipantsRepository;
 use App\Model\Repositories\ServiceteamRepository;
+use Brabijan\Images\ImageStorage;
 use Doctrine\ORM\EntityManager;
 use Nette\Application\UI\Control;
 use Nette\Utils\DateTime;
@@ -45,18 +46,26 @@ class GroupForm extends Control
 	 */
 	private $ageInDate;
 
+	/**
+	 * @var ImageStorage
+	 */
+	private $imageStorage;
+
 
 	/**
 	 * ServiceteamRegistrationForm constructor.
 	 *
 	 * @param EntityManager $em
+	 * @param ImageStorage  $imageStorage
 	 * @param int           $id
 	 */
-	public function __construct(EntityManager $em, $id)
+	public function __construct(EntityManager $em, ImageStorage $imageStorage, $id)
 	{
 		parent::__construct();
 
 		$this->em = $em;
+		$this->imageStorage = $imageStorage;
+
 		$this->participants = $this->em->getRepository(Participant::class);
 		$this->groups = $this->em->getRepository(Group::class);;
 		$this->group = $this->groups->find($id);
@@ -125,6 +134,7 @@ class GroupForm extends Control
 //                ->addRule(callback('Participant','validateBossAge'), 'Věk vedoucího skupiny Obroku 2015 musí být 18 let nebo více');
 
 		$frm->addGroup('Doplňující údaje');
+		$frm->addUpload('avatar', 'Obrázek / znak skupiny');
 //        $frm->addCropImage('avatar', 'Obrázek skupiny')
 //            ->setAspectRatio( 1 )
 //            ->setUploadScript($this->link('Image:upload'))
@@ -160,8 +170,14 @@ class GroupForm extends Control
 		$values->locationLng = $values->location->lng;
 		unset($values->location);
 
-//        if($values->avatar && $values->avatar->hasUploadedFile())
-//            $values->avatar->filename = $this->images->saveImage( $values->avatar->getUploadedFile(), 'groups' );
+		// zpracujeme avatar
+		if ($values->avatar->isOk())
+		{
+			$image = $this->imageStorage->setNamespace(Group::getNamespace())
+										->upload($values->avatar);
+			$this->group->setAvatar($image);
+		}
+		unset($values->avatar);
 
 		foreach ($values as $key => $value)
 		{

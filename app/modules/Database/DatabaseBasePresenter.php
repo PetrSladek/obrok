@@ -61,6 +61,11 @@ abstract class DatabaseBasePresenter extends \App\Module\Base\Presenters\BasePre
 
 		/** @var Serviceteam */
 		$me = $this->serviceteams->find($this->getUser()->getId());
+		if (!$me)
+		{
+			$this->getUser()->logout(true);
+			$this->redirect("Login:", array('back' => $this->storeRequest()));
+		}
 		$this->me = $me;
 		$this->template->me = $this->me;
 

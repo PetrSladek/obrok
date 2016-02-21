@@ -7,6 +7,8 @@
 
 namespace App\Model\Entity;
 
+use Brabijan\Images\Image;
+use Brabijan\Images\ImageProvider;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\ManyToOne;
@@ -21,7 +23,7 @@ use Kdyby\Doctrine;
  * @property Job|null       $job
  * @property Workgroup|null $workgroup
  */
-class Serviceteam extends Person
+class Serviceteam extends Person implements ImageProvider
 {
 
 	/** @Column(type="string", length=512, nullable=true) */
@@ -258,6 +260,12 @@ class Serviceteam extends Person
 	}
 
 
+	public function setAvatar(Image $image)
+	{
+		$this->avatarFilename = basename($image->getFile());
+	}
+
+
 	/**
 	 * Vrati objekt s nette identitou
 	 */
@@ -266,4 +274,23 @@ class Serviceteam extends Person
 		return new \Nette\Security\Identity($this->id, array_merge([Person::TYPE_SERVICETEAM], explode(" ", $this->role)));
 	}
 
+
+	// ---- ImageProvider Interface
+
+	/**
+	 * @return string
+	 */
+	public static function getNamespace()
+	{
+		return 'avatar/serviceteam';
+	}
+
+
+	/**
+	 * @return string
+	 */
+	public function getFilename()
+	{
+		return $this->avatarFilename;
+	}
 }

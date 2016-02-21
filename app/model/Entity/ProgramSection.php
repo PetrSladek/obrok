@@ -27,10 +27,11 @@ use Nette\NotImplementedException;
  * @property string    $title
  * @property string    $subTitle
  */
-class ProgramSection extends Doctrine\Entities\BaseEntity
+class ProgramSection
 {
 
 	use \Kdyby\Doctrine\Entities\Attributes\Identifier; // Using Identifier trait for id column
+	use \Kdyby\Doctrine\Entities\MagicAccessors;
 
 	/**
 	 * Nazev programove kategorie(bloku) - Vapro, Inspiro, Zivly, Sluzba, ...

@@ -20,10 +20,11 @@ use Kdyby\Doctrine;
  * @Table(name="workgroups")
  * @property string $name
  */
-class Workgroup extends Doctrine\Entities\BaseEntity
+class Workgroup
 {
 
 	use \Kdyby\Doctrine\Entities\Attributes\Identifier; // Using Identifier trait for id column
+	use \Kdyby\Doctrine\Entities\MagicAccessors;
 
 	/**
 	 * Nazev pracovni skupiny

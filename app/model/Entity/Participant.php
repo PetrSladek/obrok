@@ -249,6 +249,15 @@ class Participant extends Person
 
 
 	/**
+	 * Je vedoucí svojí skupiny?
+	 * @return bool
+	 */
+	public function isBoss()
+	{
+		return $this->group && $this->group->isBoss($this);
+	}
+
+	/**
 	 * Vrati objekt s nette identitou
 	 */
 	public function toIdentity()

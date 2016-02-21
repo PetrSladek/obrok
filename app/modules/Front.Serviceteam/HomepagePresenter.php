@@ -7,6 +7,7 @@ use App\Forms\IServiceteamAdditionalFormFactory;
 use App\Forms\IServiceteamFormFactory;
 use App\Model\Entity\Person;
 use App\Services\ImageService;
+use Brabijan\Images\TImagePipe;
 use Kdyby\Doctrine\EntityRepository;
 
 /**
@@ -16,6 +17,8 @@ use Kdyby\Doctrine\EntityRepository;
  */
 class HomepagePresenter extends ServiceteamAuthBasePresenter
 {
+
+	use TImagePipe;
 
 	/** @var ImageService @inject */
 	public $images;
