@@ -52,9 +52,25 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 	 */
 	public $openRegistrationServiceteam;
 
+	/** @var ImageService @inject */
+	public $imageService;
+
+
 	const OPEN_PARTICIPANTS_REGISTRATION_KEY = 'openRegistrationParticipants';
 
 	const OPEN_SERVICETEAM_REGISTRATION_KEY = 'openRegistrationServiceteam';
+
+
+	/**
+	 * @return \Nette\Application\UI\ITemplate
+	 */
+	protected function createTemplate()
+	{
+		$template =  parent::createTemplate();
+		$template->imageService = $this->imageService;
+
+		return $template;
+	}
 
 
 	/**

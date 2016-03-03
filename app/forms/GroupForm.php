@@ -2,6 +2,7 @@
 
 namespace App\Forms;
 
+use App\Forms\Controls\CroppieControl;
 use App\Model\Entity\Group;
 use App\Model\Entity\Participant;
 use App\Model\Entity\Serviceteam;
@@ -56,15 +57,15 @@ class GroupForm extends Control
 	 * ServiceteamRegistrationForm constructor.
 	 *
 	 * @param EntityManager $em
-	 * @param ImageStorage  $imageStorage
+	 * @param ImageStorage  $imageService
 	 * @param int           $id
 	 */
-	public function __construct(EntityManager $em, ImageStorage $imageStorage, $id)
+	public function __construct(EntityManager $em, ImageStorage $imageService, $id)
 	{
 		parent::__construct();
 
 		$this->em = $em;
-		$this->imageStorage = $imageStorage;
+		$this->imageStorage = $imageService;
 
 		$this->participants = $this->em->getRepository(Participant::class);
 		$this->groups = $this->em->getRepository(Group::class);;
@@ -135,6 +136,7 @@ class GroupForm extends Control
 
 		$frm->addGroup('Doplňující údaje');
 		$frm->addUpload('avatar', 'Obrázek / znak skupiny');
+
 //        $frm->addCropImage('avatar', 'Obrázek skupiny')
 //            ->setAspectRatio( 1 )
 //            ->setUploadScript($this->link('Image:upload'))

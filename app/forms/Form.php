@@ -2,6 +2,7 @@
 
 namespace App\Forms;
 
+use App\Forms\Controls\CroppieControl;
 use Nette;
 use Nette\Forms\Controls;
 
@@ -100,6 +101,22 @@ class Form extends Nette\Application\UI\Form
 
 		return $this[$name] = new GpsPositionPicker($caption, $options);
 
+	}
+
+
+
+	/**
+	 * Přidá GPS picker
+	 *
+	 * @param       $name
+	 * @param null  $caption
+	 * @param array $options
+	 *
+	 * @return GpsPositionPicker
+	 */
+	public function addCroppie($name, $caption = null)
+	{
+		return $this[$name] = new CroppieControl($caption);
 	}
 
 

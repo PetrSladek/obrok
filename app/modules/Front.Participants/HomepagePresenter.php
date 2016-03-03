@@ -20,8 +20,6 @@ use Nette\Utils\DateTime;
 class HomepagePresenter extends ParticipantAuthBasePresenter
 {
 
-	use \Brabijan\Images\TImagePipe	;
-
 	/** @var ImageService @inject */
 	public $images;
 

@@ -8,8 +8,11 @@
 
 namespace App\Forms;
 
+use App\Forms\Controls\CroppieControl;
 use App\Model\Entity\Serviceteam;
 use App\Model\Repositories\ServiceteamRepository;
+use App\Services\ImageService;
+use Brabijan\Images\ImagePipe;
 use Brabijan\Images\ImageStorage;
 use Doctrine\ORM\EntityManager;
 use Nette\Application\UI\Control;
@@ -40,25 +43,31 @@ class ServiceteamForm extends Control
 	private $person;
 
 	/**
-	 * @var ImageStorage
+	 * @var ImageService
 	 */
-	private $imageStorage;
+	private $imageService;
+
+	/**
+	 * @var ImagePipe
+	 */
+	private $imagePipe;
 
 
 	/**
 	 * ServiceteamRegistrationForm constructor.
 	 *
 	 * @param ServiceteamRepository $groups
-	 * @param ImageStorage          $imageStorage
+	 * @param ImageService          $imageService
 	 * @param int                   $id
 	 */
-	public function __construct(ServiceteamRepository $groups, ImageStorage $imageStorage, $id)
+	public function __construct(ServiceteamRepository $groups, ImageService $imageService, $id)
 	{
 		parent::__construct();
+
 		$this->serviceteams = $groups;
 		$this->person = $this->serviceteams->find($id);
-		$this->em = $this->serviceteams->getEntityManager();;
-		$this->imageStorage = $imageStorage;
+		$this->em = $this->serviceteams->getEntityManager();
+		$this->imageService = $imageService;
 	}
 
 
@@ -140,19 +149,13 @@ class ServiceteamForm extends Control
 			->setOption('description', 'Chceš nám něco vzkázat? Jsi už domluvený k někomu do týmu?');
 
         $frm->addGroup('Fotografie');
-		$frm->addUpload('avatar', 'Fotka');
+//		$frm->addUpload('avatar', 'Fotka');
 
-//        $frm->addCropImage('avatar', 'Fotka')
-//            ->setAspectRatio( 1 )
-//            ->setUploadScript($this->link('Image:upload'))
-//            ->setCallbackImage(function(CropImage $cropImage) {
-//                return $this->images->getImage($cropImage->getFilename());
-//            })
-//            ->setCallbackSrc(function(CropImage $cropImage, $width, $height) {
-//                return $this->images->getImageUrl($cropImage->getFilename(), $width, $height);
-//            })
-//            ->setDefaultValue( new CropImage(Serviceteam::$defaultAvatar) );
-////            ->addRule(Form::FILLED, 'Musíš nahrát fotku');
+		$control = new CroppieControl('Obrázek / znak skupiny');
+		$control->setImageUrl($this->person->getAvatar() ? $this->imageService->getImageUrl($this->person->getAvatar()) : null);
+		$control->setDefaultValue($this->person->getAvatarCrop());
+
+		$frm->addComponent($control, 'avatar');
 
 		$frm->addGroup('Tričko');
 		$frm->addSelect('tshirtSize', 'Velikost případného trička', Serviceteam::$tShirtSizes)
@@ -183,14 +186,18 @@ class ServiceteamForm extends Control
 			$this->em->persist($this->person);
 		}
 
-		// zpracujeme avatar
-		if ($values->avatar->isOk())
-		{
-			$image = $this->imageStorage->setNamespace(Serviceteam::getNamespace())
-										->upload($values->avatar);
-			$this->person->setAvatar($image);
-		}
+		/** @var \Croppie $avatar */
+		$avatar = $values->avatar;
 		unset($values->avatar);
+
+		if ($avatar->hasFileUpload())
+		{
+			$image = $avatar->getFileUpload();
+			$filename = $this->imageService->upload($image);
+			$this->person->setAvatar($filename);
+		}
+		$this->person->setAvatarCrop($avatar->getCrop());
+
 
 		// naplnime data
 		foreach ($values as $key => $value)

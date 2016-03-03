@@ -30,7 +30,6 @@ extensions:
 	skautislogin: PetrSladek\SkautIS\DI\SkautISExtension
 	gpspicker: VojtechDobes\NetteForms\GpsPickerExtension
 	ajaxHistory: VojtechDobes\NetteAjax\HistoryExtension
-#	images: WebChemistry\Images\DI\Extension
 	images: Brabijan\Images\DI\ImagesExtension
 
 skautis:
@@ -105,13 +104,13 @@ doctrine:
 application:
 	errorPresenter: Error
 	mapping:
-#		*: App\*Module\Presenters\*Presenter
 		*: App\Module\*\Presenters\*Presenter
 
 latte:
 	macros:
 #		- Nextras\Forms\Bridges\Latte\Macros\BS3InputMacros
 		- Nextras\Latte\Macros\RedefineMacro
+		- App\MacrosSet\ImageMacroSet
 forms:
 	messages:
 		EQUAL: 'Prosím vyplňte %s.'
@@ -134,7 +133,6 @@ services:
 			- addFilter(date, App\LatteFilters::date)
 			- addFilter(phone, App\LatteFilters::phone)
 			- addFilter(bbcolumns, App\LatteFilters::bbcolumns)
-
 
 	images: App\Services\ImageService(%app.webimagesUploadDir%, %app.webimagesCacheDir%, %app.webimagesCacheUrl%)
 	emails:

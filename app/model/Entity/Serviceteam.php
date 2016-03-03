@@ -7,8 +7,6 @@
 
 namespace App\Model\Entity;
 
-use Brabijan\Images\Image;
-use Brabijan\Images\ImageProvider;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\ManyToOne;
@@ -23,7 +21,7 @@ use Kdyby\Doctrine;
  * @property Job|null       $job
  * @property Workgroup|null $workgroup
  */
-class Serviceteam extends Person implements ImageProvider
+class Serviceteam extends Person
 {
 
 	/** @Column(type="string", length=512, nullable=true) */
@@ -51,7 +49,7 @@ class Serviceteam extends Person implements ImageProvider
 	 * Avatar jmeno souboru
 	 * @Column(type="string", length=1024, nullable=true)
 	 */
-	protected $avatarFilename;
+	protected $avatar;
 
 	/**
 	 * Avatar oriznutí
@@ -84,8 +82,6 @@ class Serviceteam extends Person implements ImageProvider
 		"woman-XXL" => 'Dámské XXL',
 		"woman-3XL" => 'Dámské 3XL',
 		"woman-4XL" => 'Dámské 4XL');
-
-	// Asociace
 
 	/**
 	 * Tym do ktereho spada
@@ -260,9 +256,43 @@ class Serviceteam extends Person implements ImageProvider
 	}
 
 
-	public function setAvatar(Image $image)
+	/**
+	 * Nastav název souboru s avatarem
+	 * @return string
+	 */
+	public function setAvatar($avatar)
 	{
-		$this->avatarFilename = basename($image->getFile());
+		$this->avatar = $avatar;
+	}
+
+
+	/**
+	 * Vrať název souboru s avatarem
+	 * @return mixed
+	 */
+	public function getAvatar()
+	{
+		return $this->avatar;
+	}
+
+
+	/**
+	 * Nastav ořez originálu avataru
+	 * @return mixed
+	 */
+	public function getAvatarCrop()
+	{
+		return $this->avatarCrop;
+	}
+
+
+	/**
+	 *  Nastav ořez originálu avataru
+	 * @param int[] $crop
+	 */
+	public function setAvatarCrop($crop)
+	{
+		$this->avatarCrop = $crop;
 	}
 
 
@@ -274,23 +304,4 @@ class Serviceteam extends Person implements ImageProvider
 		return new \Nette\Security\Identity($this->id, array_merge([Person::TYPE_SERVICETEAM], explode(" ", $this->role)));
 	}
 
-
-	// ---- ImageProvider Interface
-
-	/**
-	 * @return string
-	 */
-	public static function getNamespace()
-	{
-		return 'avatar/serviceteam';
-	}
-
-
-	/**
-	 * @return string
-	 */
-	public function getFilename()
-	{
-		return $this->avatarFilename;
-	}
 }

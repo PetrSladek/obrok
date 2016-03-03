@@ -6,6 +6,7 @@ use Nette\Http\FileUpload;
 use Nette\InvalidArgumentException;
 use Nette\Object;
 use Nette\Utils\Image;
+use Nette\Utils\MimeTypeDetector;
 use Tracy\Debugger;
 
 /**
@@ -42,6 +43,11 @@ class ImageService extends Object
 	 * @var string
 	 */
 	protected $cacheUrl;
+
+	/**
+	 * @var callable[]
+	 */
+	public $onBeforeSaveThumbnail;
 
 
 	/**
@@ -82,20 +88,20 @@ class ImageService extends Object
 	/**
 	 * Vygeneruje miniaturu (vezme z keše) a vrátí na ni URLs
 	 *
-	 * @param      $filename
-	 * @param null $width
-	 * @param null $height
-	 * @param int  $flags
-	 * @param null $crop
+	 * @param string     $filename
+	 * @param int|null   $width
+	 * @param int|null   $height
+	 * @param int|string $flags
+	 * @param int[]|null $crop ořez obrázku x,y,w,h
 	 *
 	 * @return string
 	 * @throws ImageServiceException
 	 */
 	public function getImageUrl($filename, $width = null, $height = null, $flags = Image::FIT, $crop = null)
 	{
-
+		$flags = $this->convertFlags($flags);
 		$cacheFilename = $this->getCacheFilename($filename, $width, $height, $flags, $crop);
-		if (!is_readable($this->getCacheDir() . $cacheFilename))
+		if (!file_exists($this->getCacheDir() . $cacheFilename))
 		{
 			$this->processImage($filename, $width, $height, $flags, $crop);
 		}
@@ -105,22 +111,67 @@ class ImageService extends Object
 
 
 	/**
+	 * Vygeneruje miniaturu (vezme z keše) a vrátí objekt obrázku
+	 *
+	 * @param string     $filename
+	 * @param int|null   $width
+	 * @param int|null   $height
+	 * @param int|string $flags
+	 * @param int[]|null $crop ořez obrázku x,y,w,h
+	 *
+	 * @return Image
+	 */
+	public function getImage($filename, $width = null, $height = null, $flags = Image::FIT, $crop = null)
+	{
+		$flags = $this->convertFlags($flags);
+		$cached = $this->getCacheDir() . $this->getCacheFilename($filename, $width, $height, $flags, $crop);
+		if (is_readable($cached))
+		{
+			return Image::fromFile($cached);
+		}
+
+		return $this->processImage($filename, $width, $height, $flags, $crop);
+	}
+
+
+	/**
+	 * @param $flags
+	 *
+	 * @return int
+	 */
+	private function convertFlags($flags)
+	{
+		if (is_string($flags))
+		{
+			switch (strtolower($flags))
+			{
+				case 'fit':
+					return Image::FIT;
+				case 'exact':
+					return Image::EXACT;
+				case 'fill':
+					return Image::FILL;
+			}
+		}
+
+		return $flags;
+	}
+
+
+	/**
 	 * Vytvoří miniaturu a vrátí objekt obrázku
 	 *
-	 * @param      $filename
-	 * @param null $width
-	 * @param null $height
-	 * @param int  $flags
-	 * @param null $crop
+	 * @param string     $filename
+	 * @param int|null   $width
+	 * @param int|null   $height
+	 * @param int        $flags
+	 * @param int[]|null $crop
 	 *
 	 * @return Image
 	 * @throws ImageServiceException
 	 */
 	public function processImage($filename, $width = null, $height = null, $flags = Image::FIT, $crop = null)
 	{
-
-		ini_set('memory_limit', 0);
-
 		$fotoUpload = $this->getUploadDir() . $filename;
 
 		if (!is_file($fotoUpload))
@@ -128,62 +179,28 @@ class ImageService extends Object
 			throw new ImageServiceException("Soubor $fotoUpload neexisuje");
 		}
 
-		try
-		{
-			$image = Image::fromFile($fotoUpload);
+		$image = Image::fromFile($fotoUpload);
 
-			// ořežeme originál
-			if ($crop)
+		if ($crop)
+		{
+			if (!is_array($crop) || count($crop) != 4)
 			{
-				try
-				{
-					$image->crop((int) $crop['x'], (int) $crop['y'], (int) $crop['w'], (int) $crop['h']);
-				}
-				catch (\Exception $e)
-				{
-					Debugger::log($e);
-				}
+				throw new ImageServiceException("Oříznutí musí být pole o čtyřech prvcích [x,y,w,h]!");
 			}
 
-			if ($width || $height)
-			{
-				$image->resize($width, $height, $flags);
-			}
+			list($x, $y, $w, $h) = $crop;
+			$image->crop($x, $y, $w, $h);
+		}
 
-			//        if($watermark && $image->getWidth() > 300) {
-			//            $watermark = Image::fromFile( $this->getUploadDir('watermark.png') );
-			//            $watermark->resize(250, null);
-			//            $image->place($watermark, 10, 5);
-			//        }
-			//        $image->sharpen();
-			$image->save($this->getCacheDir() . $this->getCacheFilename($filename, $width, $height, $flags, $crop));
-		}
-		catch (\Exception $e)
+		if ($width || $height)
 		{
-			Debugger::log($e);
+			$image->resize($width, $height, $flags);
 		}
+
+		$this->onBeforeSaveThumbnail($this, $image);
+		$image->save($this->getCacheDir() . $this->getCacheFilename($filename, $width, $height, $flags, $crop));
 
 		return $image;
-	}
-
-
-	/**
-	 * Vygeneruje miniaturu (vezme z keše) a vrátí objekt obrázku
-	 *
-	 * @param string $filename jmeno souboru v upload
-	 *
-	 * @return Image
-	 */
-	public function getImage($filename, $width = null, $height = null, $flags = Image::FIT, $crop = null)
-	{
-
-		$fotoCached = $this->getCacheDir() . $this->getCacheFilename($filename, $width, $height, $flags, $crop);
-		if (is_readable($fotoCached))
-		{
-			return Image::fromFile($fotoCached);
-		}
-
-		return $this->processImage($filename, $width, $height, $flags, $crop);
 	}
 
 
@@ -217,71 +234,70 @@ class ImageService extends Object
 	/**
 	 * Vrátí název souboru pro keš
 	 *
-	 * @param      $filename
-	 * @param      $width
-	 * @param      $height
-	 * @param      $flags
-	 * @param null $crop
+	 * @param string     $filename
+	 * @param int|null   $width
+	 * @param int|null   $height
+	 * @param int|string $flags
+	 * @param int[]|null $crop ořez obrázku x,y,w,h
 	 *
 	 * @return mixed|string
 	 */
-	public function getCacheFilename($filename, $width, $height, $flags, $crop = null)
+	private function getCacheFilename($filename, $width, $height, $flags, $crop = null)
 	{
-
 		$fileInfo = pathinfo($this->getUploadDir() . $filename);
 
-		$cachename = str_replace(".", "-", $fileInfo['basename']);
+		$cachename = str_replace(".", "-", $fileInfo['filename']);
 		$cachename .= "_{$width}x{$height}_{$flags}";
 		if ($crop)
 		{
-			$cachename .= "_{$crop['x']}-{$crop['y']}-{$crop['w']}-{$crop['h']}";
+			$cachename .= '_'.implode('-', $crop);
 		}
+
 		$cachename .= "." . $fileInfo['extension'];
 
 		return $cachename;
 	}
 
 
+//	/**
+//	 * Vrátí typ originálního obrázku podle názvu
+//	 *
+//	 * @param $filename
+//	 *
+//	 * @return int
+//	 */
+//	private function getImageType($filename)
+//	{
+//		$file = $this->getUploadDir() . $filename;
+//
+//		switch (strtolower(pathinfo($file, PATHINFO_EXTENSION)))
+//		{
+//			case 'jpg':
+//			case 'jpeg':
+//				$type = Image::JPEG;
+//				break;
+//			case 'png':
+//				$type = Image::PNG;
+//				break;
+//			case 'gif':
+//				$type = Image::GIF;
+//				break;
+//			default:
+//				throw new InvalidArgumentException("Unsupported image type.");
+//		}
+//
+//		return $type;
+//	}
+
 	/**
-	 * Vrátí typ originálního obrázku podle názvu
-	 *
-	 * @param $filename
-	 *
-	 * @return int
-	 */
-	public function getImageType($filename)
-	{
-		$file = $this->getUploadDir() . $filename;
-
-		switch (strtolower(pathinfo($file, PATHINFO_EXTENSION)))
-		{
-			case 'jpg':
-			case 'jpeg':
-				$type = Image::JPEG;
-				break;
-			case 'png':
-				$type = Image::PNG;
-				break;
-			case 'gif':
-				$type = Image::GIF;
-				break;
-			default:
-				throw new InvalidArgumentException("Unsupported image type.");
-		}
-
-		return $type;
-	}
-
-
-	/**
-	 * Uloží uploadnutý obrázek
+	 * Uloží uploadnutý obrázek a vrátí jeho relativní cestu
 	 *
 	 * @param FileUpload $file
 	 * @param string     $dir
 	 *
-	 * @return null|string
+	 * @return string
 	 */
-	public function saveImage(FileUpload $file, $dir = 'images')
+	public function upload(FileUpload $file, $filename = null)
 	{
 
 		// berem jenom cajk obrázky
@@ -290,11 +306,84 @@ class ImageService extends Object
 			return null;
 		}
 
-		$filename = strtolower(time() . '_' . $file->getSanitizedName());
+		if (!$filename)
+		{
+			$content = $file->getContents();
+			$filename = md5($content) . '.' . $this->getExtensionFromContent($content);
+		}
 
-		$file->move($this->getUploadDir() . $dir . '/' . $filename);
+		$path = $this->getUploadDir() . $filename;
 
-		return $dir . '/' . $filename;
+		$file->move($path);
+
+		return $filename;
+	}
+
+
+	/**
+	 * @param string|Image $content
+	 * @param null         $filename
+	 *
+	 * @return string
+	 */
+	public function save($content, $filename = null)
+	{
+		if (!$filename)
+		{
+			$filename = md5($content) . '.' . $this->getExtensionFromContent($content);
+		}
+
+		$path = $this->getUploadDir() . $filename;
+
+		if ($content instanceof Image)
+		{
+			$content->save($path);
+		}
+		else
+		{
+			file_put_contents($path, $content);
+		}
+
+		return $filename;
+	}
+
+
+	/**
+	 * Vrátí MIME typ podle obsahu
+	 *
+	 * @param $content
+	 *
+	 * @return string
+	 */
+	public function getMimeTypeFromContent($content)
+	{
+		return finfo_buffer(finfo_open(FILEINFO_MIME_TYPE), $content);
+	}
+
+
+	/**
+	 * Vrátí příponu obrázku podle jeho binárního obsahu
+	 *
+	 * @param $content
+	 *
+	 * @return string
+	 * @throws ImageServiceException
+	 */
+	public function getExtensionFromContent($content)
+	{
+		$mime = $this->getMimeTypeFromContent($content);
+		$extensions = [
+			'image/png'  => 'png',
+			'image/jpeg' => 'jpg',
+			'image/gif'  => 'gif',
+		];
+
+		if (!isset($extensions[$mime]))
+		{
+			throw new ImageServiceException('Not supported image MIME type "' . $mime . '"');
+		}
+
+		return $extensions[$mime];
 	}
 }
 

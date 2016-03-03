@@ -4,7 +4,7 @@
  *
  * @testCase \GroupFormTestTest
  * @author Petr Sladek <petr.sladek@skaut.cz>
- * @package 
+ * @package
  */
 
 namespace AppTests\Forms;
@@ -18,75 +18,84 @@ use Kdyby\Doctrine\EntityManager;
 use Nette;
 use Tester;
 use Tester\Assert;
+
 $container = require_once __DIR__ . '/../bootstrap.php';
+
+
 /**
  * @author Petr Sladek <petr.sladek@skaut.cz>
  */
 class GroupFormTestTest extends Tester\TestCase
 {
 
-    private $container;
+	private $container;
 
-    /** @var EntityManager */
-    private $em;
+	/** @var EntityManager */
+	private $em;
 
-
-    /**
-     * @var Group
-     */
-    private $group;
-
-    /**
-     * PersonRepositoryTest constructor.
-     * @param $container
-     */
-    public function __construct(Nette\DI\Container $container)
-    {
-        $this->container = $container;
-        $this->em = $this->container->getByType(EntityManager::class);
-    }
+	/**
+	 * @var Group
+	 */
+	private $group;
 
 
-    public function setUp()
-    {
+	/**
+	 * PersonRepositoryTest constructor.
+	 *
+	 * @param $container
+	 */
+	public function __construct(Nette\DI\Container $container)
+	{
+		$this->container = $container;
+		$this->em = $this->container->getByType(EntityManager::class);
+	}
 
-        Tester\Environment::lock('db', dirname(TEMP_DIR));
 
-        // Smaye db a vytvori Vytvori cistou DB
-        $metadata = $this->em->getMetadataFactory()->getAllMetadata();
-        $schemaTool = new SchemaTool($this->em);
-//        $schemaTool->dropSchema($metadata);
-        $schemaTool->dropDatabase();
-        $schemaTool->createSchema($metadata);
+	public function setUp()
+	{
 
-        $this->group = new Group();
-        $this->group->name = "Testovací";
-        $this->group->city = "Testov";
-        $this->group->note = "Poznámka";
+		Tester\Environment::lock('db', dirname(TEMP_DIR));
 
-        $this->em->persist($this->group);
-        $this->em->flush();
-    }
-    public function testControl()
-    {
-        /** @var IGroupFormFactory $factory */
-        $factory = $this->container->getByType(IGroupFormFactory::class);
-        $control = $factory->create($this->group->id);
+		// Smaye db a vytvori Vytvori cistou DB
+		$metadata = $this->em->getMetadataFactory()->getAllMetadata();
+		$schemaTool = new SchemaTool($this->em);
+//		$schemaTool->dropSchema($metadata);
+		$schemaTool->dropDatabase();
+		$schemaTool->createSchema($metadata);
 
-        $values = $control['form']->getValues(true);
-        $values['name'] = 'Nove jmeno';
-        $control->onSave[] = function($_, $group) {
-            Assert::equal($group, $this->group);
-            Assert::equal($group->name, 'Nove jmeno');
-        };
+		$this->group = new Group();
+		$this->group->name = "TestovacÃ­";
+		$this->group->city = "Testov";
+		$this->group->note = "PoznÃ¡mka";
 
-        $control['form']->setValues($values);
-        $control['form']->setSubmittedBy($control['form']['send']);
-        $control['form']->fireEvents();
+		$this->em->persist($this->group);
+		$this->em->flush();
+	}
 
-        Assert::true($control['form']->isSuccess());
 
-    }
+	public function testControl()
+	{
+		/** @var IGroupFormFactory $factory */
+		$factory = $this->container->getByType(IGroupFormFactory::class);
+		$control = $factory->create($this->group->id);
+
+		$values = $control['form']->getValues(true);
+		$values['name'] = 'Nove jmeno';
+		$values['avatar'] = new Nette\Http\FileUpload(null);
+
+		$control->onSave[] = function ($_, $group)
+		{
+			Assert::equal($group, $this->group);
+			Assert::equal($group->name, 'Nove jmeno');
+		};
+
+		$control['form']->setValues($values);
+		$control['form']->setSubmittedBy($control['form']['send']);
+		$control['form']->fireEvents();
+
+		Assert::true($control['form']->isSuccess());
+
+	}
 
 
 //    protected function tearDown()
@@ -98,4 +107,6 @@ class GroupFormTestTest extends Tester\TestCase
 //        $schemaTool->dropDatabase();
 //    }
 }
+
+
 \run(new GroupFormTestTest($container));
