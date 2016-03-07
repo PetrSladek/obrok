@@ -6,7 +6,11 @@
 {/redefine}
 {redefine col-name}
 <td>
-    {*<img src="{plink Image: (expand) $row->getAvatarType($row::AVATAR_TYPE_DBROW)}" alt="foto" style="float: left;margin-right: 10px;" />*}
+    <div class="pull-left" style="margin-right: 5px">
+        <img n:if="$row->getAvatar()" class="img-responsive" n:img="$row->getAvatar(), 48, 48, exact, $row->getAvatarCrop()" alt="foto" />
+        <img n:if="!$row->getAvatar()" class="img-responsive" n:img="'avatar_group.jpg', 48, 48, exact" alt="foto" />
+    </div>
+
     <strong>{$row->name}</strong>
     <br /><small>{$row->city}</small>
 </td>

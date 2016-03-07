@@ -143,6 +143,11 @@ class ServiceteamPresenter extends DatabaseBasePresenter
 			return $result;
 		});
 
+		$grid->onRender[] = function($grid)
+		{
+			$grid->template->imageService = $this->imageService;
+		};
+
 		return $grid;
 	}
 
