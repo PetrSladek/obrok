@@ -125,6 +125,11 @@ class ProgramPresenter extends DatabaseBasePresenter
 			return $result;
 		});
 
+		$grid->onRender[] = function($grid)
+		{
+			$grid->template->imageService = $this->imageService;
+		};
+
 		return $grid;
 	}
 
@@ -451,6 +456,11 @@ class ProgramPresenter extends DatabaseBasePresenter
 
 			return $result;
 		});
+
+		$grid->onRender[] = function($grid)
+		{
+			$grid->template->imageService = $this->imageService;
+		};
 
 		return $grid;
 	}

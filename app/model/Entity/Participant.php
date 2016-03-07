@@ -169,7 +169,7 @@ class Participant extends Person
 
 		if ($this->hasOtherProgramInSection($program))
 		{
-			throw new InvalidStateException("V teto sekci máte přihlášený již jiný program.", 30);
+			throw new InvalidStateException("V teto sekci máte přihlášený již jiný program.", 40);
 		}
 
 		$this->programs->add($program);
@@ -186,13 +186,13 @@ class Participant extends Person
 
 
 	/**
-	 * Ma uz jiny program v case tohoto programu?
+	 * Najde zaregistrovany program v case tohoto programu
 	 *
 	 * @param Program $program
 	 *
-	 * @return bool
+	 * @return Program|null
 	 */
-	public function hasOtherProgramInTime(Program $program)
+	public function findOtherProgramInTime(Program $program)
 	{
 		foreach ($this->programs as $otherProgram)
 		{
@@ -202,23 +202,35 @@ class Participant extends Person
 			}
 			if ($otherProgram->start == $program->start)
 			{
-				return true;
+				return $otherProgram;
 			}
 			if ($otherProgram->start > $program->start && $otherProgram->start < $program->end)
 			{
-				return true;
+				return $otherProgram;
 			}
 			if ($otherProgram->end > $program->start && $otherProgram->end < $program->end)
 			{
-				return true;
+				return $otherProgram;
 			}
 			if ($otherProgram->start < $program->start && $otherProgram->end > $program->end)
 			{
-				return true;
+				return $otherProgram;
 			}
 		}
 
-		return false;
+		return null;
+	}
+
+	/**
+	 * Ma uz jiny program v case tohoto programu?
+	 *
+	 * @param Program $program
+	 *
+	 * @return bool
+	 */
+	public function hasOtherProgramInTime(Program $program)
+	{
+		return $this->findOtherProgramInTime($program) !== null;
 	}
 
 
@@ -231,6 +243,18 @@ class Participant extends Person
 	 */
 	public function hasOtherProgramInSection(Program $program)
 	{
+		return $this->findOtherProgramInSection($program) !== null;
+	}
+
+	/**
+	 * Najde program ve stejne sekci
+	 *
+	 * @param Program $program
+	 *
+	 * @return Program|null
+	 */
+	public function findOtherProgramInSection(Program $program)
+	{
 		if ($program->section === null)
 		{
 			return false;
@@ -240,11 +264,11 @@ class Participant extends Person
 		{
 			if ($program->section === $otherProgram->section)
 			{
-				return true;
+				return $otherProgram;
 			}
 		}
 
-		return false;
+		return null;
 	}
 
 

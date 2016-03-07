@@ -3,6 +3,7 @@
 namespace App\Module\Database\Presenters;
 
 use App\Forms\Form;
+use App\Forms\IGroupFormFactory;
 use App\Model\Entity\Group;
 use App\Model\Entity\Participant;
 use App\Query\GroupsQuery;
@@ -21,7 +22,7 @@ use Nextras\Datagrid\Datagrid;
 
 /**
  * Class GroupsPresenter
- * @package App\Module\Database\Presenters
+ *
  * @author  psl <petr.sladek@webnode.com>
  */
 class GroupsPresenter extends DatabaseBasePresenter
@@ -29,33 +30,59 @@ class GroupsPresenter extends DatabaseBasePresenter
 
 	use TImagePipe;
 
-	/** @var ImageService @inject */
+	/**
+	 * @var ImageService
+	 * @inject
+	 */
 	public $images;
 
-	/** @var GroupsRepository @inject */
+	/**
+	 * @var GroupsRepository
+	 * @inject
+	 */
 	public $repository;
 
-	/** @var GroupsRepository @inject */
+	/**
+	 * @var GroupsRepository
+	 * @inject
+	 */
 	public $groups;
 
-	/** @var ParticipantsRepository @inject */
+	/**
+	 * @var ParticipantsRepository
+	 * @inject
+	 */
 	public $participants;
 
 //    /** @var PaymentsRepository @inject */
 //    public $payments;
 
-	/** @var ServiceteamRepository @inject */
+	/**
+	 * @var ServiceteamRepository
+	 * @inject
+	 */
 	public $serviceteams;
 
-	/** @var array|NULL
+	/**
+	 * @var IGroupFormFactory
+	 * @inject
+	 */
+	public $groupFormFactory;
+
+	/**
+	 * @var array|NULL
 	 * @persistent
 	 */
 	public $filter = [];
 
-	/** @var Group */
+	/**
+	 * @var Group
+	 */
 	public $item;
 
-	/** @var Participant */
+	/**
+	 * @var Participant
+	 */
 	public $participant;
 
 
@@ -297,6 +324,9 @@ class GroupsPresenter extends DatabaseBasePresenter
 	 */
 	public function createComponentFrmEdit()
 	{
+		return $this->groupFormFactory->create($this->item->id);
+
+
 		$frm = new Form();
 		$frm->setAjax();
 

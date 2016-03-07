@@ -6,7 +6,7 @@ use App\Model\Entity\Program;
 use App\Model\Repositories\ProgramsRepository;
 use App\Model\Repositories\ProgramsSectionsRepository;
 use App\Query\ProgramsSectionsQuery;
-use Kdyby\Events\InvalidStateException;
+use Nette\InvalidStateException;
 
 /**
  * Class ProgramPresenter
@@ -68,8 +68,21 @@ class ProgramPresenter extends ParticipantAuthBasePresenter
 			$this->error('Program neexistuje');
 		}
 
+
 		try
 		{
+			if ($this->me->hasOtherProgramInTime($program))
+			{
+				$otherProgram = $this->me->findOtherProgramInTime($program);
+				$this->me->unattendeeProgram($otherProgram);
+			}
+
+			if ($this->me->hasOtherProgramInSection($program))
+			{
+				$otherProgram = $this->me->findOtherProgramInSection($program);
+				$this->me->unattendeeProgram($otherProgram);
+			}
+
 			$this->me->attendeeProgram($program);
 			$this->em->flush();
 		}
