@@ -81,7 +81,7 @@ class GroupFormTestTest extends Tester\TestCase
 
 		$values = $control['form']->getValues(true);
 		$values['name'] = 'Nove jmeno';
-		$values['avatar'] = new Nette\Http\FileUpload(null);
+		$values['avatar'] = new \Croppie(0,0,0,0);
 
 		$control->onSave[] = function ($_, $group)
 		{
