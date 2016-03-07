@@ -46,23 +46,9 @@ class CroppieControl extends \Nette\Forms\Controls\BaseControl
 	 */
 	public function setValue($value)
 	{
-		if ($value !== null && !($value instanceof Croppie))
+		if ($value !== null && !($value instanceof Croppie || (is_array($value) && count($value) == 4)))
 		{
-			throw new \InvalidArgumentException("Value must be instance of Croppie");
-		}
-
-		return parent::setValue($value);
-	}
-
-
-	/**
-	 * @inheritdoc
-	 */
-	public function setDefaultValue($value)
-	{
-		if ($value !== null && !($value instanceof Croppie || is_array($value)))
-		{
-			throw new \InvalidArgumentException("Value must be instance of Croppie");
+			throw new \InvalidArgumentException("Value must be instance of Croppie or array of points [x, y, w, h]");
 		}
 
 		if(is_array($value))
@@ -71,8 +57,9 @@ class CroppieControl extends \Nette\Forms\Controls\BaseControl
 			$value = new Croppie($x, $y, $x + $w, $y + $h);
 		}
 
-		parent::setDefaultValue($value);
+		return parent::setValue($value);
 	}
+
 
 
 	/**
@@ -163,10 +150,13 @@ class CroppieControl extends \Nette\Forms\Controls\BaseControl
 	 * Nastaví URL obrázku
 	 *
 	 * @param $imageUrl
+	 *
+	 * @return $this
 	 */
 	public function setImageUrl($imageUrl)
 	{
 		$this->imageUrl = $imageUrl;
+		return $this;
 	}
 
 

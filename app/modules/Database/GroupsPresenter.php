@@ -316,16 +316,10 @@ class GroupsPresenter extends DatabaseBasePresenter
 //            ->addRule(Form::INTEGER, 'Musí být celé číslo')
 //            ->setDefaultValue(0);
 
-//        $frm->addCropImage('avatar', 'Obrázek skupiny')
-//            ->setAspectRatio( 1 )
-//            ->setUploadScript($this->link('Image:upload'))
-//            ->setCallbackImage(function(CropImage $cropImage) {
-//                return $this->images->getImage($cropImage->getFilename());
-//            })
-//            ->setCallbackSrc(function(CropImage $cropImage, $width, $height) {
-//                return $this->images->getImageUrl($cropImage->getFilename(), $width, $height);
-//            })
-//            ->setDefaultValue( new CropImage(Group::$defaultAvatar) );
+		$frm->addCroppie('avatar', 'Obrázek / znak skupiny')
+			->setImageUrl($this->item && $this->item->getAvatar() ? $this->imageService->getImageUrl($this->item->getAvatar()) : null)
+			->setDefaultValue($this->item && $this->item->getAvatarCrop() ? $this->item->getAvatarCrop() : null);
+
 
 		$frm->addSubmit('send', 'Uložit')->setAttribute('class', 'btn btn-success btn-lg btn-block');
 		$frm->onSuccess[] = [$this, 'frmEditSuccess'];
@@ -348,6 +342,18 @@ class GroupsPresenter extends DatabaseBasePresenter
 			$this->item = new Group();
 			$this->em->persist($this->item);
 		}
+
+		/** @var \Croppie $avatar */
+		$avatar = $values->avatar;
+		unset($values->avatar);
+
+		if ($avatar->hasFileUpload())
+		{
+			$image = $avatar->getFileUpload();
+			$filename = $this->imageService->upload($image);
+			$this->item->setAvatar($filename);
+		}
+		$this->item->setAvatarCrop($avatar->getCrop());
 
 		foreach ($values as $key => $value)
 		{

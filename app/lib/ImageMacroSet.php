@@ -53,10 +53,11 @@ class ImageMacroSet extends MacroSet
 	{
 		$this->isUsed = TRUE;
 //		$arguments = Helpers::prepareMacroArguments($node->args);
-		$arguments = $node->args;
-		if ($arguments["name"] === NULL) {
-			throw new CompileException("Please provide filename.");
-		}
+		$arguments = array_map('trim', explode(',', $node->args));
+
+//		if ($arguments["name"] === NULL) {
+//			throw new CompileException("Please provide filename.");
+//		}
 
 		$arguments = array_map(function ($value) use ($writer) {
 			return $value ? $writer->formatWord($value) : 'NULL';
@@ -79,10 +80,11 @@ class ImageMacroSet extends MacroSet
 	{
 		$this->isUsed = TRUE;
 //		$arguments = Helpers::prepareMacroArguments($node->args);
-		$arguments = $node->args;
-		if ($arguments["name"] === NULL) {
-			throw new CompileException("Please provide filename.");
-		}
+		$arguments = array_map('trim', explode(',', $node->args));
+
+//		if ($arguments["name"] === NULL) {
+//			throw new CompileException("Please provide filename.");
+//		}
 
 		$arguments = array_map(function ($value) use ($writer) {
 			return $value ? $writer->formatWord($value) : 'NULL';
@@ -124,10 +126,10 @@ class ImageMacroSet extends MacroSet
 
 
 	/**
-	 * @param Template $template
+	 * @param \Latte\Template $template
 	 * @throws InvalidStateException
 	 */
-	public static function validateTemplateParams(Template $template)
+	public static function validateTemplateParams(\Latte\Template $template)
 	{
 		$params = $template->getParameters();
 		if (!isset($params['imageService']) || !$params['imageService'] instanceof ImageService) {

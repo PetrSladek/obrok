@@ -300,6 +300,24 @@ abstract class Person
 
 
 	/**
+	 * @return bool
+	 */
+	public function isMale()
+	{
+		return $this->gender == self::GENDER_MALE;
+	}
+
+
+	/**
+	 * @return bool
+	 */
+	public function isFemale()
+	{
+		return $this->gender == self::GENDER_MALE;
+	}
+
+
+	/**
 	 * Vrati objekt s nette identitou
 	 */
 	public function toIdentity()

@@ -38,7 +38,7 @@ use Doctrine\ORM\PersistentCollection;
  * @property Participant|null $boss
  * @property Participant[]    $participants
  */
-class Group implements ImageProvider
+class Group
 {
 
 	use \Kdyby\Doctrine\Entities\Attributes\Identifier; // Using Identifier trait for id column
@@ -103,7 +103,7 @@ class Group implements ImageProvider
 	 * Avatar jmeno souboru
 	 * @Column(type="string", length=1024, nullable=true)
 	 */
-	protected $avatarFilename;
+	protected $avatar;
 
 	/**
 	 * Avatar oriznutí
@@ -111,7 +111,6 @@ class Group implements ImageProvider
 	 */
 	protected $avatarCrop;
 
-	// Asociace
 
 	/**
 	 * Ucastnici ve skupine
@@ -556,30 +555,42 @@ class Group implements ImageProvider
 
 
 	/**
-	 * @param Image $image
-	 */
-	public function setAvatar(Image $image)
-	{
-		$this->avatarFilename = basename($image->getFile());
-	}
-
-	// ---- ImageProvider Interface
-
-	/**
+	 * Nastav název souboru s avatarem
 	 * @return string
 	 */
-	public static function getNamespace()
+	public function setAvatar($avatar)
 	{
-		return 'avatar/group';
+		$this->avatar = $avatar;
 	}
 
 
 	/**
-	 * @return string
+	 * Vrať název souboru s avatarem
+	 * @return mixed
 	 */
-	public function getFilename()
+	public function getAvatar()
 	{
-		return $this->avatarFilename;
+		return $this->avatar;
+	}
+
+
+	/**
+	 * Nastav ořez originálu avataru
+	 * @return mixed
+	 */
+	public function getAvatarCrop()
+	{
+		return $this->avatarCrop;
+	}
+
+
+	/**
+	 *  Nastav ořez originálu avataru
+	 * @param int[] $crop
+	 */
+	public function setAvatarCrop($crop)
+	{
+		$this->avatarCrop = $crop;
 	}
 
 }

@@ -112,7 +112,7 @@ class Form extends Nette\Application\UI\Form
 	 * @param null  $caption
 	 * @param array $options
 	 *
-	 * @return GpsPositionPicker
+	 * @return CroppieControl
 	 */
 	public function addCroppie($name, $caption = null)
 	{

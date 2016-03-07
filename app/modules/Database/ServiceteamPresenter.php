@@ -23,12 +23,11 @@ use Nextras\Datagrid\Datagrid;
 
 /**
  * Class ServiceteamPresenter
- * @package App\Module\Database\Presenters
+ *
  * @author  psl <petr.sladek@webnode.com>
  */
 class ServiceteamPresenter extends DatabaseBasePresenter
 {
-	use TImagePipe;
 
 	/** @var ServiceteamRepository @inject */
 	public $repository;
@@ -335,19 +334,9 @@ class ServiceteamPresenter extends DatabaseBasePresenter
 			->setDefaultValue($this->item ? $this->item->noteInternal : null)
 			->addFilter('trim');
 
-//        $images = $this->images;
-
-//        $frm->addGroup('Fotografie');
-//        $frm->addCropImage('avatar', 'Fotka')
-//            ->setAspectRatio( 1 )
-//            ->setUploadScript($this->link('Image:upload'))
-//            ->setCallbackImage(function(CropImage $cropImage) {
-//                return $this->images->getImage($cropImage->getFilename());
-//            })
-//            ->setCallbackSrc(function(CropImage $cropImage, $width, $height) {
-//                return $this->images->getImageUrl($cropImage->getFilename(), $width, $height);
-//            })
-//            ->setDefaultValue( new CropImage(Serviceteam::$defaultAvatar) );
+		$frm->addCroppie('avatar', 'Fotka')
+			->setImageUrl($this->item && $this->item->getAvatar() ? $this->imageService->getImageUrl($this->item->getAvatar()) : null)
+			->setDefaultValue($this->item && $this->item->getAvatarCrop() ? $this->item->getAvatarCrop() : null);
 
 		$frm->addGroup('Ostatní');
 		$frm->addCheckbox('helpPreparation', 'Má zájem pomoct s přípravami')
@@ -383,6 +372,19 @@ class ServiceteamPresenter extends DatabaseBasePresenter
 			$this->item = new Serviceteam();
 			$this->em->persist($this->item);
 		}
+
+		/** @var \Croppie $avatar */
+		$avatar = $values->avatar;
+		unset($values->avatar);
+
+		if ($avatar->hasFileUpload())
+		{
+			$image = $avatar->getFileUpload();
+			$filename = $this->imageService->upload($image);
+			$this->item->setAvatar($filename);
+		}
+		$this->item->setAvatarCrop($avatar->getCrop());
+
 
 		foreach ($values as $key => $value)
 		{

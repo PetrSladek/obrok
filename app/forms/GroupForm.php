@@ -9,6 +9,7 @@ use App\Model\Entity\Serviceteam;
 use App\Model\Repositories\GroupsRepository;
 use App\Model\Repositories\ParticipantsRepository;
 use App\Model\Repositories\ServiceteamRepository;
+use App\Services\ImageService;
 use Brabijan\Images\ImageStorage;
 use Doctrine\ORM\EntityManager;
 use Nette\Application\UI\Control;
@@ -50,22 +51,22 @@ class GroupForm extends Control
 	/**
 	 * @var ImageStorage
 	 */
-	private $imageStorage;
+	private $imageService;
 
 
 	/**
 	 * ServiceteamRegistrationForm constructor.
 	 *
 	 * @param EntityManager $em
-	 * @param ImageStorage  $imageService
+	 * @param ImageService  $imageService
 	 * @param int           $id
 	 */
-	public function __construct(EntityManager $em, ImageStorage $imageService, $id)
+	public function __construct(EntityManager $em, ImageService $imageService, $id)
 	{
 		parent::__construct();
 
 		$this->em = $em;
-		$this->imageStorage = $imageService;
+		$this->imageService = $imageService;
 
 		$this->participants = $this->em->getRepository(Participant::class);
 		$this->groups = $this->em->getRepository(Group::class);;
@@ -135,18 +136,11 @@ class GroupForm extends Control
 //                ->addRule(callback('Participant','validateBossAge'), 'Věk vedoucího skupiny Obroku 2015 musí být 18 let nebo více');
 
 		$frm->addGroup('Doplňující údaje');
-		$frm->addUpload('avatar', 'Obrázek / znak skupiny');
 
-//        $frm->addCropImage('avatar', 'Obrázek skupiny')
-//            ->setAspectRatio( 1 )
-//            ->setUploadScript($this->link('Image:upload'))
-//            ->setCallbackImage(function(CropImage $cropImage) {
-//                return $this->images->getImage($cropImage->getFilename());
-//            })
-//            ->setCallbackSrc(function(CropImage $cropImage, $width, $height) {
-//                return $this->images->getImageUrl($cropImage->getFilename(), $width, $height);
-//            })
-//            ->setDefaultValue( new CropImage(Group::$defaultAvatar) );
+		$frm->addCroppie('avatar', 'Obrázek / znak skupiny')
+			->setImageUrl($this->group->getAvatar() ? $this->imageService->getImageUrl($this->group->getAvatar()) : null)
+			->setDefaultValue($this->group->getAvatarCrop() ?: null);
+
 		$frm->addGpsPicker('location', 'Mapa roverských kmenů:', [
 			'zoom' => 11,
 			'size' => [
@@ -172,14 +166,17 @@ class GroupForm extends Control
 		$values->locationLng = $values->location->lng;
 		unset($values->location);
 
-		// zpracujeme avatar
-		if ($values->avatar->isOk())
-		{
-			$image = $this->imageStorage->setNamespace(Group::getNamespace())
-										->upload($values->avatar);
-			$this->group->setAvatar($image);
-		}
+		/** @var \Croppie $avatar */
+		$avatar = $values->avatar;
 		unset($values->avatar);
+
+		if ($avatar->hasFileUpload())
+		{
+			$image = $avatar->getFileUpload();
+			$filename = $this->imageService->upload($image);
+			$this->group->setAvatar($filename);
+		}
+		$this->group->setAvatarCrop($avatar->getCrop());
 
 		foreach ($values as $key => $value)
 		{

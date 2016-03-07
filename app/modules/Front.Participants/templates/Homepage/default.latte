@@ -8,7 +8,9 @@
 
     <div class="col-md-3">
         <a n:tag-if="$open && $me->isAdmin()" href="{plink Homepage:editGroup}">
-            <img style="width: 100%" n:img="$group, 200x200, exact" alt="foto" />
+            {*<img style="width: 100%" n:img="$group, 200x200, exact" alt="foto" />*}
+            <img n:if="$group->getAvatar()" class="img-responsive" n:img="$group->getAvatar(), 400, 400, exact, $group->getAvatarCrop()" alt="foto" />
+            <img n:if="!$group->getAvatar()" class="img-responsive" n:img="'avatar_group.jpg', 400, 400, exact" alt="foto" />
         </a>
     </div>
     <div class="col-md-6">

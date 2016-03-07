@@ -31,7 +31,8 @@
                                 <button class="btn btn-success pull-right cropimage-save" role="save" type="button">Uložit</button>
                             </div>
                         </div>*}
-                        <img class="img-responsive" n:img="$item, 400x400, exact" alt="foto" />
+                        <img n:if="$item->getAvatar()" class="img-responsive" n:img="$item->getAvatar(), 400, 400, exact, $item->getAvatarCrop()" alt="foto" />
+                        <img n:if="!$item->getAvatar()" class="img-responsive" n:img="$item->isMale() ? 'avatar_boy.jpg' : 'avatar_girl.jpg', 400, 400, exact" alt="foto" />
                     </div>
                     <div class="col-md-5">
                         <h4 n:class="$acl->edit ? ajax-edit">

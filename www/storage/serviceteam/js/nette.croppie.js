@@ -1,6 +1,6 @@
 $(function() {
 
-	$('.croppie-control').each(function () {
+	$('.croppie-control').livequery(function () {
 
 
 		var $upload  = $('input[name$="[upload]"]', $(this));

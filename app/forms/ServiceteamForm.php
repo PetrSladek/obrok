@@ -149,13 +149,11 @@ class ServiceteamForm extends Control
 			->setOption('description', 'Chceš nám něco vzkázat? Jsi už domluvený k někomu do týmu?');
 
         $frm->addGroup('Fotografie');
-//		$frm->addUpload('avatar', 'Fotka');
 
-		$control = new CroppieControl('Obrázek / znak skupiny');
-		$control->setImageUrl($this->person->getAvatar() ? $this->imageService->getImageUrl($this->person->getAvatar()) : null);
-		$control->setDefaultValue($this->person->getAvatarCrop());
+		$frm->addCroppie('avatar', 'Fotka')
+			->setImageUrl($this->person->getAvatar() ? $this->imageService->getImageUrl($this->person->getAvatar()) : null)
+			->setDefaultValue($this->person->getAvatarCrop() ?: null);
 
-		$frm->addComponent($control, 'avatar');
 
 		$frm->addGroup('Tričko');
 		$frm->addSelect('tshirtSize', 'Velikost případného trička', Serviceteam::$tShirtSizes)
