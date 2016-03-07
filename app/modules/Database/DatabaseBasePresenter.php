@@ -78,22 +78,22 @@ abstract class DatabaseBasePresenter extends \App\Module\Base\Presenters\BasePre
 	}
 
 
-	/**
-	 * Uprava redraw control, aby se v pripade jinuho snippetu neposilal content.
-	 * V pripade potreby se musi invalidovat zvlast a dycky posledni
-	 *
-	 * @param null $snippet
-	 * @param bool $redraw
-	 */
-	public function redrawControl($snippet = null, $redraw = true)
-	{
-		if ($snippet && $snippet !== 'content' && $redraw === true) // pokud je zadany jmeno nejakyho snippetu
-		{
-			parent::redrawControl('content', false);
-		}
-
-		parent::redrawControl($snippet, $redraw);
-	}
+//	/**
+//	 * Uprava redraw control, aby se v pripade jinuho snippetu neposilal content.
+//	 * V pripade potreby se musi invalidovat zvlast a dycky posledni
+//	 *
+//	 * @param null $snippet
+//	 * @param bool $redraw
+//	 */
+//	public function redrawControl($snippet = null, $redraw = true)
+//	{
+//		if ($snippet && $snippet !== 'content' && $redraw === true) // pokud je zadany jmeno nejakyho snippetu
+//		{
+//			parent::redrawControl('content', false);
+//		}
+//
+//		parent::redrawControl($snippet, $redraw);
+//	}
 
 
 	/**

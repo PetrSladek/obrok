@@ -1,3 +1,12 @@
+parameters:
+	app:
+		storageUrl: /
+		storageDir: /dev/null
+		webimagesUploadDir: /dev/null
+		webimagesCacheDir: /dev/null
+		webimagesCacheUrl: /
+
+
 doctrine:
 	host: 127.0.0.1
 	user: root

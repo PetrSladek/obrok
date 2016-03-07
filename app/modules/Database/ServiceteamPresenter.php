@@ -140,7 +140,7 @@ class ServiceteamPresenter extends DatabaseBasePresenter
 //                $result->applySorting([$key => $val]);
 //            }
 
-			return $result;
+			return $result->toArray();
 		});
 
 		$grid->onRender[] = function($grid)
@@ -464,12 +464,15 @@ class ServiceteamPresenter extends DatabaseBasePresenter
 	/**
 	 * Změna statusu
 	 *
-	 * @param string $status
+	 * @param string $status confirmed | paid | arrived | left
 	 * @param bool   $value
 	 *
+	 * @param int|null   $id
+	 *
+	 * @throws \Exception
 	 * @throws \Nette\Application\BadRequestException
 	 */
-	public function handleStatus($status = 'confirmed', $value = true)
+	public function handleStatus($status, $value = true, $id = null)
 	{
 		if (!$this->acl->edit)
 		{
@@ -481,6 +484,11 @@ class ServiceteamPresenter extends DatabaseBasePresenter
 			if (!in_array($status, ['confirmed', 'paid', 'arrived', 'left']))
 			{
 				throw new \InvalidArgumentException("Wrong status name");
+			}
+
+			if($id)
+			{
+				$this->item = $this->repository->find($id);
 			}
 
 			// zavola metody setConfirmed, setPaid,...
@@ -495,6 +503,8 @@ class ServiceteamPresenter extends DatabaseBasePresenter
 		}
 
 		$this->redrawControl('flags');
+		$this->redrawControl('tblGrid');
+
 		if (!$this->isAjax())
 		{
 			$this->redirect('this');

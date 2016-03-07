@@ -42,22 +42,19 @@
 						<h4 n:class="$acl->edit ? ajax-edit">
 							<small>spadá pod tým:</small>
 							<br/>
-							<div
-								class="ajax-edit-val">{snippet team}{if $item->team}{$item->team->abbr} - {$item->team->name}{else}- nazařazen -{/if}{/snippet}</div>
+							<div class="ajax-edit-val">{snippet team}{if $item->team}{$item->team->abbr} - {$item->team->name}{else}- nazařazen -{/if}{/snippet}</div>
 							<div class="ajax-edit-target" n:if="$acl->edit">{input team}</div>
 						</h4>
 						<h3 n:class="$acl->edit ? ajax-edit">
 							<small>do prac.skupiny</small>
 							<br/>
-							<div
-								class="ajax-edit-val">{snippet workgroup}{if $item->workgroup}{$item->workgroup->name}{else}- nazařazen -{/if}{/snippet}</div>
+							<div class="ajax-edit-val">{snippet workgroup}{if $item->workgroup}{$item->workgroup->name}{else}- nazařazen -{/if}{/snippet}</div>
 							{*<div class="ajax-edit-target" n:if="$acl->edit">{input workgroup class=>"typeahead", data-sourcelink=>$presenter->link('typehead','workgroups')}</div>*}
 						</h3>
 						<h4 n:class="$acl->edit ? ajax-edit">
 							<small>je v pozici:</small>
 							<br/>
-							<div
-								class="ajax-edit-val">{snippet job}{if $item->job}{$item->job->name}{else}- nazařazen -{/if}{/snippet}</div>
+							<div class="ajax-edit-val">{snippet job}{if $item->job}{$item->job->name}{else}- nazařazen -{/if}{/snippet}</div>
 							{*<div class="ajax-edit-target" n:if="$acl->edit">{input job class=>"typeahead", data-sourcelink=>$presenter->link('typehead','jobs')}</div>*}
 						</h4>
 					</div>
