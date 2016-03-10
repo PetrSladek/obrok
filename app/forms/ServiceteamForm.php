@@ -188,13 +188,20 @@ class ServiceteamForm extends Control
 		$avatar = $values->avatar;
 		unset($values->avatar);
 
-		if ($avatar->hasFileUpload())
+		if ($avatar)
 		{
-			$image = $avatar->getFileUpload();
-			$filename = $this->imageService->upload($image);
-			$this->person->setAvatar($filename);
+			if ($image = $avatar->getFileUpload())
+			{
+				$filename = $this->imageService->upload($image);
+				$this->person->setAvatar($filename);
+			}
+
+			$this->person->setAvatarCrop($avatar->getCrop());
 		}
-		$this->person->setAvatarCrop($avatar->getCrop());
+		else
+		{
+			$this->person->removeAvatar();
+		}
 
 
 		// naplnime data

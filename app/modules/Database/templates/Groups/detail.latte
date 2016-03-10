@@ -28,7 +28,7 @@
         <div class="tab-content">
 
             <div class="modal-body tab-pane active" id="group">
-                {form frmEdit data-object-id=>$item->id, data-edit-link=>$control->link('ajaxEdit!')}
+                {*{form 'frmEdit' data-object-id=>$item->id, data-edit-link=>$control->link('ajaxEdit!')}*}
                 <div class="row">
                     <div class="col-md-4">
                         {*<div n:class="$acl->edit ? ajax-edit">
@@ -48,12 +48,12 @@
                     <div class="col-md-5">
                         <h4 n:class="$acl->edit ? ajax-edit">
                             <small>Vedoucí skupiny (18+ let)</small><br />
-                            <div class="ajax-edit-val">
+                            {*<div class="ajax-edit-val">*}
                             {snippet boss}
                                 {if $item->boss}{$item->boss->fullname} <small>{$item->boss->getAge($ageInDate)} let</small>{else}- není -{/if}
                             {/snippet}
-                            </div>
-                            <div class="ajax-edit-target" n:if="$acl->edit">{input boss}</div>
+                            {*</div>*}
+                            {*<div class="ajax-edit-target" n:if="$acl->edit">{input boss}</div>*}
                         </h4>
                         <h3>
                             <small>Kontaktní telefon</small><br />
@@ -82,12 +82,12 @@
                     <div class="col-md-4">
                         <h5 n:class="$acl->edit ? ajax-edit">
                             <small>O skupině</small><br />
-                            <div class="ajax-edit-val">
-                            {snippet note}
+                            {*<div class="ajax-edit-val">*}
+                            {*{snippet note}*}
                                 {if $item->note}{$item->note}{else}- není -{/if}
-                            {/snippet}
-                            </div>
-                            <div class="ajax-edit-target" n:if="$acl->edit">{input note}</div>
+                            {*{/snippet}*}
+                            {*</div>*}
+                            {*<div class="ajax-edit-target" n:if="$acl->edit">{input note}</div>*}
                         </h5>
                         <h5>
                             <small>Zvací odkaz</small>
@@ -97,12 +97,12 @@
                     <div class="col-md-5">
                         <h5 n:class="$acl->edit ? ajax-edit">
                             <small>Interní poznámka</small><br />
-                            <div class="ajax-edit-val">
-                            {snippet noteInternal}
+                            {*<div class="ajax-edit-val">*}
+                            {*{snippet noteInternal}*}
                                 {if $item->noteInternal}{$item->noteInternal}{else}- není -{/if}
-                            {/snippet}
-                            </div>
-                            <div class="ajax-edit-target" n:if="$acl->edit">{input noteInternal}</div>
+                            {*{/snippet}*}
+                            {*</div>*}
+                            {*<div class="ajax-edit-target" n:if="$acl->edit">{input noteInternal}</div>*}
                         </h5>
                     </div>
                     <div class="col-md-3">
@@ -135,7 +135,7 @@
 
                     </div>
                 </div>
-                {/form}
+                {*{/form}*}
             </div>
             <div class="tab-pane modal-body" id="participants" >
 

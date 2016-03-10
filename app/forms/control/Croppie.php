@@ -90,7 +90,7 @@ class Croppie
 	 */
 	public function getFileUpload()
 	{
-		return $this->upload;
+		return $this->hasFileUpload() ? $this->upload : null;
 	}
 
 

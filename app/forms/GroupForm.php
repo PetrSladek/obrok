@@ -2,13 +2,10 @@
 
 namespace App\Forms;
 
-use App\Forms\Controls\CroppieControl;
 use App\Model\Entity\Group;
 use App\Model\Entity\Participant;
-use App\Model\Entity\Serviceteam;
 use App\Model\Repositories\GroupsRepository;
 use App\Model\Repositories\ParticipantsRepository;
-use App\Model\Repositories\ServiceteamRepository;
 use App\Services\ImageService;
 use Brabijan\Images\ImageStorage;
 use Doctrine\ORM\EntityManager;
@@ -139,6 +136,7 @@ class GroupForm extends Control
 
 		$frm->addCroppie('avatar', 'Obrázek / znak skupiny')
 			->setImageUrl($this->group->getAvatar() ? $this->imageService->getImageUrl($this->group->getAvatar()) : null)
+			->setEmptyImageUrl($this->imageService->getImageUrl('avatar_group.jpg'))
 			->setDefaultValue($this->group->getAvatarCrop() ?: null);
 
 		$frm->addGpsPicker('location', 'Mapa roverských kmenů:', [
@@ -170,13 +168,20 @@ class GroupForm extends Control
 		$avatar = $values->avatar;
 		unset($values->avatar);
 
-		if ($avatar->hasFileUpload())
+		if ($avatar)
 		{
-			$image = $avatar->getFileUpload();
-			$filename = $this->imageService->upload($image);
-			$this->group->setAvatar($filename);
+			if ($image = $avatar->getFileUpload())
+			{
+				$filename = $this->imageService->upload($image);
+				$this->group->setAvatar($filename);
+			}
+
+			$this->group->setAvatarCrop($avatar->getCrop());
 		}
-		$this->group->setAvatarCrop($avatar->getCrop());
+		else
+		{
+			$this->group->removeAvatar();
+		}
 
 		foreach ($values as $key => $value)
 		{

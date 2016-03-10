@@ -382,13 +382,20 @@ class ServiceteamPresenter extends DatabaseBasePresenter
 		$avatar = $values->avatar;
 		unset($values->avatar);
 
-		if ($avatar->hasFileUpload())
+		if ($avatar)
 		{
-			$image = $avatar->getFileUpload();
-			$filename = $this->imageService->upload($image);
-			$this->item->setAvatar($filename);
+			if ($image = $avatar->getFileUpload())
+			{
+				$filename = $this->imageService->upload($image);
+				$this->item->setAvatar($filename);
+			}
+
+			$this->item->setAvatarCrop($avatar->getCrop());
 		}
-		$this->item->setAvatarCrop($avatar->getCrop());
+		else
+		{
+			$this->item->removeAvatar();
+		}
 
 
 		foreach ($values as $key => $value)

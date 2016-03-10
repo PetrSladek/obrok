@@ -23,6 +23,7 @@ use Kdyby\Doctrine;
  */
 class Serviceteam extends Person
 {
+	use Avatarable;
 
 	/** @Column(type="string", length=512, nullable=true) */
 	protected $role;
@@ -44,18 +45,6 @@ class Serviceteam extends Person
 	 * @Column(type="boolean")
 	 */
 	protected $arrivesToBuilding = false;
-
-	/**
-	 * Avatar jmeno souboru
-	 * @Column(type="string", length=1024, nullable=true)
-	 */
-	protected $avatar;
-
-	/**
-	 * Avatar oriznutí
-	 * @Column(type="json_array", nullable=true)
-	 */
-	protected $avatarCrop;
 
 	/**
 	 * Velikost tricka
@@ -253,46 +242,6 @@ class Serviceteam extends Person
 		$id = $varSymbol - $base;
 
 		return (int) $id;
-	}
-
-
-	/**
-	 * Nastav název souboru s avatarem
-	 * @return string
-	 */
-	public function setAvatar($avatar)
-	{
-		$this->avatar = $avatar;
-	}
-
-
-	/**
-	 * Vrať název souboru s avatarem
-	 * @return mixed
-	 */
-	public function getAvatar()
-	{
-		return $this->avatar;
-	}
-
-
-	/**
-	 * Nastav ořez originálu avataru
-	 * @return mixed
-	 */
-	public function getAvatarCrop()
-	{
-		return $this->avatarCrop;
-	}
-
-
-	/**
-	 *  Nastav ořez originálu avataru
-	 * @param int[] $crop
-	 */
-	public function setAvatarCrop($crop)
-	{
-		$this->avatarCrop = $crop;
 	}
 
 

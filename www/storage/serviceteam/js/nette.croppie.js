@@ -27,25 +27,31 @@ $(function() {
 			}
 		});
 
-		$croppie.croppie({
-			viewport: {
-				width: 220,
-				height: 220
+		var options = $(this).data('options');
+		$croppie.croppie(
+			$.extend({
+				viewport: {
+					width: 250,
+					height: 250
+				},
+				boundary: {
+					width: 300,
+					height: 300
+				},
+				enableZoom: true,
+				mouseWheelZoom: false
 			},
-			boundary: {
-				width: 300,
-				height: 300
-			},
-			enableZoom: true,
-			mouseWheelZoom: false,
-			update: function(cropper)
+			options,
 			{
-				$x1.val(cropper.points[0]);
-				$y1.val(cropper.points[1]);
-				$x2.val(cropper.points[2]);
-				$y2.val(cropper.points[3]);
-			}
-		});
+				update: function(cropper)
+				{
+					$x1.val(cropper.points[0]);
+					$y1.val(cropper.points[1]);
+					$x2.val(cropper.points[2]);
+					$y2.val(cropper.points[3]);
+				}
+			})
+		);
 
 		var url = $(this).data('image-url');
 		var x1 = parseInt($x1.val());

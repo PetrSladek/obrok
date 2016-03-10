@@ -433,9 +433,9 @@ tfoot ul.pagination {
 
 
 
-.croppie-container {
-  padding: 30px;
-}
+  /*.croppie-container {
+    padding: 30px;
+  }*/
 .croppie-container .cr-image {
   z-index: -1;
   position: absolute;

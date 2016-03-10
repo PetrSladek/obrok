@@ -5,6 +5,7 @@ namespace App\Forms\Controls;
 use App\Forms\Form;
 use Croppie;
 use Nette\Forms\Container;
+use Nette\Http\FileUpload;
 use Nette\Utils\Html;
 
 /**
@@ -21,6 +22,17 @@ class CroppieControl extends \Nette\Forms\Controls\BaseControl
 	/** @var string */
 	private $imageUrl;
 
+	/** @var string */
+	private $emptyUrl;
+
+	/** @var int[]  */
+	private $boundarySize = [300, 300];
+
+	/** @var int[]  */
+	private $viewportSize = [250, 250];
+
+	/** @var bool  */
+	private $enableZoom = true;
 
 	/**
 	 * This method will be called when the component (or component's parent)
@@ -61,7 +73,6 @@ class CroppieControl extends \Nette\Forms\Controls\BaseControl
 	}
 
 
-
 	/**
 	 * @inheritdoc
 	 */
@@ -73,8 +84,98 @@ class CroppieControl extends \Nette\Forms\Controls\BaseControl
 		$y2 = $this->getHttpData(Form::DATA_TEXT, '[y2]');
 		$upload = $this->getHttpData(Form::DATA_FILE, '[upload]');
 
-		$this->setValue(new Croppie($x1, $y1, $x2, $y2, $upload));
+		if (!$upload && !$this->imageUrl)
+		{
+			$this->setValue(null);
+		}
+		else
+		{
+			$this->setValue(new Croppie($x1, $y1, $x2, $y2, $upload));
+		}
 	}
+
+
+	/**
+	 * @param $part
+	 *
+	 * @return string
+	 */
+	private function getPartHtmlName($part)
+	{
+		return $this->getHtmlName() . '[' . $part . ']';
+	}
+
+
+	/**
+	 * Nastaví URL obrázku
+	 *
+	 * @param $imageUrl
+	 *
+	 * @return $this
+	 */
+	public function setImageUrl($imageUrl)
+	{
+		$this->imageUrl = $imageUrl;
+		return $this;
+	}
+
+
+	/**
+	 * Nastaví URL obrázku, který se zobrazí jako prázdný
+	 *
+	 * @param $emptyImageUrl
+	 *
+	 * @return $this
+	 */
+	public function setEmptyImageUrl($emptyImageUrl)
+	{
+		$this->emptyUrl = $emptyImageUrl;
+		return $this;
+	}
+
+	/**
+	 * Nastaví velikost viewportu
+	 *
+	 * @param int $width
+	 * @param int $height
+	 */
+	public function setViewportSize($width, $height)
+	{
+		$this->viewportSize = [$width, $height];
+	}
+
+
+	/**
+	 * Nastaví velikost ohraničení
+	 *
+	 * @param int $width
+	 * @param int $height
+	 */
+	public function setBoundarySize($width, $height)
+	{
+		$this->boundarySize = [$width, $height];
+	}
+
+
+	/**
+	 * Vypne možnost zvětšení
+	 */
+	public function disableZoom()
+	{
+		$this->enableZoom = false;
+	}
+
+
+	/**
+	 * Zaplne možnost zvětšení
+	 */
+	public function enableZoom()
+	{
+		$this->enableZoom = true;
+	}
+
+
+
 
 	/**
 	 * @inheritdoc
@@ -120,7 +221,22 @@ class CroppieControl extends \Nette\Forms\Controls\BaseControl
 
 		$control = Html::el('div', [
 			'class' => 'croppie-control',
-			'data-image-url' => $this->imageUrl,
+			'data-image-url' => $this->imageUrl ?: $this->emptyUrl,
+			'data-empty-url' => $this->emptyUrl,
+			'data-options' => json_encode([
+				'viewport' => [
+					'width' => $this->viewportSize[0],
+					'height' => $this->viewportSize[1],
+				],
+				'boundary' => [
+					'width' => $this->boundarySize[0],
+					'height' => $this->boundarySize[1],
+				],
+				'enableZoom' => $this->enableZoom,
+			]),
+			'style' => [
+				'width' => $this->boundarySize[0] . 'px',
+			],
 		]);
 
 		$control->add($croppie)
@@ -131,32 +247,6 @@ class CroppieControl extends \Nette\Forms\Controls\BaseControl
 				->add($y2);
 
 		return $control;
-
-	}
-
-
-	/**
-	 * @param $part
-	 *
-	 * @return string
-	 */
-	private function getPartHtmlName($part)
-	{
-		return $this->getHtmlName() . '[' . $part . ']';
-	}
-
-
-	/**
-	 * Nastaví URL obrázku
-	 *
-	 * @param $imageUrl
-	 *
-	 * @return $this
-	 */
-	public function setImageUrl($imageUrl)
-	{
-		$this->imageUrl = $imageUrl;
-		return $this;
 	}
 
 

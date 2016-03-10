@@ -324,7 +324,7 @@ class GroupsPresenter extends DatabaseBasePresenter
 	 */
 	public function createComponentFrmEdit()
 	{
-		return $this->groupFormFactory->create($this->item->id);
+//		return $this->groupFormFactory->create($this->item->id);
 
 
 		$frm = new Form();
@@ -353,6 +353,7 @@ class GroupsPresenter extends DatabaseBasePresenter
 
 		$frm->addCroppie('avatar', 'Obrázek / znak skupiny')
 			->setImageUrl($this->item && $this->item->getAvatar() ? $this->imageService->getImageUrl($this->item->getAvatar()) : null)
+			->setEmptyImageUrl($this->imageService->getImageUrl('avatar_group.jpg'))
 			->setDefaultValue($this->item && $this->item->getAvatarCrop() ? $this->item->getAvatarCrop() : null);
 
 
@@ -382,13 +383,20 @@ class GroupsPresenter extends DatabaseBasePresenter
 		$avatar = $values->avatar;
 		unset($values->avatar);
 
-		if ($avatar->hasFileUpload())
+		if ($avatar)
 		{
-			$image = $avatar->getFileUpload();
-			$filename = $this->imageService->upload($image);
-			$this->item->setAvatar($filename);
+			if ($image = $avatar->getFileUpload())
+			{
+				$filename = $this->imageService->upload($image);
+				$this->item->setAvatar($filename);
+			}
+
+			$this->item->setAvatarCrop($avatar->getCrop());
 		}
-		$this->item->setAvatarCrop($avatar->getCrop());
+		else
+		{
+			$this->item->removeAvatar();
+		}
 
 		foreach ($values as $key => $value)
 		{
