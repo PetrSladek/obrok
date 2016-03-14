@@ -78,13 +78,14 @@ class CroppieControl extends \Nette\Forms\Controls\BaseControl
 	 */
 	public function loadHttpData()
 	{
+		$removed = $this->getHttpData(Form::DATA_TEXT, '[removed]');
 		$x1 = $this->getHttpData(Form::DATA_TEXT, '[x1]');
 		$y1 = $this->getHttpData(Form::DATA_TEXT, '[y1]');
 		$x2 = $this->getHttpData(Form::DATA_TEXT, '[x2]');
 		$y2 = $this->getHttpData(Form::DATA_TEXT, '[y2]');
 		$upload = $this->getHttpData(Form::DATA_FILE, '[upload]');
 
-		if (!$upload && !$this->imageUrl)
+		if ((!$upload && !$this->imageUrl) || $removed)
 		{
 			$this->setValue(null);
 		}
@@ -184,11 +185,28 @@ class CroppieControl extends \Nette\Forms\Controls\BaseControl
 	{
 		$this->setOption('rendered', true);
 
-		$upload = Html::el('input', [
+		$fileInput = Html::el('input', [
 			'name' => $this->getPartHtmlName('upload'),
 			'type' => 'file',
 			'accept' => "image/*",
 		]);
+
+		$upload = Html::el('span', [
+			'class' => 'btn btn-primary btn-file',
+		])->setHtml('Browse &hellip;')->add($fileInput);
+
+		$remove = Html::el('button', [
+			'name'  => $this->getPartHtmlName('remove'),
+			'type' => 'button',
+			'class' => 'btn btn-danger',
+		])->setHtml('Remove');
+
+		$removed = Html::el('input', [
+			'name'  => $this->getPartHtmlName('removed'),
+			'type'  => 'hidden',
+			'value' => 1,
+		]);
+
 
 		$x1 = Html::el('input', [
 			'name'  => $this->getPartHtmlName('x1'),
@@ -241,6 +259,8 @@ class CroppieControl extends \Nette\Forms\Controls\BaseControl
 
 		$control->add($croppie)
 				->add($upload)
+				->add($remove)
+				->add($removed)
 				->add($x1)
 				->add($y1)
 				->add($x2)

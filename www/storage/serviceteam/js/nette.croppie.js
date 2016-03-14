@@ -1,9 +1,9 @@
 $(function() {
 
 	$('.croppie-control').livequery(function () {
-
-
 		var $upload  = $('input[name$="[upload]"]', $(this));
+		var $remove  = $('button[name$="[remove]"]', $(this));
+		var $removed  = $('input[name$="[removed]"]', $(this)).val(0);
 		var $x1  = $('input[name$="[x1]"]', $(this));
 		var $y1  = $('input[name$="[y1]"]', $(this));
 		var $x2  = $('input[name$="[x2]"]', $(this));
@@ -25,6 +25,29 @@ $(function() {
 			else {
 				console.error("Sorry - you're browser doesn't support the FileReader API");
 			}
+
+			$removed.val(0);
+		});
+
+		var emptyUrl = $(this).data('empty-url');
+		$remove.on('click', function () {
+			var image = new Image();
+			image.src = emptyUrl;
+			image.onload = function()
+			{
+				x1 = 0;
+				y1 = 0;
+				x2 = image.width;
+				y2 = image.height;
+
+				$croppie.croppie('bind',
+					{
+						url: emptyUrl,
+						points: [x1, y1, x2, y2]
+					});
+			}
+
+			$removed.val(1);
 		});
 
 		var options = $(this).data('options');
