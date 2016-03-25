@@ -1,37 +1,8 @@
-{* This is the welcome page, you can delete it *}
 
 {block content}
 
 <div class="row" n:if="!$user->isLoggedIn()">
     <div class="col-sm-6">
-        <a n:href="skautisLogin-open!" class="btn btn-success btn-block btn-lg">Prihlasit se pres Skautis</a>
+        <a n:href="skautisLogin-open!" class="btn btn-success btn-block btn-lg">Přihlásit se přes Skautis</a>
     </div>
 </div>
-
-{*
-<div class="row">
-    <div class="col-sm-4">
-        <h2>Chci vytvorit novou ucastnickou skupinu</h2>
-        <p>
-            Pokud se se chystas zalozit novou skupinu ucastniku, ktera prijede na Obrok pokracuj kliknutim na tlacitko.
-            <a class="btn btn-primary" n:href="Participants:Registration:">
-             Zalozit novou ucastnickou skupinu
-            </a>
-        </p>
-    </div>
-    <div class="col-sm-4">
-        <h2>Chci se pripojit k existujici skupine</h2>
-        <p>
-            Pokud uz nekdo vasi skupinu zalozil a jen se k ni chces pripojit. Pozaden nekoho ze clenu o zvaci odkaz a pokracuj kliknutim na nej.
-        </p>
-    </div>
-    <div class="col-sm-4">
-        <h2>Chci byt clenem Servis tymu</h2>
-        <p>
-            Pokud je ti vic nez 18 a nebo uz nemuzes byt ucastnikem muzes se pridat do servis tymu. Bude to obhnaset spoustu prace, ale take zabavy a benefitu :]
-            <a class="btn btn-primary" n:href="Serviceteam:Registration:">
-                Zaregistrovat se jako Servisak
-            </a>
-        </p>
-    </div>
-</div>*}
