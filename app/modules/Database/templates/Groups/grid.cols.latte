@@ -30,30 +30,30 @@
 {/redefine}
 
 {redefine col-confirmed}
-<td n:class="$row->confirmed ? cell-flag-blue, cell-flag">
+<td n:class="$row->isConfirmed() ? cell-flag-blue, cell-flag">
     {*<a n:tag-if="$acl->edit" class="ajax" href="{plink status! id=>$row->id, 'confirmed', !$row->confirmed}">*}
-        <i n:class="$row->confirmed ? ficon-flag-blue : ficon-flag-gray"></i>
+        <i n:class="$row->isConfirmed() ? ficon-flag-blue : ficon-flag-gray"></i>
     {*</a>*}
 </td>
 {/redefine}
 {redefine col-paid}
-<td n:class="$row->paid ? cell-flag-green : ($row->isPartlyPaid() ? cell-flag-orange), cell-flag">
+<td n:class="$row->isPaid() ? cell-flag-green, cell-flag">
     {*<a n:tag-if="$acl->edit" class="ajax" href="{plink status! id=>$row->id, 'paid', !$row->paid}">*}
-        <i n:class="$row->paid ? ficon-flag-green : ($row->isPartlyPaid() ? ficon-flag-orange : ficon-flag-gray)"></i>
+        <i n:class="$row->isPaid() ? ficon-flag-green : ficon-flag-gray"></i>
     {*</a>*}
 </td>
 {/redefine}
 {redefine col-arrived}
-<td n:class="$row->arrived ? cell-flag-pink, cell-flag">
+<td n:class="$row->isArrived() ? cell-flag-pink, cell-flag">
     {*<a n:tag-if="$acl->edit" class="ajax" href="{plink status! id=>$row->id, 'arrived', !$row->arrived}">*}
-        <i n:class="$row->arrived ? ficon-flag-pink : ficon-flag-gray"></i>
+        <i n:class="$row->isArrived() ? ficon-flag-pink : ficon-flag-gray"></i>
     {*</a>*}
 </td>
 {/redefine}
 {redefine col-left}
-<td n:class="$row->left ? cell-flag-yellow, cell-flag">
+<td n:class="$row->isLeft() ? cell-flag-yellow, cell-flag">
     {*<a n:tag-if="$acl->edit" class="ajax" href="{plink status! id=>$row->id, 'left', !$row->left}">*}
-        <i n:class="$row->left ? ficon-flag-yellow : ficon-flag-gray"></i>
+        <i n:class="$row->isLeft() ? ficon-flag-yellow : ficon-flag-gray"></i>
     {*</a>*}
 </td>
 {/redefine}

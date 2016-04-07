@@ -34,9 +34,7 @@ use Doctrine\ORM\PersistentCollection;
  * @property string           $noteInternal
  * @property string           $avatarFilename
  * @property string           $avatarCrop
- * @property bool             $confirmed
  * @property Participant|null $boss
- * @property Participant[]    $participants
  */
 class Group
 {
@@ -47,10 +45,40 @@ class Group
 
 	/**
 	 * Datum vytvoreni
+	 *
 	 * @Column(type="datetime")
 	 * @var \DateTime
 	 */
 	protected $createdAt;
+
+	/**
+	 * Pocita se s nim i kdyz treba jeste nezaplatili
+	 *
+	 * @Column(type="boolean")
+	 */
+	protected $confirmed = true;
+
+	/**
+	 * Zaplacená - všichni potvrzení učastníci zaplatili
+	 *
+	 * @Column(type="boolean")
+	 */
+	protected $paid = false;
+
+	/**
+	 * Přijeli - všichni potvrzeni učastníci přijeli
+	 *
+	 * @Column(type="boolean")
+	 */
+	protected $arrived = false;
+
+	/**
+	 * Odjeli - odjeli z akce (všichni potvrzené účastníci se deregistrovali
+	 * )
+	 * @Column(name="`left`", type="boolean")
+	 */
+	protected $left = false;
+
 
 //    /**
 //     * Variabilni symbol
@@ -60,42 +88,49 @@ class Group
 
 	/**
 	 * Nazev ucastnicke skupiny
+	 *
 	 * @Column(type="string", length=255)
 	 */
 	protected $name;
 
 	/**
 	 * Mesto
+	 *
 	 * @Column(type="string", length=255)
 	 */
 	protected $city;
 
 	/**
 	 * Kraj
+	 *
 	 * @Column(type="string", length=255, nullable=true)
 	 */
 	protected $region;
 
 	/**
 	 * Geolokace LAT
+	 *
 	 * @Column(type="float", nullable=true)
 	 */
 	protected $locationLat;
 
 	/**
 	 * Geolokace LNG
+	 *
 	 * @Column(type="float", nullable=true)
 	 */
 	protected $locationLng;
 
 	/**
 	 * Poznamka pri registraci
+	 *
 	 * @Column(type="text", nullable=true)
 	 */
 	protected $note;
 
 	/**
 	 * Interni poznamka
+	 *
 	 * @Column(type="text", nullable=true)
 	 */
 	protected $noteInternal;
@@ -103,6 +138,7 @@ class Group
 
 	/**
 	 * Ucastnici ve skupine
+	 *
 	 * @OneToMany(targetEntity="Participant", mappedBy="group", cascade={"persist"})
 	 * @var Participant[]|ArrayCollection
 	 **/
@@ -110,6 +146,7 @@ class Group
 
 	/**
 	 * Vedouci skupiny (18+)
+	 *
 	 * @ManyToOne(targetEntity="Participant", cascade={"persist"})
 	 * @JoinColumn(name="boss_id", referencedColumnName="id")
 	 * @var Participant
@@ -192,6 +229,13 @@ class Group
 	}
 
 
+	/**
+	 * Vrátí účastníky kteřé mohou být šéfem
+	 *
+	 * @param null $inDate
+	 *
+	 * @return array
+	 */
 	public function getPossibleBosses($inDate = null)
 	{
 		$bosses = [];
@@ -224,6 +268,8 @@ class Group
 	{
 		$this->participants->add($participant);
 		$participant->setGroup($this);
+
+		$this->updateStatus();
 	}
 
 
@@ -251,6 +297,8 @@ class Group
 
 		$participant->setGroup(null);
 		$this->participants->remove($participant);
+
+		$this->updateStatus();
 	}
 
 
@@ -260,7 +308,7 @@ class Group
 	 */
 	public function isConfirmed()
 	{
-		return $this->getConfirmedParticipantsCount() > 0;
+		return (bool) $this->confirmed;
 	}
 
 
@@ -270,7 +318,7 @@ class Group
 	 */
 	public function isPaid()
 	{
-		return $this->isConfirmed() && $this->getConfirmedParticipantsCount() == $this->getConfirmedParticipantsCountByStatus('paid');
+		return (bool) $this->paid;
 	}
 
 
@@ -280,7 +328,7 @@ class Group
 	 */
 	public function isArrived()
 	{
-		return $this->isConfirmed() && $this->getConfirmedParticipantsCount() == $this->getConfirmedParticipantsCountByStatus('arrived');
+		return (bool) $this->arrived;
 	}
 
 
@@ -290,70 +338,39 @@ class Group
 	 */
 	public function isLeft()
 	{
-		return $this->isConfirmed() && $this->getConfirmedParticipantsCount() == $this->getConfirmedParticipantsCountByStatus('left');
+		return (bool) $this->left;
 	}
 
-//    /**
-//     * Je preplaceno?
-//     * Zaplaceno i za ucastniky kteri se nezucastni
-//     * @return bool
-//     */
-//    public function isOverPaid() {
-//        return  $this->getParticipantsCountByStatus('paid') > $this->getConfirmedParticipantsCountByStatus('paid');
-//    }
 
-	/**
-	 * Je zaplaceno alespon castecne?
-	 * Zaplaceno za cast skupiny ale ne za vsechny
-	 * @return bool
-	 */
-	public function isPartlyPaid()
-	{
-		return $this->getConfirmedParticipantsCountByStatus('paid') > 0 && !$this->isPaid();
-	}
-
-//    /**
-//     * Neni zaplaceno za nikoho
-//     * Nebylo jeste placeno vubec za nikoho
-//     * @return bool
-//     */
-//    public function isNotPaid() {
-//        return $this->getParticipantsCountByStatus('paid') == 0;
-//    }
-
-//    /**
-//     * Kolik je preplacenych mist
-//     * @return int
-//     * @deprecated
-//     */
-//    public function getOverPaidPlaces() {
-//        return 0;
-////        return max(0, $this->paidFor - $this->getConfirmedParticipantsCountByStatus('paid'));
-//    }
 
 	/**
 	 * Vrati aktivini ucastniky (se kteryma se pocita ze prijedou)
-	 * @return \Doctrine\Common\Collections\Collection|Participant[]
+	 *
+	 * @return Participant[]
 	 */
 	public function getConfirmedParticipants()
 	{
-		$criteria = Criteria::create();
-		$criteria->where(Criteria::expr()->eq('confirmed', true));
 
-		return $this->participants->matching($criteria);
+		$participants = $this->participants->filter(function(Participant $participant) {
+			return $participant->isConfirmed();
+		})->toArray();
+
+		return $participants;
 	}
 
 
 	/**
 	 * Vrati neaktivini ucastniky (kteri neprijedou)
+	 *
 	 * @return \Doctrine\Common\Collections\Collection|Participant[]
 	 */
 	public function getUnconfirmedParticipants()
 	{
-		$criteria = Criteria::create();
-		$criteria->where(Criteria::expr()->eq('confirmed', false));
+		$participants = $this->participants->filter(function(Participant $participant) {
+			return !$participant->isConfirmed();
+		})->toArray();
 
-		return $this->participants->matching($criteria);
+		return $participants;
 	}
 
 
@@ -363,65 +380,10 @@ class Group
 	 */
 	public function getConfirmedParticipantsCount()
 	{
-		return $this->getConfirmedParticipants()->count();
+		return count($this->getConfirmedParticipants());
 	}
 
 
-	protected function getParticipantsByStatus($status, $value = true)
-	{
-		if (!in_array($status, ['confirmed', 'paid', 'arrived', 'left']))
-		{
-			throw new \InvalidArgumentException("Wrong status name");
-		}
-
-		$criteria = Criteria::create();
-		$criteria->where(Criteria::expr()->eq($status, $value));
-
-		return $this->participants->matching($criteria);
-	}
-
-
-	protected function getParticipantsCouuntByStatus($status, $value = true)
-	{
-		return $this->getParticipantsByStatus($status, $value)->count();
-	}
-
-
-	/**
-	 * Vrati vsechny platne ucastniky, kteri jsou ve stavu $status
-	 *
-	 * @param      $status
-	 * @param bool $value
-	 *
-	 * @return mixed
-	 */
-	protected function getConfirmedParticipantsByStatus($status, $value = true)
-	{
-		if (!in_array($status, ['paid', 'arrived', 'left']))
-		{
-			throw new \InvalidArgumentException("Wrong status name");
-		}
-
-		$criteria = Criteria::create();
-		$criteria->where(Criteria::expr()->eq('confirmed', true))
-				 ->andWhere(Criteria::expr()->eq($status, $value));
-
-		return $this->participants->matching($criteria);
-	}
-
-
-	/**
-	 * Vrati pocet vsech platnych ucastniku, kteri jsou ve stavu $status
-	 *
-	 * @param      $status
-	 * @param bool $value
-	 *
-	 * @return mixed
-	 */
-	protected function getConfirmedParticipantsCountByStatus($status, $value = true)
-	{
-		return $this->getConfirmedParticipantsByStatus($status, $value)->count();
-	}
 
 
 	/**
@@ -483,9 +445,12 @@ class Group
 	}
 
 
+	/**
+	 * @return int|null
+	 */
 	public function getVarSymbol()
 	{
-		return self::getVarSymbolFromId($this->id);
+		return self::getVarSymbolFromId($this->getId());
 	}
 
 
@@ -542,5 +507,27 @@ class Group
 		return (int) $id;
 	}
 
+
+	/**
+	 * Skupině se aktualizuje stav podle stavu všech členů
+	 */
+	public function updateStatus()
+	{
+		$participants = $this->getConfirmedParticipants();
+		$confirmed = !empty($participants);
+
+		$paid = $arrived = $left = $confirmed;
+		foreach ($participants as $participant)
+		{
+			$paid &= $participant->isPaid();
+			$arrived &= $participant->isArrived();
+			$left &= $participant->isLeft();
+		}
+
+		$this->confirmed = $confirmed;
+		$this->paid = $paid;
+		$this->arrived = $arrived;
+		$this->left = $left;
+	}
 
 }

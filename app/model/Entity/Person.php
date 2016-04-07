@@ -318,6 +318,40 @@ abstract class Person
 
 
 	/**
+	 * @return bool
+	 */
+	public function isConfirmed()
+	{
+		return (bool) $this->confirmed;
+	}
+
+
+	/**
+	 * @return bool
+	 */
+	public function isPaid()
+	{
+		return (bool) $this->paid;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isArrived()
+	{
+		return (bool) $this->arrived;
+	}
+
+
+	/**
+	 * @return bool
+	 */
+	public function isLeft()
+	{
+		return (bool) $this->left;
+	}
+
+	/**
 	 * Vrati objekt s nette identitou
 	 */
 	public function toIdentity()

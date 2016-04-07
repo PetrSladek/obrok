@@ -78,35 +78,6 @@
                         </h4>
                     </div>
 
-                    {*<div class="col-md-3">
-                        <h4>
-                            <small>Stav</small>
-                            <div class="btn-group" n:snippet="status">
-                                <a class="btn btn-large btn-block disabled" href="#">
-                                    <span class="ficon ficon-participant-status-{$item->getStatus()->id}"></span>
-                                    {!$item->getStatus()->name}
-                                    <span class="caret"></span>
-                                </a>
-                            </div>
-                        </h4>
-                        {snippet history}
-                        {foreach $item->getStatusHistory() as $history}
-                        {if $iterator->getCounter() < 6}
-                        <div class="ficon ficon-participant-status-{$history->status} cls">
-                            {$item->getMapper()->statuses[$history->status]->name}
-                            <small class="tipsy flt-r" title="{$history->date->format('j.n.Y H:i:s')}">[ {$history->date->format('j.n. v H:i')} ]</small>
-                        </div>
-                        {/if}
-                        {if $iterator->getCounter() >= 6}
-                            {if $iterator->getCounter() == 6}<div class="iconlist">{/if}
-                            <span class="ficon ficon-participant-status-{$history->status} tipsy" title="{$item->getMapper()->statuses[$history->status]->name} [ {$history->date->format('j.n.Y v H:i')} ]">
-                            </span>
-                            {if $iterator->isLast()}</div>{/if}
-                        {/if}
-                        {/foreach}
-                        {/snippet}
-                    </div>*}
-
 
                 </div>
                 <div class="row">

@@ -82,36 +82,13 @@
 <div class="row">
     <div class="col-md-12">
     <h4>Účastníci ve skupině</h4>
-    {*<p>Po odebrání účastníka ho můžete kdykoli vrátit, nebo vyměnit za někoho jiného</p>*}
-
-    {*{if $group->isPartlyPaid() > 0}
-    <div class="row">
-    <div class="col-md-12">
-        <br />
-        <div class="alert alert-danger">
-            <strong>Máte ve skupině
-            {if $group->getParticipantsCount() == 0 || $group->getParticipantsCount() >= 5}
-                {$group->getParticipantsCount()} účastníků
-            {elseif $group->getParticipantsCount() == 0}
-                {$group->getParticipantsCount()} učastníka
-            {else}
-                {$group->getParticipantsCount()} učastníky
-            {/if}
-                , ale zaplatili jste jen za {$group->getPaidFor()}!
-            </strong><br />
-            Musíte některé účastníky ze skupiny odebrat, nebo doplatit zbytek peněz!<br />
-            Účastníky můžete v rámci zaplaceného počtu kdykoliv vyměnit, ale nemůže jich být víc než máte zaplaceno<br />
-        </div>
-    </div>
-    </div>
-    {/if}*}
 
     {snippet participants}
         <div class="participants">
             <table class="table table-bordered" id="participants">
                 <tbody>
                 {define #row}
-                    <tr n:class="$group->isPaid() ? cell-flag-green : ($group->isConfirmed() ? cell-flag-blue)" id="pariticpant-{$participant->id}">
+                    <tr n:class="$participant->isPaid() ? cell-flag-green : ($participant->isConfirmed() ? '')" id="pariticpant-{$participant->id}">
                         <td>
                             {$participant->fullname}<br />
                             <small>

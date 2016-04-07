@@ -100,6 +100,8 @@ class Participant extends Person
 
 
 	/**
+	 * Nastavi účasníka jako potvrzeného
+	 *
 	 * @param bool $confirmed
 	 *
 	 * @return $this
@@ -110,14 +112,11 @@ class Participant extends Person
 		if ($confirmed == false)
 		{
 			$this->confirmed = false;
-			$this->paid = false;
-			$this->arrived = false;
-			$this->left = false;
 
-			if ($this->getGroup()->getBoss() === $this)
+			if ($this->group->isBoss($this))
 			{
-				$this->getGroup()->setBoss(null); // zrusime ho jako sefa
-				$this->getGroup()->tryDefineBoss(); // zkusime najit jinyho vhodnyho
+				$this->group->setBoss(null); // zrusime ho jako sefa
+				$this->group->tryDefineBoss(); // zkusime najit jinyho vhodnyho
 			}
 		}
 		else
@@ -125,9 +124,58 @@ class Participant extends Person
 			$this->confirmed = true;
 		}
 
+
+		$this->group->updateStatus();
+
 		return $this;
 	}
 
+
+	/**
+	 * Nastaví účastníka jako zaplaceného
+	 *
+	 * @param bool $paid
+	 *
+	 * @return $this
+	 */
+	public function setPaid($paid = true)
+	{
+		$this->paid = $paid;
+		$this->group->updateStatus();
+
+		return $this;
+	}
+
+	/**
+	 * Nastaví účastníka jako přijetého
+	 *
+	 * @param bool $arrived
+	 *
+	 * @return $this
+	 */
+	public function setArrived($arrived = true)
+	{
+		$this->arrived = $arrived;
+		$this->group->updateStatus();
+
+		return $this;
+	}
+
+
+	/**
+	 * Nastaví účastníka jako odjetého
+	 *
+	 * @param bool $left
+	 *
+	 * @return $this
+	 */
+	public function setLeft($left = true)
+	{
+		$this->left = $left;
+		$this->group->updateStatus();
+
+		return $this;
+	}
 
 	/**
 	 * @param Program $program

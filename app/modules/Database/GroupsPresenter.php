@@ -237,22 +237,22 @@ class GroupsPresenter extends DatabaseBasePresenter
 			{
 				$query->searchRegion($val);
 			}
-//			elseif ($key == 'confirmed')
-//			{
-//				$val ? $query->onlyConfirmed() : $query->onlyNotConfirmed();
-//			}
-//			elseif ($key == 'paid')
-//			{
-//				$val ? $query->onlyPaid() : $query->onlyNotPaid();
-//			}
-//			elseif ($key == 'arrived')
-//			{
-//				$val ? $query->onlyArrived() : $query->onlyNotArrived();
-//			}
-//			elseif ($key == 'left')
-//			{
-//				$val ? $query->onlyLeft() : $query->onlyNotLeft();
-//			}
+			elseif ($key == 'confirmed')
+			{
+				$val ? $query->onlyConfirmed() : $query->onlyNotConfirmed();
+			}
+			elseif ($key == 'paid')
+			{
+				$val ? $query->onlyPaid() : $query->onlyNotPaid();
+			}
+			elseif ($key == 'arrived')
+			{
+				$val ? $query->onlyArrived() : $query->onlyNotArrived();
+			}
+			elseif ($key == 'left')
+			{
+				$val ? $query->onlyLeft() : $query->onlyNotLeft();
+			}
 		}
 
 		return $query;
@@ -579,6 +579,8 @@ class GroupsPresenter extends DatabaseBasePresenter
 
 		$this->redrawControl('flags');
 		$this->redrawControl('participants');
+		$this->redrawControl('canceled-participants');
+
 		if (!$this->isAjax())
 		{
 			$this->redirect('this');
@@ -629,6 +631,8 @@ class GroupsPresenter extends DatabaseBasePresenter
 
 		$this->redrawControl('flags');
 		$this->redrawControl('participants');
+		$this->redrawControl('canceled-participants');
+
 		if (!$this->isAjax())
 		{
 			$this->redirect('this');

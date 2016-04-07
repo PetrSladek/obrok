@@ -104,6 +104,8 @@ class GroupsQuery extends BaseQuery
 	/**
 	 * Najde pouze potvrzene
 	 *
+	 * (maji alespon jednoho potvrzeneho ucastnika)
+	 *
 	 * @return $this
 	 */
 	public function onlyConfirmed()
@@ -111,10 +113,28 @@ class GroupsQuery extends BaseQuery
 
 		$this->filter[] = function (QueryBuilder $qb)
 		{
-			$qb->innerJoin('g.participants', 'p')
-			   ->andWhere('p.confirmed = :confirmed')
-			   ->andHaving('COUNT(p.id) > 0')
+			$qb->andWhere('g.confirmed = :confirmed')
 			   ->setParameter('confirmed', true);
+		};
+
+		return $this;
+	}
+
+
+	/**
+	 * Najde pouze ne potvrzene
+	 *
+	 * (nemaji zadneho potvrzeneho ucastnika)
+	 *
+	 * @return $this
+	 */
+	public function onlyNotConfirmed()
+	{
+
+		$this->filter[] = function (QueryBuilder $qb)
+		{
+			$qb->andWhere('g.confirmed = :confirmed')
+			   ->setParameter('confirmed', false);
 		};
 
 		return $this;
@@ -131,10 +151,26 @@ class GroupsQuery extends BaseQuery
 
 		$this->filter[] = function (QueryBuilder $qb)
 		{
-			$qb->innerJoin('g.participants', 'p')
-			   ->andWhere('p.confirmed = :confirmed')
-			   ->andHaving('SUM(p.confirmed) = SUM(p.paid)')
-			   ->setParameter('confirmed', true);
+			$qb->andWhere('g.paid = :paid')
+			   ->setParameter('paid', true);
+		};
+
+		return $this;
+	}
+
+
+	/**
+	 * Najde pouze nezaplacene zaplacene
+	 *
+	 * @return $this
+	 */
+	public function onlyNotPaid()
+	{
+
+		$this->filter[] = function (QueryBuilder $qb)
+		{
+			$qb->andWhere('g.paid = :paid')
+			   ->setParameter('paid', false);
 		};
 
 		return $this;
@@ -151,10 +187,25 @@ class GroupsQuery extends BaseQuery
 
 		$this->filter[] = function (QueryBuilder $qb)
 		{
-			$qb->innerJoin('g.participants', 'p')
-			   ->andWhere('p.confirmed = :confirmed')
-			   ->andHaving('SUM(p.confirmed) = SUM(p.arrived)')
-			   ->setParameter('confirmed', true);
+			$qb->andWhere('g.arrived = :arrived')
+			   ->setParameter('arrived', true);
+		};
+
+		return $this;
+	}
+
+	/**
+	 * Najde pouze neprijete
+	 *
+	 * @return $this
+	 */
+	public function onlyNotArrived()
+	{
+
+		$this->filter[] = function (QueryBuilder $qb)
+		{
+			$qb->andWhere('g.arrived = :arrived')
+			   ->setParameter('arrived', false);
 		};
 
 		return $this;
@@ -170,10 +221,24 @@ class GroupsQuery extends BaseQuery
 
 		$this->filter[] = function (QueryBuilder $qb)
 		{
-			$qb->innerJoin('g.participants', 'p')
-			   ->andWhere('p.confirmed = :confirmed')
-			   ->andHaving('SUM(p.confirmed) = SUM(p.left)')
-			   ->setParameter('confirmed', true);
+			$qb->andWhere('g.left = :left')
+			   ->setParameter('left', true);
+		};
+
+		return $this;
+	}
+
+	/**
+	 * Najde pouze neodjete
+	 * @return $this
+	 */
+	public function onlyNotLeft()
+	{
+
+		$this->filter[] = function (QueryBuilder $qb)
+		{
+			$qb->andWhere('g.left = :left')
+			   ->setParameter('left', false);
 		};
 
 		return $this;
