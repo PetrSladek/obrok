@@ -18,8 +18,6 @@ use Kdyby\Doctrine\EntityRepository;
 class HomepagePresenter extends ServiceteamAuthBasePresenter
 {
 
-	use TImagePipe;
-
 	/** @var ImageService @inject */
 	public $images;
 

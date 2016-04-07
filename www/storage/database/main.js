@@ -13,10 +13,10 @@ $(function(){
 
     $.nette.ext('fadeSnippets', {
         start: function (xhr, settings) {
-            $("#snippet--content").fadeTo("slow", 0.5);
+            $("#snippet--content").stop().fadeTo("slow", 0.5);
         },
         complete: function () {
-            $("#snippet--content").fadeTo("slow", 1);
+            $("#snippet--content").stop().fadeTo("slow", 1);
         }
     }, {
         snippets: {}
@@ -162,28 +162,6 @@ $(function(){
 
     $.nette.init();
 
-    //$(document).on('click', '.sidebar-handle', function(event) {
-    //    event.preventDefault();
-    //    toogleSidebar();
-    //});
-    //
-    //toogleSidebar = function () {
-    //
-    //    $('.sidebar').toggleClass('extended').toggleClass('retracted');
-    //    $('.wrapper').toggleClass('extended').toggleClass('retracted');
-    //
-    //    if ($('.sidebar').is('.retracted')){
-    //        $.cookie('protonSidebar', 'retracted', {
-    //            expires: 7,
-    //            path: '/'
-    //        });
-    //    } else {
-    //        $.cookie('protonSidebar', 'extended', {
-    //            expires: 7,
-    //            path: '/'
-    //        });
-    //    }
-    //},
 
 
 
