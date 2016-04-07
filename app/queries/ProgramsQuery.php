@@ -8,6 +8,7 @@ use App\Model\Entity\Program;
 use App\Model\Entity\ProgramSection;
 use App\Model\Entity\Serviceteam;
 use App\Model\Entity\Team;
+use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Kdyby\Doctrine\QueryObject;
 use Kdyby\Persistence\Queryable;
@@ -89,8 +90,7 @@ class ProgramsQuery extends BaseQuery
 	{
 		$this->filter[] = function (QueryBuilder $qb)
 		{
-			$qb->leftJoin('p.attendees', 'a')
-			   ->andHaving('COUNT(a.id) < p.capacity');
+			$qb->andWhere('SIZE(p.attendees) < p.capacity');
 		};
 
 		return $this;
@@ -106,8 +106,7 @@ class ProgramsQuery extends BaseQuery
 	{
 		$this->filter[] = function (QueryBuilder $qb)
 		{
-			$qb->leftJoin('p.attendees', 'a')
-			   ->andHaving('COUNT(a.id) >= p.capacity');
+			$qb->andWhere('SIZE(p.attendees) >= p.capacity');
 		};
 
 		return $this;
