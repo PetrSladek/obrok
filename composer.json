@@ -31,7 +31,8 @@
 		"beberlei/DoctrineExtensions": "^1.0",
 		"vojtech-dobes/nette-ajax-history": "^2.0",
 		"webchemistry/images": "2.0",
-		"brabijan/images": "^1.0"
+		"brabijan/images": "^1.0",
+		"dg/adminer-custom": "^1.7"
 	},
 	"require-dev": {
 		"nette/tester": "~1.4"

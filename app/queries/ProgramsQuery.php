@@ -73,7 +73,7 @@ class ProgramsQuery extends BaseQuery
 		$this->filter[] = function (QueryBuilder $qb) use ($name)
 		{
 			$qb
-				->andWhere('CONCAT( CONCAT(IFNULL(p.name, \'\'), \' \'), IFNULL(p.lector, \'\')) LIKE :name')
+				->andWhere('CONCAT(CONCAT(IFNULL(p.name, \'\'), \' \'), IFNULL(p.lector, \'\')) LIKE :name')
 				->setParameter('name', "%$name%");
 		};
 
