@@ -13,12 +13,25 @@ use Nette,
  */
 class RouterFactory
 {
+    /**
+     * Jsme na https?
+     *
+     * @return bool
+     */
+    private static function isSecure() {
+        return (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+                || $_SERVER['SERVER_PORT'] == 443;
+    }
 
 	/**
 	 * @return Nette\Application\IRouter
 	 */
 	public static function createRouter()
 	{
+        if (self::isSecure())
+        {
+            Route::$defaultFlags |= Route::SECURED;
+        }
 
 		$router = new RouteList();
 		$router[] = new Route('index.php', 'Front:Login:default', Route::ONE_WAY);
