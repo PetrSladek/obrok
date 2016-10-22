@@ -152,6 +152,7 @@ class ServiceteamForm extends Control
 
 		$frm->addCroppie('avatar', 'Fotka')
 			->setImageUrl($this->person->getAvatar() ? $this->imageService->getImageUrl($this->person->getAvatar()) : null)
+            ->setEmptyImageUrl($this->imageService->getImageUrl($this->person->isMale() ? 'avatar_boy.jpg' : 'avatar_girl.jpg'))
 			->setDefaultValue($this->person->getAvatarCrop() ?: null);
 
 

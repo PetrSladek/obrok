@@ -102,8 +102,8 @@
 <div class="navbar navbar-default navbar-fixed-top" role="navigation">
 	<div class="container">
 		<div class="navbar-header">
-			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
-			<a href="index.html" class="navbar-left"><img src="/assets/img/Obrok_logo_2.png" alt="Obrok_logo" id="logo_menu"></a> </div>
+		<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
+		<a href="index.html" class="navbar-left"><img src="/assets/img/Obrok_logo_2.png" alt="Obrok_logo" id="logo_menu"></a> </div>
 		<div class="navbar-collapse collapse">
 			<ul class="nav navbar-nav navbar-right">
 
@@ -111,12 +111,12 @@
                     <li class="active"><a href="index.html">Home</a></li>
                    -->
 
-				<li><a href="index.html#informace">Info</a></li>
-				<li><a href="index.html#kontakty">Kontakty</a></li>
-				<li><a href="index.html#partneri">Partneři</a></li>
-				<!-- <li><a href="http://registrace.obrok17.cz">Registrace</a></li>-->
-				<li><a href="faq.html">FAQ</a></li>
-				<li><a href="tym.html">Náš tým</a></li>
+				<li><a href="http://www.obrok17.cz/index.html#informace">Info</a></li>
+				<li><a href="http://www.obrok17.cz/index.html#kontakty">Kontakty</a></li>
+				<li><a href="http://www.obrok17.cz/index.html#partneri">Partneři</a></li>
+				<li class="active"><a href="{link //Homepage:}">Registrace</a></li>
+				<li><a href="http://www.obrok17.cz/faq.html">FAQ</a></li>
+				<li><a href="http://www.obrok17.cz/tym.html">Náš tým</a></li>
 			</ul>
 		</div>
 		<!--/.nav-collapse-->
@@ -124,10 +124,10 @@
 </div>
 <div id="headerwrap">
 	<div id="headerwrap_logo">
-		<div class="container">
-			<div class="row"><img src="/assets/img/Obrok_logo_velke.png" alt="Obrok_logo_velke" id="logo"></div>
-			<!--/row-->
-		</div>
+		{*<div class="container">*}
+			{*<div class="row"><img src="/assets/img/Obrok_logo_velke.png" alt="Obrok_logo_velke" id="logo"></div>*}
+			{*<!--/row-->*}
+		{*</div>*}
 		<!-- /container-->
 	</div>
 </div>
@@ -174,6 +174,94 @@
 		</div>
 	</div>
 </section>
+
+
+<section id="odpocetBox">
+	<div class="container">
+		{*<div class="col-lg-12 text-center">*}
+             {*<h2 class="section-heading tmavy">7.–11. 6. 2017<br>Trutnov</h2>*}
+        {*</div>*}
+		<div class="col-lg-12 text-center">
+			<script>
+				var vterina = 1000;
+				var minuta = vterina * 60;
+				var hodina = minuta * 60;
+				var den = hodina * 24;
+				var rok = den * 365.24219;
+
+				var slova = {
+					roku: ["rok", "roky", "let"],
+					dnu: ["den", "dny", "dnů"],
+					hodin: ["hodina", "hodiny", "hodin"],
+					minut: ["minuta", "minuty", "minut"],
+					vterin: ["vteřina", "vteřiny", "vteřin"]
+				};
+
+				function sklonovani(pocet, co) {
+					if (pocet == 1) return slova[co][0];
+					if (pocet < 5 && pocet > 0) return slova[co][1];
+					return slova[co][2];
+				}
+
+				function odpocet(el) {
+					var konec = new Date(el.getAttribute("data-konec"));
+					var ted = new Date();
+					var rozdil = konec - ted;
+					if (rozdil < vterina) {
+						el.innerHTML = el.getAttribute("data-hlaska");
+						return;
+					}
+					var zbyva = {
+						roku: Math.floor(rozdil / rok),
+						dnu: Math.floor(rozdil % rok / den),
+						hodin: Math.floor((rozdil % den) / hodina),
+						minut: Math.floor((rozdil % hodina) / minuta),
+						vterin: Math.floor((rozdil % minuta) / vterina)
+					}
+
+					var vypis = el.getAttribute("data-zbyva");
+					for (co in zbyva) {
+						var pocet = zbyva[co];
+						if (pocet > 0) vypis += " " + pocet + "&nbsp;" + sklonovani(pocet, co);
+
+					}
+
+					el.innerHTML = vypis;
+					setTimeout(function() {
+						odpocet(el);
+					}, vterina);
+				}
+			</script> <br>
+			<h2 class="section-heading tmavy mensi" style="color: white;">Do Obroku 2017 zbývá:</h2>
+			<p style="color: white;" id="odpocet" data-konec="7/6/2017 14:00:00" data-hlaska="Obrok právě probíhá" data-zbyva=""></p>
+			<script>
+				odpocet(document.getElementById('odpocet'));
+			</script>
+		</div>
+	</div>
+</section>
+
+<div id="footerwrap">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-4">
+				<p class="zapati doleva"> <a href="https://www.facebook.com/skautskyobrok/" target="_blank" class="tmavy"><i class="fa fa-facebook fa-lg"></i></a>&nbsp; <a href="https://www.instagram.com/obrok_official/" target="_blank" class="tmavy"><i class="fa fa-instagram fa-lg"></i></a>&nbsp; <a href="https://twitter.com/obrok_official" target="_blank" class="tmavy"><i class="fa fa-twitter fa-lg"></i></a><br>
+					<a href="mailto:info@obrok17.cz" class="tmavy">info@obrok17.cz</a></p>
+			</div>
+			<div class="col-lg-4 centered"> <a class="nahoru" href="#headerwrap"><img src="/assets/img/up.png" class="nahoru" alt="nahoru"></a> </div>
+			<div style="float: right; both: right;"><p class="doprava"><a class="logoskaut" href="http://www.skaut.cz/"><img src="/assets/img/SKAUT_horizontalni_logo_modre.png" class="logoskaut" alt="logo_skaut"></a></p>
+			</div>
+			<a href="http://www.toplist.cz/"><script language="JavaScript" type="text/javascript">
+					<!--
+					document.write('<img src="https://toplist.cz/count.asp?id=1723549&http='+escape(document.referrer)+'&t='+escape(document.title)+
+							'&wi='+escape(window.screen.width)+'&he='+escape(window.screen.height)+'&cd='+escape(window.screen.colorDepth)+'" width="0" height="0" border=0 alt="TOPlist" />');
+					//--></script><noscript><img src="https://toplist.cz/count.asp?id=1723549"
+												 alt="TOPlist" id="toplist" /></noscript></a>
+		</div>
+	</div>
+</div>
+<!--/footerwrap-->
+
 <!-- Bootstrap core JavaScript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
