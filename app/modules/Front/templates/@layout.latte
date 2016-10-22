@@ -11,32 +11,6 @@
 	<title>{ifset $title}{$title} | {/ifset} Registrační systém Servis týmu | Obrok 2015</title>
 
 
-
-
-	<link rel="apple-touch-icon" sizes="180x180" href="assets/favikony/apple-touch-icon.png">
-	<link rel="icon" type="image/png" href="assets/favikony/favicon-32x32.png" sizes="32x32">
-	<link rel="icon" type="image/png" href="assets/favikony/favicon-16x16.png" sizes="16x16">
-	<link rel="manifest" href="assets/favikony/manifest.json">
-	<link rel="mask-icon" href="assets/favikony/safari-pinned-tab.svg" color="#ffffff">
-	<link rel="shortcut icon" href="assets/favikony/favicon.ico">
-	<meta name="msapplication-config" content="assets/favikony/browserconfig.xml">
-	<meta name="theme-color" content="#ffffff">
-	<title>Obrok 2017</title>
-
-	<!-- Bootstrap core CSS-->
-	<link href="assets/css/bootstrap.css" rel="stylesheet">
-
-	<!-- Font import-->
-	<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
-
-	<!-- Custom styles for this template-->
-	<link href="assets/css/style.css" rel="stylesheet">
-	<link href="assets/css/font-awesome.min.css" rel="stylesheet">
-	<link href="src/css/swipebox.css" rel="stylesheet" >
-
-
-
-
 	<link rel="image_src" href="/assets/img/nahled.jpg"/>
 	<meta property="og:image" content="/assets/img/nahled.jpg" />
 	<meta property="og:locale" content="cs_CZ"/>
@@ -75,15 +49,6 @@
 	<link href="{$storageUrl}/database/vendor/bootstrap-multiselect.css" rel="stylesheet">
 	<script src="{$storageUrl}/database/vendor/bootstrap-multiselect.js" type="text/javascript"></script>
 
-	{*<link href="{$storageUrl}/database/vendor/qqUploader.css" rel="stylesheet">*}
-	{*<script src="{$storageUrl}/database/vendor/qqUploader.js" type="text/javascript"></script>*}
-
-	{*<link href="{$storageUrl}/database/vendor/jquery.jcrop/jquery.jcrop.css" rel="stylesheet">*}
-	{*<script src="{$storageUrl}/database/vendor/jquery.jcrop/jquery.jcrop.js" type="text/javascript"></script>*}
-
-	{*<script src="{$storageUrl}/database/vendor/myann/formcontrols.cropimage.js" type="text/javascript"></script>*}
-
-
 	<script src="//maps.googleapis.com/maps/api/js?libraries=places&sensor=false"></script>
 
 	<script src="{$storageUrl}/serviceteam/js/jquery.scrollTo.min.js" type="text/javascript"></script>
@@ -96,9 +61,6 @@
 
 	<link href="{$storageUrl}/serviceteam/css/datetimepicker.css" type="text/css" rel="stylesheet">
 
-	{*<link href='http://fonts.googleapis.com/css?family=PT+Sans+Narrow:400,700&amp;subset=latin,latin-ext,cyrillic' rel='stylesheet' type='text/css'>*}
-	<link rel="shortcut icon" href="/favicon.png" type="image/x-icon"/>
-
 	<script type="text/javascript">
 		$(function () {
 			$.nette.init();
@@ -106,138 +68,112 @@
 	</script>
 
 	{block head}{/block}
+
 	<!-- Custom styles for this template -->
-	<link href="{$storageUrl}/serviceteam/css/main.css" rel="stylesheet">
+	{*<link href="{$storageUrl}/serviceteam/css/main.css" rel="stylesheet">*}
+	<link rel="apple-touch-icon" sizes="180x180" href="/assets/favikony/apple-touch-icon.png">
+	<link rel="icon" type="image/png" href="/assets/favikony/favicon-32x32.png" sizes="32x32">
+	<link rel="icon" type="image/png" href="/assets/favikony/favicon-16x16.png" sizes="16x16">
+	<link rel="manifest" href="/assets/favikony/manifest.json">
+	<link rel="mask-icon" href="/assets/favikony/safari-pinned-tab.svg" color="#ffffff">
+	<link rel="shortcut icon" href="/assets/favikony/favicon.ico">
+	<meta name="msapplication-config" content="assets/favikony/browserconfig.xml">
+	<meta name="theme-color" content="#ffffff">
+	<title>Obrok 2017</title>
+
+	<!-- Bootstrap core CSS-->
+	<link href="/assets/css/bootstrap.css" rel="stylesheet">
+
+	<!-- Font import-->
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+
+	<!-- Custom styles for this template-->
+	<link href="/assets/css/style.css" rel="stylesheet">
+	<link href="/assets/css/reg-style.css" rel="stylesheet">
+	<link href="/assets/css/font-awesome.min.css" rel="stylesheet">
 
 </head>
 <!-- NAVBAR
 ================================================== -->
 <body>
-<div class="page">
 
-	<div class="navbar" role="navigation">
-		<div class="container">
-			<div class="navbar-header">
-				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-					<span class="sr-only">Toggle navigation</span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-				</button>
-				<a class="navbar-brand" href="{plink :Front:Login:}"><img src="{$storageUrl}/serviceteam/img/logo.png"
-																		  alt="Obrok 2015"/></a>
-			</div>
-			<div class="navbar-collapse collapse">
-				<ul class="nav navbar-nav">
 
-					<li><a href="/">Úvod</a></li>
-					<li><a href="http://www.obrok15.cz/obrok15/">Info</a></li>
-					<li><a href="http://www.obrok15.cz/program/">Program</a></li>
-					<li><a href="http://www.obrok15.cz/eshop/">E-Shop</a></li>
-					<li class="active with-submenu">
-						<a href="http://www.obrok15.cz/registrace/">Registrace</a>
-						<ul class="sub-menu">
-							<li><a href="http://www.obrok15.cz/registrace/faq/">FAQ</a></li>
-							{*
-							<li n:if="$openRegistrationParticipants" n:class="$presenter->isLinkCurrent(':Participants:Registration:') ? active"><a href="{plink :Participants:Registration:}">Zaregistrovat novou skupinu</a></li>
-							<li n:class="$presenter->isLinkCurrent(':Participants:Homepage:') ? active"><a href="{plink :Participants:Homepage:}">Vstup do systému pro účastníky</a></li>
-							<li n:if="$openRegistrationServiceteam" n:class="$presenter->isLinkCurrent(':Serviceteam:Registration:') ? active"><a href="{plink :Serviceteam:Registration:}">Zaregistrovat se do servis týmu</a></li>
-							<li n:class="$presenter->isLinkCurrent(':Serviceteam:Homepage:') ? active"><a href="{plink :Serviceteam:Homepage:}">Vstup do systému pro servis tým</a></li>
-							*}
-						</ul>
-					</li>
-					<li><a href="http://www.obrok15.cz/download/">Download</a></li>
-					<li><a href="http://www.obrok15.cz/tym/">Tým</a></li>
-					<li><a href="http://www.obrok15.cz/press/">Press</a></li>
-					<li><a href="http://www.obrok15.cz/partneri/">Partneři</a></li>
+<!-- Static navbar-->
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+	<div class="container">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
+			<a href="index.html" class="navbar-left"><img src="/assets/img/Obrok_logo_2.png" alt="Obrok_logo" id="logo_menu"></a> </div>
+		<div class="navbar-collapse collapse">
+			<ul class="nav navbar-nav navbar-right">
 
-				</ul>
-			</div>
+				<!--
+                    <li class="active"><a href="index.html">Home</a></li>
+                   -->
+
+				<li><a href="index.html#informace">Info</a></li>
+				<li><a href="index.html#kontakty">Kontakty</a></li>
+				<li><a href="index.html#partneri">Partneři</a></li>
+				<!-- <li><a href="http://registrace.obrok17.cz">Registrace</a></li>-->
+				<li><a href="faq.html">FAQ</a></li>
+				<li><a href="tym.html">Náš tým</a></li>
+			</ul>
 		</div>
+		<!--/.nav-collapse-->
 	</div>
-
-
-	<div class="content">
-		<div class="content-inner">
-
-			<div style="border-bottom: 1px solid #dddddd; margin-bottom: 20px; padding-bottom: 10px;">
-				<div class="container">
-					<div class="pull-left">
-						{block breadcrumb}
-							<ol class="breadcrumb">
-								<li class="active">Registrační systém pro účastniky</li>
-							</ol>
-						{/block}
-					</div>
-					<div class="pull-right">
-						{if $user->isLoggedIn()}
-							Přihlášen:
-							<strong>{$me->getFullname()}</strong>
-							|
-							{if $user->isInRole('serviceteam') && $user->isInRole('database')}
-								<a n:href=":Database:Dashboard:">Vstup do databáze</a>
-								|
-							{/if}
-							<a n:href="logout!">Odhlásit se</a>
-						{/if}
-					</div>
-				</div>
-			</div>
-
-			<div class="container">
-				<div class="row">
-					<div class="col-md-12">
-						{snippet flash}
-							<div n:foreach="$flashes as $flash" class="alert alert-{$flash->type}">
-								<button type="button" class="close" data-dismiss="alert">×</button>
-								{$flash->message}
-							</div>
-						{/snippet}
-
-
-						{include #content}
-					</div>
-					{*<div class="col-md-4">
-
-
-
-						 <h2 class="sidebar-title">Nadpis sidebaru</h2>
-						 <h3>Lorem ipsum</h3>
-						 <p>
-							 Your bones don't break, mine do. That's clear. Your cells react to bacteria and viruses differently than mine. You don't get sick, I do. That's also clear. But for some reason, you and I react the exact same way to water. We swallow it too fast, we choke. We get some in our lungs, we drown. However unreal it may seem, we are connected, you and I. We're on the same curve, just on opposite ends.
-						 </p>
-						 <p class="text-right">
-							 <a href="#">celý článek</a>
-						 </p>
-						 <h3>Lorem ipsum</h3>
-						 <p>
-							Your bones don't break, mine do. That's clear. Your cells react to bacteria and viruses differently than mine. You don't get sick, I do. That's also clear. But for some reason, you and I react the exact same way to water. We swallow it too fast, we choke. We get some in our lungs, we drown. However unreal it may seem, we are connected, you and I. We're on the same curve, just on opposite ends.
-						 </p>
-						 <p class="text-right">
-							<a href="#">celý článek</a>
-						 </p>
-						 <h2 class="sidebar-title">Naspis strany</h2>
-						 <h3>Lorem ipsum</h3>
-						 <p>
-							Your bones don't break, mine do. That's clear. Your cells react to bacteria and viruses differently than mine. You don't get sick, I do. That's also clear. But for some reason, you and I react the exact same way to water. We swallow it too fast, we choke. We get some in our lungs, we drown. However unreal it may seem, we are connected, you and I. We're on the same curve, just on opposite ends.
-						 </p>
-						 <p class="text-right">
-							<a href="#">celý článek</a>
-						 </p>
-					</div>*}
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<!-- FOOTER -->
-	<footer class="page-footer">
-		<!--<div class="container">
-			<p class="pull-right"><a href="#">Back to top</a></p>
-			<p>&copy; 2014 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
-		</div><!-- /.container -->
-	</footer>
 </div>
+<div id="headerwrap">
+	<div id="headerwrap_logo">
+		<div class="container">
+			<div class="row"><img src="/assets/img/Obrok_logo_velke.png" alt="Obrok_logo_velke" id="logo"></div>
+			<!--/row-->
+		</div>
+		<!-- /container-->
+	</div>
+</div>
+<!--/headerwrap-->
+
+
+<section id="registrationBox">
+	<div style="border-bottom: 1px solid #dddddd; margin-bottom: 20px; padding-bottom: 10px;">
+		<div class="container">
+			<div class="pull-left">
+				{block breadcrumb}
+					<ol class="breadcrumb">
+						<li class="active">Registrační systém</li>
+					</ol>
+				{/block}
+			</div>
+			<div class="pull-right">
+				{if $user->isLoggedIn()}
+					Přihlášen:
+					<strong>{$me->getFullname()}</strong>
+					|
+					{if $user->isInRole('serviceteam') && $user->isInRole('database')}
+						<a n:href=":Database:Dashboard:">Vstup do databáze</a>
+						|
+					{/if}
+					<a n:href="logout!">Odhlásit se</a>
+				{/if}
+			</div>
+		</div>
+	</div>
+
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				{snippet flash}
+					<div n:foreach="$flashes as $flash" class="alert alert-{$flash->type}">
+						<button type="button" class="close" data-dismiss="alert">×</button>
+						{$flash->message}
+					</div>
+				{/snippet}
+
+				{include #content}
+			</div>
+		</div>
+	</div>
+</section>
 <!-- Bootstrap core JavaScript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->

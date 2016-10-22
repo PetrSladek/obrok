@@ -1,0 +1,518 @@
+/* ==========================================================================
+   Base Styles, Bootstrap Modifications & Fonts Import
+   ========================================================================== */
+
+
+@import 'https://fonts.googleapis.com/css?family=Open+Sans';
+
+@font-face {
+    font-family: Montserrat;
+    src: url(../fonts/Montserrat-Regular.woff);
+}
+
+@font-face {
+    font-family: Montserrat;
+    src: url(../fonts/Montserrat-SemiBold.woff);
+    font-weight: bold;
+}
+
+
+/*
+ * A better looking default horizontal rule
+ */
+
+hr {
+	display: block;
+	height: 1px;
+	border: 0;
+	border-top: 1px solid #ccc;
+	margin: 1em 0;
+	padding: 0;
+}
+
+.centered {
+	text-align: center
+}
+
+.doprava {
+	text-align: right;
+}
+
+.mt {
+	margin-top: 80px;
+}
+
+.mb {
+	margin-bottom: 80px;
+}
+
+/* ==========================================================================
+   General styles
+   ========================================================================== */
+
+
+body {
+	font-family: 'Montserrat', sans-serif;
+	font-weight: 400;
+	font-size: 16px;
+	background-color: #333;
+	-webkit-font-smoothing: antialiased;
+	-webkit-overflow-scrolling: touch;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	font-weight: 700;
+	color: #FFF;
+}
+
+#logo {
+	max-width: 80%;
+	height: auto;
+}
+
+@media (min-width: 721px) and (max-width: 1366px) {
+#logo {
+max-width: 55%;
+height: auto;
+}
+}
+
+.navbar-brand {
+	font-weight: 700;
+	font-size: 20px;
+}
+
+.navbar-default .navbar-brand {
+	color: #315198;
+}
+
+.navbar-default {
+	font-weight: 700;
+	background-color: rgba(255, 255, 255, 0.9);
+	border-color: transparent;
+}
+
+.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
+	color: #40b3cb;
+	background-color: transparent;
+	border-bottom: 2px solid #315198;
+}
+
+.navbar-default .navbar-nav > li > a {
+	color: #315198;
+}
+/* ==========================================================================
+   Wrap Sections
+   ========================================================================== */
+
+#headerwrap {
+	margin-top: 0;
+	padding-top: 0;
+	width: 100%;
+	background: linear-gradient(180deg, #315198, #40b3cb, #d64389, #dfb72b);
+	background-size: 100% 400%;
+	-webkit-animation: LogoGradient 30s ease infinite;
+	-moz-animation: LogoGradient 30s ease infinite;
+	animation: LogoGradient 30s ease infinite;
+}
+
+@-webkit-keyframes LogoGradient {
+ 0% {background-position:51% 0%}
+ 50% {background-position:50% 100%}
+ 100% {background-position:51% 0%}
+}
+@-moz-keyframes LogoGradient {
+ 0% {background-position:51% 0%}
+ 50% {background-position:50% 100%}
+ 100% {background-position:51% 0%}
+}
+@keyframes LogoGradient {
+ 0% {background-position:51% 0%}
+ 50% {background-position:50% 100%}
+ 100% {background-position:51% 0%}
+}
+
+#headerwrap_logo {
+	background: url(../img/pozadi.png) no-repeat center top;
+	margin-top: 0;
+	padding-top: 250px;
+	text-align: center;
+	background-attachment: relative;
+	background-position: center center;
+	min-height: 980px;
+	width: 100%;
+	-webkit-background-size: 100%;
+	-moz-background-size: 100%;
+	-o-background-size: 100%;
+	background-size: 100%;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+
+#headerwrap h1 {
+	padding-top: 10px;
+	padding-bottom: 20px;
+	letter-spacing: 4px;
+	font-size: 50px;
+}
+
+#headerwrap h4 {
+	font-weight: 400;
+}
+
+#toplist{
+	display:none;
+	}
+
+p.popisek {
+	font-family: Open sans, sans-serif;
+	font-size: 20px;
+	font-weight: 400;
+}
+
+p.popisek_hlavni {
+	margin-top: 15px;
+	font-size: 20px;
+	font-weight: 700;
+}
+
+p.maly{
+	font-size: 16px;
+}
+
+p.registrace {
+	line-height: 200%;
+	text-transform: none;
+	font-family: 'Montserrat', sans-serif;
+	text-transform: uppercase;
+	font-size: 50px;
+	font-style: normal;
+	font-weight: 700;
+	text-align:center;
+}
+
+p.doleva, h2.doleva {
+	text-align: left;
+}
+
+p.doprava {
+	text-align: right;
+}
+
+p.zapati{
+	margin:0;
+	padding-top: 11px;
+	}
+	
+#odpocet{
+	font-size: 30px;
+	}
+	
+@media (max-width: 992px) {
+p.zapati {
+	padding-bottom: 11px;
+	}
+}
+
+a.nahoru {
+	display: block;
+	width: 70px;
+	height: 70px;
+	margin: 0 auto;
+	margin-bottom: 5px;
+	text-align: center;
+	border-radius: 50%;
+}
+
+a.logoskaut {
+	display: block;
+	margin: 0;
+	padding: 0;
+}
+
+a.svetly, p.svetly {
+	color: #ffffff;
+}
+
+p.zapati.tmavy, a.tmavy, p.tmavy, section h2.section-heading.tmavy {
+	color: #315198;
+}
+
+#social {
+	padding-top: 50px;
+	padding-bottom: 50px;
+	background-color: #f2f2f2;
+}
+
+#social i {
+	font-size: 20px;
+	color: #4a4a4a
+}
+
+#social i:hover {
+	color: #315198
+}
+
+#footerwrap {
+	padding-top: 10px;
+	padding-bottom: 0;
+	background-color: #fff;
+}
+
+#footerwrap p {
+	color: #315198;
+	margin-left: 8px;
+}
+
+#workwrap {
+	background: url(../img/work.jpg) no-repeat center top;
+	margin-top: -70px;
+	padding-top: 300px;
+	text-align: center;
+	background-attachment: relative;
+	background-position: center center;
+	min-height: 650px;
+	width: 100%;
+	-webkit-background-size: 100%;
+	-moz-background-size: 100%;
+	-o-background-size: 100%;
+	background-size: 100%;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+
+#workwrap h1 {
+	padding-top: 10px;
+	padding-bottom: 20px;
+	letter-spacing: 4px;
+	font-size: 80px;
+	font-weight: bold;
+}
+
+#workwrap h4 {
+	font-weight: 400;
+}
+
+#program, #partneri, #nastym, #odpocetBox {
+	background: #315198; /* For browsers that do not support gradients */
+	background: -webkit-linear-gradient(#315198, #40b3cb); /* For Safari 5.1 to 6.0 */
+	background: -o-linear-gradient(#315198, #40b3cb); /* For Opera 11.1 to 12.0 */
+	background: -moz-linear-gradient(#315198, #40b3cb); /* For Firefox 3.6 to 15 */
+	background: linear-gradient(#315198, #40b3cb); /* Standard syntax */
+}
+
+#kontakty, #otazky, #informace {
+	background: #d64389; /* For browsers that do not support gradients */
+	background: -webkit-linear-gradient(#d64389, #dfb72b); /* For Safari 5.1 to 6.0 */
+	background: -o-linear-gradient(#d64389, #dfb72b); /* For Opera 11.1 to 12.0 */
+	background: -moz-linear-gradient(#d64389, #dfb72b); /* For Firefox 3.6 to 15 */
+	background: linear-gradient(#d64389, #dfb72b); /* Standard syntax */
+}
+
+ @-keyframes pulse {
+ 0% {
+background-color: #315198;
+}
+ 25% {
+background-color: #40b3cb;
+}
+ 50% {
+background-color: #d64389;
+}
+ 75% {
+background-color: #dfb72b;
+}
+ 100% {
+background-color: #315198;
+}
+
+}
+ @-ms-keyframes pulse {
+ 0% {
+background-color: #315198;
+}
+ 25% {
+background-color: #40b3cb;
+}
+ 50% {
+background-color: #d64389;
+}
+ 75% {
+background-color: #dfb72b;
+}
+ 100% {
+background-color: #315198;
+}
+
+}
+ @-webkit-keyframes pulse {
+ 0% {
+background-color: #315198;
+}
+ 25% {
+background-color: #40b3cb;
+}
+ 50% {
+background-color: #d64389;
+}
+ 75% {
+background-color: #dfb72b;
+}
+ 100% {
+background-color: #315198;
+}
+}
+
+.navbar-header {
+/*background-color: #666;*/
+}
+
+#aboutwrap {
+	background: url(../img/about.jpg) no-repeat center top;
+	margin-top: -70px;
+	padding-top: 250px;
+	text-align: center;
+	background-attachment: relative;
+	background-position: center center;
+	min-height: 550px;
+	width: 100%;
+	-webkit-background-size: 100%;
+	-moz-background-size: 100%;
+	-o-background-size: 100%;
+	background-size: 100%;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+
+/* Gallery */
+.gallery {
+	margin-top: 30px;
+	padding-top: 30px;
+	padding-bottom: 30px;
+}
+
+.gallery img:hover {
+	opacity: 0.4;
+}
+
+.galerry .portfolio-caption {
+	padding: 10px;
+}
+
+.nahoru {
+	width: 70px;
+	height: 70px;
+}
+
+.logoskaut {
+	width: 350px;
+	height: 70px;
+	padding-left: 132px;
+	margin-bottom: -15px;
+}
+
+.ikona {
+	width: 225px;
+	height: auto;
+}
+
+.bg-light-gray {
+	background-color: #f2f2f2;
+}
+
+.team-member {
+	margin-bottom: relative;
+	text-align: center;
+	padding-bottom: 50px;
+	padding-top: 50px;
+}
+
+.team-member img {
+	margin: 0 auto;
+}
+
+.team-member h4 {
+	margin-top: 20px;
+	margin-bottom: 0;
+	text-transform: none;
+}
+
+.team-member p {
+	padding: 5px 0;
+	margin-top: 0;
+}
+
+section {
+	padding: 80px 0;
+}
+
+section h2.section-heading {
+	margin-top: 0;
+	margin-bottom: 20px;
+	font-size: 50px;
+	color: #FFF;
+	text-transform: uppercase;
+}
+
+section h3.section-subheading {
+	margin-bottom: 25px;
+	text-transform: none;
+	font-family: Open sans, sans-serif;
+	font-size: 20px;
+	font-style: normal;
+	font-weight: 400;
+}
+
+iframe {
+	width: 100%;
+	height: 300px;
+	border: 0;
+}
+
+#logo_menu {
+	width: 360px;
+	height: 45px;
+	margin-top: 8px;
+}
+
+@media (max-width: 992px) {
+#logo_menu {
+	width: 280px;
+	height: 35px;
+	margin-top: 13px;
+	margin-left: 10px;
+	margin-bottom: 10px;
+}
+
+}
+
+#hithitBox{
+background-color:#fff;
+	}
+	
+@media (min-width: 721px) and (max-width: 1280px) {
+#uvod {
+	margin-top: -300px;
+}	
+
+}
+
+@media (min-width: 1281px) and (max-width: 1367px) {
+#uvod {
+	margin-top: -250px;
+
+
+}
+
+}
+
+
+.hithitVnitrek{
+
+}
