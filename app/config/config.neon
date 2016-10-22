@@ -3,8 +3,8 @@
 
 parameters:
 	app:
-		name: 'Obrok15'
-		hashKey:  #nastavit pri instalaci a pak uz nemenit (je kvuli vztvareni heshu pro zvaci url atd..)
+		name: 'Obrok17'
+		hashKey:  #nastavit pri instalaci a pak uz nemenit (je kvuli vytvareni heshu pro zvaci url atd..)
 
 		storageUrl: '/storage'
 		storageDir: %wwwDir%/storage/
