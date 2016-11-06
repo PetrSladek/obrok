@@ -11,6 +11,9 @@
 
 #registrationBox h2 {
 	color: black;
+
+	margin-left: 0;
+	margin-bottom: 10px;
 }
 
 #registrationBox a:not(.btn) {

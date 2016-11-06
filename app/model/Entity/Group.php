@@ -295,8 +295,7 @@ class Group
 			$this->setBoss(null);
 		}
 
-		$participant->setGroup(null);
-		$this->participants->remove($participant);
+		$this->participants->removeElement($participant);
 
 		$this->updateStatus();
 	}

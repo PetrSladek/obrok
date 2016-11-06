@@ -161,7 +161,7 @@ class ServiceteamForm extends Control
 			->setDefaultValue($this->person->tshirtSize)
 			->setOption('description', 'Tričko zatím bohužel úplně nemůžeme slíbit. Nicméně pravděpodobně bude :)');
 
-		$frm->addSubmit('send', 'Upravit svoje údaje')
+		$frm->addSubmit('send', 'Uložit údaje')
 			->setAttribute('class', 'btn btn-primary');
 
 		$frm->onSuccess[] = $this->processForm;
