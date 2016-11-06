@@ -46,12 +46,14 @@
 .togroup {
 	background: #F5F5F5;
 	margin: 25px 0;
+}
+
 h2 {
 	margin-left: 95px;
 	margin-top: 8px;
 	margin-bottom: 0;
 }
-}
+
 
 #frm-frmRegistration-location-search {
 	position: absolute;
@@ -97,9 +99,8 @@ h2 {
 	cursor: move;
 }
 .croppie-container .cr-slider-wrap {
-	width: 75%;
-	margin: 0 auto;
-	margin-top: 25px;
+	width: 100%;
+	margin: 25px auto;
 	text-align: center;
 }
 .croppie-result {
