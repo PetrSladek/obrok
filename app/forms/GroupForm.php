@@ -146,7 +146,7 @@ class GroupForm extends Control
 				'y' => '400',
 			]])
 			->setDefaultValue($this->group->locationLng !== null && $this->group->locationLng !== null ? [$this->group->locationLat, $this->group->locationLng] : null)
-			->setOption('description', 'Píchnete špendlík vašho kmene do mapy, a pomozte tím vytvoření Mapy českého roveringu');
+			->setOption('description', 'Píchněte špendlík vašeho kmene do mapy a pomozte tím vytvoření Mapy českého roveringu');
 
 		$frm->addSubmit('send', 'Uložit údaje skupiny')
 			->setAttribute('class', 'btn btn-primary');
