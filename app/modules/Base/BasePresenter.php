@@ -94,7 +94,7 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 		// Sablona pro emaily
 		$this->emails->setTemplate($this->createTemplate());
 
-		$this->ageInDate = DateTime::from('8.6.2015');
+		$this->ageInDate = DateTime::from('2017-07-06');
 		$this->template->ageInDate = $this->ageInDate;
 
 		$this->openRegistrationParticipants = $this->settings->get(self::OPEN_PARTICIPANTS_REGISTRATION_KEY, true); // default TRUE
