@@ -12,10 +12,10 @@ parameters:
 		webimagesCacheDir: %appDir%/../www/storage/webimages/cache/
 		webimagesCacheUrl: /storage/webimages/cache/
 
-		emailDefaultFrom: "Obrok15.cz <registrace@obrok15.cz>"
+		emailDefaultFrom: "Obrok17.cz <registrace@obrok17.cz>"
 		emailTemplateDir: %appDir%/templates/emails/
-		emailSubjectFormat: '[Obrok15.cz] %'
-		emailToRegistration: registrace@obrok15.cz
+		emailSubjectFormat: '[Obrok 2017] %'
+		emailToRegistration: registrace@obrok17.cz
 
 
 php:
