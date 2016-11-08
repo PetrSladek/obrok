@@ -177,7 +177,7 @@ $(function(){
 
 
     $('.ajax-edit').livequery(function(){
-        showEdit = true;
+        var showEdit = true;
 //        var objectId = $(this).closest('form').data('object-id');
         var ajaxEditLink = $(this).closest('form').data('edit-link');
 
@@ -253,9 +253,11 @@ $(function(){
                     showStatus('Uloženo','success');
                     $target.fadeOut(function(){
                         showEdit = true;
-                    })
-                    for(s in payload.snippets)
-                        $('#'+s).html(payload.snippets[s]);
+                    });
+                    for(var s in payload.snippets)
+                    {
+                        $('#' + s).html(payload.snippets[s]);
+                    }
 
                 } else {
                     showStatus(payload.message ? payload.message : 'Chyba','danger');

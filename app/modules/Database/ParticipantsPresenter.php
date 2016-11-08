@@ -391,7 +391,7 @@ class ParticipantsPresenter extends DatabaseBasePresenter
 			->addRule(Form::EMAIL, 'E-mailová adresa není platná')
 			->setAttribute('title', 'E-mail, který pravidelně vybíráš a můžem Tě na něm kontaktovat. Budou Ti chodit informace atd..')
 			->setAttribute('data-placement', 'right');
-		$frm->addText('phone', 'Mobilní telefon', null, 13)
+		$frm->addText('phone', 'Mobilní telefon')
 			->setDefaultValue($this->item ? $this->item->phone : null)
 			->setEmptyValue('+420')
 			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat Mobilní telefon')

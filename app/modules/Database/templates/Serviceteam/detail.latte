@@ -43,19 +43,19 @@
 							<small>spadá pod tým:</small>
 							<br/>
 							<div class="ajax-edit-val">{snippet team}{if $item->team}{$item->team->abbr} - {$item->team->name}{else}- nazařazen -{/if}{/snippet}</div>
-							<div class="ajax-edit-target" n:if="$acl->edit">{input team}</div>
+							<div class="ajax-edit-target" n:if="$acl->edit">{input team class=>'form-control'}</div>
 						</h4>
 						<h3 n:class="$acl->edit ? ajax-edit">
 							<small>do prac.skupiny</small>
 							<br/>
 							<div class="ajax-edit-val">{snippet workgroup}{if $item->workgroup}{$item->workgroup->name}{else}- nazařazen -{/if}{/snippet}</div>
-							{*<div class="ajax-edit-target" n:if="$acl->edit">{input workgroup class=>"typeahead", data-sourcelink=>$presenter->link('typehead','workgroups')}</div>*}
+							<div class="ajax-edit-target" n:if="$acl->edit">{input workgroup class=>'form-control'}</div>
 						</h3>
 						<h4 n:class="$acl->edit ? ajax-edit">
 							<small>je v pozici:</small>
 							<br/>
 							<div class="ajax-edit-val">{snippet job}{if $item->job}{$item->job->name}{else}- nazařazen -{/if}{/snippet}</div>
-							{*<div class="ajax-edit-target" n:if="$acl->edit">{input job class=>"typeahead", data-sourcelink=>$presenter->link('typehead','jobs')}</div>*}
+							<div class="ajax-edit-target" n:if="$acl->edit">{input job class=>'form-control'}</div>
 						</h4>
 					</div>
 					<div class="col-md-3">
@@ -63,13 +63,13 @@
 							<small>email</small>
 							<br/>
 							<div class="ajax-edit-val">{snippet email}{$item->email}{/snippet}</div>
-							<div class="ajax-edit-target" n:if="$acl->edit">{input email}</div>
+							<div class="ajax-edit-target" n:if="$acl->edit">{input email class=>'form-control'}</div>
 						</h4>
 						<h3 n:class="$acl->edit ? ajax-edit">
 							<small>telefon:</small>
 							<br/>
 							<div class="ajax-edit-val">{snippet phone}{$item->getPhone()|phone}{/snippet}</div>
-							<div class="ajax-edit-target" n:if="$acl->edit">{input phone}</div>
+							<div class="ajax-edit-target" n:if="$acl->edit">{input phone class=>'form-control'}</div>
 
 						</h3>
 
@@ -77,7 +77,7 @@
 							<small>z města</small>
 							<br/>
 							<div class="ajax-edit-val">{snippet addressCity}{$item->addressCity}{/snippet}</div>
-							<div class="ajax-edit-target" n:if="$acl->edit">{input addressCity}</div>
+							<div class="ajax-edit-target" n:if="$acl->edit">{input addressCity class=>'form-control'}</div>
 						</h5>
 						<h5 n:class="$acl->edit ? ajax-edit">
 							<small>věk na O15</small>
@@ -85,7 +85,7 @@
 							<div class="ajax-edit-val">{snippet birthdate}<abbr
 									title="datum narození: {$item->birthdate->format('j.n.Y')}">{$item->getAge($ageInDate)}
 									let</abbr>{/snippet}</div>
-							<div class="ajax-edit-target" n:if="$acl->edit">{input birthdate}</div>
+							<div class="ajax-edit-target" n:if="$acl->edit">{input birthdate class=>'form-control'}</div>
 						</h5>
 
 					</div>
@@ -104,7 +104,7 @@
 									<div n:class="$acl->edit ? ajax-edit, wh">
 										<div
 											class="ajax-edit-val">{snippet health}{if $item->health}{!$item->health|escape|nl2br}{else}- není -{/if}{/snippet}</div>
-										<div class="ajax-edit-target" n:if="$acl->edit">{input health}</div>
+										<div class="ajax-edit-target" n:if="$acl->edit">{input health class=>'form-control'}</div>
 									</div>
 								</td>
 							</tr>
@@ -116,7 +116,7 @@
 									<div n:class="$acl->edit ? ajax-edit, wh">
 										<div
 											class="ajax-edit-val">{snippet experience}{if $item->experience}{!$item->experience|escape|nl2br}{else}- není -{/if}{/snippet}</div>
-										<div class="ajax-edit-target" n:if="$acl->edit">{input experience}</div>
+										<div class="ajax-edit-target" n:if="$acl->edit">{input experience class=>'form-control'}</div>
 									</div>
 								</td>
 							</tr>
@@ -128,7 +128,7 @@
 									<div n:class="$acl->edit ? ajax-edit, wh">
 										<div
 											class="ajax-edit-val">{snippet note}{if $item->note}{!$item->note|escape|nl2br}{else}- není -{/if}{/snippet}</div>
-										<div class="ajax-edit-target" n:if="$acl->edit">{input note}</div>
+										<div class="ajax-edit-target" n:if="$acl->edit">{input note class=>'form-control'}</div>
 									</div>
 								</td>
 							</tr>
@@ -140,7 +140,7 @@
 									<div n:class="$acl->edit ? ajax-edit">
 										<div
 											class="ajax-edit-val">{snippet noteInternal}{if $item->noteInternal}{!$item->noteInternal|escape|nl2br}{else}- není -{/if}{/snippet}</div>
-										<div class="ajax-edit-target" n:if="$acl->edit">{input noteInternal}</div>
+										<div class="ajax-edit-target" n:if="$acl->edit">{input noteInternal class=>'form-control'}</div>
 									</div>
 								</td>
 							</tr>

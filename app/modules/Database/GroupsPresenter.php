@@ -714,9 +714,14 @@ class GroupsPresenter extends DatabaseBasePresenter
 		echo '<pre>';
 
 		/** @var Group[] $groups */
-		$groups = $this->groups->findBy(['region=' => null]);
+		$groups = $this->groups->findAll();
 		foreach ($groups as $group)
 		{
+
+            if ($group->region)
+            {
+                continue;
+            }
 
 			$data = file_get_contents("http://maps.googleapis.com/maps/api/geocode/json?address=" . urlencode($group->city . ' ,Česká republika') . "&sensor=false&language=cs");
 			$data = json_decode($data);
@@ -735,10 +740,10 @@ class GroupsPresenter extends DatabaseBasePresenter
 				}
 			}
 			$group->region = $region;
-			$this->groups->persistAndFlush($group);
 			echo "{$group->city} : {$group->region}\n";
 
 		}
+        $this->em->flush();
 		echo "Hotovo\n";
 		$this->terminate();
 	}

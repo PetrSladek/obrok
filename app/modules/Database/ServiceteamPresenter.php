@@ -297,7 +297,7 @@ class ServiceteamPresenter extends DatabaseBasePresenter
 			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat E-mail')
 			->addRule(Form::EMAIL, 'E-mailová adresa není platná')
 			->setAttribute('title', 'E-mail, který pravidelně vybíráš a můžem Tě na něm kontaktovat.  Budou Ti chodit informace atd..');
-		$frm->addText('phone', 'Mobilní telefon', null, 13)
+		$frm->addText('phone', 'Mobilní telefon')
 			->setDefaultValue($this->item ? $this->item->phone : null)
 			->setEmptyValue('+420')
 			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat Mobilní telefon')
@@ -309,18 +309,12 @@ class ServiceteamPresenter extends DatabaseBasePresenter
 			->setDefaultValue($this->item && $this->item->team ? $this->item->team->id : null)
 			->setPrompt('- nezařazen -');
 
-		$frm->addTypeahead('workgroup', 'Patří do prac.skupiny', function ($query)
-		{
-			$workgroups = $this->workgroups->findPairs(['name like' => "%{$query}%"], 'name');
-
-			return $workgroups;
+		$frm->addTypeahead('workgroup', 'Patří do prac.skupiny', function ($query)  {
+            return $this->workgroups->findPairs(['name like' => "%{$query}%"], 'name');
 		})->setDefaultValue($this->item && $this->item->workgroup ? $this->item->workgroup->name : null);
 
-		$frm->addTypeahead('job', 'Pozice', function ($query)
-		{
-			$jobs = $this->jobs->findPairs(['name like' => "%{$query}%"], 'name');
-
-			return $jobs;
+		$frm->addTypeahead('job', 'Pozice', function ($query) {
+			return $this->jobs->findPairs(['name like' => "%{$query}%"], 'name');
 		})->setDefaultValue($this->item && $this->item->job ? $this->item->job->name : null);
 
 //        $frm->addCheckbox('replacer','Náhradník?');
@@ -448,7 +442,7 @@ class ServiceteamPresenter extends DatabaseBasePresenter
 
 			case 'team':
 				$val = $frm['team']->getValue();
-				$this->item->team = $this->teams->find($val);
+				$this->item->team = $val ? $this->teams->find($val) : null;
 				break;
 			default:
 				foreach ($data as $key => $val)
@@ -570,6 +564,25 @@ class ServiceteamPresenter extends DatabaseBasePresenter
 		$this->sendResponse($pdf);
 	}
 
+
+//    /**
+//     * Vrátí data pro napovídání typeahead inputu
+//     * @param $table
+//     */
+//	public function actionTypeahead($table)
+//    {
+//        $result = [];
+//        if ($table == 'workgroups')
+//        {
+//            $result = $this->workgroups->findPairs([], 'name');
+//        }
+//        elseif ($table == 'jobs')
+//        {
+//            $result = $this->jobs->findPairs([], 'name');
+//        }
+//
+//        $this->sendJson(array_values($result));
+//    }
 }
 
 
