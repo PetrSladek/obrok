@@ -64,7 +64,7 @@ abstract class ParticipantAuthBasePresenter extends \App\Module\Front\Presenters
 		$this->template->me = $this->me;
 
 		// Uzavreni registrace, aby se v prubehu obroku{stavecky uz nedfali menit yadna data ye stranz ucastniku
-		$this->open = true;
+		$this->open = $this->openRegistrationParticipants;
 		$this->template->open = $this->open;
 	}
 

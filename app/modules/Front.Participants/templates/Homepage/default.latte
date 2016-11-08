@@ -8,7 +8,6 @@
 
     <div class="col-md-3">
         <a n:tag-if="$open && $me->isAdmin()" href="{plink Homepage:editGroup}">
-            {*<img style="width: 100%" n:img="$group, 200x200, exact" alt="foto" />*}
             <img n:if="$group->getAvatar()" class="img-responsive" n:img="$group->getAvatar(), 400, 400, exact, $group->getAvatarCrop()" alt="foto" />
             <img n:if="!$group->getAvatar()" class="img-responsive" n:img="'avatar_group.jpg', 400, 400, exact" alt="foto" />
         </a>
@@ -40,7 +39,7 @@
             {/if}
             <tr>
             {var $adms = $group->getAdministrators()}
-            {if count($adms)>1}<td>Administrátoři skupiny</td>{else}<td>Administrátor skupiny</td>{/if}
+            {if count($adms) > 1}<td>Administrátoři skupiny</td>{else}<td>Administrátor skupiny</td>{/if}
                 <td>
                     {foreach $adms as $adm}
                     <strong>{$adm->fullname}</strong>{sep} ,{/sep}
@@ -53,25 +52,29 @@
 
 </div>
 
-<div class="row">
+<div class="row" n:if="count($programs) || $openRegistrationProgram">
     <div class="col-md-12">
         <h4>Tvůj program</h4>
 
-        {if $programs}
-        <table class="table table-bordered table-striped">
-            {foreach $programs as $program}
-            <tr>
-                <td>
-                    <strong>{$program->section->title} <small n:ifcontent>{$program->section->subTitle}</small></strong> {$program->start|day} {$program->start->format('j.n. H:i')}-{$program->end->format('H:i')}:<br />
-                    <strong>{$program->name}</strong> <small n:if="$program->lector && $program->lector != '-'"><em>{$program->lector}</em></small>
-                </td>
-            </tr>
-            {/foreach}
-        </table>
-        <a n:href="Program:" class="btn btn-success">Přeregistruj si svůj program!</a>
+        {if count($programs)}
+            <table class="table table-bordered table-striped">
+                {foreach $programs as $program}
+                <tr>
+                    <td>
+                        <strong>{$program->section->title} <small n:ifcontent>{$program->section->subTitle}</small></strong> {$program->start|day} {$program->start->format('j.n. H:i')}-{$program->end->format('H:i')}:<br />
+                        <strong>{$program->name}</strong> <small n:if="$program->lector && $program->lector != '-'"><em>{$program->lector}</em></small>
+                    </td>
+                </tr>
+                {/foreach}
+            </table>
+            {if $openRegistrationProgram}
+                <a n:if="$openRegistrationProgram" n:href="Program:" class="btn btn-success">Přeregistruj si svůj program!</a>
+            {else}
+                Registrace je uzavřená!
+            {/if}
         {else}
-        <em>- nemáš nic zaregistrováno -</em>
-        <a n:href="Program:" class="btn btn-success">Zaregistruj si svůj program!</a>
+            <div><em>- nemáš nic zaregistrováno -</em></div>
+            <a n:if="$openRegistrationProgram" n:href="Program:" class="btn btn-success">Zaregistruj si svůj program!</a>
         {/if}
 
     </div>
@@ -133,42 +136,14 @@
                             {/if}
                         </td>
                     </tr>
-                    {*{if $me->isAdmin() || $user->id == $participant->id}
-                    <tr class="row-edit cell-status-*}{*$participant->getStatus()->id*}{*" data-defaults="*}{*$participant->getJson()*}{*">
-                        <td colspan="5" class="dark">
-                        </td>
-                    </tr>
-                    {/if}*}
                 {/define}
 
                 {foreach $me->group->getConfirmedParticipants() as $participant}
                     {include #row group=>$me->group}
                 {/foreach}
 
-                {*{for $i=0; $i < $me->group->getOverPaidPlaces(); $i++}*}
-                    {*<tr class="cell-flag-green">*}
-                        {*<td colspan="5" class="text-center">*}
-                        {*- Volné zaplacené místo -*}
-                        {*{if $openRegistrationParticipants}*}
-                            {*<br />&nbsp;*}
-                            {*<small>Můžete přidat nového účastníka skupiny, nebo obnovit někoho zrušeného a použije se již zaplacená platba za někoho z vyřazených</small>&nbsp;*}
-                        {*{/if}*}
-                        {*</td>*}
-                    {*</tr>*}
-                {*{/for}*}
-
                 </tbody>
             </table>
-
-           {* {if $me->isAdmin() && $open}
-                *}{*{if $group->possibleSetPaidParticipants() || $group->getStatus()->id == Group::STATUS_REGISTRED || $group->getStatus()->id == Group::STATUS_DONTKNOW}*}{*
-                    <a href="{plink participant}" class="btn btn-primary" id="addParticipantButton">Přidat nového účastníka</a>
-                *}{*{else}*}{*
-                    *}{*<span class="btn disabled">Přidat nového účastníka</span> <small>Jestli chcete vyměnit některého účastníka, musíte nejdříve jiného odebrat</small>*}{*
-                *}{*{/if}*}{*
-            {else}
-                <span class="btn disabled">Přidat nového účastníka</span> <small>Přidávat účastníky do skupiny může jen administrátor skupiny</small>
-            {/if}*}
 
         </div>
 
@@ -179,7 +154,6 @@
             {foreach $canceled as $participant}
                 {$participant->fullname}
                 <small n:if="$openRegistrationParticipants && $open && $me->isAdmin()"><a class="ajax" href="{plink goBack! $participant->id}">Vrátit</a></small>
-                {*<small n:if="$open && $me->isAdmin() && $participant->payment_recieved && ($group->getStatus()->id == Group::STATUS_REGISTRED || $group->getStatus()->id == Group::STATUS_DONTKNOW)"><a class="ajax" href="{link usePayment! $participant->id}" title="Jeho platba se převede na prvního aktivního učastníka, za nějž ještě nebylo zaplaceno">ZAPLACEN - použít jeho platbu</a></small>*}
                 {sep}, {/sep}
             {/foreach}
             {/if}
@@ -226,19 +200,6 @@
     </div>
     <div class="col-md-5">
         <table  class="table">
-            {*<tr n:if="$group->getPaidFor() > 0" class="text-success">
-               <td colspan="2">Aktuálně je zaplaceno za
-                <strong>
-                    {if $group->getPaidFor() == 0 || $group->getPaidFor() >= 5}
-                    {$group->getPaidFor()} účastníků
-                    {elseif $group->getPaidFor() == 1}
-                    {$group->getPaidFor()} účastníka
-                    {elseif $group->getPaidFor() >= 2}
-                    {$group->getPaidFor()} účastníky
-                    {/if}
-                </strong>
-               </td>
-           </tr>*}
            <tr>
                <td>Částka:</td>
                <td><strong>600 Kč za každého účastníka</strong></td>

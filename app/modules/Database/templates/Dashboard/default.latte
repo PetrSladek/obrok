@@ -67,25 +67,46 @@
         </table>
 
         <table class="table table-bordered table-condensed table-striped table-hover">
-                    <thead>
-                        <tr>
-                            <th colspan="999">Registrace servis týmu</th>
-                        </tr>
-                    </thead>
-                    <tr>
-                        {if $openRegistrationServiceteam}
-                        <td class="success">
-                            <div class="text-success">Registrace je práve <strong>otevřena <span class="glyphicon glyphicon-ok" aria-hidden="true"></span></strong></div>
-                            <a n:href="closeServiceteamRegistration!" class="btn btn-warning">Uzavřít registraci</a>
-                        </td>
-                        {else}
-                        <td class="danger">
-                            <div class="text-danger">Registrace je práve <strong>uzavřena <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></strong></div>
-                            <a n:href="openServiceteamRegistration!" class="btn btn-warning">Otevřít registraci</a>
-                        </td>
-                        {/if}
-                    </tr>
-                </table>
+            <thead>
+                <tr>
+                    <th colspan="999">Registrace servis týmu</th>
+                </tr>
+            </thead>
+            <tr>
+                {if $openRegistrationServiceteam}
+                <td class="success">
+                    <div class="text-success">Registrace je práve <strong>otevřena <span class="glyphicon glyphicon-ok" aria-hidden="true"></span></strong></div>
+                    <a n:href="closeServiceteamRegistration!" class="btn btn-warning">Uzavřít registraci</a>
+                </td>
+                {else}
+                <td class="danger">
+                    <div class="text-danger">Registrace je práve <strong>uzavřena <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></strong></div>
+                    <a n:href="openServiceteamRegistration!" class="btn btn-warning">Otevřít registraci</a>
+                </td>
+                {/if}
+            </tr>
+        </table>
+
+        <table class="table table-bordered table-condensed table-striped table-hover">
+            <thead>
+            <tr>
+                <th colspan="999">Registrace programů</th>
+            </tr>
+            </thead>
+            <tr>
+                {if $openRegistrationProgram}
+                    <td class="success">
+                        <div class="text-success">Registrace je práve <strong>otevřena <span class="glyphicon glyphicon-ok" aria-hidden="true"></span></strong></div>
+                        <a n:href="closeProgramRegistration!" class="btn btn-warning">Uzavřít registraci programů</a>
+                    </td>
+                {else}
+                    <td class="danger">
+                        <div class="text-danger">Registrace je práve <strong>uzavřena <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></strong></div>
+                        <a n:href="openProgramRegistration!" class="btn btn-warning">Otevřít registraci programů</a>
+                    </td>
+                {/if}
+            </tr>
+        </table>
     </div>
 
     <div class="col-md-4">

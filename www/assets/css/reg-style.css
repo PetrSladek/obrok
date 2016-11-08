@@ -9,9 +9,14 @@
 	padding: 20px 0 20px 0;
 }
 
-#registrationBox h2 {
+#registrationBox h2,
+#registrationBox h3,
+#registrationBox h4,
+#registrationBox h5 {
 	color: black;
 
+}
+#registrationBox h2 {
 	margin-left: 0;
 	margin-bottom: 10px;
 }

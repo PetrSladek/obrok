@@ -166,60 +166,97 @@ class DashboardPresenter extends DatabaseBasePresenter
 	}
 
 
-	/**
-	 * Příkaz k zavření registrace
-	 *
-	 * @throws \Nette\Application\BadRequestException
-	 */
-	public function handleCloseParticipantRegistration()
-	{
-		if (!$this->user->isInRole('groups-edit'))
-		{
-			$this->error('Nemáte oprávnění', IResponse::S401_UNAUTHORIZED);
-		}
+    /**
+     * Příkaz k zavření registrace
+     *
+     * @throws \Nette\Application\BadRequestException
+     */
+    public function handleCloseParticipantRegistration()
+    {
+        if (!$this->user->isInRole('groups-edit'))
+        {
+            $this->error('Nemáte oprávnění', IResponse::S401_UNAUTHORIZED);
+        }
 
-		$this->settings->set(self::OPEN_PARTICIPANTS_REGISTRATION_KEY, false);
+        $this->settings->set(self::OPEN_PARTICIPANTS_REGISTRATION_KEY, false);
 
-		$this->flashMessage("Registrace účastníků byla uzavřena", "success");
-		$this->isAjax() ? $this->redrawControl() : $this->redirect('this');
-	}
-
-
-	/**
-	 * Příkaz k otevření registrace ST
-	 *
-	 * @throws \Nette\Application\BadRequestException
-	 */
-	public function handleOpenServiceteamRegistration()
-	{
-		if (!$this->user->isInRole('serviceteam-edit'))
-		{
-			$this->error('Nemáte oprávnění', IResponse::S401_UNAUTHORIZED);
-		}
-
-		$this->settings->set(self::OPEN_SERVICETEAM_REGISTRATION_KEY, true);
-
-		$this->flashMessage("Registrace servis týmu byla otevřena", "success");
-		$this->isAjax() ? $this->redrawControl() : $this->redirect('this');
-	}
+        $this->flashMessage("Registrace účastníků byla uzavřena", "success");
+        $this->isAjax() ? $this->redrawControl() : $this->redirect('this');
+    }
 
 
-	/**
-	 * Příkaz k zavření registrace
-	 *
-	 * @throws \Nette\Application\BadRequestException
-	 */
-	public function handleCloseServiceteamRegistration()
-	{
-		if (!$this->user->isInRole('serviceteam-edit'))
-		{
-			$this->error('Nemáte oprávnění', IResponse::S401_UNAUTHORIZED);
-		}
+    /**
+     * Příkaz k otevření registrace ST
+     *
+     * @throws \Nette\Application\BadRequestException
+     */
+    public function handleOpenServiceteamRegistration()
+    {
+        if (!$this->user->isInRole('serviceteam-edit'))
+        {
+            $this->error('Nemáte oprávnění', IResponse::S401_UNAUTHORIZED);
+        }
 
-		$this->settings->set(self::OPEN_SERVICETEAM_REGISTRATION_KEY, false);
+        $this->settings->set(self::OPEN_SERVICETEAM_REGISTRATION_KEY, true);
 
-		$this->flashMessage("Registrace servis týmu byla uzavřena", "success");
-		$this->isAjax() ? $this->redrawControl() : $this->redirect('this');
-	}
+        $this->flashMessage("Registrace servis týmu byla otevřena", "success");
+        $this->isAjax() ? $this->redrawControl() : $this->redirect('this');
+    }
+
+
+    /**
+     * Příkaz k zavření registrace
+     *
+     * @throws \Nette\Application\BadRequestException
+     */
+    public function handleCloseServiceteamRegistration()
+    {
+        if (!$this->user->isInRole('serviceteam-edit'))
+        {
+            $this->error('Nemáte oprávnění', IResponse::S401_UNAUTHORIZED);
+        }
+
+        $this->settings->set(self::OPEN_SERVICETEAM_REGISTRATION_KEY, false);
+
+        $this->flashMessage("Registrace servis týmu byla uzavřena", "success");
+        $this->isAjax() ? $this->redrawControl() : $this->redirect('this');
+    }
+
+    /**
+     * Příkaz k otevření registrace Programů
+     *
+     * @throws \Nette\Application\BadRequestException
+     */
+    public function handleOpenProgramRegistration()
+    {
+        if (!$this->user->isInRole('groups-edit'))
+        {
+            $this->error('Nemáte oprávnění', IResponse::S401_UNAUTHORIZED);
+        }
+
+        $this->settings->set(self::OPEN_PROGRAM_REGISTRATION_KEY, true);
+
+        $this->flashMessage("Registrace programů byla otevřena", "success");
+        $this->isAjax() ? $this->redrawControl() : $this->redirect('this');
+    }
+
+
+    /**
+     * Příkaz k zavření registrace Programů
+     *
+     * @throws \Nette\Application\BadRequestException
+     */
+    public function handleCloseProgramRegistration()
+    {
+        if (!$this->user->isInRole('groups-edit'))
+        {
+            $this->error('Nemáte oprávnění', IResponse::S401_UNAUTHORIZED);
+        }
+
+        $this->settings->set(self::OPEN_PROGRAM_REGISTRATION_KEY, false);
+
+        $this->flashMessage("Registrace programů byla uzavřena", "success");
+        $this->isAjax() ? $this->redrawControl() : $this->redirect('this');
+    }
 
 }

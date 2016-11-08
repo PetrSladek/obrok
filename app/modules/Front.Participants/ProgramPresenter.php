@@ -22,7 +22,18 @@ class ProgramPresenter extends ParticipantAuthBasePresenter
 	/** @var ProgramsSectionsRepository @inject */
 	public $sections;
 
-	/**
+    public function startup()
+    {
+        parent::startup();
+
+        if (!$this->openRegistrationProgram)
+        {
+            $this->error('Registrace programů je uzavřená');
+        }
+    }
+
+
+    /**
 	 * Připravý data pro vypsání výchozí šablony
 	 */
 	public function renderDefault()

@@ -46,17 +46,26 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 	 */
 	public $openRegistrationParticipants;
 
-	/**
-	 * Je povoleno registrovat nové Servisaky?
-	 * @var bool
-	 */
-	public $openRegistrationServiceteam;
+    /**
+     * Je povoleno registrovat nové Servisaky?
+     * @var bool
+     */
+    public $openRegistrationServiceteam;
+
+    /**
+     * Je povoleno registrovat program?
+     * @var bool
+     */
+    public $openRegistrationProgram;
+
 
 	/** @var ImageService @inject */
 	public $imageService;
 
 
 	const OPEN_PARTICIPANTS_REGISTRATION_KEY = 'openRegistrationParticipants';
+
+    const OPEN_PROGRAM_REGISTRATION_KEY = 'openProgramParticipants';
 
 	const OPEN_SERVICETEAM_REGISTRATION_KEY = 'openRegistrationServiceteam';
 
@@ -93,6 +102,9 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 
 		$this->openRegistrationServiceteam = $this->settings->get(self::OPEN_SERVICETEAM_REGISTRATION_KEY, true); // default TRUE
 		$this->template->openRegistrationServiceteam = $this->openRegistrationServiceteam;
+
+        $this->openRegistrationProgram = $this->settings->get(self::OPEN_PROGRAM_REGISTRATION_KEY, false); // default false
+        $this->template->openRegistrationProgram = $this->openRegistrationProgram;
 	}
 
 
