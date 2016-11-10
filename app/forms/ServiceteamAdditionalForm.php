@@ -68,12 +68,12 @@ class ServiceteamAdditionalForm extends Control
 		$frm->addGroup('Doplňující údaje, aneb prozraď nám něco o sobě, ať ti můžeme najít to nejlepší zařazení ;-)');
 
 		$frm->addSelect('arrivesToBuilding', 'Kdy přijedu?', array(
-			1 => 'Přijedu i na stavěcí týden od 7.6.2015',
+			1 => 'Přijedu i na stavěcí týden od 3.6.2017',
 			0 => 'Můžu jen na Obrok',
 		))
 			->setDefaultValue($this->person->arrivesToBuilding ? 1 : 0);
 
-		$frm->addCheckbox('helpPreparation', 'Mám zájem a možnost pomoct s přípravami Obrok 2015 už před akcí');
+		$frm->addCheckbox('helpPreparation', 'Mám zájem a možnost pomoct s přípravami Obrok 2017 už před akcí');
 
 //        $frm->addCheckbox('helpSzt', 'Mám zdravotnické vzdělání a chci pomoct SZT (Skautský záchranný tým)');
 //        $frm->addCheckbox('helpSos', 'Mám zájem pomáhat SOSce (Skautská ochraná služba)');

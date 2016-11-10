@@ -174,7 +174,7 @@ class Serviceteam extends Person
 		{
 			return null;
 		}
-		$arrive = array(false => 'Příjezd až na Obrok', true => 'Příjezd i na stavěcí týden od 7.6.2015');
+		$arrive = array(false => 'Příjezd až na Obrok', true => 'Příjezd i na stavěcí týden od 3.6.2017');
 
 		return $arrive[$this->arrivesToBuilding];
 	}
