@@ -82,7 +82,7 @@ class ServiceteamRegistrationForm extends Control
 		$frm->addDatepicker('birthdate', 'Datum narození')
 			->setDefaultValue($this->person->birthdate)
 			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat Datum narození nebo je ve špatném formátu')
-			->addRule(Form::RANGE, 'Podle data narození vám 7.6.2016 ještě nebude 18 let (což porušuje podmínky účasti)', array(null, DateTime::from('7.6.2016')->modify('-18 years')))
+			->addRule(Form::RANGE, 'Podle data narození vám 7.6.2017 ještě nebude 18 let (což porušuje podmínky účasti)', array(null, DateTime::from('7.6.2017')->modify('-18 years')))
 			->setAttribute('description', 'Tvoje Datum narození ve formátu dd.mm.yyyy');
 		$frm->addText('addressCity', 'Město')
 			->setDefaultValue($this->person->addressCity)
