@@ -102,7 +102,7 @@ doctrine:
 #			soundex: DoctrineExtensions\Query\Mysql\Soundex
 #			uuid_short: DoctrineExtensions\Query\Mysql\UuidShort
 application:
-	errorPresenter: Error
+	errorPresenter: Front:Error
 	mapping:
 		*: App\Module\*\Presenters\*Presenter
 

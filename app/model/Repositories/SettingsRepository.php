@@ -22,7 +22,9 @@ class SettingsRepository extends EntityDao
 	public function get($key, $default = null)
 	{
 		$class = Setting::class;
-		$dql = $this->createQuery("SELECT s.value FROM {$class} s WHERE s.key = :key")->setParameter('key', $key);
+		$dql = $this->createQuery("SELECT s.value FROM {$class} s WHERE s.key = :key")
+                    ->setParameter('key', $key)
+                    ->setMaxResults(1) ;
 		try
 		{
 			return $dql->getSingleScalarResult();
