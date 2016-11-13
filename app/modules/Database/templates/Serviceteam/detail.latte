@@ -164,10 +164,19 @@
 							</tr>
 							<tr>
 								<td>
-									{if $item->arrivesToBuilding == 0}
+									{if $item->arrivesToBuilding}
 										<div class="text-success"><i class="ficon-accept"></i> Prijede na stavecku</div>
 									{else}
 										<div class="text-error"><i class="ficon-delete"></i> Prijede az na akci</div>
+									{/if}
+								</td>
+							</tr>
+							<tr>
+								<td>
+									{if $item->stayToDestroy}
+										<div class="text-success"><i class="ficon-accept"></i> Zůstane na bourání</div>
+									{else}
+										<div class="text-error"><i class="ficon-delete"></i> Nezůčastní se bourání</div>
 									{/if}
 								</td>
 							</tr>

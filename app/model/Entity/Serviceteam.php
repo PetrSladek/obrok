@@ -46,6 +46,12 @@ class Serviceteam extends Person
 	 */
 	protected $arrivesToBuilding = false;
 
+    /**
+     * Zůstane na bouračku na stavecku?
+     * @Column(type="boolean")
+     */
+    protected $stayToDestroy = false;
+
 	/**
 	 * Velikost tricka
 	 * @Column(type="string")
@@ -162,21 +168,6 @@ class Serviceteam extends Person
 		}
 
 		return self::$tShirtSizes[$this->tshirtSize];
-	}
-
-
-	/**
-	 * @return null
-	 */
-	public function getArriveText()
-	{
-		if (!isset($this->arrivesToBuilding))
-		{
-			return null;
-		}
-		$arrive = array(false => 'Příjezd až na Obrok', true => 'Příjezd i na stavěcí týden od 3.6.2017');
-
-		return $arrive[$this->arrivesToBuilding];
 	}
 
 

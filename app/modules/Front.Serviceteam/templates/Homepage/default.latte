@@ -34,7 +34,11 @@
                     </tr>
                     <tr>
                         <td>Příjezd</td>
-                        <td><strong>{$me->getArriveText()}</strong></td>
+                        <td><strong>{$me->arrivesToBuilding ? 'Přijedu na stavečku od 4.6.2017' : 'Přijedu až na Obrok'}</strong></td>
+                    </tr>
+                    <tr>
+                        <td>Odjezd</td>
+                        <td><strong>{$me->stayToDestroy ? 'Zůstanu i na bourání v neděli' : 'Nemůžu zůstat na bourání tábořiště'}</strong></td>
                     </tr>
                 </table>
             </div>
