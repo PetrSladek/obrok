@@ -175,7 +175,7 @@ class ParticipantRegistrationForm extends Control
 			->addRule($frm::FILLED, 'Musíte souhlasit s podmínkami účasti')
 			->setOmitted();
 
-		$frm->addSubmit('send', 'Zaregistrovat se')
+		$frm->addSubmit('send', 'Dokončit registraci')
 			->setAttribute('class', 'btn btn-primary btn-block');
 
 		$frm->onSuccess[] = $this->processForm;
