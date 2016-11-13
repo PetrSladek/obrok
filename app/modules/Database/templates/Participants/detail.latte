@@ -61,7 +61,7 @@
                             <div class="ajax-edit-target" n:if="$acl->edit">{input phone class=>'form-control'}</div>
                         </h3>
                         <h4 n:class="$acl->edit ? ajax-edit">
-                            <small>věk na O15</small><br />
+                            <small>věk na O17</small><br />
                             <div class="ajax-edit-val">{snippet birthdate}<abbr title="datum narození: {$item->birthdate->format('j.n.Y')}">{$item->getAge($ageInDate)} let</abbr>{/snippet}</div>
                             <div class="ajax-edit-target" n:if="$acl->edit">{input birthdate class=>'form-control'}</div>
                         </h4>
