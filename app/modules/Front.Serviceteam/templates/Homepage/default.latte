@@ -46,20 +46,27 @@
         </div>
 
         <div class="row">
-            <div class="col-md-3">
+            <div class="col-md-6">
                 {if $me->paid}
                 <table  class="table">
                     <tr>
                         <td colspan="2"><h4>Informace k platbě</h4></td>
                     </tr>
                     <tr>
-                        <td colspan="2"><strong class="text-success">Účastnický poplatek byl úspěšně přijat</strong></td>
+                        <td colspan="2"><div class="alert alert-success">Účastnický poplatek byl úspěšně přijat</div></td>
                     </tr>
                 </table>
                 {else}
                 <table  class="table">
                     <tr>
                         <td colspan="2"><h4>Informace k platbě</h4></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <div n:class="alert, $daysToPay < 10 ? alert-danger : alert-warning">
+                                Na zaplacení máte už jen {$daysToPay} {$daysToPay == 1 ? 'den' : in_array($daysToPay, [2,3,4]) ? 'dny' : 'dní'}!
+                            </div>
+                        </td>
                     </tr>
                     <tr>
                         <td>Částka:</td>
@@ -75,7 +82,7 @@
                     </tr>
                     <tr>
                         <td>Poznámka pro příjemce</td>
-                        <td><strong>Obrok 2017</strong></td>
+                        <td><strong>Obrok 2017 {$me->getFullName()}</strong></td>
                     </tr>
                 </table>
                 {/if}

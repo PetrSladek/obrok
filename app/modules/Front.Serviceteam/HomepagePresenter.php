@@ -8,7 +8,9 @@ use App\Forms\IServiceteamFormFactory;
 use App\Model\Entity\Person;
 use App\Services\ImageService;
 use Brabijan\Images\TImagePipe;
+use DoctrineExtensions\Query\Mysql\Date;
 use Kdyby\Doctrine\EntityRepository;
+use Nette\Utils\DateTime;
 
 /**
  * Class HomepagePresenter
@@ -29,6 +31,21 @@ class HomepagePresenter extends ServiceteamAuthBasePresenter
 
 	/** @var IServiceteamAdditionalFormFactory @inject */
 	public $serviceteamAdditionalFormFactory;
+
+
+    /**
+     * Vykreslí stránku s nástenkou
+     */
+    public function renderDefault()
+    {
+        $payToDate = DateTime::from($this->me->createdAt);
+        $payToDate->modify('+ 30 days');
+
+        $now = new DateTime('now');
+
+        $diff = $now->diff($payToDate);
+        $this->template->daysToPay = $payToDate > $now ? $diff->days : 0;
+    }
 
 
 	/**

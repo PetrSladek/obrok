@@ -445,7 +445,9 @@ class Group
 
 
 	/**
-	 * @return int|null
+     * Vrati variabilni symbol této skupiny
+     *
+	 * @return int
 	 */
 	public function getVarSymbol()
 	{
@@ -456,7 +458,7 @@ class Group
 	/**
 	 * Vrati variabilni symbol skupiny
 	 *
-	 * @param $id ID Skupiny
+	 * @param int $id ID Skupiny
 	 *
 	 * @return int|null
 	 */
@@ -467,9 +469,9 @@ class Group
 			return null;
 		}
 
-		// 1510001 - 1519999
-		$base = 1510000;
-		$max = 9999;
+		// 35100001 - 35199999
+        $base = 35100000;
+        $max = 99999;
 
 		return $base + $id;
 	}
@@ -492,9 +494,9 @@ class Group
 		$varSymbol = str_replace(' ', '', $varSymbol);
 		$varSymbol = (int) $varSymbol;
 
-		// 1510001 - 1519999
-		$base = 1510000;
-		$max = 9999;
+		// 35100001 - 35199999
+		$base = 35100000;
+		$max = 99999;
 		// Kdyz bude ID vetsi jak 9999 tak jsme v haji =)
 
 		if ($varSymbol <= $base || $varSymbol > $base + $max)

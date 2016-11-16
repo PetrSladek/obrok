@@ -38,8 +38,17 @@ class HomepagePresenter extends ParticipantAuthBasePresenter
 	 */
 	public function renderDefault()
 	{
-
 		$this->template->programs = $this->me->programs;
+
+
+        $payToDate = DateTime::from($this->me->group->createdAt);
+        $payToDate->modify('+ 30 days');
+
+        $now = new DateTime('now');
+
+        $diff = $now->diff($payToDate);
+        $this->template->daysToPay = $payToDate > $now ? $diff->days : 0;
+
 	}
 
 

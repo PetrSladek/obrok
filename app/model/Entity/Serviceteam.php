@@ -172,7 +172,9 @@ class Serviceteam extends Person
 
 
 	/**
-	 * @return int|null
+     * Vrátí variabilní symbol tohoto servisáka
+     *
+	 * @return int
 	 */
 	public function getVarSymbol()
 	{
@@ -183,7 +185,7 @@ class Serviceteam extends Person
 	/**
 	 * Vrati var.Symbol Servisáka
 	 *
-	 * @param $id
+	 * @param int $id
 	 *
 	 * @return int|null
 	 */
@@ -194,9 +196,9 @@ class Serviceteam extends Person
 			return null;
 		}
 
-		// 1520001 - 1529999
-		$base = 1520000;
-		$max = 9999;
+		// 15200001 - 15299999
+		$base = 35200000;
+		$max = 99999;
 
 		// Kdyz bude ID vetsi jak 9999 tak jsme v haji =)
 
@@ -221,8 +223,8 @@ class Serviceteam extends Person
 		$varSymbol = str_replace(' ', '', $varSymbol);
 		$varSymbol = (int) $varSymbol;
 
-		$base = 1520000;
-		$max = 9999;
+		$base = 35200000;
+		$max = 99999;
 		// Kdyz bude ID vetsi jak 9999 tak jsme v haji =)
 
 		if ($varSymbol <= $base || $varSymbol > $base + $max)
