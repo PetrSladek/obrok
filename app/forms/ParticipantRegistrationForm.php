@@ -171,7 +171,7 @@ class ParticipantRegistrationForm extends Control
 			->setDefaultValue($this->person->health);
 
 		$frm->addGroup(null);
-		$frm->addCheckbox('conditions', Html::el()->setHtml('Souhlasím s <a target="_blank" href="http://www.obrok15.cz/registrace/">podmínkami účasti na akci</a> a s <a target="_blank" href="http://www.obrok15.cz/obecna-ustanoveni-storno-podminky/">obecnými ustanoveními</a>'))
+		$frm->addCheckbox('conditions', Html::el()->setHtml('Souhlasím s <a target="_blank" href="http://www.obrok17.cz/registrace/">podmínkami účasti na akci</a> a s <a target="_blank" href="http://www.obrok17.cz/obecna-ustanoveni-storno-podminky/">obecnými ustanoveními</a>'))
 			->addRule($frm::FILLED, 'Musíte souhlasit s podmínkami účasti')
 			->setOmitted();
 
