@@ -20,8 +20,8 @@
 					<a href="{link sort! orderColumn => $column->getNewState() ? $column->name : NULL, orderType => $column->getNewState()}" class="ajax">{$column->label}</a>
 
 					<span class="positioner">
-					    <a href="{link sort! orderColumn => $column->name, orderType => desc}" n:class="ajax, $column->isAsc() ? active"><span class="up"></span></a>
-					    <a href="{link sort! orderColumn => $column->name, orderType => asc}" n:class="ajax, $column->isDesc() ? active"><span class="down"></span></a>
+					    <a href="{link sort! orderColumn => $column->name, orderType => asc}" n:class="ajax, $column->isAsc() ? active"><span class="up"></span></a>
+						<a href="{link sort! orderColumn => $column->name, orderType => desc}" n:class="ajax, $column->isDesc() ? active"><span class="down"></span></a>
                     </span>
 
 		            {*{if $column->isAsc()}

@@ -135,10 +135,47 @@ class ServiceteamPresenter extends DatabaseBasePresenter
 			{
 				$result->applyPaging($paginator->getOffset(), $paginator->getLength());
 			}
-//            if($sorting) {
-//                list($key, $val) = $sorting;
-//                $result->applySorting([$key => $val]);
-//            }
+
+			if($sorting)
+			{
+                list($column, $order) = $sorting;
+
+                if ($column == 'varSymbol')
+                {
+                    $column = 'p.id';
+                }
+                else if ($column == 'fullname')
+                {
+                    $column = 'p.lastName';
+                }
+                else if ($column == 'address')
+                {
+                    $column = 'p.addressCity';
+                }
+                else if ($column == 'age')
+                {
+                    $column = 'p.birthdate';
+                    $order = $order == 'ASC' ? 'DESC' : 'ASC';
+                }
+                else if ($column == 'contact')
+                {
+                    $column = 'p.email';
+                }
+                else if ($column == 'team')
+                {
+                    $column = 't.name';
+                }
+                else if ($column == 'group')
+                {
+                    $column = 'w.name'; // workgroup
+                }
+                else
+                {
+                    $column = 'p.' . $column;
+                }
+
+                $result->applySorting([$column => $order]);
+            }
 
 			return $result->toArray();
 		});
