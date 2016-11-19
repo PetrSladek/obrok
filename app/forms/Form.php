@@ -100,7 +100,6 @@ class Form extends Nette\Application\UI\Form
 		}
 
 		return $this[$name] = new GpsPositionPicker($caption, $options);
-
 	}
 
 
