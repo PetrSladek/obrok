@@ -75,7 +75,7 @@ class ServiceteamPresenter extends DatabaseBasePresenter
 		$grid->addCellsTemplate(__DIR__ . '/templates/grid.layout.latte');
 		$grid->addCellsTemplate(__DIR__ . '/templates/Serviceteam/grid.cols.latte');
 
-		$grid->addColumn('varSymbol', 'ID / VS')->enableSort();
+		$grid->addColumn('varSymbol', 'ID / VS')->enableSort(Datagrid::ORDER_DESC);
 		$grid->addColumn('fullname', 'Jméno')->enableSort();
 		$grid->addColumn('address', 'Město')->enableSort();
 		$grid->addColumn('age', 'Věk')->enableSort();
