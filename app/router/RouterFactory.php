@@ -40,7 +40,10 @@ class RouterFactory
 		$databaseRouter[] = new Route('database/<presenter>/<action>[/<id>]', 'Dashboard:default');
 
 		$router[] = $frontParticipantsRouter = new RouteList('Front:Participants');
-		$frontParticipantsRouter[] = new Route('pozvanka/<hash>-<id>', 'Registration:toGroup');
+
+        $frontParticipantsRouter[] = new Route('pozvanka/<hash>-<id>', 'Invitation:toGroup');
+        $frontParticipantsRouter[] = new Route('pozvanka/registrace/<hash>-<id>', 'Registration:toGroup');
+
 		$frontParticipantsRouter[] = new Route('ucastnici/<presenter>/<action>[/<id>]', [
 			'presenter' => array(
 				Route::VALUE        => 'Homepage',

@@ -9,16 +9,18 @@
 
 {block content}
 
-<div class="row">
-    <div class="col-md-12">
-        <h1>Zaregistovat se do skupiny</h1>
+    <div class="row">
+        <div class="col-sm-6">
+            <h2>Zaregistovat se do skupiny</h2>
 
-        <div class="clearfix togroup">
-            {*<img class="pull-left" width="80" src="{link Image: (expand) $group->getAvatarType($group::AVATAR_TYPE_DBDETAIL)}" alt="foto" />*}
-            <h2>{$group->name}<br /><small>{$group->city}</small></h2>
+            <div class="pull-left">
+                <img n:if="$group->getAvatar()" class="img-responsive" n:img="$group->getAvatar(), 150, 150, exact, $group->getAvatarCrop()" alt="foto" />
+                <img n:if="!$group->getAvatar()" class="img-responsive" n:img="'avatar_group.jpg', 150, 150, exact" alt="foto" />
+            </div>
+            <h3>{$group->name}<br /><small>{$group->city}</small></h3>
         </div>
     </div>
-</div>
+
 
 
 

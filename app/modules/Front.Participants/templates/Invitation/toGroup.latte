@@ -1,0 +1,33 @@
+{var $title = 'Zaregistrovat se dp skupiny '. $group->name . " - " . $group->city}
+
+{block #ogMeta}
+    <meta property="og:title" content="{$title} | Obrok 2017" />
+    <meta property="og:description" content="Přidat se ke skupině {$group->name} - {$group->city} na Obrok 2017" />
+    <meta name="description" content="Přidat se ke skupině {$group->name} - {$group->city} na Obrok 2017" />
+{/block}
+
+
+{block content}
+
+<div class="row">
+    <div class="col-sm-6 col-md-offset-4">
+        <h2>Zaregistovat se do skupiny</h2>
+
+        <div class="pull-left">
+            <img n:if="$group->getAvatar()" class="img-responsive" n:img="$group->getAvatar(), 150, 150, exact, $group->getAvatarCrop()" alt="foto" />
+            <img n:if="!$group->getAvatar()" class="img-responsive" n:img="'avatar_group.jpg', 150, 150, exact" alt="foto" />
+        </div>
+        <h3>{$group->name}<br /><small>{$group->city}</small></h3>
+    </div>
+</div>
+
+
+
+<div class="row">
+    <div class="col-sm-6 col-md-offset-4">
+        <a n:href="skautisLogin-open!" class="btn btn-success btn-block btn-lg">Přihlásit se přes SkautIS</a>
+    </div>
+</div>
+
+
+{/block}

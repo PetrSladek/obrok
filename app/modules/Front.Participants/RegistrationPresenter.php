@@ -59,6 +59,7 @@ class RegistrationPresenter extends UnspecifiedPersonAuthBasePresenter
 	public function actionToGroup($id, $hash)
 	{
 		$this->group = $this->groups->find($id);
+
 		if (!$this->group)
 		{
 			$this->error("Skupina #$id neexistuje");
@@ -69,10 +70,10 @@ class RegistrationPresenter extends UnspecifiedPersonAuthBasePresenter
 			$this->error("Pokus o napadeni");
 		}
 
-//        if(!$this->openRegistrationParticipants/* && !$this->group->getFreePlaces()*/) {
-//            $this->flashMessage('Nelze registrovat nové učastníky. Kapacita je již zaplněná', 'warning');
-//            $this->redirect('Homepage:');
-//        }
+        if (!$this->openRegistrationParticipants/* && !$this->group->getFreePlaces()*/) {
+            $this->flashMessage('Nelze registrovat nové učastníky. Kapacita je již zaplněná', 'warning');
+            $this->redirect('Homepage:');
+        }
 
 		$this->template->group = $this->group;
 	}
@@ -107,4 +108,3 @@ class RegistrationPresenter extends UnspecifiedPersonAuthBasePresenter
 }
 
 
-;
