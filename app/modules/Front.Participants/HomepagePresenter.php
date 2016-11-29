@@ -391,7 +391,7 @@ class HomepagePresenter extends ParticipantAuthBasePresenter
 		$values = $frm->getValues();
 		$emails = array_map('trim', explode("\n", trim($values->emails)));
 
-		$link = $this->link('//Registration:toGroup', $this->me->group->id, $this->me->group->getInvitationHash($this->config->hashKey));
+		$link = $this->link('//Invitation:toGroup', $this->me->group->id, $this->me->group->getInvitationHash($this->config->hashKey));
 
 		try
 		{

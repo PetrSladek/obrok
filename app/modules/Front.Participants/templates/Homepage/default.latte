@@ -180,7 +180,7 @@
     {*{if $openRegistrationParticipants || $group->getFreePlaces()}*}
     {if $openRegistrationParticipants}
         <h4>Zvací odkaz</h4>
-        <strong><a href="{link //Registration:toGroup $group->id, $group->getInvitationHash($config->hashKey)}">{link //Registration:toGroup $group->id, $group->getInvitationHash($config->hashKey)}</a></strong>
+        <strong><a href="{link //Invitation:toGroup $group->id, $group->getInvitationHash($config->hashKey)}">{link //Invitation:toGroup $group->id, $group->getInvitationHash($config->hashKey)}</a></strong>
         <h4>Zvací formulář</h4>
         {control frmSendInvitationLink}
     {else}

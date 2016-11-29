@@ -283,7 +283,7 @@ class GroupsPresenter extends DatabaseBasePresenter
 	 */
 	public function renderDetail()
 	{
-		$link = $this->link('//:Front:Participants:Registration:toGroup', $this->item->id, $this->item->getInvitationHash($this->config->hashKey));
+		$link = $this->link('//:Front:Participants:Invitation:toGroup', $this->item->id, $this->item->getInvitationHash($this->config->hashKey));
 		$this->template->invitationLink = $link;
 
 		$this->template->activeParticipants = $this->item->getConfirmedParticipants();
