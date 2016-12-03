@@ -60,17 +60,17 @@ class GroupRegistrationForm extends Control
 		$frm->addText('city', 'Město')
 			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat %label')
 			->setOption('description', 'Město, ke kterému se skupina "hlásí", ve kterém funguje');
-		$frm->addTextarea('note', 'O skupině')
+		$frm->addTextArea('note', 'O skupině')
 			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat %label')
 			->setOption('description', 'Napište nám krátkou charakteristku vaší skupiny. Jste fungující kmen nebo skupina "jednotlivců"? Čím se zabýváte? Napiště něco, co by ostatní mohlo zajímat!');
 
-		$frm->addGpsPicker('location', 'Mapa roverských kmenů:', [
-			'zoom' => 11,
-			'size' => [
-				'x' => '100%',
-				'y' => '400',
-			]])
-			->setOption('description', 'Píchněte špendlík vašeho kmene do mapy a pomozte tím vytvoření Mapy českého roveringu');
+//		$frm->addGpsPicker('location', 'Mapa roverských kmenů:', [
+//			'zoom' => 11,
+//			'size' => [
+//				'x' => '100%',
+//				'y' => '400',
+//			]])
+//			->setOption('description', 'Píchněte špendlík vašeho kmene do mapy a pomozte tím vytvoření Mapy českého roveringu');
 
 		$frm->addSubmit('send', 'Zaregistrovat Skupinu na Obrok 2017')
 			->setAttribute('class', 'btn btn-primary btn-block');
@@ -94,8 +94,8 @@ class GroupRegistrationForm extends Control
 		$group->city = $values->city;
 		$group->note = $values->note;
 
-		$group->locationLat = $values->location->lat;
-		$group->locationLng = $values->location->lng;
+//		$group->locationLat = $values->location->lat;
+//		$group->locationLng = $values->location->lng;
 
 		$this->em->persist($group);
 		$this->em->flush();

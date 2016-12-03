@@ -481,7 +481,7 @@ class ParticipantsPresenter extends DatabaseBasePresenter
 		$this->em->persist($this->item);
 		$this->em->flush();
 
-		$this->redirect(":Participants:Login:as", $id, $hash);
+		$this->redirect(":Front:Login:as", $id, $hash);
 	}
 
 

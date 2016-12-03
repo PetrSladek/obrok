@@ -3,6 +3,7 @@
 namespace App\Module\Front\Presenters;
 
 use App\Hydrators\SkautisHydrator;
+use App\Model\Entity\Participant;
 use App\Model\Entity\Person;
 use Kdyby\Doctrine\EntityManager;
 use Nette;
@@ -45,5 +46,39 @@ class LoginPresenter extends FrontBasePresenter
 		}
 
 	}
+
+
+    /**
+     * Přihlásí uživatele
+     *
+     * @param $id
+     * @param $hash
+     */
+	public function actionAs($id, $hash)
+    {
+        /** @var Person $person */
+        $person = $this->persons->find($id);
+        if (!$person)
+        {
+            $this->error('Uzivatel neexistuje');
+        }
+
+        if (empty($hash))
+        {
+            $this->error('Prazdny hash');
+        }
+
+        if (!Nette\Security\Passwords::verify($hash, $person->quickLoginHash))
+        {
+            $this->error('Spatne hash');
+        }
+
+        $person->quickLoginHash = null;
+        $this->em->persist($person);
+        $this->em->flush();
+
+        $this->user->login($person->toIdentity());
+        $this->redirect('default');
+    }
 
 }

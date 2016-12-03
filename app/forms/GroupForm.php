@@ -139,14 +139,14 @@ class GroupForm extends Control
 			->setEmptyImageUrl($this->imageService->getImageUrl('avatar_group.jpg'))
 			->setDefaultValue($this->group->getAvatarCrop() ?: null);
 
-		$frm->addGpsPicker('location', 'Mapa roverských kmenů:', [
-			'zoom' => 11,
-			'size' => [
-				'x' => '100%',
-				'y' => '400',
-			]])
-			->setDefaultValue($this->group->locationLng !== null && $this->group->locationLng !== null ? [$this->group->locationLat, $this->group->locationLng] : null)
-			->setOption('description', 'Píchněte špendlík vašeho kmene do mapy a pomozte tím vytvoření Mapy českého roveringu');
+//		$frm->addGpsPicker('location', 'Mapa roverských kmenů:', [
+//			'zoom' => 11,
+//			'size' => [
+//				'x' => '100%',
+//				'y' => '400',
+//			]])
+//			->setDefaultValue($this->group->locationLng !== null && $this->group->locationLng !== null ? [$this->group->locationLat, $this->group->locationLng] : null)
+//			->setOption('description', 'Píchněte špendlík vašeho kmene do mapy a pomozte tím vytvoření Mapy českého roveringu');
 
 		$frm->addSubmit('send', 'Uložit údaje skupiny')
 			->setAttribute('class', 'btn btn-primary');

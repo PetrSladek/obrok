@@ -116,7 +116,7 @@ class GroupsPresenter extends DatabaseBasePresenter
 			$this->error("Item not found");
 		}
 
-		$this->participant = $this->item->getAdministrators()->fetch();
+		$this->participant = $this->item->getAdministrators()->first();
 
 		if (!$this->participant)
 		{
@@ -128,9 +128,9 @@ class GroupsPresenter extends DatabaseBasePresenter
 		$this->participant->quickLoginHash = Passwords::hash($hash);
 
 		$this->em->persist($this->participant);
-		$this->em->flush($this->participant);
+		$this->em->flush();
 
-		$this->redirect(":Participants:Login:as", $this->participant->id, $hash);
+        $this->redirect(":Front:Login:as", $this->participant->getId(), $hash);
 	}
 
 

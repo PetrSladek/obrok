@@ -90,7 +90,7 @@
 
             <div class="col-md-6">
                 {if !$me->paid}
-                <img src="https://api.paylibo.com/paylibo/generator/czech/image?compress=false&size=440&accountNumber=2100437022&bankCode=2010&amount=350&currency=CZK&vs={$me->getVarSymbol()}&message={='Obrok 2017 '.$me->getFullName()}" />
+                <img class="img-responsive" src="https://api.paylibo.com/paylibo/generator/czech/image?compress=false&size=440&accountNumber=2100437022&bankCode=2010&amount=350&currency=CZK&vs={$me->getVarSymbol()}&message={='Obrok 2017 '.$me->getFullName()}" />
                 {/if}
             </div>
         </div>

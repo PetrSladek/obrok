@@ -13,6 +13,10 @@
 
     <strong>{$row->name}</strong>
     <br /><small>{$row->city}</small>
+
+    <div class="pull-right text-right">
+        <a n:if="$acl->edit" class="btn btn-xs btn-default" href="{plink Groups:loginAs $row->id}">Přihlásit se</a>
+    </div>
 </td>
 {/redefine}
 {redefine col-contact}

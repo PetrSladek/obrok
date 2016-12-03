@@ -197,6 +197,14 @@
 <div class="row">
     <div class="col-md-6">
         <table class="table">
+            {if $group->isPaid()}
+            <tr>
+                <td colspan="2"><h4>Informace k platbě</h4></td>
+            </tr>
+            <tr>
+                <td colspan="2"><div class="alert alert-success">Účastnický poplatek byl úspěšně přijat</div></td>
+            </tr>
+            {else}
             <tr>
                 <td colspan="2"><h4>Informace k platbě</h4></td>
             </tr>
@@ -209,7 +217,7 @@
             </tr>
            <tr>
                <td>Částka:</td>
-               <td><strong>700 Kč za každého účastníka</strong></td>
+               <td><strong>{=$group->getConfirmedParticipantsCount()*700} Kč (700 Kč/účastník)</strong></td>
            </tr>
            <tr>
                <td>Číslo účtu</td>
@@ -223,13 +231,19 @@
                <td>Poznámka pro příjemce</td>
                <td><strong>Obrok 2017 {$group->name} {$group->city}</strong></td>
            </tr>
+            {/if}
        </table>
-    </div>
-    <div class="col-md-6">
+
         Platbu provádějte až budete mít splněné všechny podmínky učasti!<br />
         <strong>Zaplaťte prosím za všechny registrované účastníky najednou.</strong><br />
         V případě, že později budete chtít někoho přidat. Zaplaťte pouze za něj (se stejným Var.Symbolem)
     </div>
+    <div class="col-md-6">
+        {if !$me->paid}
+            <img class="img-responsive" src="https://api.paylibo.com/paylibo/generator/czech/image?compress=false&size=440&accountNumber=2100437022&bankCode=2010&amount={=$group->getConfirmedParticipantsCount()*700}&currency=CZK&vs={$group->getVarSymbol()}&message={='Obrok 2017 '.$group->name.' ' .$group->city}" />
+        {/if}
+    </div>
+
 </div>
 
 
