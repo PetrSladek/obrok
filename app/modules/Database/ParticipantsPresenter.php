@@ -27,6 +27,7 @@ use Nextras\Datagrid\Datagrid;
  * Class ParticipantsPresenter
  * @package App\Module\Database\Presenters
  * @author  psl <petr.sladek@webnode.com>
+ * @persistent(tblGrid)
  */
 class ParticipantsPresenter extends DatabaseBasePresenter
 {

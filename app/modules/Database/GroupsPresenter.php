@@ -25,6 +25,7 @@ use Nextras\Datagrid\Datagrid;
  * Class GroupsPresenter
  *
  * @author  psl <petr.sladek@webnode.com>
+ * @persistent(tblGrid)
  */
 class GroupsPresenter extends DatabaseBasePresenter
 {

@@ -25,6 +25,7 @@ use Nextras\Datagrid\Datagrid;
  * Class ServiceteamPresenter
  *
  * @author  psl <petr.sladek@webnode.com>
+ * @persistent(tblGrid)
  */
 class ServiceteamPresenter extends DatabaseBasePresenter
 {
