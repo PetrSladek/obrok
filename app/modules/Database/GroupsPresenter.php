@@ -150,7 +150,7 @@ class GroupsPresenter extends DatabaseBasePresenter
 		$grid->addCellsTemplate(__DIR__ . '/templates/grid.layout.latte');
 		$grid->addCellsTemplate(__DIR__ . '/templates/Groups/grid.cols.latte');
 
-		$grid->addColumn('varSymbol', 'ID / VS')->enableSort();;
+		$grid->addColumn('varSymbol', 'ID / VS')->enableSort(true);
 		$grid->addColumn('name', 'Název')->enableSort();;
 		$grid->addColumn('region', 'Kraj')->enableSort();;
 

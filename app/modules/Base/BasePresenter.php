@@ -3,6 +3,7 @@
 namespace App\Module\Base\Presenters;
 
 use App\Model\Phone;
+use App\Model\Repositories\ParticipantsRepository;
 use App\Model\Repositories\SettingsRepository;
 use Kdyby\Doctrine\EntityManager;
 use App\Services\EmailsService;
@@ -40,6 +41,9 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 	/** @var SettingsRepository @inject */
 	public $settings;
 
+    /** @var ParticipantsRepository @inject */
+    public $participants;
+
 	/**
 	 * Je povoleno registrovat nové učastníky?
 	 * @var bool
@@ -57,7 +61,6 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
      * @var bool
      */
     public $openRegistrationProgram;
-
 
 	/** @var ImageService @inject */
 	public $imageService;
@@ -97,7 +100,14 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 		$this->ageInDate = DateTime::from('2017-07-06');
 		$this->template->ageInDate = $this->ageInDate;
 
-		$this->openRegistrationParticipants = $this->settings->get(self::OPEN_PARTICIPANTS_REGISTRATION_KEY, true); // default TRUE
+
+        $countParticipants = count($this->participants->findBy(['confirmed'=>true]));
+        $freeCapacity = max(0, 900 - $countParticipants) > 0;
+
+        // otevřená registrace v settings
+        $this->template->openRegistrationParticipantsSettings = $this->settings->get(self::OPEN_PARTICIPANTS_REGISTRATION_KEY, true); // default TRUE
+
+		$this->openRegistrationParticipants = $this->settings->get(self::OPEN_PARTICIPANTS_REGISTRATION_KEY, true) && $freeCapacity; // default TRUE
 		$this->template->openRegistrationParticipants = $this->openRegistrationParticipants;
 
 		$this->openRegistrationServiceteam = $this->settings->get(self::OPEN_SERVICETEAM_REGISTRATION_KEY, true); // default TRUE
@@ -118,7 +128,6 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 		$this->template->storageUrl = $this->config->storageUrl;
 
 		$this->template->user = $this->getUser();
-
 	}
 
 

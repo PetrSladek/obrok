@@ -95,6 +95,14 @@ class HomepagePresenter extends ParticipantAuthBasePresenter
 	 */
 	public function handleGoBack($id)
 	{
+        if ($this->openRegistrationParticipants)
+        {
+            $this->flashMessage('Účastníka nelze vzít zpět. Registrace je uzavřená, kapacita byla naplněna.', 'danger');
+            $this->isAjax() ? $this->redrawControl() : $this->redirect('this');
+
+            return;
+        }
+
 
 		$this->participant = $this->participants->find($id);
 		if (!$this->participant)

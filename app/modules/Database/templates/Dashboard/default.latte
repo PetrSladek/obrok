@@ -52,14 +52,14 @@
                 </tr>
             </thead>
             <tr>
-                {if $openRegistrationParticipants}
+                {if $openRegistrationParticipantsSettings}
                 <td class="success">
-                    <div class="text-success">Registrace je práve <strong>otevřena <span class="glyphicon glyphicon-ok" aria-hidden="true"></span></strong></div>
+                    <div class="text-success">Registrace je právě <strong>otevřena do maxima 900 účastníků<span class="glyphicon glyphicon-ok" aria-hidden="true"></span></strong></div>
                     <a n:href="closeParticipantRegistration!" class="btn btn-warning">Uzavřít registraci</a>
                 </td>
                 {else}
                 <td class="danger">
-                    <div class="text-danger">Registrace je práve <strong>uzavřena <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></strong></div>
+                    <div class="text-danger">Registrace je právě <strong>uzavřena <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></strong></div>
                     <a n:href="openParticipantRegistration!" class="btn btn-warning">Otevřít registraci</a>
                 </td>
                 {/if}
