@@ -207,9 +207,7 @@ class GroupsPresenter extends DatabaseBasePresenter
                 }
                 else if ($column == 'participantsCount')
                 {
-                    // TOOD tohle chce dořešit
                     $column = 'participantsCount';
-//                    $column = 'g.id';
                 }
                 else
                 {

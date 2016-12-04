@@ -67,7 +67,7 @@ class ParticipantsQuery extends PersonsQuery
 		$this->filter[] = function (QueryBuilder $qb) use ($group)
 		{
 			$qb
-				->andWhere('CONCAT( CONCAT(IFNULL(g.name, \'\'), \' \'), IFNULL(g.city, \'\')) LIKE :group')
+				->andWhere('CONCAT(CONCAT(IFNULL(g.name, \'\'), \' \'), IFNULL(g.city, \'\')) LIKE :group')
 				->setParameter('group', "%$group%");
 		};
 
