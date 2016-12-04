@@ -6,6 +6,7 @@ use App\Model\Entity\Group;
 use App\Model\Entity\Participant;
 use App\Model\Entity\Serviceteam;
 use App\Model\Entity\Team;
+use Doctrine\Common\Collections\Expr\Expression;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use Kdyby\Doctrine\QueryObject;
@@ -52,7 +53,7 @@ class GroupsQuery extends BaseQuery
 	{
 		$id = (int) str_replace("#", '', $id);
 
-		$this->filter[] = function (QueryBuilder $qb) use ($id)
+		$this->filter[__METHOD__] = function (QueryBuilder $qb) use ($id)
 		{
 			$qb->andWhere('g.id = :id')
 			   ->setParameter('id', $id);
@@ -71,7 +72,7 @@ class GroupsQuery extends BaseQuery
 	 */
 	public function searchName($name)
 	{
-		$this->filter[] = function (QueryBuilder $qb) use ($name)
+		$this->filter[__METHOD__] = function (QueryBuilder $qb) use ($name)
 		{
 			$qb
 				->andWhere('CONCAT( CONCAT(IFNULL(g.name, \'\'), \' \'), IFNULL(g.city, \'\')) LIKE :name')
@@ -91,7 +92,7 @@ class GroupsQuery extends BaseQuery
 	 */
 	public function searchRegion($region)
 	{
-		$this->filter[] = function (QueryBuilder $qb) use ($region)
+		$this->filter[__METHOD__] = function (QueryBuilder $qb) use ($region)
 		{
 			$qb
 				->andWhere('g.region LIKE :region')
@@ -111,8 +112,7 @@ class GroupsQuery extends BaseQuery
 	 */
 	public function onlyConfirmed()
 	{
-
-		$this->filter[] = function (QueryBuilder $qb)
+		$this->filter[__METHOD__] = function (QueryBuilder $qb)
 		{
 			$qb->andWhere('g.confirmed = :confirmed')
 			   ->setParameter('confirmed', true);
@@ -132,7 +132,7 @@ class GroupsQuery extends BaseQuery
 	public function onlyNotConfirmed()
 	{
 
-		$this->filter[] = function (QueryBuilder $qb)
+		$this->filter[__METHOD__] = function (QueryBuilder $qb)
 		{
 			$qb->andWhere('g.confirmed = :confirmed')
 			   ->setParameter('confirmed', false);
@@ -150,7 +150,7 @@ class GroupsQuery extends BaseQuery
 	public function onlyPaid()
 	{
 
-		$this->filter[] = function (QueryBuilder $qb)
+		$this->filter[__METHOD__] = function (QueryBuilder $qb)
 		{
 			$qb->andWhere('g.paid = :paid')
 			   ->setParameter('paid', true);
@@ -158,6 +158,24 @@ class GroupsQuery extends BaseQuery
 
 		return $this;
 	}
+
+    /**
+     * Najde pouze zaplacene
+     *
+     * @return $this
+     */
+    public function onlyUnpaid()
+    {
+
+        $this->filter[__METHOD__] = function (QueryBuilder $qb)
+        {
+            $qb->andWhere('g.paid = :paid')
+                ->setParameter('paid', false);
+        };
+
+        return $this;
+    }
+
 
 
 	/**
@@ -168,7 +186,7 @@ class GroupsQuery extends BaseQuery
 	public function onlyNotPaid()
 	{
 
-		$this->filter[] = function (QueryBuilder $qb)
+		$this->filter[__METHOD__] = function (QueryBuilder $qb)
 		{
 			$qb->andWhere('g.paid = :paid')
 			   ->setParameter('paid', false);
@@ -186,7 +204,7 @@ class GroupsQuery extends BaseQuery
 	public function onlyArrived()
 	{
 
-		$this->filter[] = function (QueryBuilder $qb)
+		$this->filter[__METHOD__] = function (QueryBuilder $qb)
 		{
 			$qb->andWhere('g.arrived = :arrived')
 			   ->setParameter('arrived', true);
@@ -203,7 +221,7 @@ class GroupsQuery extends BaseQuery
 	public function onlyNotArrived()
 	{
 
-		$this->filter[] = function (QueryBuilder $qb)
+		$this->filter[__METHOD__] = function (QueryBuilder $qb)
 		{
 			$qb->andWhere('g.arrived = :arrived')
 			   ->setParameter('arrived', false);
@@ -220,7 +238,7 @@ class GroupsQuery extends BaseQuery
 	public function onlyLeft()
 	{
 
-		$this->filter[] = function (QueryBuilder $qb)
+		$this->filter[__METHOD__] = function (QueryBuilder $qb)
 		{
 			$qb->andWhere('g.left = :left')
 			   ->setParameter('left', true);
@@ -236,7 +254,7 @@ class GroupsQuery extends BaseQuery
 	public function onlyNotLeft()
 	{
 
-		$this->filter[] = function (QueryBuilder $qb)
+		$this->filter[__METHOD__] = function (QueryBuilder $qb)
 		{
 			$qb->andWhere('g.left = :left')
 			   ->setParameter('left', false);
@@ -246,12 +264,113 @@ class GroupsQuery extends BaseQuery
 	}
 
 
-	public function withParticipations()
+    /**
+     * Připojí ke skupině i její aktivní uživatele
+     *
+     * @return $this
+     */
+	public function withParticipants()
     {
-        $this->select[] = function (QueryBuilder $qb)
+        $this->select[__METHOD__] = function (QueryBuilder $qb)
         {
             $qb->addSelect('COUNT(p) AS HIDDEN  participantsCount');
             $qb->leftJoin('g.participants', 'p', Join::WITH, 'p.confirmed = 1');
+        };
+
+        return $this;
+    }
+
+
+    /**
+     * Vybere jen skupiny z poctem ucastniku mensim nez je zadan pocet
+     *
+     * @param int $count
+     *
+     * @return $this
+     */
+    public function hasCountParticipantsLessThen($count)
+    {
+        // musime do selectu pridat ucastniky
+        $this->withParticipants();
+
+        $this->filter[__METHOD__] = function (QueryBuilder $qb) use ($count)
+        {
+            $qb->andHaving('participantsCount < :ltCount')
+               ->setParameter(':ltCount', $count);
+        };
+
+        return $this;
+    }
+
+    /**
+     * Vybere jen skupiny z poctem ucastniku alespoň ...
+     *
+     * @param int $count
+     *
+     * @return $this
+     */
+    public function hasCountParticipantsAtLeast($count)
+    {
+        // musime do selectu pridat ucastniky
+        $this->withParticipants();
+
+        $this->filter[__METHOD__] = function (QueryBuilder $qb) use ($count)
+        {
+            $qb->andHaving('participantsCount >= :atlCount')
+                ->setParameter(':atlCount', $count);
+        };
+
+        return $this;
+    }
+
+    /**
+     * Vyfiltruje jen skupiny co mají nějaké potvrzené ale nezaplacené účastníky
+     */
+    public function hasUnpaidParticipants()
+    {
+        $this->filter[__METHOD__] = function (QueryBuilder $qb)
+        {
+            $sqb = clone $qb;
+            $sqb->resetDQLPart('from');
+            $sqb->select('up') // unpaid participant
+                ->from(Participant::class, 'up')
+                ->where("up.group = g AND up.confirmed = 1 AND up.paid = 0");
+
+            $qb->andWhere('EXISTS (' . $sqb->getDQL() . ')');
+        };
+
+        return $this;
+    }
+
+    /**
+     * Vyfiltruje jen skupiny co mají nějaké potvrzené a zaplacené účastníky
+     */
+    public function hasPaidParticipants()
+    {
+        $this->filter[__METHOD__] = function (QueryBuilder $qb)
+        {
+            $sqb = clone $qb;
+            $sqb->resetDQLPart('from');
+            $sqb->select('pp') // unpaid participant
+                ->from(Participant::class, 'pp')
+                ->where("pp.group = g AND  pp.confirmed = 1 AND pp.paid=1");
+
+            $qb->andWhere('EXISTS (' . $sqb->getDQL() . ')');
+        };
+
+        return $this;
+    }
+
+    /**
+     * Vybere jen skupiny nemající žádného šéfa
+     *
+     * @return $this
+     */
+    public function hasNoBoss()
+    {
+        $this->filter[__METHOD__] = function (QueryBuilder $qb)
+        {
+            $qb->andWhere('g.boss IS NULL');
         };
 
         return $this;

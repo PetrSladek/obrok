@@ -96,14 +96,33 @@ class DashboardPresenter extends DatabaseBasePresenter
 
 		// Problemovy skupiny
 		$warningGroups = new ArrayHash();
-		// malo lidi
-		$warningGroups->fewParticipants = []; //$this->groups->getGroupsWithFewParticipants()->fetchAll();
+
+        // malo lidi
+        $query = (new GroupsQuery())
+            ->onlyConfirmed()
+            ->hasCountParticipantsLessThen(4);
+		$warningGroups->fewParticipants = $this->groups->fetch($query);
+
 		// chybi vedouci
-		$warningGroups->noBoss = []; //$this->groups->getGroupsWithNoBoss()->fetchAll();
-		// nedoplaceny
-		$warningGroups->underPaid = []; //$this->groups->getGroupsUnderPaid()->fetchAll();
-		// preplaceny
-		$warningGroups->overPaid = []; //$this->groups->getGroupsOverPaid()->fetchAll();
+        $query = (new GroupsQuery())
+            ->onlyConfirmed()
+            ->hasCountParticipantsAtLeast(4)
+            ->hasNoBoss();
+        $warningGroups->noBoss =  $this->groups->fetch($query);
+
+        // existuje v ní nezaplacený účastník
+        $query = (new GroupsQuery())
+            ->onlyPaid()
+            ->hasUnpaidParticipants();
+		$warningGroups->paidWithUnpaidParticipant = $this->groups->fetch($query);
+
+        // skupina je nezaplacená ale je v ní nějaký zaplacený účastník
+        $query = (new GroupsQuery())
+            ->onlyConfirmed()
+            ->onlyUnpaid()
+            ->hasPaidParticipants();
+		$warningGroups->confirmedWithPaidParticipant = $this->groups->fetch($query);
+
 
 		$this->template->warningGroups = $warningGroups;
 

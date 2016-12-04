@@ -42,6 +42,96 @@
 			</tr>
 		</table>
 
+        <table class="table table-bordered table-condensed table-striped table-hover table-warning" n:ifcontent>
+            {define tr}
+                <tr>
+                    <td width="60">
+                        #{$row->id}<br />
+                        <small>{$row->varSymbol}</small>
+                    </td>
+                    <td>
+                        <a href="{plink Groups:detail $row->id}" class="ajax tr-link"></a>
+
+                        <div class="pull-left" style="margin-right: 5px">
+                            <img n:if="$row->getAvatar()" class="img-responsive" n:img="$row->getAvatar(), 48, 48, exact, $row->getAvatarCrop()" alt="foto" />
+                            <img n:if="!$row->getAvatar()" class="img-responsive" n:img="'avatar_group.jpg', 48, 48, exact" alt="foto" />
+                        </div>
+
+                        <strong>{$row->name}</strong>
+                        <br /><small>{$row->city}</small>
+                    </td>
+                    <td>
+                        {$row->getConfirmedParticipantsCount()} členů
+                    </td>
+                </tr>
+            {/define}
+
+            {if count($warningGroups->noBoss)}
+                <thead>
+                <tr>
+                    <th colspan="99">
+                        <img src="{$storageUrl}/database/img/datagrid/icons/error.png" />
+                        Skupiny co nemají vedoucího ({=count($warningGroups->noBoss)})
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                {foreach $warningGroups->noBoss as $row}
+                    {include #tr}
+                {/foreach}
+                </tbody>
+            {/if}
+
+            {if count($warningGroups->fewParticipants)}
+                <thead>
+                    <tr>
+                        <th colspan="99">
+                            <img src="{$storageUrl}/database/img/datagrid/icons/error.png" />
+                            Skupiny s málo účastníky ({=count($warningGroups->fewParticipants)})
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                {foreach $warningGroups->fewParticipants as $row}
+                    {include #tr}
+                {/foreach}
+                </tbody>
+            {/if}
+
+            {if count($warningGroups->paidWithUnpaidParticipant)}
+                <thead>
+                    <tr>
+                        <th colspan="99">
+                            <img src="{$storageUrl}/database/img/datagrid/icons/error.png" />
+                            Zaplacené skupiny s nezaplacenými účastníky ({=count($warningGroups->paidWithUnpaidParticipant)})
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                {foreach $warningGroups->paidWithUnpaidParticipant as $row}
+                    {include #tr}
+                {/foreach}
+                </tbody>
+            {/if}
+
+            {if count($warningGroups->confirmedWithPaidParticipant)}
+                <thead>
+                    <tr>
+                        <th colspan="99">
+                            <img src="{$storageUrl}/database/img/datagrid/icons/error.png" />
+                            Nezaplacené skupiny co mají zaplacené některé členy ({=count($warningGroups->confirmedWithPaidParticipant)})
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                {foreach $warningGroups->confirmedWithPaidParticipant as $row}
+                    {include #tr}
+                {/foreach}
+                </tbody>
+            {/if}
+        </table>
+
+
 	</div>
 
 	<div class="col-md-4">
@@ -314,75 +404,5 @@
 </script>
 
 
-<div class="row">
-
-<div class="col-md-4">
-        <table class="table table-bordered table-condensed table-striped table-hover">
-        {define tr}
-        <tr>
-            <td width="60">
-                #{$row->id}<br />
-                <small>{$row->varSymbol}</small>
-            </td>
-            <td>
-                {*<img src="{plink Image: (expand) $row->getAvatarType($row::AVATAR_TYPE_DBROW)}" alt="foto" style="float: left;margin-right: 10px;" />*}
-                <strong>{$row->name}</strong>
-                <br /><small>{$row->city}</small>
-            </td>
-            <td>
-                {$row->participantsCount} členů
-                <br /><small>Zaplaceno za: {$row->paidFor}</small>
-            </td>
-        </tr>
-        {/define}
-            <thead>
-                <tr>
-                    <th colspan="99">Málo účastníků</th>
-                </tr>
-            </thead>
-            <tbody>
-                {foreach $warningGroups->fewParticipants as $row}
-                    {include #tr}
-                {/foreach}
-            </tbody>
-
-            <thead>
-                <tr>
-                    <th colspan="99">Nemají vedoucího</th>
-                </tr>
-            </thead>
-            <tbody>
-                {foreach $warningGroups->noBoss as $row}
-                    {include #tr}
-                {/foreach}
-            </tbody>
-
-
-            <thead>
-                <tr>
-                    <th colspan="99">Nedoplacený</th>
-                </tr>
-            </thead>
-            <tbody>
-                {foreach $warningGroups->underPaid as $row}
-                    {include #tr}
-                {/foreach}
-            </tbody>
-
-            <thead>
-                <tr>
-                    <th colspan="99">Přeplacený</th>
-                </tr>
-            </thead>
-            <tbody>
-                {foreach $warningGroups->overPaid as $row}
-                    {include #tr}
-                {/foreach}
-            </tbody>
-
-        </table>
-    </div>
-
-</div>
 
 {/block}

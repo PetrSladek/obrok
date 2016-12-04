@@ -237,7 +237,7 @@ class GroupsPresenter extends DatabaseBasePresenter
 	public function getFilteredQuery($filter)
 	{
 		$query = new GroupsQuery();
-        $query->withParticipations();
+        $query->withParticipants();
 
 		foreach ($filter as $key => $val)
 		{
@@ -585,6 +585,8 @@ class GroupsPresenter extends DatabaseBasePresenter
 				$method = "set" . ucfirst($status);
 				$participant->$method($value);
 			}
+
+			$this->item->updateStatus();
 
 			$this->em->flush();
 		}

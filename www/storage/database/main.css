@@ -342,6 +342,14 @@ table th {
   padding: 0 5px;
   text-align: left;
 }
+
+table.table-warning th {
+  background: -moz-linear-gradient(center top, #f6f58c, #ffd74d) repeat scroll 0 0 #f8bf38;
+  border-color: rgba(255, 81, 0, 0.2) rgba(230, 87, 20, 0.2) rgba(255, 41, 16, 0.3);
+  color: #47280E;
+}
+
+
 table span.positioner {
   display: block;
   float: right;

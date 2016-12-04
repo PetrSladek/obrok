@@ -5,6 +5,7 @@ namespace App\Module\Database\Presenters;
 use App\BasePresenter;
 use App\Forms\Form;
 use App\Model\Entity\Serviceteam;
+use App\Model\Repositories\GroupsRepository;
 use App\Model\Repositories\ServiceteamRepository;
 use Kdyby\Doctrine\EntityDao;
 use Kdyby\Doctrine\EntityManager;
@@ -36,9 +37,11 @@ abstract class DatabaseBasePresenter extends \App\Module\Base\Presenters\BasePre
 	/** @var ServiceteamRepository @inject */
 	public $serviceteams;
 
-	/** @var EntityDao */
-	public $repository;
-
+    /**
+     * Výchozí počet záznamů na stránku
+     *
+     * @var int
+     */
 	public $gridItemsPerPage = 100;
 
 	/**
@@ -78,24 +81,6 @@ abstract class DatabaseBasePresenter extends \App\Module\Base\Presenters\BasePre
 	}
 
 
-//	/**
-//	 * Uprava redraw control, aby se v pripade jinuho snippetu neposilal content.
-//	 * V pripade potreby se musi invalidovat zvlast a dycky posledni
-//	 *
-//	 * @param null $snippet
-//	 * @param bool $redraw
-//	 */
-//	public function redrawControl($snippet = null, $redraw = true)
-//	{
-//		if ($snippet && $snippet !== 'content' && $redraw === true) // pokud je zadany jmeno nejakyho snippetu
-//		{
-//			parent::redrawControl('content', false);
-//		}
-//
-//		parent::redrawControl($snippet, $redraw);
-//	}
-
-
 	/**
 	 * Vykreslení výchozí šablony
 	 */
@@ -111,44 +96,6 @@ abstract class DatabaseBasePresenter extends \App\Module\Base\Presenters\BasePre
 			$tpl->acl = $this->acl;
 			$tpl->ageInDate = $this->ageInDate;
 		}
-	}
-
-
-	/**
-	 * Základní funkce pro zjištění počtu položek
-	 *
-	 * @param $filter
-	 *
-	 * @return mixed
-	 */
-	public function gridItemsCount($filter)
-	{
-		$count = $this->repository->countBy($filter);
-
-		return $count;
-	}
-
-
-	/**
-	 * Základní funkce pro datasource tabulky
-	 *
-	 * @param                $filter
-	 * @param                $order
-	 * @param Paginator|null $paginator
-	 *
-	 * @return array
-	 */
-	public function gridDatasource($filter, $order, Paginator $paginator = null)
-	{
-		// filter pouzivam ze svyho externiho formu
-		$collection = $this->repository->findBy(
-			$filter,
-			$order ? : ['id' => 'DESC'],
-			$paginator ? $paginator->itemsPerPage : null,
-			$paginator ? $paginator->offset : null
-		);
-
-		return $collection;
 	}
 
 
