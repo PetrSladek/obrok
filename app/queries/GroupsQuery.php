@@ -6,6 +6,7 @@ use App\Model\Entity\Group;
 use App\Model\Entity\Participant;
 use App\Model\Entity\Serviceteam;
 use App\Model\Entity\Team;
+use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use Kdyby\Doctrine\QueryObject;
 use Kdyby\Persistence\Queryable;
@@ -245,6 +246,18 @@ class GroupsQuery extends BaseQuery
 	}
 
 
+	public function withParticipations()
+    {
+        $this->select[] = function (QueryBuilder $qb)
+        {
+            $qb->addSelect('COUNT(p) AS HIDDEN  participantsCount');
+            $qb->leftJoin('g.participants', 'p', Join::WITH, 'p.confirmed = 1');
+        };
+
+        return $this;
+    }
+
+
 	/**
 	 * @param Queryable $repository
 	 *
@@ -253,7 +266,7 @@ class GroupsQuery extends BaseQuery
 	protected function createBasicDql(Queryable $repository)
 	{
 		$qb = $repository->createQueryBuilder()
-						 ->select('g')// person
+						 ->select('g')// group
 						 ->from(Group::class, 'g');
 
 		$this->applyFilterTo($qb);
@@ -270,6 +283,7 @@ class GroupsQuery extends BaseQuery
 	protected function doCreateQuery(Queryable $repository)
 	{
 		$qb = $this->createBasicDql($repository);
+        $qb->groupBy('g.id');
 		$this->applySelectTo($qb);
 
 		return $qb;
@@ -286,7 +300,7 @@ class GroupsQuery extends BaseQuery
 		$qb = $this->createBasicDql($repository);
 		$this->applySelectTo($qb);
 
-		return $qb->select('COUNT(g.id)');
+		return $qb->select('COUNT(DISTINCT g.id)');
 	}
 
 }

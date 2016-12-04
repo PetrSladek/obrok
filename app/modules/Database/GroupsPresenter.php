@@ -12,6 +12,7 @@ use App\Model\Repositories\ParticipantsRepository;
 use App\Model\Repositories\ServiceteamRepository;
 use App\Services\ImageService;
 use Brabijan\Images\TImagePipe;
+use Doctrine\ORM\AbstractQuery;
 use Nette\Forms\Container;
 use Nette\Forms\Controls\BaseControl;
 use Nette\Http\IResponse;
@@ -150,11 +151,11 @@ class GroupsPresenter extends DatabaseBasePresenter
 		$grid->addCellsTemplate(__DIR__ . '/templates/grid.layout.latte');
 		$grid->addCellsTemplate(__DIR__ . '/templates/Groups/grid.cols.latte');
 
-		$grid->addColumn('varSymbol', 'ID / VS')->enableSort(true);
-		$grid->addColumn('name', 'Název')->enableSort();;
-		$grid->addColumn('region', 'Kraj')->enableSort();;
+		$grid->addColumn('varSymbol', 'ID / VS')->enableSort(/*Datagrid::ORDER_DESC*/);
+		$grid->addColumn('name', 'Název')->enableSort();
+		$grid->addColumn('region', 'Kraj')->enableSort();
 
-		$grid->addColumn('participantsCount', 'Počet účastníků')->enableSort();;
+		$grid->addColumn('participantsCount', 'Počet účastníků')->enableSort();
 
 		$grid->addColumn('confirmed', 'Přijede?')->enableSort();
 		$grid->addColumn('paid', 'Zaplatil?')->enableSort();
@@ -163,7 +164,6 @@ class GroupsPresenter extends DatabaseBasePresenter
 
 		$grid->setFilterFormFactory(function ()
 		{
-
 			$form = new Container();
 			$form->addText('varSymbol');
 			$form->addText('name');
@@ -196,11 +196,27 @@ class GroupsPresenter extends DatabaseBasePresenter
 			{
 				$result->applyPaging($paginator->getOffset(), $paginator->getLength());
 			}
-//			if ($sorting)
-//			{
-//				list($key, $val) = $sorting;
-//				$result->applySorting([$key => $val]);
-//			}
+            if($sorting)
+            {
+                list($column, $order) = $sorting;
+
+                if ($column == 'varSymbol')
+                {
+                    $column = 'g.id';
+                }
+                else if ($column == 'participantsCount')
+                {
+                    // TOOD tohle chce dořešit
+                    $column = 'participantsCount';
+//                    $column = 'g.id';
+                }
+                else
+                {
+                    $column = 'g.' . $column;
+                }
+
+                $result->applySorting([$column => $order]);
+            }
 
 			return $result;
 		});
@@ -222,6 +238,7 @@ class GroupsPresenter extends DatabaseBasePresenter
 	public function getFilteredQuery($filter)
 	{
 		$query = new GroupsQuery();
+        $query->withParticipations();
 
 		foreach ($filter as $key => $val)
 		{
