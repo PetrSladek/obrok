@@ -7,8 +7,7 @@
 {define col-fullname}
 	<td>
 		<div class="pull-left" style="margin-right: 5px">
-			<img n:if="$row->getAvatar()" class="img-responsive"
-				 n:img="$row->getAvatar(), 48, 48, exact, $row->getAvatarCrop()" alt="foto"/>
+			<img n:if="$row->getAvatar()" class="img-responsive" n:img="$row->getAvatar(), 48, 48, exact, $row->getAvatarCrop()" alt="foto"/>
 			<img n:if="!$row->getAvatar()" class="img-responsive" n:img="$row->isMale() ? 'avatar_boy.jpg' : 'avatar_girl.jpg', 48, 48, exact" alt="foto"/>
 		</div>
 
@@ -99,9 +98,4 @@
 {/define}
 {define col-filter-tshirtSize}
 {input $column->name class=>"input-sm multiselect", size=>2}
-{/define}
-
-
-{define row-actions}
-	<a class="btn btn-default" data-ajax-modal="detail" href="{plink detail $primary}">Otevřít</a>
 {/define}

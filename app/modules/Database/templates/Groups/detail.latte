@@ -46,7 +46,8 @@
                         <img n:if="!$item->getAvatar()" class="img-responsive" n:img="'avatar_group.jpg', 400, 400, exact" alt="foto" />
                     </div>
                     <div class="col-md-5">
-                        <h4 n:class="$acl->edit ? ajax-edit">
+                        {*<h4 n:class="$acl->edit ? ajax-edit">*}
+                        <h4>
                             <small>Vedoucí skupiny (18+ let)</small><br />
                             {*<div class="ajax-edit-val">*}
                             {snippet boss}
@@ -75,7 +76,8 @@
                 </div>
                 <div class="row">
                     <div class="col-md-4">
-                        <h5 n:class="$acl->edit ? ajax-edit">
+                        {*<h5 n:class="$acl->edit ? ajax-edit">*}
+                        <h5>
                             <small>O skupině</small><br />
                             {if $item->note}{$item->note}{else}- není -{/if}
                         </h5>
@@ -85,7 +87,8 @@
                         </h5>
                     </div>
                     <div class="col-md-5">
-                        <h5 n:class="$acl->edit ? ajax-edit">
+                        {*<h5 n:class="$acl->edit ? ajax-edit">*}
+                        <h5>
                             <small>Interní poznámka</small><br />
                             {if $item->noteInternal}{$item->noteInternal}{else}- není -{/if}
                         </h5>

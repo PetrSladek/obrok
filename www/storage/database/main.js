@@ -36,7 +36,6 @@ $(function(){
             var tabs = this.activeTabs;
             if (tabs.length) {
                 for (t in tabs) {
-                    console.log(tabs[t]);
                     $('ul.nav > li > a[data-toggle=tab][href="'+tabs[t]+'"]').tab('show');
                 }
             }
@@ -175,6 +174,27 @@ $(function(){
     });
 
 
+    // pokud v radku libovolne tabulky existuhe a.tr-link tak se pouzije na proklik z celeho radku
+    $('table.table tr').livequery(function() {
+
+        var $link = $(this).find('a.tr-link');
+        if (!$link.length)
+        {
+            return;
+        }
+
+        $(this).css('cursor', 'pointer');
+
+        $(this).find('a').not($link).click(function (e) {
+            e.stopPropagation();
+        });
+
+        $(this).click(function(e) {
+            e.preventDefault();
+            $link.click();
+        });
+    });
+
 
     $('.ajax-edit').livequery(function(){
         var showEdit = true;
@@ -207,7 +227,14 @@ $(function(){
 
 
         // vezme nazev snippetu
-        var snippet = $value.find('[id^=snippet--]').attr('id').replace('snippet--','');
+        var $snippet = $value.find('[id^=snippet--]');
+        if (!$snippet.length)
+        {
+            console.error("Snippet pro ",$value," neexistuje!");
+            return;
+        }
+
+        var snippet = $snippet.attr('id').replace('snippet--','');
 
         var type = 'byInputBlur';
         if($target.find('button[role=save]').length > 0)
