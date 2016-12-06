@@ -3,7 +3,6 @@
         <div class="row">
 
             <div class="col-md-3">
-                {*<img style="width: 100%" n:img="$me, 200x200, exact" alt="foto" />*}
                 <img n:if="$me->getAvatar()" class="img-responsive" n:img="$me->getAvatar(), 400, 400, exact, $me->getAvatarCrop()" alt="foto" />
                 <img n:if="!$me->getAvatar()" class="img-responsive" n:img="$me->isMale() ? 'avatar_boy.jpg' : 'avatar_girl.jpg', 400, 400, exact" alt="foto" />
             </div>
@@ -114,7 +113,7 @@
         {*{/if}*}
 
 <p class="center">
-    V případě jakýchkoliv dotazů či změn (které zde nejdou provést) napiště na email <a href="mailto:{$config->emailToRegistration}">{$config->emailToRegistration}</a>
+    V případě jakýchkoliv dotazů či změn (které zde nejdou provést) napište na e-mail <a href="mailto:{$config->emailToRegistration}">{$config->emailToRegistration}</a>
 </p>
 
 
