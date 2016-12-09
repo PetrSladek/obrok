@@ -28,7 +28,7 @@
 
 {redefine col-participantsCount}
 <td>
-    {$row->getConfirmedParticipantsCount()} členů
+    {$row->getConfirmedParticipantsCount()} členů <br> {$row->getConfirmedParticipantsCount()*700},- Kč
     {*<br /><small>Zaplaceno za: {$row->paidFor}</small>*}
 </td>
 {/redefine}
