@@ -217,7 +217,8 @@
             </tr>
            <tr>
                <td>Částka:</td>
-               <td><strong>{=($group->getConfirmedParticipantsCount()-$group->getPaidParticipantsCount())*700} Kč (700 Kč/účastník)</strong></td>
+               <td>{if $group->getPaidParticipantsCount()>=1}Zbývá:{/if}<strong> {=($group->getConfirmedParticipantsCount()-$group->getPaidParticipantsCount())*700} Kč (700 Kč/os.)</strong><br>
+            {if $group->getPaidParticipantsCount()>=1}   <small>Zaplaceno: {=$group->getPaidParticipantsCount()*700},- Kč ({=$group->getPaidParticipantsCount()}x) </small> {/if} </td>
            </tr>
            <tr>
                <td>Číslo účtu</td>
@@ -239,8 +240,8 @@
         V případě, že později budete chtít někoho přidat. Zaplaťte pouze za něj (se stejným Var.Symbolem)
     </div>
     <div class="col-md-6">
-        {if !$me->paid}
-            <img class="img-responsive" src="https://api.paylibo.com/paylibo/generator/czech/image?compress=false&size=440&accountNumber=2100437022&bankCode=2010&amount={=$group->getConfirmedParticipantsCount()*700}&currency=CZK&vs={$group->getVarSymbol()}&message={='Obrok 2017 '.$group->name.' ' .$group->city}" />
+        {if !$group->paid}
+            <img class="img-responsive" src="https://api.paylibo.com/paylibo/generator/czech/image?compress=false&size=440&accountNumber=2100437022&bankCode=2010&amount={=($group->getConfirmedParticipantsCount()-$group->getPaidParticipantsCount())*700}&currency=CZK&vs={$group->getVarSymbol()}&message={='Obrok 2017 '.$group->name.' ' .$group->city}" />
         {/if}
     </div>
 
