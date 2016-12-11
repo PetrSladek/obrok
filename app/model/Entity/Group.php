@@ -356,6 +356,16 @@ class Group
 
 		return $participants;
 	}
+  
+  	public function getPaidParticipants()
+	{
+
+		$participants = $this->participants->filter(function(Participant $participant) {
+			return $participant->isPaid();
+		})->toArray();
+
+		return $participants;
+	}
 
 
 	/**
@@ -381,7 +391,13 @@ class Group
 	{
 		return count($this->getConfirmedParticipants());
 	}
+  
+  
 
+  	public function getPaidParticipantsCount()
+	{
+		return count($this->getPaidParticipants());
+	}
 
 
 
