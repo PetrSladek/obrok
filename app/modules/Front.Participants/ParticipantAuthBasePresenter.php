@@ -42,7 +42,7 @@ abstract class ParticipantAuthBasePresenter extends \App\Module\Front\Presenters
 		// Pokud je ucatnik => presmerujeme na jeho Homepage
 		elseif ($this->user->isInRole(Person::TYPE_SERVICETEAM))
 		{
-			$this->flashMessage('Už si zaregistrovaný jako servisák. Nemůžeš se registrovat znovu!', 'warning');
+			$this->flashMessage('Už jsi zaregistrovaný jako servisák. Nemůžeš se registrovat znovu!', 'warning');
 			$this->redirect(':Front:Serviceteam:Homepage:');
 		}
 		// Pokud je servisak => presmerujeme na jeho Homepage
