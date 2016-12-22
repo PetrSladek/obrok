@@ -35,13 +35,13 @@ abstract class UnspecifiedPersonAuthBasePresenter extends \App\Module\Base\Prese
 		// Pokud je ucatnik => presmerujeme na jeho Homepage
 		elseif ($this->user->isInRole(Person::TYPE_PARTICIPANT))
 		{
-			$this->flashMessage('Už si zaregistrovaný jako účastník. Nemůžeš se registrovat znovu!', 'danger');
+			$this->flashMessage('Už jsi zaregistrovaný jako účastník. Nemůžeš se registrovat znovu!', 'danger');
 			$this->redirect(':Front:Participants:Homepage:');
 		}
 		// Pokud je servisak => presmerujeme na jeho Homepage
 		elseif ($this->user->isInRole(Person::TYPE_SERVICETEAM))
 		{
-			$this->flashMessage('Už si zaregistrovaný jako servisák. Nemůžeš se registrovat znovu!', 'danger');
+			$this->flashMessage('Už jsi zaregistrovaný jako servisák. Nemůžeš se registrovat znovu!', 'danger');
 			$this->redirect(':Front:Serviceteam:Homepage:');
 		}
 
