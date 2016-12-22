@@ -95,8 +95,8 @@
                         <td>
                             {$participant->fullname}<br />
                             <small>
-                                {if ($me->isAdmin() || $user->id == $participant->id) && $open}<a class="edit" href="{plink participant $participant->id}">Editovat údaje</a>{/if}
-                                {if $me->isAdmin() && $open} | <a class="ajax" href="{plink goOut! $participant->id}">Odebrat</a>{/if}
+                                {if ($me->isAdmin() || $user->id == $participant->id) && $open=1}<a class="edit" href="{plink participant $participant->id}">Editovat údaje</a>{/if}
+                                {if $me->isAdmin() && $open=1} | <a class="ajax" href="{plink goOut! $participant->id}">Odebrat</a>{/if}
                             </small>
                         </td>
                         <td>
