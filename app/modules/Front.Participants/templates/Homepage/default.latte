@@ -28,7 +28,7 @@
                 <td>Zodpovědný vedoucí (18+)</td>
                 <td>
                     <strong>{if $boss}{$boss->fullname}{else}<a n:tag-if="$me->isAdmin()" href="{plink editGroup}">- doplňtě -</a>{/if}</strong>
-                    &nbsp;&nbsp;&nbsp;<small class="help" title="zodpovídá za účastníky ve skupině v průběhu Obroku 2015">(?)</small>
+                    &nbsp;&nbsp;&nbsp;<small class="help" title="zodpovídá za účastníky ve skupině v průběhu Obroku 2017">(?)</small>
                 </td>
             </tr>
             {if $boss}
@@ -96,7 +96,7 @@
                             {$participant->fullname}<br />
                             <small>
                                 {if ($me->isAdmin() || $user->id == $participant->id) && $open=1}<a class="edit" href="{plink participant $participant->id}">Editovat údaje</a>{/if}
-                                {if $me->isAdmin() && $open=1} | <a class="ajax" href="{plink goOut! $participant->id}">Odebrat</a>{/if}
+                               
                             </small>
                         </td>
                         <td>
@@ -144,7 +144,7 @@
 
                 </tbody>
             </table>
-
+            Všichni výše uvedení souhlasí s dokumenty <a href="http://www.obrok17.cz/obecna-ustanoveni-storno-podminky">Obecná ustanovení a storno podmínky</a> a <a href="http://www.obrok17.cz/registrace">Registrační podmínky</a>! </br></br>
         </div>
 
         <div>
