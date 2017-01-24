@@ -14,6 +14,7 @@ use App\Model\Repositories\ServiceteamRepository;
 use App\Model\Repositories\TeamsRepository;
 use App\Model\Repositories\WorkgroupsRepository;
 use Kdyby\Doctrine\EntityRepository;
+use Nette\Application\UI\Form;
 use Nette\Http\IResponse;
 use Nette\Utils\ArrayHash;
 
@@ -44,11 +45,13 @@ class DashboardPresenter extends DatabaseBasePresenter
 	public $settings;
 
 
-	/**
+    /**
 	 * Výchozí akce
 	 */
-	public function actionDefault()
+	public function renderDefault()
 	{
+        // otevřená registrace v settings
+        $this->template->openRegistrationParticipantsSettings = $this->settings->get(self::OPEN_PARTICIPANTS_REGISTRATION_KEY, true); // default TRUE
 
 		$this->template->lastServiceteam = $this->serviceteams->findBy([], ['createdAt' => 'desc'], 10);
 		$this->template->lastGroups = $this->groups->findBy([], ['createdAt' => 'desc'], 10);
@@ -179,6 +182,7 @@ class DashboardPresenter extends DatabaseBasePresenter
 		}
 
 		$this->settings->set(self::OPEN_PARTICIPANTS_REGISTRATION_KEY, true);
+        $this->openRegistrationParticipants &= true; // bere se tam jeste kapacita
 
 		$this->flashMessage("Registrace účastníků byla otevřena", "success");
 		$this->isAjax() ? $this->redrawControl() : $this->redirect('this');
@@ -198,6 +202,7 @@ class DashboardPresenter extends DatabaseBasePresenter
         }
 
         $this->settings->set(self::OPEN_PARTICIPANTS_REGISTRATION_KEY, false);
+        $this->openRegistrationParticipants = false;
 
         $this->flashMessage("Registrace účastníků byla uzavřena", "success");
         $this->isAjax() ? $this->redrawControl() : $this->redirect('this');
@@ -217,6 +222,7 @@ class DashboardPresenter extends DatabaseBasePresenter
         }
 
         $this->settings->set(self::OPEN_SERVICETEAM_REGISTRATION_KEY, true);
+        $this->openRegistrationServiceteam = true;
 
         $this->flashMessage("Registrace servis týmu byla otevřena", "success");
         $this->isAjax() ? $this->redrawControl() : $this->redirect('this');
@@ -236,6 +242,7 @@ class DashboardPresenter extends DatabaseBasePresenter
         }
 
         $this->settings->set(self::OPEN_SERVICETEAM_REGISTRATION_KEY, false);
+        $this->openRegistrationServiceteam = false;
 
         $this->flashMessage("Registrace servis týmu byla uzavřena", "success");
         $this->isAjax() ? $this->redrawControl() : $this->redirect('this');
@@ -254,6 +261,7 @@ class DashboardPresenter extends DatabaseBasePresenter
         }
 
         $this->settings->set(self::OPEN_PROGRAM_REGISTRATION_KEY, true);
+        $this->openRegistrationProgram = true;
 
         $this->flashMessage("Registrace programů byla otevřena", "success");
         $this->isAjax() ? $this->redrawControl() : $this->redirect('this');
@@ -273,9 +281,40 @@ class DashboardPresenter extends DatabaseBasePresenter
         }
 
         $this->settings->set(self::OPEN_PROGRAM_REGISTRATION_KEY, false);
+        $this->openRegistrationProgram = false;
 
         $this->flashMessage("Registrace programů byla uzavřena", "success");
         $this->isAjax() ? $this->redrawControl() : $this->redirect('this');
     }
 
+
+    /**
+     * Formulář na zadání kapacity (účastníků) akce
+     *
+     * @return Form
+     */
+    public function createComponentFrmParticipantsCapacity()
+    {
+        $frm = new Form();
+
+        $frm->addText('capacity', 'Maximální počet účastníků')
+            ->setType('number')
+            ->setRequired()
+            ->addRule(Form::NUMERIC)
+            ->setDefaultValue($this->participantsCapacity);
+
+        $frm->addSubmit('send', 'Uložit');
+
+        $frm->onSuccess[] = function (Form $frm, ArrayHash $values)
+        {
+            // ulozime hodnotu do nastaven8
+            $this->settings->set(self::CAPACITY_PARTICIPANTS, (int) $values->capacity);
+            $this->participantsCapacity = (int) $values->capacity;
+
+            $this->flashMessage('Kapacita účastníků úspěšně uložena.', 'success');
+            $this->isAjax() ? $this->redrawControl() : $this->redirect('this');
+        };
+
+        return $frm;
+    }
 }

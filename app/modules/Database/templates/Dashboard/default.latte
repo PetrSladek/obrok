@@ -144,15 +144,26 @@
             <tr>
                 {if $openRegistrationParticipantsSettings}
                 <td class="success">
-                    <div class="text-success">Registrace je právě <strong>otevřena do maxima 900 účastníků<span class="glyphicon glyphicon-ok" aria-hidden="true"></span></strong></div>
-                    <a n:href="closeParticipantRegistration!" class="btn btn-warning">Uzavřít registraci</a>
+                    <div class="text-success">Registrace je právě <strong>otevřena do maxima {$participantsCapacity} účastníků<span class="glyphicon glyphicon-ok" aria-hidden="true"></span></strong></div>
+                    <a n:href="closeParticipantRegistration!" class="btn btn-warning ajax">Uzavřít registraci</a>
                 </td>
                 {else}
                 <td class="danger">
                     <div class="text-danger">Registrace je právě <strong>uzavřena <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></strong></div>
-                    <a n:href="openParticipantRegistration!" class="btn btn-warning">Otevřít registraci</a>
+                    <a n:href="openParticipantRegistration!" class="btn btn-warning ajax">Otevřít registraci</a>
                 </td>
                 {/if}
+            </tr>
+            <tr>
+                <td>
+                    <form n:name="frmParticipantsCapacity" class="form-inline ajax">
+                        <div class="form-group">
+                            <label n:name="capacity">Maximální počet účastníků: </label>
+                            <input n:name="capacity" class="form-control" placeholder="Kapacita">
+                        </div>
+                        <button n:name="send" class="btn btn-default">Uložit</button>
+                    </form>
+                </td>
             </tr>
         </table>
 
@@ -166,12 +177,12 @@
                 {if $openRegistrationServiceteam}
                 <td class="success">
                     <div class="text-success">Registrace je práve <strong>otevřena <span class="glyphicon glyphicon-ok" aria-hidden="true"></span></strong></div>
-                    <a n:href="closeServiceteamRegistration!" class="btn btn-warning">Uzavřít registraci</a>
+                    <a n:href="closeServiceteamRegistration!" class="btn btn-warning ajax">Uzavřít registraci</a>
                 </td>
                 {else}
                 <td class="danger">
                     <div class="text-danger">Registrace je práve <strong>uzavřena <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></strong></div>
-                    <a n:href="openServiceteamRegistration!" class="btn btn-warning">Otevřít registraci</a>
+                    <a n:href="openServiceteamRegistration!" class="btn btn-warning ajax">Otevřít registraci</a>
                 </td>
                 {/if}
             </tr>
@@ -187,12 +198,12 @@
                 {if $openRegistrationProgram}
                     <td class="success">
                         <div class="text-success">Registrace je práve <strong>otevřena <span class="glyphicon glyphicon-ok" aria-hidden="true"></span></strong></div>
-                        <a n:href="closeProgramRegistration!" class="btn btn-warning">Uzavřít registraci programů</a>
+                        <a n:href="closeProgramRegistration!" class="btn btn-warning ajax">Uzavřít registraci programů</a>
                     </td>
                 {else}
                     <td class="danger">
                         <div class="text-danger">Registrace je práve <strong>uzavřena <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></strong></div>
-                        <a n:href="openProgramRegistration!" class="btn btn-warning">Otevřít registraci programů</a>
+                        <a n:href="openProgramRegistration!" class="btn btn-warning ajax">Otevřít registraci programů</a>
                     </td>
                 {/if}
             </tr>
@@ -223,7 +234,7 @@
 
 
 
-<div class="row">
+<div class="row" n:snippet="data">
     <div class="col-md-4">
         <table class="table table-bordered table-condensed table-striped table-hover">
             <thead>

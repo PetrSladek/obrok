@@ -62,6 +62,14 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
      */
     public $openRegistrationProgram;
 
+    /**
+     * Maximální počet registrovaných účastníků
+     *
+     * @var int
+     */
+    protected $participantsCapacity;
+
+
 	/** @var ImageService @inject */
 	public $imageService;
 
@@ -71,6 +79,8 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
     const OPEN_PROGRAM_REGISTRATION_KEY = 'openProgramParticipants';
 
 	const OPEN_SERVICETEAM_REGISTRATION_KEY = 'openRegistrationServiceteam';
+
+    const CAPACITY_PARTICIPANTS = 'capacityParticipants';
 
 
 	/**
@@ -100,21 +110,16 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 		$this->ageInDate = DateTime::from('2017-06-07');
 		$this->template->ageInDate = $this->ageInDate;
 
+        $this->participantsCapacity = $this->settings->get(self::CAPACITY_PARTICIPANTS, 900); // default 900
 
         $countParticipants = count($this->participants->findBy(['confirmed'=>true]));
-        $freeCapacity = max(0, 900 - $countParticipants) > 0;
+        $freeCapacity = max(0, $this->participantsCapacity - $countParticipants) > 0;
 
-        // otevřená registrace v settings
-        $this->template->openRegistrationParticipantsSettings = $this->settings->get(self::OPEN_PARTICIPANTS_REGISTRATION_KEY, true); // default TRUE
-
-		$this->openRegistrationParticipants = $this->settings->get(self::OPEN_PARTICIPANTS_REGISTRATION_KEY, true) && $freeCapacity; // default TRUE
-		$this->template->openRegistrationParticipants = $this->openRegistrationParticipants;
-
-		$this->openRegistrationServiceteam = $this->settings->get(self::OPEN_SERVICETEAM_REGISTRATION_KEY, true); // default TRUE
-		$this->template->openRegistrationServiceteam = $this->openRegistrationServiceteam;
-
+        $this->openRegistrationParticipants = $this->settings->get(self::OPEN_PARTICIPANTS_REGISTRATION_KEY, true) && $freeCapacity; // default TRUE
+        $this->openRegistrationServiceteam = $this->settings->get(self::OPEN_SERVICETEAM_REGISTRATION_KEY, true); // default TRUE
         $this->openRegistrationProgram = $this->settings->get(self::OPEN_PROGRAM_REGISTRATION_KEY, false); // default false
-        $this->template->openRegistrationProgram = $this->openRegistrationProgram;
+
+
 	}
 
 
@@ -126,8 +131,12 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 		// Variables
 		$this->template->config = $this->config;
 		$this->template->storageUrl = $this->config->storageUrl;
-
 		$this->template->user = $this->getUser();
+
+        $this->template->participantsCapacity = $this->participantsCapacity;
+        $this->template->openRegistrationProgram = $this->openRegistrationProgram;
+        $this->template->openRegistrationServiceteam = $this->openRegistrationServiceteam;
+        $this->template->openRegistrationParticipants = $this->openRegistrationParticipants;
 	}
 
 
