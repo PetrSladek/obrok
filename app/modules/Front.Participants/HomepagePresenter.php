@@ -9,6 +9,7 @@ use App\Forms\Form;
 use App\Model\Entity\Person;
 use App\Model\Repositories\GroupsRepository;
 use App\Services\ImageService;
+use DoctrineExtensions\Query\Mysql\Date;
 use Nette\Utils\AssertionException;
 use Nette\Utils\DateTime;
 
@@ -40,8 +41,9 @@ class HomepagePresenter extends ParticipantAuthBasePresenter
 	{
 		$this->template->programs = $this->me->programs;
 
+        $fromDate = new DateTime('2017-01-25 20:00');
 
-        $payToDate = DateTime::from($this->me->group->createdAt);
+        $payToDate = DateTime::from($fromDate);
         $payToDate->modify('+ 30 days midnight');
 
         $now = new DateTime('now midnight');
