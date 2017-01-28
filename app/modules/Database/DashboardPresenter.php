@@ -41,9 +41,6 @@ class DashboardPresenter extends DatabaseBasePresenter
 	/** @var ServiceteamRepository @inject */
 	public $serviceteams;
 
-	/** @var SettingsRepository @inject */
-	public $settings;
-
 
     /**
 	 * Výchozí akce

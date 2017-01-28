@@ -2,15 +2,13 @@
 
 namespace App\Module\Base\Presenters;
 
-use App\Model\Phone;
 use App\Model\Repositories\ParticipantsRepository;
-use App\Model\Repositories\SettingsRepository;
+use App\Settings;
 use Kdyby\Doctrine\EntityManager;
 use App\Services\EmailsService;
 use App\Services\ImageService;
 use Nette\Utils\ArrayHash;
 use Nette\Utils\DateTime;
-use Nette\Utils\Html;
 use PetrSladek\SkautIS\SkautIS;
 
 /**
@@ -38,7 +36,7 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 	/** @var SkautIS @inject */
 	public $skautis;
 
-	/** @var SettingsRepository @inject */
+	/** @var Settings @inject */
 	public $settings;
 
     /** @var ParticipantsRepository @inject */
@@ -110,14 +108,14 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 		$this->ageInDate = DateTime::from('2017-06-07');
 		$this->template->ageInDate = $this->ageInDate;
 
-        $this->participantsCapacity = $this->settings->get(self::CAPACITY_PARTICIPANTS, 900); // default 900
+        $this->participantsCapacity = (int) $this->settings->get(self::CAPACITY_PARTICIPANTS, 900); // default 900
 
-        $countParticipants = count($this->participants->findBy(['confirmed'=>true]));
+        $countParticipants = $this->participants->countBy(['confirmed'=>true]);
         $freeCapacity = max(0, $this->participantsCapacity - $countParticipants) > 0;
 
-        $this->openRegistrationParticipants = $this->settings->get(self::OPEN_PARTICIPANTS_REGISTRATION_KEY, true) && $freeCapacity; // default TRUE
-        $this->openRegistrationServiceteam = $this->settings->get(self::OPEN_SERVICETEAM_REGISTRATION_KEY, true); // default TRUE
-        $this->openRegistrationProgram = $this->settings->get(self::OPEN_PROGRAM_REGISTRATION_KEY, false); // default false
+        $this->openRegistrationParticipants = (bool) $this->settings->get(self::OPEN_PARTICIPANTS_REGISTRATION_KEY, true) && $freeCapacity; // default TRUE
+        $this->openRegistrationServiceteam = (bool) $this->settings->get(self::OPEN_SERVICETEAM_REGISTRATION_KEY, true); // default TRUE
+        $this->openRegistrationProgram = (bool) $this->settings->get(self::OPEN_PROGRAM_REGISTRATION_KEY, false); // default false
 
 
 	}
