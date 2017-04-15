@@ -596,6 +596,44 @@ class ParticipantsPresenter extends DatabaseBasePresenter
 		return $grid;
 	}
 
+
+	/**
+	 * Nastaví LAT a LNG k ucastnikum kteri ji jeste nemaji
+	 */
+	public function actionSetLocationToParticipant()
+	{
+		echo '<pre>';
+
+		/** @var Participant[] $participants */
+		$participants = $this->participants->findBy(['location_lat' => null, 'location_lng' => null], null, 500);
+		foreach ($participants as $participant)
+		{
+			if ($participant->getLocation())
+			{
+				continue;
+			}
+
+			$address = (string) $participant->getAddress();
+
+			$data = file_get_contents("http://maps.googleapis.com/maps/api/geocode/json?address=" . urlencode($address) . "&sensor=false&language=cs");
+			$data = json_decode($data);
+
+			if (isset($data->results[0]->geometry))
+			{
+				$geometry = $data->results[0]->geometry;
+				$lat = $geometry->location->lat;
+				$lng = $geometry->location->lng;
+
+				$participant->setLocation($lat, $lng);
+
+				echo "{$participant->getFullname()} : {$lat},{$lng}\n";
+			}
+		}
+
+		$this->em->flush();
+		echo "Hotovo\n";
+		$this->terminate();
+	}
 }
 
 

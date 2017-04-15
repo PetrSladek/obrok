@@ -8,6 +8,7 @@
 namespace App\Model\Entity;
 
 use App\Model\Address;
+use App\Model\Location;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\Table;
@@ -20,6 +21,7 @@ use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\PersistentCollection;
 use Kdyby\Doctrine;
 use Nette\InvalidStateException;
+use Nette\Security\Identity;
 use Nette\Utils\DateTime;
 
 /**
@@ -54,6 +56,22 @@ class Participant extends Person
 	 * @var Program[]|ArrayCollection
 	 */
 	protected $programs;
+
+	/**
+	 * LAT Souřadnice bydliště
+	 *
+	 * @var float
+	 * @Column(type="decimal", precision=10, scale=8, nullable=true)
+	 */
+	protected $location_lat;
+
+	/**
+	 * LNG Souřadnice bydliště
+	 *
+	 * @var float
+	 * @Column(type="decimal", precision=10, scale=8, nullable=true)
+	 */
+	protected $location_lng;
 
 
 	public function __construct()
@@ -329,12 +347,34 @@ class Participant extends Person
 		return $this->group && $this->group->isBoss($this);
 	}
 
+
 	/**
 	 * Vrati objekt s nette identitou
+	 *
+	 * @return Identity
 	 */
 	public function toIdentity()
 	{
 		return new \Nette\Security\Identity($this->id, Person::TYPE_PARTICIPANT);
+	}
+
+
+	public function setLocation($lat, $lng)
+	{
+		$this->location_lat = $lat;
+		$this->location_lng = $lng;
+	}
+
+	/**
+	 * Vrátí souřadnice učastníkova bydliště
+	 *
+	 * @return Location|null
+	 */
+	public function getLocation()
+	{
+		return $this->location_lat && $this->location_lng
+			? new Location($this->location_lat, $this->location_lng)
+			: null;
 	}
 
 }

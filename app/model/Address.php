@@ -4,7 +4,9 @@ namespace App\Model;
 
 /**
  * Class Address
+ *
  * @package App\Model
+ *
  * @author  peggy <petr.sladek@skaut.cz>
  */
 class Address
@@ -63,4 +65,14 @@ class Address
 		}
 	}
 
+
+	/**
+	 * Převede adresi na string
+	 *
+	 * @return string
+	 */
+	public function __toString()
+	{
+		return sprintf('%s, %s %s, %s', $this->street, $this->city, $this->postalCode, $this->country);
+	}
 }
