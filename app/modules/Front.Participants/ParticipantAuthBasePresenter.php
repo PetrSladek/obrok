@@ -53,7 +53,7 @@ abstract class ParticipantAuthBasePresenter extends \App\Module\Front\Presenters
 		}
 
 		/** @var Participant */
-		$me = $this->persons->find($this->getUser()->getId());
+		$me = $this->participants->find($this->getUser()->getId());
 		if(!$me)
 		{
 			$this->getUser()->logout(true);

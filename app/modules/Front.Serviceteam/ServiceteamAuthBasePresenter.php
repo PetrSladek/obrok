@@ -47,7 +47,7 @@ abstract class ServiceteamAuthBasePresenter extends \App\Module\Front\Presenters
 		}
 
 		/** @var Serviceteam */
-		$me = $this->persons->find($this->getUser()->getId());
+		$me = $this->serviceteams->find($this->getUser()->getId());
 		if(!$me)
 		{
 			$this->getUser()->logout(true);

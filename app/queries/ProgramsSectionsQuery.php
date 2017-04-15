@@ -20,7 +20,7 @@ class ProgramsSectionsQuery extends BaseQuery
 	{
 		$this->onPostFetch[] = function ($_, Queryable $repository, \Iterator $iterator)
 		{
-			$ids = array_keys(iterator_to_array($iterator, true));
+			$ids = array_map(function(ProgramSection $section) { return $section->getId(); }, iterator_to_array($iterator));
 
 			$repository->createQueryBuilder()
 				->select('partial section.{id}', 'programs')
@@ -28,27 +28,32 @@ class ProgramsSectionsQuery extends BaseQuery
 				->leftJoin('section.programs', 'programs')
 				->andWhere('section.id IN (:ids)')->setParameter('ids', $ids)
 				->getQuery()->getResult();
+
+
 		};
 
 		return $this;
 	}
 
-//	public function withParticipants()
-//	{
-//		$this->onPostFetch[] = function ($_, Queryable $repository, \Iterator $iterator)
-//		{
-//			$ids = array_keys(iterator_to_array($iterator, true));
-//
-//			$repository->createQueryBuilder()
-//				->select('partial section.{id}')
-//				->from(Participant::class, 'participants')
-//				->leftJoin('section.programs', 'programs')
-//				->andWhere('section.id IN (:ids)')->setParameter('ids', $ids)
-//				->getQuery()->getResult();
-//		};
-//
-//		return $this;
-//	}
+	public function withAttendies()
+	{
+		$this->onPostFetch[] = function ($_, Queryable $repository, \Iterator $iterator)
+		{
+			$ids = array_map(function(ProgramSection $section) { return $section->getId(); }, iterator_to_array($iterator));
+
+			$repository->createQueryBuilder()
+				->select('partial section.{id}', 'partial programs.{id}', 'partial attendees.{id}')
+				->from(ProgramSection::class, 'section')
+				->leftJoin('section.programs', 'programs')
+				->leftJoin('programs.attendees', 'attendees')
+				->andWhere('section.id IN (:ids)')->setParameter('ids', $ids)
+				->getQuery()->getResult();
+
+		};
+
+		return $this;
+	}
+
 
 	/**
 	 * @param Queryable $repository
