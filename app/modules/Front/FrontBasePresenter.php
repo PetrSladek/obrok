@@ -66,10 +66,13 @@ abstract class FrontBasePresenter extends \App\Module\Base\Presenters\BasePresen
 						try
 						{
 							$membership = $this->skautis->getClient()->org->MembershipAllPerson(['ID_Person' => $skautisPersonId]);
-							$unitNumber = $membership->MembershipAllOutput->RegistrationNumber;
-							$person->setUnitNumber($unitNumber);
+							if (isset($membership->MembershipAllOutput->RegistrationNumber))
+							{
+								$unitNumber = $membership->MembershipAllOutput->RegistrationNumber;
+								$person->setUnitNumber($unitNumber);
 
-							$this->em->flush($person);
+								$this->em->flush($person);
+							}
 						}
 						catch (\Exception $e)
 						{
