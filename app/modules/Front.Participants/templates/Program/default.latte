@@ -45,9 +45,9 @@
 						</td>
 						<td width="1" class="text-right">
 							{if $me->isAtendeeProgram($program)}
-							<a n:href="unattendeeProgram! $program->id" class="btn btn-xs btn-danger ajax">Odregistrovat</a>
+							<a n:href="unattendeeProgram! $program->id" data-registration="{$program->name} - {$program->lector}" class="btn btn-xs btn-danger ajax unattendee">Odregistrovat</a>
 							{elseif !$program->isFull()}
-							<a n:href="attendeeProgram! $program->id" class="btn btn-xs btn-success ajax">Zaregistrovat</a>
+							<a n:href="attendeeProgram! $program->id" data-registration="{$program->name} - {$program->lector}" class="btn btn-xs btn-success ajax attendee">Zaregistrovat</a>
 							{else}
 							<span class="btn btn-xs btn-default disabled">Zaregistrovat</span>
 							{/if}
@@ -66,10 +66,13 @@
 	<script type="text/javascript">
 
 		$(function() {
-//			$('a.registration').live('click',function(){
-//				// console.log('registration: ' + $(this).attr('data-registration'));
-//				ga('send', 'event', 'registrace', $(this).attr('data-registration'));
-//			});
+			$('.attendee').live('click',function(){
+				ga('send', 'event', 'registrace', $(this).attr('data-registration'));
+			});
+
+			$('.unattendee').live('click',function(){
+				ga('send', 'event', 'odregistrace', $(this).attr('data-registration'));
+			});
 
 			$(function () {
 				$('[data-toggle="popover"]').popover()
