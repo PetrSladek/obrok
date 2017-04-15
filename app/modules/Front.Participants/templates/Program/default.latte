@@ -66,11 +66,11 @@
 	<script type="text/javascript">
 
 		$(function() {
-			$('.attendee').live('click',function(){
+			$('.attendee').live('click',function() {
 				ga('send', 'event', 'registrace', $(this).attr('data-registration'));
 			});
 
-			$('.unattendee').live('click',function(){
+			$('.unattendee').live('click',function() {
 				ga('send', 'event', 'odregistrace', $(this).attr('data-registration'));
 			});
 
