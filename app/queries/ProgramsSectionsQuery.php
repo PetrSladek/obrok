@@ -2,6 +2,7 @@
 
 namespace App\Query;
 
+use App\Model\Entity\Participant;
 use App\Model\Entity\Program;
 use App\Model\Entity\ProgramSection;
 use Kdyby\Persistence\Queryable;
@@ -22,7 +23,7 @@ class ProgramsSectionsQuery extends BaseQuery
 			$ids = array_keys(iterator_to_array($iterator, true));
 
 			$repository->createQueryBuilder()
-				->select('partial section.{id}')
+				->select('partial section.{id}', 'programs')
 				->from(ProgramSection::class, 'section')
 				->leftJoin('section.programs', 'programs')
 				->andWhere('section.id IN (:ids)')->setParameter('ids', $ids)
@@ -31,6 +32,23 @@ class ProgramsSectionsQuery extends BaseQuery
 
 		return $this;
 	}
+
+//	public function withParticipants()
+//	{
+//		$this->onPostFetch[] = function ($_, Queryable $repository, \Iterator $iterator)
+//		{
+//			$ids = array_keys(iterator_to_array($iterator, true));
+//
+//			$repository->createQueryBuilder()
+//				->select('partial section.{id}')
+//				->from(Participant::class, 'participants')
+//				->leftJoin('section.programs', 'programs')
+//				->andWhere('section.id IN (:ids)')->setParameter('ids', $ids)
+//				->getQuery()->getResult();
+//		};
+//
+//		return $this;
+//	}
 
 	/**
 	 * @param Queryable $repository
