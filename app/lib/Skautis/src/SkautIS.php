@@ -44,7 +44,7 @@ class SkautIS extends Object
 	protected $personId;
 
 
-	public function __construct(Application\Application $app, User $user, Request $httpRequest, SessionStorage $session, \SkautIS\SkautIS $client)
+	public function __construct(Application\Application $app, User $user, Request $httpRequest, SessionStorage $session, \Skautis\Skautis $client)
 	{
 		$this->app = $app;
 		$this->httpRequest = $httpRequest;
@@ -106,7 +106,7 @@ class SkautIS extends Object
 
 
 	/**
-	 * @return \SkautIS\SkautIS
+	 * @return \Skautis\Skautis
 	 */
 	public function getClient()
 	{
