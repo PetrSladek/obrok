@@ -60,6 +60,23 @@ abstract class FrontBasePresenter extends \App\Module\Base\Presenters\BasePresen
 				// Pokud existuje jako ucastnik, servisak nebo guest (jeste si nezvolil co bude)
 				if ($person)
 				{
+
+					if (!$person->getUnitNumber())
+					{
+						try
+						{
+							$membership = $this->skautis->getClient()->org->MembershipAllPerson(['ID_Person' => $skautisPersonId]);
+							$unitNumber = $membership->MembershipAllOutput->RegistrationNumber;
+							$person->setUnitNumber($unitNumber);
+
+							$this->em->flush($person);
+						}
+						catch (\Exception $e)
+						{
+
+						}
+					}
+
 					$this->getUser()->login($person->toIdentity());
 				}
 				// Jinak ho zaregistruju ho jako UnspecifiedPerson person

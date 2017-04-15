@@ -16,6 +16,11 @@ use Kdyby\Persistence\Queryable;
 class ProgramsSectionsQuery extends BaseQuery
 {
 
+	/**
+	 * Připojí načtení programů
+	 * 
+	 * @return $this
+	 */
 	public function withPrograms()
 	{
 		$this->onPostFetch[] = function ($_, Queryable $repository, \Iterator $iterator)
@@ -35,6 +40,11 @@ class ProgramsSectionsQuery extends BaseQuery
 		return $this;
 	}
 
+	/**
+	 * Připojí načtení proxy attendies
+	 *
+	 * @return $this
+	 */
 	public function withAttendies()
 	{
 		$this->onPostFetch[] = function ($_, Queryable $repository, \Iterator $iterator)

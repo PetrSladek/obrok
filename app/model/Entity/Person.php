@@ -45,6 +45,7 @@ use Nette\Utils\DateTime;
  * @property string    $health
  * @property string    $note
  * @property string    $noteInternal
+ * @property string    $unitNumber
  * @property string    $skautisUserId
  * @property string    $skautisPersonId
  */
@@ -171,6 +172,13 @@ abstract class Person
 	 * @Column(name="`left`", type="boolean")
 	 */
 	protected $left = false;
+
+	/**
+	 * Číslo jednotky
+	 *
+	 * @Column(type="string", length=255, nullable=true)
+	 */
+	protected $unitNumber;
 
 	/**
 	 * Skautis User ID
@@ -357,6 +365,22 @@ abstract class Person
 	public function toIdentity()
 	{
 		return new \Nette\Security\Identity($this->id, self::TYPE_UNSPECIFIED);
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getUnitNumber()
+	{
+		return $this->unitNumber;
+	}
+
+	/**
+	 * @param mixed $unitNumber
+	 */
+	public function setUnitNumber($unitNumber)
+	{
+		$this->unitNumber = (string) $unitNumber;
 	}
 
 }
