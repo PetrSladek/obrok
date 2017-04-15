@@ -605,7 +605,7 @@ class ParticipantsPresenter extends DatabaseBasePresenter
 		echo '<pre>';
 
 		/** @var Participant[] $participants */
-		$participants = $this->participants->findBy(['location_lat' => null, 'location_lng' => null], null, 500);
+		$participants = $this->participants->findBy(['location_lat' => null, 'location_lng' => null], null, 100);
 		foreach ($participants as $participant)
 		{
 			if ($participant->getLocation())
