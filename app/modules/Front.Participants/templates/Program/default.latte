@@ -9,7 +9,6 @@
 {block content}
 
 
-<div class="container">
     <div class="containerContent clearfix">
 		<h2>Můj program</h2>
 
@@ -61,16 +60,15 @@
 
 
 	</div>
-</div>
 
 	<script type="text/javascript">
 
 		$(function() {
-			$('.attendee').live('click',function() {
+			$(document).on('click', '.attendee', function() {
 				ga('send', 'event', 'registrace', $(this).attr('data-registration'));
 			});
 
-			$('.unattendee').live('click',function() {
+			$(document).on('click', '.unattendee', function() {
 				ga('send', 'event', 'odregistrace', $(this).attr('data-registration'));
 			});
 
@@ -80,6 +78,13 @@
 		});
 
 	</script>
+	<style type="text/css">
+		#snippet--flash
+		{
+			position: fixed;
+			top: 66px;/
+		}
+	</style>
 
 
 <a n:href="Homepage:" class="btn btn-default">Zpět na homepage</a>

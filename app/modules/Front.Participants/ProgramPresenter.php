@@ -6,6 +6,9 @@ use App\Model\Entity\Program;
 use App\Model\Repositories\ProgramsRepository;
 use App\Model\Repositories\ProgramsSectionsRepository;
 use App\Query\ProgramsSectionsQuery;
+use Doctrine\ORM\AbstractQuery;
+use Doctrine\ORM\Internal\Hydration\ArrayHydrator;
+use Doctrine\ORM\Query\ResultSetMapping;
 use Nette\InvalidStateException;
 
 /**
@@ -84,8 +87,42 @@ class ProgramPresenter extends ParticipantAuthBasePresenter
 		}
 
 
+
 		try
 		{
+			// ma uz zaregistrovana 3 vapra, ale zadne z nich neni sport
+			if ($program->isVapro())
+			{
+				$vapros = 0;
+				$sports = 0;
+				foreach ($this->me->getPrograms() as $otherProgram)
+				{
+					if ($otherProgram->section->getId() === $program->section->getId())
+					{
+						continue;
+					}
+
+					if ($otherProgram->isVapro() && !$otherProgram->isSport())
+					{
+						$vapros++;
+					}
+					elseif ($otherProgram->isSport())
+					{
+						$sports++;
+					}
+				}
+
+				if ($program->isSport() && $sports >= 1)
+				{
+					throw new InvalidStateException('Netradiční sport můžeš mít jen v 1 bloku VaPro!');
+				}
+
+				if (!$program->isSport() && $vapros >= 3)
+				{
+					throw new InvalidStateException('Můžeš mít jen 3 bloky běžného VaPro. 1 blok musí být Netradiční sport!');
+				}
+			}
+
 			if ($this->me->hasOtherProgramInTime($program))
 			{
 				$otherProgram = $this->me->findOtherProgramInTime($program);

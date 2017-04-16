@@ -163,4 +163,29 @@ class Program
 		return $this;
 	}
 
+
+	/**
+	 * Je program vapro?
+	 *
+	 * @return int
+	 */
+	public function isVapro()
+	{
+//		return preg_match('/vapro/i', $this->section->title);
+
+		return in_array($this->section->getId(), [3, 4, 5, 6]);
+
+//		return true;
+	}
+
+	/**
+	 * Je program sport?
+	 *
+	 * @return int
+	 */
+	public function isSport()
+	{
+		return $this->isVapro() && preg_match('/sport/i', $this->name);
+	}
+
 }

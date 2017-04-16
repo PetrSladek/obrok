@@ -245,6 +245,10 @@ class Participant extends Person
 	}
 
 
+	/**
+	 * @param Program $program
+	 * @return bool
+	 */
 	public function isAtendeeProgram(Program $program)
 	{
 		return $this->programs->contains($program);
@@ -323,7 +327,7 @@ class Participant extends Person
 	{
 		if ($program->section === null)
 		{
-			return false;
+			return null;
 		}
 
 		foreach ($this->programs as $otherProgram)
@@ -336,6 +340,16 @@ class Participant extends Person
 
 		return null;
 	}
+
+
+	/**
+	 * @return array|Program[]
+	 */
+	public function getPrograms()
+	{
+		return $this->programs->toArray();
+	}
+
 
 
 	/**
