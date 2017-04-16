@@ -110,14 +110,19 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 
         $this->participantsCapacity = (int) $this->settings->get(self::CAPACITY_PARTICIPANTS, 900); // default 900
 
-        $countParticipants = $this->participants->countBy(['confirmed'=>true]);
-        $freeCapacity = max(0, $this->participantsCapacity - $countParticipants) > 0;
-
-        $this->openRegistrationParticipants = (bool) $this->settings->get(self::OPEN_PARTICIPANTS_REGISTRATION_KEY, true) && $freeCapacity; // default TRUE
+        $this->openRegistrationParticipants = (bool) $this->settings->get(self::OPEN_PARTICIPANTS_REGISTRATION_KEY, true) && $this->isFreeCapacity(); // default TRUE
         $this->openRegistrationServiceteam = (bool) $this->settings->get(self::OPEN_SERVICETEAM_REGISTRATION_KEY, true); // default TRUE
         $this->openRegistrationProgram = (bool) $this->settings->get(self::OPEN_PROGRAM_REGISTRATION_KEY, false); // default false
+	}
 
-
+	/**
+	 * Je jeste volna kapacita pro ucastniky?
+	 * @return bool
+	 */
+	private function isFreeCapacity()
+	{
+		$countParticipants = $this->participants->countBy(['confirmed'=>true]);
+		return max(0, $this->participantsCapacity - $countParticipants) > 0;
 	}
 
 

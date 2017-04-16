@@ -44,8 +44,9 @@ class ProgramPresenter extends ParticipantAuthBasePresenter
 		$query = (new ProgramsSectionsQuery())
 			->withPrograms()
 			->withAttendies();
+		$sections = $this->sections->fetch($query);
 
-		$this->template->sections = $this->sections->fetch($query);
+		$this->template->sections = $sections;
 	}
 
 
@@ -85,8 +86,6 @@ class ProgramPresenter extends ParticipantAuthBasePresenter
 		{
 			$this->error('Program neexistuje');
 		}
-
-
 
 		try
 		{
