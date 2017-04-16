@@ -6,6 +6,20 @@
 	</ol>
 {/block}
 
+
+{block programInfo}
+	<strong>{$program->name}</strong>
+	<button n:if="$program->perex || $program->tools || $program->location"
+			class="btn btn-defaut btn-xs"
+			data-toggle="popover" data-trigger="focus" data-html="true"
+			title="{$program->name} - {$program->lector}"
+			data-content="{$program->perex}{if $program->tools}<br /><br /><strong>Pomůcky a potřeby:</strong> {$program->tools}{/if}{if $program->location}<br /><br /><strong>Místo:</strong> {$program->location}{/if}
+									">
+		<i class="fa fa-info-circle"></i> info
+	</button><br />
+	<em n:ifcontent>{$program->lector}</em>
+{/block}
+
 {block content}
 
 
@@ -19,42 +33,85 @@
 		{snippet sections}
 			{foreach $sections as $section}
 			<h3>{$section->title} <small n:ifcontent>{$section->subTitle}</small></h3>
-			<table class="table table-bordered">
-				<tbody>
-				{foreach $section->getPrograms() as $program}
-					<tr n:class="$me->isAtendeeProgram($program) ? bg-success : (!$program->isFull() ? bg-warning)">
-						<td>
-							<strong>{$program->name}</strong>
-							<button n:if="$program->perex || $program->tools || $program->location"
-									class="btn btn-defaut btn-xs"
-									data-toggle="popover" data-trigger="focus" data-html="true"
-									title="{$program->name} - {$program->lector}"
-									data-content="{$program->perex}{if $program->tools}<br /><br /><strong>Pomůcky a potřeby:</strong> {$program->tools}{/if}{if $program->location}<br /><br /><strong>Místo:</strong> {$program->location}{/if}
-							">
-								<i class="fa fa-info-circle"></i> info
-							</button><br />
-							<em n:ifcontent>{$program->lector}</em>
-						</td>
-						<td>
-							{$program->start|day} {$program->start->format('j.n.')}<br />
-							{$program->start->format('H:i')} - {$program->end->format('H:i')}
-						</td>
-						<td>
-							{$program->getOccupied()} / {$program->getCapacity()}
-						</td>
-						<td width="1" class="text-right">
-							{if $me->isAtendeeProgram($program)}
-							<a n:href="unattendeeProgram! $program->id" data-registration="{$program->name} - {$program->lector}" class="btn btn-xs btn-danger ajax unattendee">Odregistrovat</a>
-							{elseif !$program->isFull()}
-							<a n:href="attendeeProgram! $program->id" data-registration="{$program->name} - {$program->lector}" class="btn btn-xs btn-success ajax attendee">Zaregistrovat</a>
-							{else}
-							<span class="btn btn-xs btn-default disabled">Zaregistrovat</span>
-							{/if}
-						</td>
-					</tr>
-				{/foreach}
-				</tbody>
-			</table>
+
+			{if $section->title == 'Krinspiro'}
+				<p>Vyberte 12 aktivit a seřaďte je podle preferencí</p>
+				<div class="row">
+					<div class="col-sm-6">
+						<table class="table table-bordered">
+							<tbody>
+							{foreach $section->getPrograms() as $program}
+								{continueIf $me->isAtendeeProgram($program)}
+								<tr class="bg-warning">
+									<td>
+										{include #programInfo}
+									</td>
+									<td width="1" class="text-right">
+										{if !$program->isFull()}
+											<a n:href="appendProgram! $program->id" class="btn btn-xs btn-success ajax attendee">Zařadit »</a>
+										{else}
+											<span class="btn btn-xs btn-default disabled">Zařadit »</span>
+										{/if}
+									</td>
+								</tr>
+							{/foreach}
+							</tbody>
+						</table>
+					</div>
+					<div class="col-sm-6">
+						<table class="table table-bordered sorted">
+							<tbody>
+							{foreach $section->getPrograms() as $program}
+								{continueIf !$me->isAtendeeProgram($program)}
+								<tr class="bg-success" data-id="{$program->id}">
+									{*<td width="1">*}
+										{*{$iterator->getCounter()}.*}
+									{*</td>*}
+									<td>
+										{include #programInfo}
+									</td>
+									<td width="1" class="text-right">
+										<a n:href="unappendProgram! $program->id" class="btn btn-xs btn-danger ajax unattendee">« Vyřadit</a>
+										{*<a n:href="unappendProgram! $program->id" class="btn btn-xs btn-info ajax">Nahoru</a>*}
+										{*<a n:href="unappendProgram! $program->id" class="btn btn-xs btn-info ajax">Dolu</a>*}
+									</td>
+								</tr>
+							{/foreach}
+							</tbody>
+						</table>
+					</div>
+				</div>
+
+			{else}
+
+				<table class="table table-bordered">
+					<tbody>
+					{foreach $section->getPrograms() as $program}
+						<tr n:class="$me->isAtendeeProgram($program) ? bg-success : (!$program->isFull() ? bg-warning)">
+							<td>
+								{include #programInfo}
+							</td>
+							<td>
+								{$program->start|day} {$program->start->format('j.n.')}<br />
+								{$program->start->format('H:i')} - {$program->end->format('H:i')}
+							</td>
+							<td>
+								{$program->getOccupied()} / {$program->getCapacity()}
+							</td>
+							<td width="1" class="text-right">
+								{if $me->isAtendeeProgram($program)}
+									<a n:href="unattendeeProgram! $program->id" class="btn btn-xs btn-danger ajax unattendee">Odregistrovat</a>
+								{elseif !$program->isFull()}
+									<a n:href="attendeeProgram! $program->id" class="btn btn-xs btn-success ajax attendee">Zaregistrovat</a>
+								{else}
+									<span class="btn btn-xs btn-default disabled">Zařadit »</span>
+								{/if}
+							</td>
+						</tr>
+					{/foreach}
+					</tbody>
+				</table>
+			{/if}
 			{/foreach}
 		{/snippet}
 
@@ -65,16 +122,44 @@
 
 		$(function() {
 			$(document).on('click', '.attendee', function() {
-				ga('send', 'event', 'registrace', $(this).attr('data-registration'));
+				ga('send', 'event', 'registrace');
 			});
 
 			$(document).on('click', '.unattendee', function() {
-				ga('send', 'event', 'odregistrace', $(this).attr('data-registration'));
+				ga('send', 'event', 'odregistrace');
 			});
 
 			$(function () {
-				$('[data-toggle="popover"]').popover()
+				$('[data-toggle="popover"]').popover();
+
+//				// Sortable rows
+//				var table = $('.table.sorted').sortable({
+//					containerSelector: 'table',
+//					itemPath: '> tbody',
+//					itemSelector: 'tr',
+//					placeholder: '<tr class="placeholder"><td colspan="99">&nbsp;<br />&nbsp;</td></tr>',
+//					onDrop: function ($item, container, _super, event)
+//					{
+//						var items = table.sortable("serialize").get()[0];
+//
+//						var positions = [];
+//						for(var i in items)
+//						{
+//							positions.push(items[i].id);
+//						}
+//
+//						$.get('?do=sort' , {
+//							positions: positions
+//						});
+//
+//						console.log(positions);
+//
+//						_super($item, container);
+//					}
+//				});
+
 			});
+
 		});
 
 	</script>
@@ -83,6 +168,16 @@
 		{
 			position: fixed;
 			top: 66px;/
+		}
+
+		body.dragging, body.dragging * {
+			cursor: move !important;
+		}
+
+		.dragged {
+			position: absolute;
+			opacity: 0.5;
+			z-index: 2000;
 		}
 	</style>
 

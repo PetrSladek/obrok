@@ -145,4 +145,97 @@ class ProgramPresenter extends ParticipantAuthBasePresenter
 		$this->isAjax() ? $this->redrawControl() : $this->redirect('this');
 	}
 
+	/**
+	 * Přidání programu učastníkovi
+	 *
+	 * @param $programId
+	 */
+	public function handleAppendProgram($programId)
+	{
+		/** @var Program $program */
+		$program = $this->programs->getReference($programId);
+		if (!$program)
+		{
+			$this->error('Program neexistuje');
+		}
+
+		try
+		{
+			$this->me->appendProgram($program);
+			$this->em->flush();
+		}
+		catch (InvalidStateException $e)
+		{
+			$this->flashMessage($e->getMessage(), 'danger');
+		}
+
+		$this->isAjax() ? $this->redrawControl() : $this->redirect('this');
+	}
+
+	/**
+	 * Odebrání programu učastníkovi
+	 *
+	 * @param $programId
+	 */
+	public function handleUnappendProgram($programId)
+	{
+		/** @var Program $program */
+		$program = $this->programs->getReference($programId);
+		if (!$program)
+		{
+			$this->error('Program neexistuje');
+		}
+
+		try
+		{
+			$this->me->unattendeeProgram($program);
+			$this->em->flush();
+		}
+		catch (InvalidStateException $e)
+		{
+			$this->flashMessage($e->getMessage(), 'danger');
+		}
+
+		$this->isAjax() ? $this->redrawControl() : $this->redirect('this');
+	}
+
+
+	/**
+	 * Seřadí krinspira
+	 *
+	 * @param array $positions
+	 */
+	public function handleSort(array $positions)
+	{
+		foreach ($this->me->getPrograms() as $program)
+		{
+			if ($program->section->getId() === 9) // krinspiro
+			{
+				$this->me->unattendeeProgram($program);
+			}
+		}
+
+		$i = 0;
+		foreach ($positions as $programId)
+		{
+			$program = $this->programs->find($programId);
+
+			if ($program->section->getId() !== 9) // krinspiro
+			{
+				$this->error('Takhle lze pridat jen krinspira');
+			}
+
+			if ($i++ > 12)
+			{
+				$this->error('Nelze pridat vic nez 12 aktivit krinspira');
+			}
+
+			$this->me->appendProgram($program);
+		}
+
+		$this->em->flush();
+		$this->isAjax() ? $this->redrawControl() : $this->redirect('this');
+	}
+
+
 }

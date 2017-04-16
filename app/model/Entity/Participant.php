@@ -199,6 +199,27 @@ class Participant extends Person
 	 * @param Program $program
 	 *
 	 * @return $this
+	 * @throws InvalidStateException
+	 */
+	public function appendProgram(Program $program)
+	{
+		if ($this->isAtendeeProgram($program))
+		{
+			throw new InvalidStateException('Uživatel je již přihlášen na tento program.', 20);
+		}
+
+		$this->programs->add($program);
+		$program->addAttendee($this);
+
+		return $this;
+	}
+
+
+
+	/**
+	 * @param Program $program
+	 *
+	 * @return $this
 	 */
 	public function unattendeeProgram(Program $program)
 	{
@@ -243,6 +264,7 @@ class Participant extends Person
 
 		return $this;
 	}
+
 
 
 	/**
