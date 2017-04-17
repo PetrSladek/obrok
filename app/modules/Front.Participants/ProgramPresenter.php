@@ -161,6 +161,13 @@ class ProgramPresenter extends ParticipantAuthBasePresenter
 
 		try
 		{
+			$otherPrograms = $this->me->getProgramsInSection($program->section);
+
+			if (count($otherPrograms) >= 12)
+			{
+				throw new InvalidStateException("V Krinspiru můžete mít jen 12 aktivit.");
+			}
+
 			$this->me->appendProgram($program);
 			$this->em->flush();
 		}
@@ -207,27 +214,28 @@ class ProgramPresenter extends ParticipantAuthBasePresenter
 	 */
 	public function handleSort(array $positions)
 	{
+
+		$myKrinspiro = [];
+
 		foreach ($this->me->getPrograms() as $program)
 		{
 			if ($program->section->getId() === 9) // krinspiro
 			{
 				$this->me->unattendeeProgram($program);
+				$myKrinspiro[] = $program->getId();
 			}
 		}
 
-		$i = 0;
+		$this->em->flush();
+
 		foreach ($positions as $programId)
 		{
+			/** @var Program $program */
 			$program = $this->programs->find($programId);
 
-			if ($program->section->getId() !== 9) // krinspiro
+			if (!in_array($programId, $myKrinspiro))
 			{
-				$this->error('Takhle lze pridat jen krinspira');
-			}
-
-			if ($i++ > 12)
-			{
-				$this->error('Nelze pridat vic nez 12 aktivit krinspira');
+				$this->error('Při řazené nelze přidat další aktivitu');
 			}
 
 			$this->me->appendProgram($program);

@@ -413,4 +413,20 @@ class Participant extends Person
 			: null;
 	}
 
+
+	/**
+	 * Vrátí programy v sekci
+	 *
+	 * @param ProgramSection $section
+	 *
+	 * @return Program[]
+	 */
+	public function getProgramsInSection(ProgramSection $section)
+	{
+		return $this->programs->filter(function (Program $program) use ($section)
+		{
+			return $program->section->getId() === $section->getId();
+		})->toArray();
+	}
+
 }

@@ -42,13 +42,13 @@
 							<tbody>
 							{foreach $section->getPrograms() as $program}
 								{continueIf $me->isAtendeeProgram($program)}
-								<tr class="bg-warning">
+								<tr n:class="count($me->getProgramsInSection($program->section)) < 12 ? bg-warning">
 									<td>
 										{include #programInfo}
 									</td>
 									<td width="1" class="text-right">
-										{if !$program->isFull()}
-											<a n:href="appendProgram! $program->id" class="btn btn-xs btn-success ajax attendee">Zařadit »</a>
+										{if count($me->getProgramsInSection($program->section)) < 12}
+											<a n:href="appendProgram! $program->id" class="btn btn-xs btn-success ajax attendee">Vybrat »</a>
 										{else}
 											<span class="btn btn-xs btn-default disabled">Zařadit »</span>
 										{/if}
@@ -59,14 +59,16 @@
 						</table>
 					</div>
 					<div class="col-sm-6">
+						{if}
 						<table class="table table-bordered sorted">
 							<tbody>
-							{foreach $section->getPrograms() as $program}
-								{continueIf !$me->isAtendeeProgram($program)}
+							{var $kr = 0}
+							{foreach $me->getPrograms() as $program}
+								{continueIf $program->section !== $section}
 								<tr class="bg-success" data-id="{$program->id}">
-									{*<td width="1">*}
-										{*{$iterator->getCounter()}.*}
-									{*</td>*}
+									<td width="1" class="num">
+										{=++$kr}.
+									</td>
 									<td>
 										{include #programInfo}
 									</td>
@@ -79,6 +81,11 @@
 							{/foreach}
 							</tbody>
 						</table>
+						{else}
+							<div class="alert alert-info">
+								Vyberte 12 aktivit Krinspiro, které se vám líbí a seřadtě je podle vašich preferencí.
+							</div>
+						{/if $kr}
 					</div>
 				</div>
 
@@ -130,22 +137,38 @@
 			});
 
 			$(function () {
-				$('[data-toggle="popover"]').popover();
+
+				$('[data-toggle="popover"]').livequery(function () {
+					$(this).popover();
+				});
 
 				$('.table.sorted').livequery(function () {
 					// Sortable rows
+					var $table = $(this);
 					var table = $(this).sortable({
 						containerSelector: 'table',
 						itemPath: '> tbody',
 						itemSelector: 'tr',
+						handle: 'td.num',
 						placeholder: '<tr class="placeholder"><td colspan="99">&nbsp;<br />&nbsp;</td></tr>',
-						onDrop: function ($item, container, _super, event) {
+						onDragStart: function ($item, container, _super, event)
+						{
+							$('[data-toggle="popover"]', $item).popover('hide');
+
+							_super($item, container);
+						},
+						onDrop: function ($item, container, _super, event)
+						{
 							var items = table.sortable("serialize").get()[0];
 
 							var positions = [];
+							var kr = 1;
 							for (var i in items) {
 								positions.push(items[i].id);
+
+								$('[data-id="' + items[i].id + '"] .num', $table).text((kr++) + '.');
 							}
+
 
 							$.get('?do=sort', {
 								positions: positions
