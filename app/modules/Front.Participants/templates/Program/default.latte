@@ -132,31 +132,31 @@
 			$(function () {
 				$('[data-toggle="popover"]').popover();
 
-//				// Sortable rows
-//				var table = $('.table.sorted').sortable({
-//					containerSelector: 'table',
-//					itemPath: '> tbody',
-//					itemSelector: 'tr',
-//					placeholder: '<tr class="placeholder"><td colspan="99">&nbsp;<br />&nbsp;</td></tr>',
-//					onDrop: function ($item, container, _super, event)
-//					{
-//						var items = table.sortable("serialize").get()[0];
-//
-//						var positions = [];
-//						for(var i in items)
-//						{
-//							positions.push(items[i].id);
-//						}
-//
-//						$.get('?do=sort' , {
-//							positions: positions
-//						});
-//
-//						console.log(positions);
-//
-//						_super($item, container);
-//					}
-//				});
+				$('.table.sorted').livequery(function () {
+					// Sortable rows
+					var table = $(this).sortable({
+						containerSelector: 'table',
+						itemPath: '> tbody',
+						itemSelector: 'tr',
+						placeholder: '<tr class="placeholder"><td colspan="99">&nbsp;<br />&nbsp;</td></tr>',
+						onDrop: function ($item, container, _super, event) {
+							var items = table.sortable("serialize").get()[0];
+
+							var positions = [];
+							for (var i in items) {
+								positions.push(items[i].id);
+							}
+
+							$.get('?do=sort', {
+								positions: positions
+							});
+
+							console.log(positions);
+
+							_super($item, container);
+						}
+					});
+				});
 
 			});
 
