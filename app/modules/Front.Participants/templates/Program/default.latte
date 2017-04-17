@@ -66,11 +66,14 @@
 							{foreach $me->getPrograms() as $program}
 								{continueIf $program->section !== $section}
 								<tr class="bg-success" data-id="{$program->id}">
-									<td width="1" class="num">
-										{=++$kr}.
+									<td width="1">
+										<span class="num">{=++$kr}.</span>
 									</td>
 									<td>
 										{include #programInfo}
+									</td>
+									<td width="1" class="position">
+										<button class="btn btn-info btn-xs"><i class="fa fa-arrows-v" aria-hidden="true"></i> Chytni a přesuň</button>
 									</td>
 									<td width="1" class="text-right">
 										<a n:href="unappendProgram! $program->id" class="btn btn-xs btn-danger ajax unattendee">« Vyřadit</a>
@@ -149,7 +152,7 @@
 						containerSelector: 'table',
 						itemPath: '> tbody',
 						itemSelector: 'tr',
-						handle: 'td.num',
+						handle: 'td.position',
 						placeholder: '<tr class="placeholder"><td colspan="99">&nbsp;<br />&nbsp;</td></tr>',
 						onDragStart: function ($item, container, _super, event)
 						{
