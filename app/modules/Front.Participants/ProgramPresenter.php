@@ -3,6 +3,7 @@
 namespace App\Module\Front\Participants\Presenters;
 
 use App\Model\Entity\Program;
+use App\Model\Entity\ProgramSection;
 use App\Model\Repositories\ProgramsRepository;
 use App\Model\Repositories\ProgramsSectionsRepository;
 use App\Query\ProgramsSectionsQuery;
@@ -159,6 +160,11 @@ class ProgramPresenter extends ParticipantAuthBasePresenter
 			$this->error('Program neexistuje');
 		}
 
+		if ($program->section->getId() !== 9)
+		{
+			$this->error('Tohle jde jen z Krinspirem!');
+		}
+
 		try
 		{
 			$otherPrograms = $this->me->getProgramsInSection($program->section);
@@ -214,7 +220,7 @@ class ProgramPresenter extends ParticipantAuthBasePresenter
 	 */
 	public function handleSort(array $positions)
 	{
-
+//		$section = $this->em->getReference(ProgramSection::class, $section);
 		$myKrinspiro = [];
 
 		foreach ($this->me->getPrograms() as $program)
