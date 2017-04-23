@@ -27,7 +27,7 @@
 		<h2>Můj program</h2>
 
 		{if !$openRegistrationProgram}
-            {if $programRegistrationDateFrom > \Nette\Utils\DateTime::from('now')}
+            {if $programRegistrationDateFrom && $programRegistrationDateFrom > \Nette\Utils\DateTime::from('now')}
 		        <div class="alert alert-warning">Registrace se spouští <strong{* data-countdownto="{$programRegistrationDateFrom->format("U")}" data-link="{link refresh!}"*}>{$programRegistrationDateFrom->format("j.n.Y H:i")}</strong></div>
             {else}
                 <div class="alert alert-warning">Registrace programů je aktuálně uzavřená</div>

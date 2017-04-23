@@ -203,9 +203,15 @@
             </tr>
             </thead>
             <tr>
-                {if $openRegistrationProgram}
+                {if $openRegistrationProgramSettings}
                     <td class="success">
-                        <div class="text-success">Registrace je práve <strong>otevřena <span class="glyphicon glyphicon-ok" aria-hidden="true"></span></strong></div>
+                        {if $programRegistrationDateFrom && $programRegistrationDateFrom > \Nette\Utils\DateTime::from('now')}
+                            <div class="text-success">Registrace <strong>bude otevřena od {$programRegistrationDateFrom->format('j.n.Y H:i')} <span class="glyphicon glyphicon-ok" aria-hidden="true"></span></strong></div>
+                        {else}
+                            <div class="text-success">Registrace je práve <strong>otevřena <span class="glyphicon glyphicon-ok" aria-hidden="true"></span></strong></div>
+                        {/if}
+
+
                         <a n:href="closeProgramRegistration!" class="btn btn-warning ajax">Uzavřít registraci programů</a>
                     </td>
                 {else}

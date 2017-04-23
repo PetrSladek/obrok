@@ -50,6 +50,7 @@ class DashboardPresenter extends DatabaseBasePresenter
 	{
         // otevřená registrace v settings
         $this->template->openRegistrationParticipantsSettings = $this->settings->get(self::OPEN_PARTICIPANTS_REGISTRATION_KEY, true); // default TRUE
+        $this->template->openRegistrationProgramSettings = $this->settings->get(self::OPEN_PROGRAM_REGISTRATION_KEY, false); // default FALSE
 
 		$this->template->lastServiceteam = $this->serviceteams->findBy([], ['createdAt' => 'desc'], 10);
 		$this->template->lastGroups = $this->groups->findBy([], ['createdAt' => 'desc'], 10);
@@ -334,7 +335,7 @@ class DashboardPresenter extends DatabaseBasePresenter
 		{
 			// ulozime hodnotu do nastaven8
 
-			$date = new DateTime($values->date);
+			$date = $values->date ? new DateTime($values->date) : null;
 
 			$this->settings->set(self::PROGRAM_REGISTRATION_DATE_FROM, serialize($date));
 			$this->programRegistrationDateFrom = $date;
