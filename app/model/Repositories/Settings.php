@@ -59,12 +59,17 @@ class Settings
 
     /**
      * @param string $key
-     * @param mixed $value
+     * @param string $value
      *
-     * @return mixed
+     * @return string
      */
     public function set($key, $value)
     {
+	    if (is_bool($value))
+	    {
+		    $value = (int) $value;
+	    }
+
         $this->cache->save($key, $value);
         $this->settings->set($key, $value);
 

@@ -44,8 +44,8 @@ class Setting
 	/**
 	 * Setting constructor.
 	 *
-	 * @param $key
-	 * @param $value
+	 * @param string $key
+	 * @param string $value
 	 */
 	public function __construct($key, $value)
 	{

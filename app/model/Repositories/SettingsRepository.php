@@ -44,21 +44,36 @@ class SettingsRepository extends EntityDao
 	 */
 	public function set($key, $value)
 	{
-		$em = $this->getEntityManager();
 
-		$updateSuccessful = (bool) $em->createQueryBuilder()
-									  ->update(Setting::class, 's')
-									  ->set('s.value', ':value')
-									  ->where('s.key = :key')
-									  ->setParameters(['value' => $value, 'key' => $key])
-									  ->getQuery()->getSingleScalarResult();
+		$setting = $this->findOneBy(['key' => $key]);
 
-		if (!$updateSuccessful)
+		if ($setting)
+		{
+			$setting->value = $value;
+		}
+		else
 		{
 			$setting = new Setting($key, $value);
-			$em->persist($setting);
-			$em->flush();
+			$this->getEntityManager()->persist($setting);
 		}
+
+		$this->getEntityManager()->flush($setting);
+
+
+//		$em = $this->getEntityManager();
+//		$updateSuccessful = (bool) $em->createQueryBuilder()
+//									  ->update(Setting::class, 's')
+//									  ->set('s.value', ':value')
+//									  ->where('s.key = :key')
+//									  ->setParameters(['value' => $value, 'key' => $key])
+//									  ->getQuery()->getSingleScalarResult();
+//
+//		if (!$updateSuccessful)
+//		{
+//			$setting = new Setting($key, $value);
+//			$em->persist($setting);
+//			$em->flush();
+//		}
 
 		return $value;
 	}
