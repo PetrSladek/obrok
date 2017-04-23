@@ -34,6 +34,11 @@ class ProgramSection
 	use \Kdyby\Doctrine\Entities\MagicAccessors;
 
 	/**
+	 * TODO dat to pryč všude kde se to používá
+	 */
+	const KRINSPIRO = 9;
+
+	/**
 	 * Nazev programove kategorie(bloku) - Vapro, Inspiro, Zivly, Sluzba, ...
 	 * @Column(type="string", length=255)
 	 */

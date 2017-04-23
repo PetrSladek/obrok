@@ -7,6 +7,8 @@ use App\Model\Entity\Group;
 use App\Model\Entity\Participant;
 use App\Forms\Form;
 use App\Model\Entity\Person;
+use App\Model\Entity\Program;
+use App\Model\Entity\ProgramSection;
 use App\Model\Repositories\GroupsRepository;
 use App\Services\ImageService;
 use DoctrineExtensions\Query\Mysql\Date;
@@ -39,7 +41,13 @@ class HomepagePresenter extends ParticipantAuthBasePresenter
 	 */
 	public function renderDefault()
 	{
-		$this->template->programs = $this->me->programs;
+		$programs = $this->me->getPrograms();
+		$programs = array_filter($programs, function (Program $program)
+		{
+			return $program->section->getId() !== ProgramSection::KRINSPIRO; // Krinspiro
+		});
+
+		$this->template->programs = $programs;
 
         $fromDate = new DateTime('2017-01-25 20:00');
 

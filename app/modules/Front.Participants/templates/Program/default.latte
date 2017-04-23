@@ -34,7 +34,7 @@
 			{foreach $sections as $section}
 			<h3>{$section->title} <small n:ifcontent>{$section->subTitle}</small></h3>
 
-			{if $section->title == 'Krinspiro'}
+			{if $section->id == $section::KRINSPIRO}
 				<p>Vyberte 12 aktivit a seřaďte je podle preferencí</p>
 				<div class="row">
 					<div class="col-sm-6">
@@ -59,15 +59,14 @@
 						</table>
 					</div>
 					<div class="col-sm-6">
-						{if}
+						{if $myKrinspiro}
 						<table class="table table-bordered sorted">
 							<tbody>
-							{var $kr = 0}
-							{foreach $me->getPrograms() as $program}
+							{foreach $myKrinspiro as $kr => $program}
 								{continueIf $program->section !== $section}
 								<tr class="bg-success" data-id="{$program->id}">
 									<td width="1">
-										<span class="num">{=++$kr}.</span>
+										<span class="num">{= $kr+1}.</span>
 									</td>
 									<td>
 										{include #programInfo}
@@ -77,8 +76,6 @@
 									</td>
 									<td width="1" class="text-right">
 										<a n:href="unappendProgram! $program->id" class="btn btn-xs btn-danger ajax unattendee">« Vyřadit</a>
-										{*<a n:href="unappendProgram! $program->id" class="btn btn-xs btn-info ajax">Nahoru</a>*}
-										{*<a n:href="unappendProgram! $program->id" class="btn btn-xs btn-info ajax">Dolu</a>*}
 									</td>
 								</tr>
 							{/foreach}
@@ -88,7 +85,7 @@
 							<div class="alert alert-info">
 								Vyberte 12 aktivit Krinspiro, které se vám líbí a seřadtě je podle vašich preferencí.
 							</div>
-						{/if $kr}
+						{/if}
 					</div>
 				</div>
 

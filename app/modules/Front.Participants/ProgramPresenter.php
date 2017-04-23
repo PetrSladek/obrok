@@ -48,6 +48,17 @@ class ProgramPresenter extends ParticipantAuthBasePresenter
 		$sections = $this->sections->fetch($query);
 
 		$this->template->sections = $sections;
+
+
+		// Krinspiro
+		$conn = $this->em->getConnection();
+		$priorites = $conn->fetchAll('SELECT program_id FROM krinspiro WHERE participant_id = ? ORDER BY priority ASC', [$this->me->getId()]);
+		$myKrinspiro = [];
+		foreach ($priorites as $priority)
+		{
+			$myKrinspiro[] = $this->programs->getReference($priority['program_id']);
+		}
+		$this->template->myKrinspiro = $myKrinspiro;
 	}
 
 
@@ -149,7 +160,7 @@ class ProgramPresenter extends ParticipantAuthBasePresenter
 	/**
 	 * Přidání programu učastníkovi
 	 *
-	 * @param $programId
+	 * @param int $programId
 	 */
 	public function handleAppendProgram($programId)
 	{
@@ -160,7 +171,7 @@ class ProgramPresenter extends ParticipantAuthBasePresenter
 			$this->error('Program neexistuje');
 		}
 
-		if ($program->section->getId() !== 9)
+		if ($program->section->getId() !== ProgramSection::KRINSPIRO)
 		{
 			$this->error('Tohle jde jen z Krinspirem!');
 		}
@@ -173,6 +184,16 @@ class ProgramPresenter extends ParticipantAuthBasePresenter
 			{
 				throw new InvalidStateException("V Krinspiru můžete mít jen 12 aktivit.");
 			}
+
+			;
+
+			// Krinspiro priority
+			$conn = $this->em->getConnection();
+			$conn->insert('krinspiro', [
+				'participant_id' => (int) $this->me->getId(),
+				'program_id' => (int) $programId,
+				'priority' => (int) time(),
+			]);
 
 			$this->me->appendProgram($program);
 			$this->em->flush();
@@ -201,6 +222,13 @@ class ProgramPresenter extends ParticipantAuthBasePresenter
 
 		try
 		{
+			// Krinspiro priority
+			$conn = $this->em->getConnection();
+			$conn->delete('krinspiro', [
+				'participant_id' => (int) $this->me->getId(),
+				'program_id' => (int) $programId,
+			]);
+
 			$this->me->unattendeeProgram($program);
 			$this->em->flush();
 		}
@@ -220,34 +248,33 @@ class ProgramPresenter extends ParticipantAuthBasePresenter
 	 */
 	public function handleSort(array $positions)
 	{
-//		$section = $this->em->getReference(ProgramSection::class, $section);
 		$myKrinspiro = [];
 
 		foreach ($this->me->getPrograms() as $program)
 		{
-			if ($program->section->getId() === 9) // krinspiro
+			if ($program->section->getId() === ProgramSection::KRINSPIRO) // krinspiro
 			{
-				$this->me->unattendeeProgram($program);
 				$myKrinspiro[] = $program->getId();
 			}
 		}
 
-		$this->em->flush();
-
-		foreach ($positions as $programId)
+		foreach ($positions as $position => $programId)
 		{
-			/** @var Program $program */
-			$program = $this->programs->find($programId);
-
 			if (!in_array($programId, $myKrinspiro))
 			{
 				$this->error('Při řazené nelze přidat další aktivitu');
 			}
 
-			$this->me->appendProgram($program);
+			// Krinspiro priority
+			$conn = $this->em->getConnection();
+			$conn->update('krinspiro', [
+				'priority' => (int) $position,
+			], [
+				'participant_id' => (int) $this->me->getId(),
+				'program_id' => (int) $programId,
+			]);
 		}
 
-		$this->em->flush();
 		$this->isAjax() ? $this->redrawControl() : $this->redirect('this');
 	}
 
