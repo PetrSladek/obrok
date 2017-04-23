@@ -5,13 +5,14 @@ namespace App\Module\Front\Participants\Presenters;
 use App\Model\Entity\Participant;
 use App\Model\Entity\Person;
 use App\Model\Repositories\PersonsRepository;
+use App\Module\Front\Presenters\FrontBasePresenter;
 
 /**
  * Class ParticipantAuthBasePresenter
  * @package App\Module\Front\Participants\Presenters
  * @author  psl <petr.sladek@webnode.com>
  */
-abstract class ParticipantAuthBasePresenter extends \App\Module\Front\Presenters\FrontBasePresenter
+abstract class ParticipantAuthBasePresenter extends FrontBasePresenter
 {
 
 	/** @var Participant */

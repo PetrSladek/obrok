@@ -17,6 +17,7 @@ use Kdyby\Doctrine\EntityRepository;
 use Nette\Application\UI\Form;
 use Nette\Http\IResponse;
 use Nette\Utils\ArrayHash;
+use Nette\Utils\DateTime;
 
 /**
  * Class DashboardPresenter
@@ -314,4 +315,34 @@ class DashboardPresenter extends DatabaseBasePresenter
 
         return $frm;
     }
+
+	/**
+	 * Formulář na zadání kapacity (účastníků) akce
+	 *
+	 * @return Form
+	 */
+	public function createComponentFrmProgramRegistrationDateFrom()
+	{
+		$frm = new Form();
+
+		$frm->addText('date', 'Registraci povolit od:')
+			->setDefaultValue($this->programRegistrationDateFrom ? $this->programRegistrationDateFrom->format('j.n.Y H:i') : null);
+
+		$frm->addSubmit('send', 'Uložit');
+
+		$frm->onSuccess[] = function (Form $frm, ArrayHash $values)
+		{
+			// ulozime hodnotu do nastaven8
+
+			$date = new DateTime($values->date);
+
+			$this->settings->set(self::PROGRAM_REGISTRATION_DATE_FROM, serialize($date));
+			$this->programRegistrationDateFrom = $date;
+
+			$this->flashMessage('Datum registrace programů úspěšně uloženo.', 'success');
+			$this->isAjax() ? $this->redrawControl() : $this->redirect('this');
+		};
+
+		return $frm;
+	}
 }

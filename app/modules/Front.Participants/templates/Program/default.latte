@@ -26,9 +26,13 @@
     <div class="containerContent clearfix">
 		<h2>Můj program</h2>
 
-		{*{if !$registrationActive}*}
-		{*<p>Registrace se spouští <strong data-countdownto="{$registrationActiveFrom->format("U")}" data-link="{link refresh!}">{$registrationActiveFrom->format("j.n.Y H:i")}</strong> <em>(poté se stránka sama obnoví)</em></p>*}
-		{*{/if}*}
+		{if !$openRegistrationProgram}
+            {if $programRegistrationDateFrom > \Nette\Utils\DateTime::from('now')}
+		        <div class="alert alert-warning">Registrace se spouští <strong{* data-countdownto="{$programRegistrationDateFrom->format("U")}" data-link="{link refresh!}"*}>{$programRegistrationDateFrom->format("j.n.Y H:i")}</strong></div>
+            {else}
+                <div class="alert alert-warning">Registrace programů je aktuálně uzavřená</div>
+            {/if}
+		{/if}
 
         <ul class="nav nav-tabs" role="tablist">
             {foreach $sections as $section}
@@ -54,12 +58,12 @@
                                     <tbody>
                                     {foreach $section->getPrograms() as $program}
                                         {continueIf $me->isAtendeeProgram($program)}
-                                        <tr n:class="count($me->getProgramsInSection($program->section)) < 12 ? bg-warning  : bg-disabled">
+                                        <tr n:class="!$openRegistrationProgram ? bg-blank : (count($me->getProgramsInSection($program->section)) < 12 ? bg-warning  : bg-disabled)">
                                             <td>
                                                 {include #programInfo}
                                             </td>
                                             <td width="1" class="text-right">
-                                                {if count($me->getProgramsInSection($program->section)) < 12}
+                                                {if $openRegistrationProgram && count($me->getProgramsInSection($program->section)) < 12}
                                                     <a n:href="appendProgram! $program->id" class="btn btn-xs btn-success ajax attendee">Vybrat »</a>
                                                 {else}
                                                     <span class="btn btn-xs btn-default disabled">Zařadit »</span>
@@ -83,11 +87,19 @@
                                                 <td>
                                                     {include #programInfo}
                                                 </td>
-                                                <td width="1" class="position">
-                                                    <button class="btn btn-info btn-xs"><i class="fa fa-arrows-v" aria-hidden="true"></i> Chytni a přesuň</button>
+                                                <td width="1" n:class="$openRegistrationProgram ? position">
+                                                    {if $openRegistrationProgram}
+                                                        <button class="btn btn-info btn-xs"><i class="fa fa-arrows-v" aria-hidden="true"></i> Chytni a přesuň</button>
+                                                    {else}
+                                                        <span class="btn btn-xs btn-default disabled">Chytni a přesuň</span>
+                                                    {/if}
                                                 </td>
                                                 <td width="1" class="text-right">
-                                                    <a n:href="unappendProgram! $program->id" class="btn btn-xs btn-danger ajax unattendee">« Vyřadit</a>
+                                                    {if $openRegistrationProgram}
+                                                        <a n:href="unappendProgram! $program->id" class="btn btn-xs btn-danger ajax unattendee">« Vyřadit</a>
+                                                    {else}
+                                                        <span class="btn btn-xs btn-default disabled">« Vyřadit</span>
+                                                    {/if}
                                                 </td>
                                             </tr>
                                         {/foreach}
@@ -106,7 +118,7 @@
                         <table class="table table-bordered">
                             <tbody>
                             {foreach $section->getPrograms() as $program}
-                                <tr n:class="$me->isAtendeeProgram($program) ? bg-success : (!$program->isFull() ? bg-warning : bg-disabled)">
+                                <tr n:class="$me->isAtendeeProgram($program) ? bg-success : (!$openRegistrationProgram ? bg-blank : (!$program->isFull() ? bg-warning : bg-disabled))">
                                     <td>
                                         {include #programInfo}
                                     </td>
@@ -118,9 +130,11 @@
                                         {$program->getOccupied()} / {$program->getCapacity()}
                                     </td>
                                     <td width="1" class="text-right">
-                                        {if $me->isAtendeeProgram($program)}
+                                        {if $openRegistrationProgram && $me->isAtendeeProgram($program)}
                                             <a n:href="unattendeeProgram! $program->id" class="btn btn-xs btn-danger ajax unattendee">Odregistrovat</a>
-                                        {elseif !$program->isFull()}
+                                        {elseif $me->isAtendeeProgram($program)}
+                                            <span class="btn btn-xs btn-default disabled">Odregistrovat</span>
+                                        {elseif $openRegistrationProgram && !$program->isFull()}
                                             <a n:href="attendeeProgram! $program->id" class="btn btn-xs btn-success ajax attendee">Zaregistrovat</a>
                                         {else}
                                             <span class="btn btn-xs btn-default disabled">Zaregistrovat</span>

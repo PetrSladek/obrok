@@ -7,6 +7,7 @@ use App\Model\Entity\UnspecifiedPerson;
 use App\Model\Repositories\ParticipantsRepository;
 use App\Model\Repositories\PersonsRepository;
 use App\Model\Repositories\ServiceteamRepository;
+use App\Module\Base\Presenters\BasePresenter;
 use PetrSladek\SkautIS\Dialog\LoginDialog;
 use PetrSladek\SkautIS\SkautIS;
 
@@ -15,7 +16,7 @@ use PetrSladek\SkautIS\SkautIS;
  * @package App\Module\Front\Presenters
  * @author  psl <petr.sladek@webnode.com>
  */
-abstract class FrontBasePresenter extends \App\Module\Base\Presenters\BasePresenter
+abstract class FrontBasePresenter extends BasePresenter
 {
 
 	/** @var ParticipantsRepository @inject */

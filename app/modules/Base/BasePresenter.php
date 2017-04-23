@@ -18,7 +18,6 @@ use PetrSladek\SkautIS\SkautIS;
  */
 abstract class BasePresenter extends \Nette\Application\UI\Presenter
 {
-
 	/** @var ArrayHash */
 	protected $config;
 
@@ -46,19 +45,25 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 	 * Je povoleno registrovat nové učastníky?
 	 * @var bool
 	 */
-	public $openRegistrationParticipants;
+	protected $openRegistrationParticipants;
 
     /**
      * Je povoleno registrovat nové Servisaky?
      * @var bool
      */
-    public $openRegistrationServiceteam;
+	protected $openRegistrationServiceteam;
 
     /**
      * Je povoleno registrovat program?
      * @var bool
      */
-    public $openRegistrationProgram;
+    protected $openRegistrationProgram;
+
+	/**
+	 * Datum registrace programů od
+	 * @var DateTime|null
+	 */
+	protected $programRegistrationDateFrom;
 
     /**
      * Maximální počet registrovaných účastníků
@@ -79,6 +84,8 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 	const OPEN_SERVICETEAM_REGISTRATION_KEY = 'openRegistrationServiceteam';
 
     const CAPACITY_PARTICIPANTS = 'capacityParticipants';
+
+	const PROGRAM_REGISTRATION_DATE_FROM = 'programRegistrationDateFrom';
 
 
 	/**
@@ -110,19 +117,40 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 
         $this->participantsCapacity = (int) $this->settings->get(self::CAPACITY_PARTICIPANTS, 900); // default 900
 
+		$programRegistrationDateFrom = $this->settings->get(self::PROGRAM_REGISTRATION_DATE_FROM, null);
+        $this->programRegistrationDateFrom = $programRegistrationDateFrom ? unserialize($programRegistrationDateFrom) : null;
+
         $this->openRegistrationParticipants = (bool) $this->settings->get(self::OPEN_PARTICIPANTS_REGISTRATION_KEY, true) && $this->isFreeCapacity(); // default TRUE
         $this->openRegistrationServiceteam = (bool) $this->settings->get(self::OPEN_SERVICETEAM_REGISTRATION_KEY, true); // default TRUE
-        $this->openRegistrationProgram = (bool) $this->settings->get(self::OPEN_PROGRAM_REGISTRATION_KEY, false); // default false
+        $this->openRegistrationProgram = (bool) $this->settings->get(self::OPEN_PROGRAM_REGISTRATION_KEY, false) && $this->isTimeForProgramRegistration(); // default FALSE
 	}
 
 	/**
 	 * Je jeste volna kapacita pro ucastniky?
+	 *
 	 * @return bool
 	 */
 	private function isFreeCapacity()
 	{
 		$countParticipants = $this->participants->countBy(['confirmed'=>true]);
 		return max(0, $this->participantsCapacity - $countParticipants) > 0;
+	}
+
+
+	/**
+	 * Nastal čas pro registraci programů
+	 *
+	 * @return bool
+	 */
+	private function isTimeForProgramRegistration()
+	{
+		if (!$this->programRegistrationDateFrom)
+		{
+			return false;
+		}
+
+		$now = new DateTime();
+		return $now >= $this->programRegistrationDateFrom;
 	}
 
 
@@ -138,6 +166,7 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 
         $this->template->participantsCapacity = $this->participantsCapacity;
         $this->template->openRegistrationProgram = $this->openRegistrationProgram;
+		$this->template->programRegistrationDateFrom = $this->programRegistrationDateFrom;
         $this->template->openRegistrationServiceteam = $this->openRegistrationServiceteam;
         $this->template->openRegistrationParticipants = $this->openRegistrationParticipants;
 	}

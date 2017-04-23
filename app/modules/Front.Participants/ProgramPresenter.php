@@ -30,10 +30,10 @@ class ProgramPresenter extends ParticipantAuthBasePresenter
     {
         parent::startup();
 
-        if (!$this->openRegistrationProgram)
-        {
-            $this->error('Registrace programů je uzavřená');
-        }
+//        if (!$this->openRegistrationProgram)
+//        {
+//            $this->error('Registrace programů je uzavřená');
+//        }
     }
 
 
@@ -71,6 +71,11 @@ class ProgramPresenter extends ParticipantAuthBasePresenter
 	 */
 	public function handleUnattendeeProgram($programId)
 	{
+		if (!$this->openRegistrationProgram)
+		{
+			$this->error('Registrace programů je uzavřená');
+		}
+
 		/** @var Program $program */
 		$program = $this->programs->find($programId);
 		if (!$program)
@@ -92,6 +97,11 @@ class ProgramPresenter extends ParticipantAuthBasePresenter
 	 */
 	public function handleAttendeeProgram($programId)
 	{
+		if (!$this->openRegistrationProgram)
+		{
+			$this->error('Registrace programů je uzavřená');
+		}
+
 		/** @var Program $program */
 		$program = $this->programs->find($programId);
 		if (!$program)
@@ -167,6 +177,11 @@ class ProgramPresenter extends ParticipantAuthBasePresenter
 	 */
 	public function handleAppendProgram($programId)
 	{
+		if (!$this->openRegistrationProgram)
+		{
+			$this->error('Registrace programů je uzavřená');
+		}
+
 		/** @var Program $program */
 		$program = $this->programs->getReference($programId);
 		if (!$program)
@@ -216,6 +231,11 @@ class ProgramPresenter extends ParticipantAuthBasePresenter
 	 */
 	public function handleUnappendProgram($programId)
 	{
+		if (!$this->openRegistrationProgram)
+		{
+			$this->error('Registrace programů je uzavřená');
+		}
+
 		/** @var Program $program */
 		$program = $this->programs->getReference($programId);
 		if (!$program)
@@ -251,6 +271,11 @@ class ProgramPresenter extends ParticipantAuthBasePresenter
 	 */
 	public function handleSort(array $positions)
 	{
+		if (!$this->openRegistrationProgram)
+		{
+			$this->error('Registrace programů je uzavřená');
+		}
+
 		$myKrinspiro = [];
 
 		foreach ($this->me->getPrograms() as $program)
