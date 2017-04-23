@@ -30,97 +30,111 @@
 		{*<p>Registrace se spouští <strong data-countdownto="{$registrationActiveFrom->format("U")}" data-link="{link refresh!}">{$registrationActiveFrom->format("j.n.Y H:i")}</strong> <em>(poté se stránka sama obnoví)</em></p>*}
 		{*{/if}*}
 
-		{snippet sections}
-			{foreach $sections as $section}
-			<h3>{$section->title} <small n:ifcontent>{$section->subTitle}</small></h3>
+        <ul class="nav nav-tabs" role="tablist">
+            {foreach $sections as $section}
+            <li role="presentation" n:class="$iterator->first ? active">
+                <a href="#section-{$section->id}" role="tab" data-toggle="tab">
+                    {$section->title} <small n:ifcontent>{$section->subTitle}</small>
+                </a>
+            </li>
+            {/foreach}
+        </ul>
 
-			{if $section->id == $section::KRINSPIRO}
-				<p>Vyberte 12 aktivit a seřaďte je podle preferencí</p>
-				<div class="row">
-					<div class="col-sm-6">
-						<table class="table table-bordered">
-							<tbody>
-							{foreach $section->getPrograms() as $program}
-								{continueIf $me->isAtendeeProgram($program)}
-								<tr n:class="count($me->getProgramsInSection($program->section)) < 12 ? bg-warning">
-									<td>
-										{include #programInfo}
-									</td>
-									<td width="1" class="text-right">
-										{if count($me->getProgramsInSection($program->section)) < 12}
-											<a n:href="appendProgram! $program->id" class="btn btn-xs btn-success ajax attendee">Vybrat »</a>
-										{else}
-											<span class="btn btn-xs btn-default disabled">Zařadit »</span>
-										{/if}
-									</td>
-								</tr>
-							{/foreach}
-							</tbody>
-						</table>
-					</div>
-					<div class="col-sm-6">
-						{if $myKrinspiro}
-						<table class="table table-bordered sorted">
-							<tbody>
-							{foreach $myKrinspiro as $kr => $program}
-								{continueIf $program->section !== $section}
-								<tr class="bg-success" data-id="{$program->id}">
-									<td width="1">
-										<span class="num">{= $kr+1}.</span>
-									</td>
-									<td>
-										{include #programInfo}
-									</td>
-									<td width="1" class="position">
-										<button class="btn btn-info btn-xs"><i class="fa fa-arrows-v" aria-hidden="true"></i> Chytni a přesuň</button>
-									</td>
-									<td width="1" class="text-right">
-										<a n:href="unappendProgram! $program->id" class="btn btn-xs btn-danger ajax unattendee">« Vyřadit</a>
-									</td>
-								</tr>
-							{/foreach}
-							</tbody>
-						</table>
-						{else}
-							<div class="alert alert-info">
-								Vyberte 12 aktivit Krinspiro, které se vám líbí a seřadtě je podle vašich preferencí.
-							</div>
-						{/if}
-					</div>
-				</div>
+        <!-- Tab panes -->
+        <div class="tab-content" n:snippet="sections">
+        {foreach $sections as $section}
+            <div role="tabpanel" n:class="tab-pane, $iterator->first ? active" id="section-{$section->id}">
+                <h3>{$section->title} <small n:ifcontent>{$section->subTitle}</small></h3>
+                <div n:snippet="section-{$section->id}">
+                    {if $section->id == $section::KRINSPIRO}
+                        <div class="alert alert-info">Vyber 12 aktivit a seřaď je podle tvých preferencí.</div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <table class="table table-bordered">
+                                    <tbody>
+                                    {foreach $section->getPrograms() as $program}
+                                        {continueIf $me->isAtendeeProgram($program)}
+                                        <tr n:class="count($me->getProgramsInSection($program->section)) < 12 ? bg-warning  : bg-disabled">
+                                            <td>
+                                                {include #programInfo}
+                                            </td>
+                                            <td width="1" class="text-right">
+                                                {if count($me->getProgramsInSection($program->section)) < 12}
+                                                    <a n:href="appendProgram! $program->id" class="btn btn-xs btn-success ajax attendee">Vybrat »</a>
+                                                {else}
+                                                    <span class="btn btn-xs btn-default disabled">Zařadit »</span>
+                                                {/if}
+                                            </td>
+                                        </tr>
+                                    {/foreach}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-sm-6">
+                                {if $myKrinspiro}
+                                    <table class="table table-bordered sorted">
+                                        <tbody>
+                                        {foreach $myKrinspiro as $kr => $program}
+                                            {continueIf $program->section !== $section}
+                                            <tr class="bg-success" data-id="{$program->id}">
+                                                <td width="1">
+                                                    <span class="num">{= $kr+1}.</span>
+                                                </td>
+                                                <td>
+                                                    {include #programInfo}
+                                                </td>
+                                                <td width="1" class="position">
+                                                    <button class="btn btn-info btn-xs"><i class="fa fa-arrows-v" aria-hidden="true"></i> Chytni a přesuň</button>
+                                                </td>
+                                                <td width="1" class="text-right">
+                                                    <a n:href="unappendProgram! $program->id" class="btn btn-xs btn-danger ajax unattendee">« Vyřadit</a>
+                                                </td>
+                                            </tr>
+                                        {/foreach}
+                                        </tbody>
+                                    </table>
+                                {else}
+                                    <div class="alert alert-info">
+                                        Vyberte 12 aktivit Krinspiro, které se vám líbí a seřadtě je podle vašich preferencí.
+                                    </div>
+                                {/if}
+                            </div>
+                        </div>
 
-			{else}
+                    {else}
 
-				<table class="table table-bordered">
-					<tbody>
-					{foreach $section->getPrograms() as $program}
-						<tr n:class="$me->isAtendeeProgram($program) ? bg-success : (!$program->isFull() ? bg-warning)">
-							<td>
-								{include #programInfo}
-							</td>
-							<td>
-								{$program->start|day} {$program->start->format('j.n.')}<br />
-								{$program->start->format('H:i')} - {$program->end->format('H:i')}
-							</td>
-							<td>
-								{$program->getOccupied()} / {$program->getCapacity()}
-							</td>
-							<td width="1" class="text-right">
-								{if $me->isAtendeeProgram($program)}
-									<a n:href="unattendeeProgram! $program->id" class="btn btn-xs btn-danger ajax unattendee">Odregistrovat</a>
-								{elseif !$program->isFull()}
-									<a n:href="attendeeProgram! $program->id" class="btn btn-xs btn-success ajax attendee">Zaregistrovat</a>
-								{else}
-									<span class="btn btn-xs btn-default disabled">Zařadit »</span>
-								{/if}
-							</td>
-						</tr>
-					{/foreach}
-					</tbody>
-				</table>
-			{/if}
-			{/foreach}
-		{/snippet}
+                        <table class="table table-bordered">
+                            <tbody>
+                            {foreach $section->getPrograms() as $program}
+                                <tr n:class="$me->isAtendeeProgram($program) ? bg-success : (!$program->isFull() ? bg-warning : bg-disabled)">
+                                    <td>
+                                        {include #programInfo}
+                                    </td>
+                                    <td>
+                                        {$program->start|day} {$program->start->format('j.n.')}<br />
+                                        {$program->start->format('H:i')} - {$program->end->format('H:i')}
+                                    </td>
+                                    <td>
+                                        {$program->getOccupied()} / {$program->getCapacity()}
+                                    </td>
+                                    <td width="1" class="text-right">
+                                        {if $me->isAtendeeProgram($program)}
+                                            <a n:href="unattendeeProgram! $program->id" class="btn btn-xs btn-danger ajax unattendee">Odregistrovat</a>
+                                        {elseif !$program->isFull()}
+                                            <a n:href="attendeeProgram! $program->id" class="btn btn-xs btn-success ajax attendee">Zaregistrovat</a>
+                                        {else}
+                                            <span class="btn btn-xs btn-default disabled">Zaregistrovat</span>
+                                        {/if}
+                                    </td>
+                                </tr>
+                            {/foreach}
+                            </tbody>
+                        </table>
+                    {/if}
+                </div>
+            </div>
+        {/foreach}
+        </div>
 
 
 	</div>
@@ -191,6 +205,7 @@
 		{
 			position: fixed;
 			top: 66px;/
+            z-index: 99;
 		}
 
 		body.dragging, body.dragging * {
@@ -202,6 +217,11 @@
 			opacity: 0.5;
 			z-index: 2000;
 		}
+
+        .bg-disabled {
+            opacity: 0.5;
+            background: #eeeeee;
+        }
 	</style>
 
 

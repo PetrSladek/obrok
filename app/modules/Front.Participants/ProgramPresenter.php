@@ -106,6 +106,8 @@ class ProgramPresenter extends ParticipantAuthBasePresenter
 			{
 				$vapros = 0;
 				$sports = 0;
+
+				$sportSection = null;
 				foreach ($this->me->getPrograms() as $otherProgram)
 				{
 					if ($otherProgram->section->getId() === $program->section->getId())
@@ -120,12 +122,13 @@ class ProgramPresenter extends ParticipantAuthBasePresenter
 					elseif ($otherProgram->isSport())
 					{
 						$sports++;
+						$sportSection = $otherProgram->section;
 					}
 				}
 
 				if ($program->isSport() && $sports >= 1)
 				{
-					throw new InvalidStateException('Netradiční sport můžeš mít jen v 1 bloku VaPro!');
+					throw new InvalidStateException('Netradiční Sport můžeš mít jen v jednom VaPro bloku! Nejprve ho odregistruj z ' . $sportSection->title . ' ' . $sportSection->subTitle);
 				}
 
 				if (!$program->isSport() && $vapros >= 3)
