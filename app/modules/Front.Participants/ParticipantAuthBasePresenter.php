@@ -66,11 +66,7 @@ abstract class ParticipantAuthBasePresenter extends FrontBasePresenter
 		$this->template->me = $this->me;
 
 		// je registrace otevrena jen pro mě?
-
-		Debugger::barDump($this->me->hasOpenProgramRegistration(), 'Mam ja otevrenou registraci?');
-		Debugger::barDump($this->openRegistrationParticipants, 'Je otevrena registrace normalne?');
-		$this->openRegistrationParticipants = $this->openRegistrationParticipants || $this->me->hasOpenProgramRegistration();
-		Debugger::barDump($this->openRegistrationParticipants, 'Vysledek');
+		$this->openRegistrationProgram = $this->openRegistrationProgram || $this->me->hasOpenProgramRegistration();
 
 		$this->open = $this->openRegistrationParticipants;
 		$this->template->open = $this->open;
