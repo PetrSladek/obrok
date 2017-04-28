@@ -64,7 +64,9 @@ abstract class ParticipantAuthBasePresenter extends FrontBasePresenter
 		$this->me = $me;
 		$this->template->me = $this->me;
 
-		// Uzavreni registrace, aby se v prubehu obroku{stavecky uz nedfali menit yadna data ye stranz ucastniku
+		// je registrace otevrena jen pro mě?
+		$this->openRegistrationParticipants |= $this->me->hasOpenProgramRegistration();
+
 		$this->open = $this->openRegistrationParticipants;
 		$this->template->open = $this->open;
 	}

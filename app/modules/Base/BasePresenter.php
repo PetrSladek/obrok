@@ -2,6 +2,7 @@
 
 namespace App\Module\Base\Presenters;
 
+use App\Model\Entity\Participant;
 use App\Model\Repositories\ParticipantsRepository;
 use App\Settings;
 use Kdyby\Doctrine\EntityManager;
