@@ -15,6 +15,7 @@
            {/if}
         </div>
         <div class="pull-right">
+           <a n:if="$acl->edit" n:href="loginAs $item->id" class="btn btn-default"><i class="fa fa-sign-in"></i> Přihlásit se</a>
            <a n:if="$acl->edit" n:href="edit $item->id" class="btn btn-warning ajax">Editovat údaje</a>
         </div>
     </div>
@@ -112,6 +113,12 @@
 
             <div class="tab-pane" id="program">
                 <h2>Programy</h2>
+
+                {if $item->hasOpenProgramRegistration()}
+                    <a n:if="$acl->edit" n:href="closeProgramRegistration!" class="ajax btn btn-info">Zavřít registraci programů</a>
+                {else}
+                    <a n:if="$acl->edit" n:href="openProgramRegistration!" class="ajax btn btn-warning">Povolit registraci programů!</a>
+                {/if}
 
                 {snippet programs}
 

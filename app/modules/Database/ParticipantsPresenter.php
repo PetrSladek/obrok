@@ -323,6 +323,28 @@ class ParticipantsPresenter extends DatabaseBasePresenter
 
 
 	/**
+	 * Povolí uživateli registraci programu
+	 */
+	public function handleOpenProgramRegistration()
+	{
+		$this->item->openProgramRegistration();
+
+		$this->isAjax() ? $this->redrawControl() : $this->redirect('this');
+	}
+
+
+	/**
+	 * Zavře uživateli registraci programu
+	 */
+	public function handleCloseProgramRegistration()
+	{
+		$this->item->closeProgramRegistration();
+
+		$this->isAjax() ? $this->redrawControl() : $this->redirect('this');
+	}
+
+
+	/**
 	 * Vykreslení šavlony detailu učastníka
 	 *
 	 * @param $id
@@ -634,6 +656,10 @@ class ParticipantsPresenter extends DatabaseBasePresenter
 		echo "Hotovo\n";
 		$this->terminate();
 	}
+
+
+
+
 }
 
 

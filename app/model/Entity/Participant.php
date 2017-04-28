@@ -74,9 +74,20 @@ class Participant extends Person
 	protected $location_lng;
 
 
+	/**
+	 * Má tento účastník specálně otevřenou registraci programů?
+	 *
+	 * @var bool
+	 *
+	 * @Column(type="boolean")
+	 */
+	protected $openProgramRegistration = false;
+
+
 	public function __construct()
 	{
 		parent::__construct();
+
 		$this->programs = new ArrayCollection();
 	}
 
@@ -427,6 +438,33 @@ class Participant extends Person
 		{
 			return $program->section->getId() === $section->getId();
 		})->toArray();
+	}
+
+
+	/**
+	 * @return bool
+	 */
+	public function hasOpenProgramRegistration()
+	{
+		return (bool) $this->openProgramRegistration;
+	}
+
+
+	/**
+	 * Otevře pro účastníka registraci
+	 */
+	public function openProgramRegistration()
+	{
+		$this->openProgramRegistration = true;
+	}
+
+
+	/**
+	 * Otevře pro účastníka registraci
+	 */
+	public function closeProgramRegistration()
+	{
+		$this->openProgramRegistration = false;
 	}
 
 }
