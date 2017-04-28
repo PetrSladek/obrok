@@ -328,6 +328,7 @@ class ParticipantsPresenter extends DatabaseBasePresenter
 	public function handleOpenProgramRegistration()
 	{
 		$this->item->openProgramRegistration();
+		$this->em->flush($this->item);
 
 		$this->isAjax() ? $this->redrawControl() : $this->redirect('this');
 	}
@@ -339,6 +340,7 @@ class ParticipantsPresenter extends DatabaseBasePresenter
 	public function handleCloseProgramRegistration()
 	{
 		$this->item->closeProgramRegistration();
+		$this->em->flush($this->item);
 
 		$this->isAjax() ? $this->redrawControl() : $this->redirect('this');
 	}
