@@ -384,33 +384,33 @@
     function _initRotationControls () {
         // TODO - Not a fan of these controls
         return;
-        var self = this,
-            wrap, btnLeft, btnRight, iLeft, iRight;
-
-        wrap = document.createElement('div');
-        self.elements.orientationBtnLeft = btnLeft = document.createElement('button');
-        self.elements.orientationBtnRight = btnRight = document.createElement('button');
-
-        wrap.appendChild(btnLeft);
-        wrap.appendChild(btnRight);
-
-        iLeft = document.createElement('i');
-        iRight = document.createElement('i');
-        btnLeft.appendChild(iLeft);
-        btnRight.appendChild(iRight);
-
-        addClass(wrap, 'cr-rotate-controls');
-        addClass(btnLeft, 'cr-rotate-l');
-        addClass(btnRight, 'cr-rotate-r');
-
-        self.elements.boundary.appendChild(wrap);
-
-        btnLeft.addEventListener('click', function () {
-            self.rotate(-90);
-        });
-        btnRight.addEventListener('click', function () {
-            self.rotate(90);
-        });
+        // var self = this,
+        //     wrap, btnLeft, btnRight, iLeft, iRight;
+        //
+        // wrap = document.createElement('div');
+        // self.elements.orientationBtnLeft = btnLeft = document.createElement('button');
+        // self.elements.orientationBtnRight = btnRight = document.createElement('button');
+        //
+        // wrap.appendChild(btnLeft);
+        // wrap.appendChild(btnRight);
+        //
+        // iLeft = document.createElement('i');
+        // iRight = document.createElement('i');
+        // btnLeft.appendChild(iLeft);
+        // btnRight.appendChild(iRight);
+        //
+        // addClass(wrap, 'cr-rotate-controls');
+        // addClass(btnLeft, 'cr-rotate-l');
+        // addClass(btnRight, 'cr-rotate-r');
+        //
+        // self.elements.boundary.appendChild(wrap);
+        //
+        // btnLeft.addEventListener('click', function () {
+        //     self.rotate(-90);
+        // });
+        // btnRight.addEventListener('click', function () {
+        //     self.rotate(90);
+        // });
     }
 
     function _hasExif() {

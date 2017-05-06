@@ -64,9 +64,9 @@
                                             </td>
                                             <td width="1" class="text-right">
                                                 {if $openRegistrationProgram && count($me->getProgramsInSection($program->section)) < 12}
-                                                    <a n:href="appendProgram! $program->id" class="btn btn-xs btn-success ajax attendee">Vybrat »</a>
+                                                    <a n:href="appendProgram! $program->id" onclick="$(this).addClass('loading'); ga('send', 'event', {'type': 'vybrat', 'id': {$program->id}, 'name': {$program->name}});" class="btn btn-xs btn-success ajax attendee"><i class="fa fa-spinner fa-spin"></i> Vybrat »</a>
                                                 {else}
-                                                    <span class="btn btn-xs btn-default disabled">Zařadit »</span>
+                                                    <span class="btn btn-xs btn-default disabled">Vybrat »</span>
                                                 {/if}
                                             </td>
                                         </tr>
@@ -96,7 +96,7 @@
                                                 </td>
                                                 <td width="1" class="text-right">
                                                     {if $openRegistrationProgram}
-                                                        <a n:href="unappendProgram! $program->id" class="btn btn-xs btn-danger ajax unattendee">« Vyřadit</a>
+                                                        <a n:href="unappendProgram! $program->id" onclick="$(this).addClass('loading'); ga('send', 'event', {'type': 'vyřadit', 'program':{$program->id}, 'name': {$program->name}});" class="btn btn-xs btn-danger ajax unattendee"><i class="fa fa-spinner fa-spin"></i> « Vyřadit</a>
                                                     {else}
                                                         <span class="btn btn-xs btn-default disabled">« Vyřadit</span>
                                                     {/if}
@@ -131,11 +131,11 @@
                                     </td>
                                     <td width="1" class="text-right">
                                         {if $openRegistrationProgram && $me->isAtendeeProgram($program)}
-                                            <a n:href="unattendeeProgram! $program->id" class="btn btn-xs btn-danger ajax unattendee">Odregistrovat</a>
+                                            <a n:href="unattendeeProgram! $program->id" onclick="$(this).addClass('loading'); ga('send', 'event', {'type': 'odregistrace', 'program':{$program->id}, 'name': {$program->name}});" class="btn btn-xs btn-danger ajax unattendee"><i class="fa fa-spinner fa-spin"></i> Odregistrovat</a>
                                         {elseif $me->isAtendeeProgram($program)}
                                             <span class="btn btn-xs btn-default disabled">Odregistrovat</span>
                                         {elseif $openRegistrationProgram && !$program->isFull()}
-                                            <a n:href="attendeeProgram! $program->id" class="btn btn-xs btn-success ajax attendee">Zaregistrovat</a>
+                                            <a n:href="attendeeProgram! $program->id"  onclick="$(this).addClass('loading'); ga('send', 'event', {'type': 'registrace', 'program':{$program->id}, 'name': {$program->name}});" class="btn btn-xs btn-success ajax attendee"><i class="fa fa-spinner fa-spin"></i> Zaregistrovat</a>
                                         {else}
                                             <span class="btn btn-xs btn-default disabled">Zaregistrovat</span>
                                         {/if}
@@ -155,76 +155,64 @@
 
 	<script type="text/javascript">
 
-		$(function() {
-			$(document).on('click', '.attendee', function() {
-				ga('send', 'event', 'registrace');
-			});
+        $(function () {
 
-			$(document).on('click', '.unattendee', function() {
-				ga('send', 'event', 'odregistrace');
-			});
+            // for bootstrap 3 use 'shown.bs.tab', for bootstrap 2 use 'shown' in the next line
+            $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+                // save the latest tab; use cookies if you like 'em better:
+                localStorage.setItem('lastTab', $(this).attr('href'));
+            });
 
-			$(function () {
+            // go to the latest tab, if it exists:
+            var lastTab = localStorage.getItem('lastTab');
+            if (lastTab) {
+                $('[href="' + lastTab + '"]').tab('show');
+            }
 
-                // for bootstrap 3 use 'shown.bs.tab', for bootstrap 2 use 'shown' in the next line
-                $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-                    // save the latest tab; use cookies if you like 'em better:
-                    localStorage.setItem('lastTab', $(this).attr('href'));
+            $('[data-toggle="popover"]').livequery(function () {
+                $(this).popover();
+            });
+
+            $('.table.sorted').livequery(function () {
+                // Sortable rows
+                var $table = $(this);
+                var table = $(this).sortable({
+                    containerSelector: 'table',
+                    itemPath: '> tbody',
+                    itemSelector: 'tr',
+                    handle: 'td.position',
+                    placeholder: '<tr class="placeholder"><td colspan="99">&nbsp;<br />&nbsp;</td></tr>',
+                    onDragStart: function ($item, container, _super, event)
+                    {
+                        $('[data-toggle="popover"]', $item).popover('hide');
+
+                        _super($item, container);
+                    },
+                    onDrop: function ($item, container, _super, event)
+                    {
+                        var items = table.sortable("serialize").get()[0];
+
+                        var positions = [];
+                        var kr = 1;
+                        for (var i in items) {
+                            positions.push(items[i].id);
+
+                            $('[data-id="' + items[i].id + '"] .num', $table).text((kr++) + '.');
+                        }
+
+
+                        $.get('?do=sort', {
+                            positions: positions
+                        });
+
+                        console.log(positions);
+
+                        _super($item, container);
+                    }
                 });
+            });
 
-                // go to the latest tab, if it exists:
-                var lastTab = localStorage.getItem('lastTab');
-                if (lastTab) {
-                    $('[href="' + lastTab + '"]').tab('show');
-                }
-
-				$('[data-toggle="popover"]').livequery(function () {
-					$(this).popover();
-				});
-
-				$('.table.sorted').livequery(function () {
-					// Sortable rows
-					var $table = $(this);
-					var table = $(this).sortable({
-						containerSelector: 'table',
-						itemPath: '> tbody',
-						itemSelector: 'tr',
-						handle: 'td.position',
-						placeholder: '<tr class="placeholder"><td colspan="99">&nbsp;<br />&nbsp;</td></tr>',
-						onDragStart: function ($item, container, _super, event)
-						{
-							$('[data-toggle="popover"]', $item).popover('hide');
-
-							_super($item, container);
-						},
-						onDrop: function ($item, container, _super, event)
-						{
-							var items = table.sortable("serialize").get()[0];
-
-							var positions = [];
-							var kr = 1;
-							for (var i in items) {
-								positions.push(items[i].id);
-
-								$('[data-id="' + items[i].id + '"] .num', $table).text((kr++) + '.');
-							}
-
-
-							$.get('?do=sort', {
-								positions: positions
-							});
-
-							console.log(positions);
-
-							_super($item, container);
-						}
-					});
-				});
-
-			});
-
-		});
-
+        });
 	</script>
 	<style type="text/css">
 		#snippet--flash
@@ -248,6 +236,12 @@
             opacity: 0.5;
             background: #eeeeee;
         }
+
+        .attendee .fa-spinner { display: none; }
+        .attendee.loading .fa-spinner { display: inline-block; }
+        .unattendee .fa-spinner { display: none; }
+        .unattendee.loading .fa-spinner { display: inline-block; }
+
 	</style>
 
 

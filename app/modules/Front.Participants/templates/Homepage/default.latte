@@ -58,14 +58,17 @@
 
         {if count($programs)}
             <table class="table table-bordered table-striped">
-                {foreach $programs as $program}
+            {foreach $programs as $program}
+                {continueIf $program->section->getId() == \App\Model\Entity\ProgramSection::KRINSPIRO}
                 <tr>
                     <td>
                         <strong>{$program->section->title} <small n:ifcontent>{$program->section->subTitle}</small></strong> {$program->start|day} {$program->start->format('j.n. H:i')}-{$program->end->format('H:i')}:<br />
                         <strong>{$program->name}</strong> <small n:if="$program->lector && $program->lector != '-'"><em>{$program->lector}</em></small>
+                        {if $program->location}<br />Umístění: {$program->location}{/if}
+                        {if $program->tools}<br />S sebou: {$program->tools}{/if}
                     </td>
                 </tr>
-                {/foreach}
+            {/foreach}
             </table>
             {if $openRegistrationProgram}
                 <a n:if="$openRegistrationProgram" n:href="Program:" class="btn btn-success">Přeregistruj si svůj program!</a>
