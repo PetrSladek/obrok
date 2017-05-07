@@ -303,22 +303,38 @@ class Participant extends Person
 			{
 				continue;
 			}
-			if ($otherProgram->start == $program->start)
+
+			if ($otherProgram->start >= $program->start && $otherProgram->start < $program->end)
 			{
 				return $otherProgram;
 			}
-			if ($otherProgram->start > $program->start && $otherProgram->start < $program->end)
+
+			if ($otherProgram->end > $program->start && $otherProgram->end <= $program->end)
 			{
 				return $otherProgram;
 			}
-			if ($otherProgram->end > $program->start && $otherProgram->end < $program->end)
+
+			if ($otherProgram->start <= $program->start && $otherProgram->end >= $program->end)
 			{
 				return $otherProgram;
 			}
-			if ($otherProgram->start < $program->start && $otherProgram->end > $program->end)
-			{
-				return $otherProgram;
-			}
+
+//			if ($otherProgram->start == $program->start)
+//			{
+//				return $otherProgram;
+//			}
+//			if ($otherProgram->start > $program->start && $otherProgram->start < $program->end)
+//			{
+//				return $otherProgram;
+//			}
+//			if ($otherProgram->end > $program->start && $otherProgram->end < $program->end)
+//			{
+//				return $otherProgram;
+//			}
+//			if ($otherProgram->start < $program->start && $otherProgram->end > $program->end)
+//			{
+//				return $otherProgram;
+//			}
 		}
 
 		return null;

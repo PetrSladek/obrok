@@ -198,9 +198,9 @@ class ProgramPresenter extends ParticipantAuthBasePresenter
 		{
 			$otherPrograms = $this->me->getProgramsInSection($program->section);
 
-			if (count($otherPrograms) >= 12)
+			if (count($otherPrograms) >= 20)
 			{
-				throw new InvalidStateException("V Krinspiru můžete mít jen 12 aktivit.");
+				throw new InvalidStateException("V Krinspiru můžete mít jen 20 aktivit.");
 			}
 
 			;
