@@ -51,12 +51,13 @@ abstract class FrontBasePresenter extends BasePresenter
 				return;
 			}
 
+			$skautisUserId = (int) $skautis->getUserId();
 			$skautisPersonId = (int) $skautis->getPersonId();
 
 			try
 			{
 
-				$person = $this->persons->findBySkautisPersonId($skautisPersonId);
+				$person = $this->persons->findBySkautisUserId($skautisUserId);
 
 				// Pokud existuje jako ucastnik, servisak nebo guest (jeste si nezvolil co bude)
 				if ($person)
