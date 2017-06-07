@@ -50,7 +50,7 @@ class LoginPresenter extends \App\Module\Base\Presenters\BasePresenter // Neover
 			{
 
 				// Pokud existuje jako ST
-				if ($serviceteam = $this->serviceteams->findOneBy(['skautisPersonId' => (int) $skautis->getPersonId()]))
+				if ($serviceteam = $this->serviceteams->findOneBy(['skautisUserId' => (int) $skautis->getUserId()]))
 				{
 					$this->getUser()->login($serviceteam->toIdentity());
 				}

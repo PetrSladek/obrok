@@ -39,5 +39,15 @@ class PersonsRepository extends EntityDao
 	{
 		return $this->findOneBy(['skautisPersonId' => $skautisPersonId]);
 	}
+	
+	/**
+	 * @param $skautisUserId
+	 *
+	 * @return mixed
+	 */
+	public function findBySkautisUserId($skautisUserId)
+	{
+		return $this->findOneBy(['skautisUserId' => $skautisUserId]);
+	}
 
 }
