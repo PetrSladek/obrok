@@ -30,7 +30,7 @@
 {define col-age}
 	<td>
 		{$row->getAge($ageInDate)} let<br/>
-		<small>{$row->birthdate->format("j.n.Y")}</small>
+		<small>{if $row->birthdate}{$row->birthdate->format("j.n.Y")}{/if}</small>
 	</td>
 {/define}
 {define col-group}
