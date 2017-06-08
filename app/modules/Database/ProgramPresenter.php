@@ -5,6 +5,7 @@ namespace App\Module\Database\Presenters;
 use App\Forms\Form;
 use App\Model\Entity\Participant;
 use App\Model\Entity\Program;
+use App\Model\Entity\ProgramSection;
 use App\Query\ParticipantsQuery;
 use App\Query\ProgramsQuery;
 use App\Model\Repositories\ParticipantsRepository;
@@ -463,6 +464,309 @@ class ProgramPresenter extends DatabaseBasePresenter
 		};
 
 		return $grid;
+	}
+
+
+	public function actionKrinspiro()
+	{
+		static $attempts = 1;
+
+		set_time_limit(0);
+
+		// projdu krinspiro skupiny
+		// projdu lidi ve skupine
+
+		// kazda skupina bude mít 12 aktivit vc. casu
+		// na jedne aktivite nemuze byt dve skupinz zaraz
+
+		// udelam soucet pozice kazde aktivity vsech ucastniku skupiny
+		// seradim podle toho aktivity
+
+		// vezmu prvnich dvanact aktivit .. udelam shuffle (nahodne je prehazim) a zaradim je postupne do 12 aktivit
+		// kdyz na naktere aktivite nebud emísto, vezmu dalsi v pořadí
+
+		$conn = $this->em->getConnection();
+
+
+		// krinspira ktera trvaji hodinu
+		$longActivities = [369, 365, 362, 361, 367, 358, 376, 349];
+
+		start:
+
+		// tabulka obsazení
+		$krinspiro = [];
+
+
+		$groups = $conn->fetchAll('SELECT * FROM krinspiro_groups -- ORDER BY RAND()');
+
+		$activitiesNames = [];
+		$groupNames = [];
+
+		$groupActivitisPriorities = [];
+		try
+		{
+			foreach ($groups as $group)
+			{
+				$krinspiroGroupId = $group['id'];
+				$groupNames[$krinspiroGroupId] = $group['name'];
+				// vezmu všech 62 aktivit serazených podle souhrné priority členů skupiny
+				$activitiesPriority = $conn->fetchAll('
+				SELECT
+					pr.id AS program_id,
+					pr.name AS program_name,
+					IFNULL((
+						SELECT SUM(k.priority) 
+						FROM krinspiro k
+						JOIN krinspiro_participant kp ON k.participant_id = kp.participant_id
+						JOIN person p
+							ON p.id = kp.participant_id
+							AND p.type = \'participant\'
+							AND p.confirmed = 1
+							AND p.paid = 1
+						WHERE kp.krinspiro_group_id = ? AND k.program_id = pr.id
+						), 0) AS program_priority
+						
+				FROM program pr
+				
+				WHERE pr.section_id = ?
+				-- ORDER BY program_priority DESC, RAND()
+			', [$krinspiroGroupId, ProgramSection::KRINSPIRO]);
+
+
+				$listActivities = [];
+				foreach ($activitiesPriority as $i => $activity) {
+					$listActivities[] = (int)$activity['program_id'];
+					$activitiesNames[(int)$activity['program_id']] = $activity['program_name'];
+
+					$groupActivitisPriorities[$krinspiroGroupId][$activity['program_id']] = $i+1;
+				}
+
+
+				$block = 1;
+				$listFullInThisBlock = [];
+				do {
+
+					$x = 5;// prvnich x aktivit to vezme podle priority, dal pak nahodne;
+//					if (count($listActivities) > (62-$x))
+//					{
+//						$activityId = array_shift($listActivities);
+//					}
+//					else
+					{
+						$inx = rand(0, count($listActivities) - 1);
+						$activityId = @$listActivities[$inx];
+						unset($listActivities[$inx]);
+						$listActivities = array_values($listActivities);
+					}
+
+					if (!$activityId)
+					{
+//						dump(sprintf('%d skupina: %d. blok DOSLI AKTIVITY', $krinspiroGroupId, $block));
+						throw  new \Exception(sprintf('%d skupina: %d. blok DOSLI AKTIVITY', $krinspiroGroupId, $block), 666);
+//						break;
+					}
+
+//				dump(sprintf('%d skupina: %d. blok aktivita %d ve frontě %d preskoceno %d', $krinspiroGroupId, $block, $activityId, count($listActivities), count($listFullInThisBlock)));
+
+					// pokud aktivitu v tomto bloku uz někdo má zkusíme ji použív v některém z příštích bloků
+					if (in_array($activityId, $longActivities))
+					{
+						if (isset($krinspiro[$block][$activityId]) || isset($krinspiro[$block + 1][$activityId]) || ($block % 2 == 0))
+						{
+							$listFullInThisBlock[] = $activityId;
+						}
+						else
+						{
+							$krinspiro[$block][$activityId] = $krinspiroGroupId;
+							$krinspiro[$block+1][$activityId] = $krinspiroGroupId;
+
+							// nepouzite priradime nazacatek prioritnáho seznamu
+							foreach (array_reverse($listFullInThisBlock) as $item)
+							{
+								array_unshift($listActivities, $item);
+							}
+							$listFullInThisBlock = [];
+
+							// tento blok je vyreseny, budeme resit dalsi
+							$block++;
+							$block++;
+						}
+					}
+					else
+					{
+						if (isset($krinspiro[$block][$activityId]))
+						{
+							$listFullInThisBlock[] = $activityId;
+						}
+						else
+						{
+							$krinspiro[$block][$activityId] = $krinspiroGroupId;
+
+							// nepouzite priradime nazacatek prioritnáho seznamu
+							foreach (array_reverse($listFullInThisBlock) as $item)
+							{
+								array_unshift($listActivities, $item);
+							}
+							$listFullInThisBlock = [];
+
+							// tento blok je vyreseny, budeme resit dalsi
+							$block++;
+						}
+					}
+
+
+					// uz mame vsech 12 bloku správně obsazenych
+					if ($block > 8)
+					{
+						break;
+					}
+
+				} while (true); // snad se to nezacyklí :D
+			}
+
+		}
+		catch (\Exception $e)
+		{
+			if ($e->getCode() === 666 AND $attempts++ < 100)
+			{
+//				$this->actionKrinspiro(); // zkusim to cely znovu
+
+				goto start;
+			}
+			echo $e->getMessage();
+		}
+
+
+
+		uksort($activitiesNames, function($a, $b) use ($activitiesNames) {
+			if (
+				preg_match('/#(\d+)/', $activitiesNames[$a], $ma)  &&
+				preg_match('/#(\d+)/', $activitiesNames[$b], $mb)
+			)
+			{
+				return (int) $ma[1] - (int) $mb[1];
+			}
+
+			return 0;
+		});
+
+		uksort($groupNames, function($a, $b) {
+			return $a - $b;
+		});
+
+
+		echo "Vypocteno na $attempts. pokus :)";
+
+
+
+		$sqls = [
+			'TRUNCATE krinspiro_grous_activities;'
+		];
+
+		echo '<table border="1">';
+		echo '<tr>';
+		echo '<td>-</td>';
+		foreach ($activitiesNames as $activityId => $activityName)
+		{
+			echo '<th>' . $activityName . ' (' . $activityId. ')</th>';
+		}
+		echo '</tr>';
+
+		foreach ($krinspiro as $block => $activities)
+		{
+			echo '<tr>';
+			echo '<th>Blok ' . $block . '</th>';
+
+			foreach ($activitiesNames as $activityId => $activityName)
+			{
+				$groupId = @$activities[$activityId];
+				echo '<td>' . ($groupId ? ($groupNames[$groupId] . ' #' . $activities[$activityId])  :  null) . '</td>';
+
+				if ($groupId)
+				{
+					$sqls[] = 'INSERT INTO krinspiro_grous_activities (krinspiro_group_id, krinspiro_activity, block) VALUES (' . (int)$groupId . ', ' . (int)$activityId . ', ' . (int)$block . ');';
+				}
+			}
+
+			echo '</tr>';
+		}
+		echo '</table>';
+
+
+
+		echo '<hr />';
+
+		echo '<table border="1">';
+
+		echo '<tr>';
+		echo '<td>-</td>';
+		foreach ($krinspiro as $block => $activities)
+		{
+			echo '<th>Blok ' . $block . '</th>';
+		}
+		echo '</tr>';
+
+		foreach ($activitiesNames as $activityId => $activityName)
+		{
+			echo '<tr>';
+			echo '<th>' . $activityName . ' (' . $activityId. ')</th>';
+
+			foreach ($krinspiro as $block => $activities)
+			{
+				$groupId = @$activities[$activityId];
+				echo '<td>' . ($groupId ? ($groupNames[$groupId] . ' #' . $activities[$activityId])  :  null) . '</td>';
+			}
+
+			echo '</tr>';
+		}
+		echo '</table>';
+
+
+
+		echo '<hr />';
+
+		echo '<table border="1">';
+
+		echo '<tr>';
+		echo '<td>-</td>';
+		foreach ($krinspiro as $block => $activities)
+		{
+			echo '<th>Blok ' . $block . '</th>';
+		}
+		echo '</tr>';
+
+
+		foreach ($groupNames as $groupId => $groupName)
+		{
+			echo '<tr>';
+			echo '<th>' . $groupName . ' #' . $groupId . '</th>';
+
+			foreach ($krinspiro as $block => $activities)
+			{
+				$activityId = null;
+				foreach ($activities as $id => $activityGroupId)
+				{
+					if ($activityGroupId == $groupId)
+					{
+						$activityId =  $id;
+						break;
+					}
+				}
+
+				echo '<td>' .  ($activityId ? $activitiesNames[$activityId] : null) . '</td>';
+			}
+
+			echo '</tr>';
+		}
+
+		echo '</table>';
+
+
+		echo implode('<br />', $sqls);
+
+		die;
+
+
 	}
 
 }

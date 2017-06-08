@@ -592,6 +592,8 @@ class ParticipantsPresenter extends DatabaseBasePresenter
 		{
 
 			$query = new ProgramsQuery();
+			$query->withoutKrinspiro();
+
 			foreach ($filter as $key => $val)
 			{
 				if ($key == 'id')

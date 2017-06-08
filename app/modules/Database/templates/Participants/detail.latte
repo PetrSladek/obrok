@@ -125,6 +125,7 @@
                     {if $item->programs}
                         <table class="table table-bordered table-striped">
                             {foreach $item->programs as $program}
+                                {continueIf $program->section->id == \App\Model\Entity\ProgramSection::KRINSPIRO}
                             <tr>
                                 <td>
                                     <strong>{$program->section->title} <small n:ifcontent>{$program->section->subTitle}</small></strong> {$program->start|day} {$program->start->format('j.n. H:i')}-{$program->end->format('H:i')}:<br />

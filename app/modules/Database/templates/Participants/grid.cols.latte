@@ -37,7 +37,7 @@
         <a class="btn btn-xs btn-default" n:href="this filter=>['group'=>$groupName]">Vyfiltrovat</a>
     </div>
 
-    <strong n:if="$row->group">{$row->group->name}</strong>
+    <strong n:if="$row->group">#{$row->group->id} {$row->group->name}</strong>
     <br /><small n:if="$row->group">{$row->group->city}</small>
 
 

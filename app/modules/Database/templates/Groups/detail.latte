@@ -7,7 +7,7 @@
 
 <div class="row">
     <div class="pull-left">
-        <h1>{$item->id} - {$item->name} <small>/{$item->city}/</small></h1>
+        <h1>#{$item->id} {$item->name} <small>/{$item->city}/</small></h1>
     </div>
 
     <div class="pull-right">
@@ -127,7 +127,7 @@
                                         <td>
                                             {if empty($participant->addressStreet) || empty($participant->addressCity)}
                                                 {if $acl->edit || $user->id == $participant->id}
-                                                <strong class="missing"><a href="{plink participant $participant->id}">Doplňte bydliště!</a></strong>
+                                                <strong class="missing"><a n:href="Participants:edit $participant->id">Doplňte bydliště!</a></strong>
                                                 {else}
                                                 <strong class="missing">Doplňte bydliště!</strong>
                                                 {/if}
