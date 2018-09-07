@@ -10,8 +10,9 @@ install:
   - composer install --no-interaction --prefer-source
 
 before_script:
-#  - mysql -u root -e 'CREATE DATABASE obrok_is_tests CHARACTER SET utf8 COLLATE utf8_general_ci;';
+  - mysql -u root -e 'CREATE DATABASE obrok_is_tests CHARACTER SET utf8 COLLATE utf8_general_ci;';
 #  - mysql -u root testbase < tests/testbase.sql
+ - php www\index.php orm:schema-tool:create
 
 script:
   - ./vendor/bin/tester -s ./tests/
