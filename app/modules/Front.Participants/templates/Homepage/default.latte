@@ -122,7 +122,7 @@
                             {/if}
                         </td>
                         <td>
-                            {!$participant->getPhone()|phone}<br />
+                            {$participant->getPhone()|phone|noescape}<br />
                             {$participant->email}
                         </td>
                         <td>

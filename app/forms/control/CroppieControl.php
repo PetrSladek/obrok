@@ -193,7 +193,7 @@ class CroppieControl extends \Nette\Forms\Controls\BaseControl
 
 		$upload = Html::el('span', [
 			'class' => 'btn btn-primary btn-file',
-		])->setHtml('Nahrát fotku &hellip;')->add($fileInput);
+		])->setHtml('Nahrát fotku &hellip;')->addHtml($fileInput);
 
 		$remove = Html::el('button', [
 			'name'  => $this->getPartHtmlName('remove'),
@@ -257,14 +257,14 @@ class CroppieControl extends \Nette\Forms\Controls\BaseControl
 			],
 		]);
 
-		$control->add($croppie)
-				->add($upload)
-				->add($remove)
-				->add($removed)
-				->add($x1)
-				->add($y1)
-				->add($x2)
-				->add($y2);
+		$control->addHtml($croppie)
+				->addHtml($upload)
+				->addHtml($remove)
+				->addHtml($removed)
+				->addHtml($x1)
+				->addHtml($y1)
+				->addHtml($x2)
+				->addHtml($y2);
 
 		return $control;
 	}

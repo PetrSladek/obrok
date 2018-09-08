@@ -178,7 +178,7 @@ class ParticipantRegistrationForm extends Control
 		$frm->addSubmit('send', 'Dokončit registraci')
 			->setAttribute('class', 'btn btn-primary btn-block');
 
-		$frm->onSuccess[] = $this->processForm;
+		$frm->onSuccess[] = [$this, 'processForm'];
 
 		return $frm;
 	}

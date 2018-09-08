@@ -113,7 +113,7 @@ class ServiceteamRegistrationForm extends Control
 		$frm->addSubmit('send', 'Registrovat se do servis týmu')
 			->setAttribute('class', 'btn btn-primary btn-block');
 
-		$frm->onSuccess[] = $this->processForm;
+		$frm->onSuccess[] = [$this, 'processForm'];
 
 		return $frm;
 	}

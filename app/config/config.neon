@@ -28,7 +28,7 @@ extensions:
 	doctrine: Kdyby\Doctrine\DI\OrmExtension
 	skautis: Skautis\Nette\SkautisExtension
 	skautislogin: PetrSladek\SkautIS\DI\SkautISExtension
-	gpspicker: VojtechDobes\NetteForms\GpsPickerExtension
+#	gpspicker: VojtechDobes\NetteForms\GpsPickerExtension
 	ajaxHistory: VojtechDobes\NetteAjax\HistoryExtension
 	images: Brabijan\Images\DI\ImagesExtension
 
@@ -142,17 +142,51 @@ services:
 			- setSubjectFormat(%app.emailSubjectFormat%)
 	router: App\RouterFactory::createRouter
 
-	- App\Model\Repositories\PersonsRepository( @doctrine.default.entityManager, @doctrine.default.entityManager::getClassMetadata('App\Model\Entity\Person') )
-	- App\Model\Repositories\ParticipantsRepository( @doctrine.default.entityManager,  @doctrine.default.entityManager::getClassMetadata('App\Model\Entity\Participant') )
-	- App\Model\Repositories\ServiceteamRepository( @doctrine.default.entityManager, @doctrine.default.entityManager::getClassMetadata('App\Model\Entity\Serviceteam') )
-	- App\Model\Repositories\UnspecifiedsRepository( @doctrine.default.entityManager, @doctrine.default.entityManager::getClassMetadata('App\Model\Entity\Unspecified') )
-	- App\Model\Repositories\GroupsRepository( @doctrine.default.entityManager, @doctrine.default.entityManager::getClassMetadata('App\Model\Entity\Group') )
-	- App\Model\Repositories\JobsRepository( @doctrine.default.entityManager, @doctrine.default.entityManager::getClassMetadata('App\Model\Entity\Job') )
-	- App\Model\Repositories\TeamsRepository( @doctrine.default.entityManager, @doctrine.default.entityManager::getClassMetadata('App\Model\Entity\Team') )
-	- App\Model\Repositories\WorkgroupsRepository( @doctrine.default.entityManager, @doctrine.default.entityManager::getClassMetadata('App\Model\Entity\Workgroup') )
-	- App\Model\Repositories\ProgramsRepository( @doctrine.default.entityManager, @doctrine.default.entityManager::getClassMetadata('App\Model\Entity\Program') )
-	- App\Model\Repositories\ProgramsSectionsRepository( @doctrine.default.entityManager, @doctrine.default.entityManager::getClassMetadata('App\Model\Entity\ProgramSection') )
-	- App\Model\Repositories\SettingsRepository( @doctrine.default.entityManager, @doctrine.default.entityManager::getClassMetadata('App\Model\Entity\Setting') )
+	personsRepository:
+	    class: App\Model\Repositories\PersonsRepository
+	    tags:
+	        doctrine.repositoryEntity: App\Model\Entity\Person
+	participantsRepository:
+	    class: App\Model\Repositories\ParticipantsRepository
+	    tags:
+	        doctrine.repositoryEntity: App\Model\Entity\Participant
+	ServiceteamRepository:
+	    class: App\Model\Repositories\ServiceteamRepository
+	    tags:
+	        doctrine.repositoryEntity: App\Model\Entity\Serviceteam
+	unspecifiedsRepository:
+	    class: App\Model\Repositories\UnspecifiedsRepository
+	    tags:
+	        doctrine.repositoryEntity: App\Model\Entity\UnspecifiedPerson
+	groupsRepository:
+	    class: App\Model\Repositories\GroupsRepository
+	    tags:
+	        doctrine.repositoryEntity: App\Model\Entity\Group
+	jobsRepository:
+	    class: App\Model\Repositories\JobsRepository
+	    tags:
+	        doctrine.repositoryEntity: App\Model\Entity\Job
+	teamsRepository:
+	    class: App\Model\Repositories\TeamsRepository
+	    tags:
+	        doctrine.repositoryEntity: App\Model\Entity\Team
+	workgroupsRepository:
+	    class: App\Model\Repositories\WorkgroupsRepository
+	    tags:
+	        doctrine.repositoryEntity: App\Model\Entity\Workgroup
+	programsRepository:
+	    class: App\Model\Repositories\ProgramsRepository
+	    tags:
+	        doctrine.repositoryEntity: App\Model\Entity\Program
+	programsSectionsRepository:
+	    class: App\Model\Repositories\ProgramsSectionsRepository
+	    tags:
+	        doctrine.repositoryEntity: App\Model\Entity\ProgramSection
+	settingsRepository:
+	    class: App\Model\Repositories\SettingsRepository
+	    tags:
+	        doctrine.repositoryEntity: App\Model\Entity\Setting
+
 	- App\Hydrators\SkautisHydrator
 	- App\Settings
 

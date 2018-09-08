@@ -1,6 +1,6 @@
 {include 'head.latte'}
 <h1>{$data->subject}</h1>
 
-{!$data->table}
+{$data->table|noescape}
 
 {include 'foot.latte'}

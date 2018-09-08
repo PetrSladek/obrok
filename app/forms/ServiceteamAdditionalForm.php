@@ -119,7 +119,7 @@ class ServiceteamAdditionalForm extends Control
 //        $defaults['avatar'] = $this->person->getAvatar();
 //        $frm->setDefaults($defaults);
 
-		$frm->onSuccess[] = $this->processForm;
+		$frm->onSuccess[] = [$this, 'processForm'];
 
 		return $frm;
 	}

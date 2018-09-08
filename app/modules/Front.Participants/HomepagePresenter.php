@@ -270,7 +270,7 @@ class HomepagePresenter extends ParticipantAuthBasePresenter
 		$frm->addSubmit('send', 'Uložit údaje účastníka')
 			->setAttribute('class', 'btn btn-primary');
 
-		$frm->onSuccess[] = callback($this, 'frmParticipantSubmitted');
+		$frm->onSuccess[] = [$this, 'frmParticipantSubmitted'];
 
 		if ($this->participant)
 		{
@@ -393,7 +393,7 @@ class HomepagePresenter extends ParticipantAuthBasePresenter
 
 		$frm->addSubmit('send', 'Pozvat účastníky');
 
-		$frm->onSuccess[] = $this->frmSendInvitationLinkSuccess;
+		$frm->onSuccess[] = [$this, 'frmSendInvitationLinkSuccess'];
 
 		return $frm;
 	}

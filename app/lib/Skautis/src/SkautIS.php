@@ -3,13 +3,13 @@
 namespace PetrSladek\SkautIS;
 
 use Nette\Application;
-use Nette\Http\ISessionStorage;
 use Nette\Http\Request;
-use Nette\Object;
 use Nette\Security\User;
+use Nette\SmartObject;
 
-class SkautIS extends Object
+class SkautIS
 {
+	use SmartObject;
 
 	/**
 	 * @var \Nette\Application\Application

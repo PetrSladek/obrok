@@ -25,7 +25,7 @@
                     </tr>
                     <tr>
                         <td>Kontaktní telefon</td>
-                        <td><strong>{!$me->getPhone()|phone}</strong></td>
+                        <td><strong>{$me->getPhone()|phone|noescape}</strong></td>
                     </tr>
                     <tr>
                         <td>Velikost trička</td>

@@ -163,7 +163,7 @@ class ServiceteamForm extends Control
 		$frm->addSubmit('send', 'Uložit údaje')
 			->setAttribute('class', 'btn btn-primary');
 
-		$frm->onSuccess[] = $this->processForm;
+		$frm->onSuccess[] = [$this, 'processForm'];
 
 		return $frm;
 	}

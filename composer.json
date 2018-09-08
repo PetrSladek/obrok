@@ -6,36 +6,21 @@
 	"minimum-stability": "dev",
   	"prefer-stable": true,
 	"require": {
-		"php": ">= 5.4.0",
-		"nette/application": "~2.3.0",
-		"nette/bootstrap": "~2.3.0",
-		"nette/caching": "~2.3.0",
-		"nette/database": "~2.3.0",
-		"nette/di": "~2.3.0",
-		"nette/finder": "~2.3.0",
-		"nette/forms": "~2.3.0",
-		"nette/http": "~2.3.0",
-		"nette/mail": "~2.3.0",
-		"nette/robot-loader": "~2.3.0",
-		"nette/safe-stream": "~2.3.0",
-		"nette/security": "~2.3.0",
-		"nette/utils": "~2.3.0",
-		"latte/latte": "~2.3.0",
-		"tracy/tracy": "~2.3.0",
-		"kdyby/doctrine": "~3.0.0",
+		"php": ">= 7.1.0",
+		"nette/nette": "~2.4.0",
+		"kdyby/doctrine": "~3.3.0",
 		"skautis/skautis": "2.*@dev",
 		"skautis/nette": "2.*@dev",
-		"vojtech-dobes/nette-forms-gpspicker": "^1.3",
 		"nextras/forms": "^1.5",
 		"nextras/datagrid": "^2.1",
 		"nextras/latte-macros": "^1.1",
 		"beberlei/DoctrineExtensions": "^1.0",
 		"vojtech-dobes/nette-ajax-history": "^2.0",
 		"webchemistry/images": "2.0",
-		"brabijan/images": "^1.0",
+		"brabijan/images": "^3.0",
 		"dg/adminer-custom": "^1.7"
 	},
 	"require-dev": {
-		"nette/tester": "~1.4"
+		"nette/tester": "~2.0"
 	}
 }

@@ -151,7 +151,7 @@ class GroupForm extends Control
 		$frm->addSubmit('send', 'Uložit údaje skupiny')
 			->setAttribute('class', 'btn btn-primary');
 
-		$frm->onSuccess[] = $this->processForm;
+		$frm->onSuccess[] = [$this, 'processForm'];
 
 		return $frm;
 	}

@@ -3,19 +3,20 @@
 namespace App\Services;
 
 use Nette\Http\FileUpload;
-use Nette\InvalidArgumentException;
-use Nette\Object;
+use Nette\SmartObject;
 use Nette\Utils\Image;
-use Nette\Utils\MimeTypeDetector;
-use Tracy\Debugger;
+
 
 /**
  * Class ImageService
  * @package App\Services
  * @author  psl <petr.sladek@webnode.com>
  */
-class ImageService extends Object
+class ImageService
 {
+
+	use SmartObject;
+
 	/**
 	 * Kvalita miniatur
 	 *

@@ -41,7 +41,7 @@ class LoginDialog extends AbstractDialog
 	 */
 	public function getUrl()
 	{
-		return new UrlScript($this->skautis->client->getLoginUrl());
+		return new UrlScript($this->skautis->getClient()->getLoginUrl());
 	}
 
 }

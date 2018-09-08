@@ -75,7 +75,7 @@ class GroupRegistrationForm extends Control
 		$frm->addSubmit('send', 'Zaregistrovat Skupinu na Obrok 2017')
 			->setAttribute('class', 'btn btn-primary btn-block');
 
-		$frm->onSuccess[] = $this->processForm;
+		$frm->onSuccess[] = [$this, 'processForm'];
 
 		return $frm;
 	}

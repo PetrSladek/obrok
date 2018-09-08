@@ -92,7 +92,7 @@ class LatteFilters
 			$phone = new Phone($phone);
 		}
 
-		return Html::el(null)->add(Html::el('small class="cc"')->setText($phone->getCc()))->add(Html::el(null)->setText(" " . $phone->getNumber()));
+		return Html::el(null)->addHtml(Html::el('small class="cc"')->setText($phone->getCc()))->addHtml(Html::el(null)->setText(" " . $phone->getNumber()));
 	}
 
 

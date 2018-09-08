@@ -2,14 +2,15 @@
 
 namespace PetrSladek\SkautIS;
 
-use Nette\Object;
+use Nette\SmartObject;
 
 /**
  * @property string $signal_response_link
  * @property string $last_request
  */
-class SessionStorage extends Object
+class SessionStorage
 {
+	use SmartObject;
 
 	/**
 	 * @var \Nette\Http\SessionSection

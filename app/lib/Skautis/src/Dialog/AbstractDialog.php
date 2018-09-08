@@ -5,17 +5,15 @@ namespace PetrSladek\SkautIS\Dialog;
 use PetrSladek\SkautIS\SessionStorage;
 use PetrSladek\SkautIS\SkautIS;
 use Nette\Application;
-use Nette\Application\Responses;
-use Nette\Application\UI\PresenterComponent;
+#use Nette\Application\UI\PresenterComponent;
 use Nette\Http\UrlScript;
-use Nette;
 
 /**
  * @author Petr Sladek <petr.sladek@skaut.cz>
  *
  * @method onResponse(AbstractDialog $dialog)
  */
-abstract class AbstractDialog extends PresenterComponent
+abstract class AbstractDialog extends Application\UI\Component
 {
 
 	/**

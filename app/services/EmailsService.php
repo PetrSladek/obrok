@@ -9,20 +9,18 @@
 namespace App\Services;
 
 use Nette\Application\UI\ITemplate;
-use Nette\Latte;
-use Nette\Database\Connection;
 use Nette\Mail\IMailer;
 use Nette\Mail\Message;
-use Nette\Object;
+use Nette\SmartObject;
 use Nette\Templating\FileTemplate;
-use Nette\Templating\IFileTemplate;
 use Tracy\Debugger;
 
 /**
  * Instance této třídy je továrnou pro vytváření emailů.
  */
-class EmailsService extends Object
+class EmailsService
 {
+	use SmartObject;
 
 	/**
 	 * @var ITemplate
