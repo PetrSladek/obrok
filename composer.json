@@ -18,7 +18,9 @@
 		"vojtech-dobes/nette-ajax-history": "^2.0",
 		"webchemistry/images": "2.0",
 		"brabijan/images": "^3.0",
-		"dg/adminer-custom": "^1.7"
+		"dg/adminer-custom": "^1.7",
+		"dg/ftp-deployment": "^3.0",
+		"vlucas/phpdotenv": "^2.5"
 	},
 	"require-dev": {
 		"nette/tester": "~2.0"
