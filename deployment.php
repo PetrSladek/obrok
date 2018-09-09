@@ -22,7 +22,7 @@ return [
 			log/*
 			temp/*
 			www/storage/webimages/
-	
+			deployment.log
 		",
 
 		'allowdelete' => 'yes',
