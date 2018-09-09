@@ -23,22 +23,22 @@ class PersonsRepository extends EntityDao
 
 		$table = $this->getClassMetadata()->getTableName();
 		$em->getConnection()
-		   ->executeUpdate("UPDATE {$table} SET type = ? WHERE id = ? LIMIT 1", [$type, $entity->id]);
+		   ->executeUpdate("UPDATE {$table} SET type = ? WHERE id = ? LIMIT 1", [$type, $entity->getId()]);
 
 		// vratim parametrem
-		$entity = $this->find($entity->id);
+		$entity = $this->find($entity->getId());
 	}
 
-
-	/**
-	 * @param $skautisPersonId
-	 *
-	 * @return mixed
-	 */
-	public function findBySkautisPersonId($skautisPersonId)
-	{
-		return $this->findOneBy(['skautisPersonId' => $skautisPersonId]);
-	}
+//
+//	/**
+//	 * @param $skautisPersonId
+//	 *
+//	 * @return mixed
+//	 */
+//	public function findBySkautisPersonId($skautisPersonId)
+//	{
+//		return $this->findOneBy(['skautisPersonId' => $skautisPersonId]);
+//	}
 	
 	/**
 	 * @param $skautisUserId
