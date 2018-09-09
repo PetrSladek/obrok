@@ -25,10 +25,6 @@ function id($val) {
     return $val;
 }
 
-function run(Tester\TestCase $testCase) {
-    $testCase->run();
-}
-
 
 $configurator = new Nette\Configurator;
 $configurator->setDebugMode(false);

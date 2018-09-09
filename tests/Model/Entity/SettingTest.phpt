@@ -10,11 +10,8 @@
 namespace AppTests\Model\Entity\Group;
 
 use App\Model\Entity\Group;
-use App\Model\Entity\Participant;
 use App\Model\Entity\Setting;
-use Doctrine\DBAL\Exception\InvalidArgumentException;
 use Kdyby;
-use Nette;
 use Tester;
 use Tester\Assert;
 
