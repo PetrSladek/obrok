@@ -134,8 +134,8 @@ class ParticipantRegistrationForm extends Control
 		$frm->addDatepicker('birthdate', 'Datum narození:')
 			->setDefaultValue($this->person->birthdate)
 			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat Datum narození nebo je ve špatném formátu (musí být dd.mm.yyyy)')
-			->addRule(Form::RANGE, 'Podle data narození vám 7.6.2017 ještě nebude 15 let (což porušuje podmínky účasti)', array(null, DateTime::from('7.6.2017')->modify('-15 years')))
-			->addRule(Form::RANGE, 'Podle data narození vám 7.6.2017 bude už více než 25 let (což porušuje podmínky účasti)', array(DateTime::from('7.6.2017')->modify('-25 years'), null));
+			->addRule(Form::RANGE, 'Podle data narození vám 7.6.2019 ještě nebude 15 let (což porušuje podmínky účasti)', array(null, DateTime::from('7.6.2019')->modify('-15 years')))
+			->addRule(Form::RANGE, 'Podle data narození vám 7.6.2019 bude už více než 25 let (což porušuje podmínky účasti)', array(DateTime::from('7.6.2019')->modify('-25 years'), null));
 
 		$frm->addRadioList('gender', 'Pohlaví', [Person::GENDER_MALE => 'muž', Person::GENDER_FEMALE => 'žena'])
 			->setDefaultValue($this->person->gender)
@@ -171,7 +171,7 @@ class ParticipantRegistrationForm extends Control
 			->setDefaultValue($this->person->health);
 
 		$frm->addGroup(null);
-		$frm->addCheckbox('conditions', Html::el()->setHtml('Souhlasím s <a target="_blank" href="http://www.obrok17.cz/registrace/">podmínkami účasti na akci</a> a s <a target="_blank" href="http://www.obrok17.cz/obecna-ustanoveni-storno-podminky/">obecnými ustanoveními</a>'))
+		$frm->addCheckbox('conditions', Html::el()->setHtml('Souhlasím s <a target="_blank" href="http://www.obrok19.cz/registrace/">podmínkami účasti na akci</a> a s <a target="_blank" href="http://www.obrok19.cz/obecna-ustanoveni-storno-podminky/">obecnými ustanoveními</a>'))
 			->addRule($frm::FILLED, 'Musíte souhlasit s podmínkami účasti')
 			->setOmitted();
 

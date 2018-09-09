@@ -109,7 +109,7 @@ height: auto;
 	margin-top: 0;
 	padding-top: 0;
 	width: 100%;
-	background: linear-gradient(180deg, #315198, #40b3cb, #d64389, #dfb72b);
+	/*background: linear-gradient(180deg, #315198, #40b3cb, #d64389, #dfb72b);*/
 	background-size: 100% 400%;
 	-webkit-animation: LogoGradient 30s ease infinite;
 	-moz-animation: LogoGradient 30s ease infinite;
@@ -297,21 +297,21 @@ p.zapati.tmavy, a.tmavy, p.tmavy, section h2.section-heading.tmavy {
 	font-weight: 400;
 }
 
-#program, #partneri, #nastym, #odpocetBox {
-	background: #315198; /* For browsers that do not support gradients */
-	background: -webkit-linear-gradient(#315198, #40b3cb); /* For Safari 5.1 to 6.0 */
-	background: -o-linear-gradient(#315198, #40b3cb); /* For Opera 11.1 to 12.0 */
-	background: -moz-linear-gradient(#315198, #40b3cb); /* For Firefox 3.6 to 15 */
-	background: linear-gradient(#315198, #40b3cb); /* Standard syntax */
-}
+/*#program, #partneri, #nastym, #odpocetBox {*/
+	/*background: #315198; !* For browsers that do not support gradients *!*/
+	/*background: -webkit-linear-gradient(#315198, #40b3cb); !* For Safari 5.1 to 6.0 *!*/
+	/*background: -o-linear-gradient(#315198, #40b3cb); !* For Opera 11.1 to 12.0 *!*/
+	/*background: -moz-linear-gradient(#315198, #40b3cb); !* For Firefox 3.6 to 15 *!*/
+	/*background: linear-gradient(#315198, #40b3cb); !* Standard syntax *!*/
+/*}*/
 
-#kontakty, #otazky, #informace {
-	background: #d64389; /* For browsers that do not support gradients */
-	background: -webkit-linear-gradient(#d64389, #dfb72b); /* For Safari 5.1 to 6.0 */
-	background: -o-linear-gradient(#d64389, #dfb72b); /* For Opera 11.1 to 12.0 */
-	background: -moz-linear-gradient(#d64389, #dfb72b); /* For Firefox 3.6 to 15 */
-	background: linear-gradient(#d64389, #dfb72b); /* Standard syntax */
-}
+/*#kontakty, #otazky, #informace {*/
+	/*background: #d64389; !* For browsers that do not support gradients *!*/
+	/*background: -webkit-linear-gradient(#d64389, #dfb72b); !* For Safari 5.1 to 6.0 *!*/
+	/*background: -o-linear-gradient(#d64389, #dfb72b); !* For Opera 11.1 to 12.0 *!*/
+	/*background: -moz-linear-gradient(#d64389, #dfb72b); !* For Firefox 3.6 to 15 *!*/
+	/*background: linear-gradient(#d64389, #dfb72b); !* Standard syntax *!*/
+/*}*/
 
  @-keyframes pulse {
  0% {
@@ -476,15 +476,15 @@ iframe {
 }
 
 #logo_menu {
-	width: 360px;
-	height: 45px;
+	/*width: 360px;*/
+	/*height: 45px;*/
 	margin-top: 8px;
 }
 
 @media (max-width: 992px) {
 #logo_menu {
-	width: 280px;
-	height: 35px;
+	/*width: 280px;*/
+	/*height: 35px;*/
 	margin-top: 13px;
 	margin-left: 10px;
 	margin-bottom: 10px;

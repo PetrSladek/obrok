@@ -33,7 +33,7 @@
                     </tr>
                     <tr>
                         <td>Příjezd</td>
-                        <td><strong>{$me->arrivesToBuilding ? 'Přijedu na stavečku od 4.6.2017' : 'Přijedu až na Obrok'}</strong></td>
+                        <td><strong>{$me->arrivesToBuilding ? 'Přijedu na stavečku od 4.6.2019' : 'Přijedu až na Obrok'}</strong></td>
                     </tr>
                     <tr>
                         <td>Odjezd</td>
@@ -81,7 +81,7 @@
                     </tr>
                     <tr>
                         <td>Poznámka pro příjemce</td>
-                        <td><strong>Obrok 2017 {$me->getFullName()}</strong></td>
+                        <td><strong>Obrok 2019 {$me->getFullName()}</strong></td>
                     </tr>
                 </table>
                 {/if}
@@ -89,7 +89,7 @@
 
             <div class="col-md-6">
                 {if !$me->paid}
-                <img class="img-responsive" src="https://api.paylibo.com/paylibo/generator/czech/image?compress=false&size=440&accountNumber=2100437022&bankCode=2010&amount=350&currency=CZK&vs={$me->getVarSymbol()}&message={='Obrok 2017 '.$me->getFullName()}" />
+                <img class="img-responsive" src="https://api.paylibo.com/paylibo/generator/czech/image?compress=false&size=440&accountNumber=2100437022&bankCode=2010&amount=350&currency=CZK&vs={$me->getVarSymbol()}&message={='Obrok 2019 '.$me->getFullName()}" />
                 {/if}
             </div>
         </div>

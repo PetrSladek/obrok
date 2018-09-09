@@ -104,7 +104,7 @@ class ServiceteamForm extends Control
 		$frm->addDatepicker('birthdate', 'Datum narození')
 			->setDefaultValue($this->person->birthdate)
 			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat Datum narození nebo je ve špatném formátu')
-			->addRule(Form::RANGE, 'Podle data narození vám 7.6.2017 ještě nebude 18 let (což porušuje podmínky účasti)', array(null, DateTime::from('7.6.2017')->modify('-18 years')))
+			->addRule(Form::RANGE, 'Podle data narození vám 7.6.2019 ještě nebude 18 let (což porušuje podmínky účasti)', array(null, DateTime::from('7.6.2019')->modify('-18 years')))
 			->setOption('description', 'Tvoje Datum narození ve formátu dd.mm.yyyy');
 		$frm->addText('addressCity', 'Město')
 			->setDefaultValue($this->person->addressCity)
@@ -128,7 +128,7 @@ class ServiceteamForm extends Control
 
 		$frm->addGroup('Doplňující údaje, aneb prozraď nám něco o sobě, ať ti můžeme najít to nejlepší zařazení ;-)');
 
-        $frm->addCheckbox('arrivesToBuilding', 'Přijedu na stavěcí týden od 4.6.2017')
+        $frm->addCheckbox('arrivesToBuilding', 'Přijedu na stavěcí týden od 4.6.2019')
             ->setDefaultValue((bool) $this->person->arrivesToBuilding);
         $frm->addCheckbox('stayToDestroy', 'Zůstanu na bourání tábořiště v neděli')
             ->setDefaultValue((bool) $this->person->stayToDestroy);

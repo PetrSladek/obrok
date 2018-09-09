@@ -417,8 +417,8 @@ class ParticipantsPresenter extends DatabaseBasePresenter
 		$frm->addDatepicker('birthdate', 'Datum narození:')
 			->setDefaultValue($this->item ? $this->item->birthdate->format('j.n.Y') : null)
 			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat Datum narození nebo je ve špatném formátu (musí být dd.mm.yyyy)')
-            ->addRule(Form::RANGE, 'Podle data narození vám 7.6.2017 ještě nebude 15 let (což porušuje podmínky účasti)', array(null, DateTime::from('7.6.2017')->modify('-15 years')))
-            ->addRule(Form::RANGE, 'Podle data narození vám 7.6.2017 bude už více než 25 let (což porušuje podmínky účasti)', array(DateTime::from('7.6.2017')->modify('-25 years'), null));
+            ->addRule(Form::RANGE, 'Podle data narození vám 7.6.2019 ještě nebude 15 let (což porušuje podmínky účasti)', array(null, DateTime::from('7.6.2019')->modify('-15 years')))
+            ->addRule(Form::RANGE, 'Podle data narození vám 7.6.2019 bude už více než 25 let (což porušuje podmínky účasti)', array(DateTime::from('7.6.2019')->modify('-25 years'), null));
 
 //            ->addRule(callback('Participant','validateAge'), 'Věk účastníka Obroku 2015 musí být od 15 do 24 let');
 

@@ -72,7 +72,7 @@ class GroupRegistrationForm extends Control
 //			]])
 //			->setOption('description', 'Píchněte špendlík vašeho kmene do mapy a pomozte tím vytvoření Mapy českého roveringu');
 
-		$frm->addSubmit('send', 'Zaregistrovat Skupinu na Obrok 2017')
+		$frm->addSubmit('send', 'Zaregistrovat Skupinu na Obrok 2019')
 			->setAttribute('class', 'btn btn-primary btn-block');
 
 		$frm->onSuccess[] = [$this, 'processForm'];

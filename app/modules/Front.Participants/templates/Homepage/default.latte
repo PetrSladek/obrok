@@ -28,13 +28,13 @@
                 <td>Zodpovědný vedoucí (18+)</td>
                 <td>
                     <strong>{if $boss}{$boss->fullname}{else}<a n:tag-if="$me->isAdmin()" href="{plink editGroup}">- doplňtě -</a>{/if}</strong>
-                    &nbsp;&nbsp;&nbsp;<small class="help" title="zodpovídá za účastníky ve skupině v průběhu Obroku 2017">(?)</small>
+                    &nbsp;&nbsp;&nbsp;<small class="help" title="zodpovídá za účastníky ve skupině v průběhu Obroku 2019">(?)</small>
                 </td>
             </tr>
             {if $boss}
             <tr>
                 <td>Kontaktní telefon</td>
-                <td><strong>{$boss->getPhone()|phone}&nbsp;&nbsp;&nbsp;<small class="help" title="Kontaktní telefon na vedoucího skupiny, který musí mít sebou v době konání Obrok 2017">(?)</small></td>
+                <td><strong>{$boss->getPhone()|phone}&nbsp;&nbsp;&nbsp;<small class="help" title="Kontaktní telefon na vedoucího skupiny, který musí mít sebou v době konání Obrok 2019">(?)</small></td>
             </tr>
             {/if}
             <tr>
@@ -146,7 +146,7 @@
 
                 </tbody>
             </table>
-            Všichni výše uvedení souhlasí s dokumenty <a href="http://www.obrok17.cz/obecna-ustanoveni-storno-podminky">Obecná ustanovení a storno podmínky</a> a <a href="http://www.obrok17.cz/registrace">Registrační podmínky</a>! </br></br>
+            Všichni výše uvedení souhlasí s dokumenty <a href="http://www.obrok19.cz/obecna-ustanoveni-storno-podminky">Obecná ustanovení a storno podmínky</a> a <a href="http://www.obrok19.cz/registrace">Registrační podmínky</a>! </br></br>
         </div>
 
         <div>
@@ -232,7 +232,7 @@
            </tr>
            <tr>
                <td>Poznámka pro příjemce</td>
-               <td><strong>Obrok 2017 {$group->name} {$group->city}</strong></td>
+               <td><strong>Obrok 2019 {$group->name} {$group->city}</strong></td>
            </tr>
             {/if}
        </table>
@@ -243,7 +243,7 @@
     </div>
     <div class="col-md-6">
         {if !$group->paid}
-            <img class="img-responsive" src="https://api.paylibo.com/paylibo/generator/czech/image?compress=false&size=440&accountNumber=2100437022&bankCode=2010&amount={=($group->getConfirmedParticipantsCount()-$group->getPaidParticipantsCount())*700}&currency=CZK&vs={$group->getVarSymbol()}&message={='Obrok 2017 '.$group->name.' ' .$group->city}" />
+            <img class="img-responsive" src="https://api.paylibo.com/paylibo/generator/czech/image?compress=false&size=440&accountNumber=2100437022&bankCode=2010&amount={=($group->getConfirmedParticipantsCount()-$group->getPaidParticipantsCount())*700}&currency=CZK&vs={$group->getVarSymbol()}&message={='Obrok 2019 '.$group->name.' ' .$group->city}" />
         {/if}
     </div>
 

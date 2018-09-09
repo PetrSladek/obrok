@@ -3,7 +3,7 @@
 
 parameters:
 	app:
-		name: 'Obrok17'
+		name: 'Obrok19'
 		hashKey:  #nastavit pri instalaci a pak uz nemenit (je kvuli vytvareni heshu pro zvaci url atd..)
 
 		storageUrl: '/storage'
@@ -12,10 +12,10 @@ parameters:
 		webimagesCacheDir: %appDir%/../www/storage/webimages/cache/
 		webimagesCacheUrl: /storage/webimages/cache/
 
-		emailDefaultFrom: "Obrok17.cz <registrace@obrok17.cz>"
+		emailDefaultFrom: "Obrok19.cz <registrace@obrok19.cz>"
 		emailTemplateDir: %appDir%/templates/emails/
-		emailSubjectFormat: '[Obrok 2017] %'
-		emailToRegistration: registrace@obrok17.cz
+		emailSubjectFormat: '[Obrok 2019] %'
+		emailToRegistration: registrace@obrok19.cz
 
 
 php:
@@ -33,7 +33,7 @@ extensions:
 	images: Brabijan\Images\DI\ImagesExtension
 
 console:
-    url: http://www.obrok17.cz
+    url: http://www.obrok19.cz
 
 skautis:
 	applicationId:

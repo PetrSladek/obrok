@@ -82,7 +82,7 @@ class ServiceteamRegistrationForm extends Control
 		$frm->addDatepicker('birthdate', 'Datum narození')
 			->setDefaultValue($this->person->birthdate)
 			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat Datum narození nebo je ve špatném formátu')
-			->addRule(Form::RANGE, 'Podle data narození vám 7.6.2017 ještě nebude 18 let (což porušuje podmínky účasti)', array(null, DateTime::from('7.6.2017')->modify('-18 years')))
+			->addRule(Form::RANGE, 'Podle data narození vám 7.6.2019 ještě nebude 18 let (což porušuje podmínky účasti)', array(null, DateTime::from('7.6.2019')->modify('-18 years')))
 			->setAttribute('description', 'Tvoje Datum narození ve formátu dd.mm.yyyy');
 		$frm->addText('addressCity', 'Město')
 			->setDefaultValue($this->person->addressCity)
@@ -105,7 +105,7 @@ class ServiceteamRegistrationForm extends Control
 			->addRule(Form::EMAIL, 'E-mailová adresa není platná')
 			->setAttribute('description', 'Kontaktní e-mail na který vám budou chodit informace');
 
-		$frm->addCheckbox('conditions', Html::el()->setHtml('Souhlasím s <a target="_blank" href="http://www.obrok17.cz/registrace/">podmínkami účasti na akci</a> a s <a target="_blank" href="http://www.obrok17.cz/obecna-ustanoveni-storno-podminky/">obecnými ustanoveními</a>'))
+		$frm->addCheckbox('conditions', Html::el()->setHtml('Souhlasím s <a target="_blank" href="http://www.obrok19.cz/registrace/">podmínkami účasti na akci</a> a s <a target="_blank" href="http://www.obrok19.cz/obecna-ustanoveni-storno-podminky/">obecnými ustanoveními</a>'))
 			->addRule($frm::FILLED, 'Musíte souhlasit s podmínkami účasti')
 			->setOmitted();
 
