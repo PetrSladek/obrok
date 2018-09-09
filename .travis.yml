@@ -2,25 +2,22 @@ language: php
 
 php:
   - 5.6
-  - 7.0
-
-matrix:
-  allow_failures:
-    - php: 7.0
 
 before_install:
   - composer self-update
 
 install:
-  - composer install --no-interaction --prefer-source
+  - composer install --no-interaction --prefer-dist
 
 before_script:
+  - ls -l
   - mysql -u root -e 'CREATE DATABASE obrok_is_tests CHARACTER SET utf8 COLLATE utf8_general_ci;';
-#  - mysql -u root testbase < tests/testbase.sql
+  - php www/index.php orm:schema-tool:create
+  #  - mysql -u root testbase < tests/testbase.sql
 
 script:
   - ./vendor/bin/tester -s ./tests/
 
 after_failure:
-  # Vytiskne obsah souborù *.actual
+  # Vytiskne obsah souborÃ¹ *.actual
   - for i in $(find ./tests -name \*.actual); do echo "--- $i"; cat $i; echo; echo; done
