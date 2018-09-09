@@ -299,7 +299,7 @@ class Participant extends Person
 	{
 		foreach ($this->programs as $otherProgram)
 		{
-			if ($otherProgram->id == $program->id)
+			if ($otherProgram->getId() == $program->getId())
 			{
 				continue;
 			}
@@ -482,5 +482,7 @@ class Participant extends Person
 	{
 		$this->openProgramRegistration = false;
 	}
+
+
 
 }

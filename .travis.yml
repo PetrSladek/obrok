@@ -12,7 +12,6 @@ install:
 before_script:
   - ls -l
   - mysql -u root -e 'CREATE DATABASE obrok_is_tests CHARACTER SET utf8 COLLATE utf8_general_ci;';
-  - php www/index.php orm:schema-tool:create
   #  - mysql -u root testbase < tests/testbase.sql
 
 script:

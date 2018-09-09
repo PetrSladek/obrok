@@ -132,4 +132,5 @@ class PersonRepositoryTest extends Tester\TestCase
 }
 
 
-\run(new PersonRepositoryTest($container));
+$test = new PersonRepositoryTest($container);
+$test->run();

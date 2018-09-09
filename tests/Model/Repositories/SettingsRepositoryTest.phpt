@@ -79,4 +79,5 @@ class SettingsRepositoryTest extends Tester\TestCase
 }
 
 
-\run(new SettingsRepositoryTest($container));
+$test = new SettingsRepositoryTest($container);
+$test->run();

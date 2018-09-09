@@ -93,7 +93,6 @@ class GroupFormTestTest extends Tester\TestCase
 		$control['form']->fireEvents();
 
 		Assert::true($control['form']->isSuccess());
-
 	}
 
 
@@ -108,4 +107,5 @@ class GroupFormTestTest extends Tester\TestCase
 }
 
 
-\run(new GroupFormTestTest($container));
+$test = new GroupFormTestTest($container);
+$test->run();

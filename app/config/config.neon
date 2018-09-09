@@ -32,6 +32,9 @@ extensions:
 	ajaxHistory: VojtechDobes\NetteAjax\HistoryExtension
 	images: Brabijan\Images\DI\ImagesExtension
 
+console:
+    url: http://www.obrok17.cz
+
 skautis:
 	applicationId:
 
