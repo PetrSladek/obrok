@@ -15,7 +15,7 @@ before_script:
   #  - mysql -u root testbase < tests/testbase.sql
 
 script:
-  - ./vendor/bin/tester -s ./tests/ -c ./tests/php.ini
+  - ./vendor/bin/tester -s ./tests/ -C
 
 after_failure:
   - cat log/error.log
