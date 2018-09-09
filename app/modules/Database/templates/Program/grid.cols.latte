@@ -1,31 +1,31 @@
 
-{redefine col-id}
+{define col-id}
 <td width="15">
     #{$row->id}
 </td>
-{/redefine}
-{redefine col-time}
+{/define}
+{define col-time}
 <td width="90">
     {$row->start|day}
     <br /><small>{$row->start->format('H:i')} - {$row->end->format('H:i')}</small>
 </td>
-{/redefine}
-{redefine col-section}
+{/define}
+{define col-section}
 <td>
     {$row->section->title}
     <br /><small>{$row->section->subTitle}</small>
 </td>
-{/redefine}
-{redefine col-name}
+{/define}
+{define col-name}
 <td>
     {$row->name}
     {if $row->lector}<br /><small>{$row->lector}</small>{/if}
 </td>
-{/redefine}
-{redefine col-capacity}
+{/define}
+{define col-capacity}
 <td n:class="$row->occupied >= $row->capacity ? cell-flag-red : cell-flag-green">
     {$row->occupied} / {$row->capacity}
 </td>
-{/redefine}
+{/define}
 
 

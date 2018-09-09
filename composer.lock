@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "75d9397d366d1efb0f997709ae398e2a",
-    "content-hash": "f8df91d9ad8f876fa958130fefef2870",
+    "hash": "feb39d24e40b03920c426aa96f743b05",
+    "content-hash": "2ea15c3c476d7bedce830116ee2f5984",
     "packages": [
         {
             "name": "beberlei/DoctrineExtensions",
@@ -2834,29 +2834,30 @@
         },
         {
             "name": "nextras/datagrid",
-            "version": "v2.1.3",
+            "version": "v3.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nextras/datagrid.git",
-                "reference": "eff150dbfaf696f44e7e72c16cbe7b4c219e135c"
+                "reference": "ef541bfc36ce00fee40e6d38f66ecd770760abc7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nextras/datagrid/zipball/eff150dbfaf696f44e7e72c16cbe7b4c219e135c",
-                "reference": "eff150dbfaf696f44e7e72c16cbe7b4c219e135c",
+                "url": "https://api.github.com/repos/nextras/datagrid/zipball/ef541bfc36ce00fee40e6d38f66ecd770760abc7",
+                "reference": "ef541bfc36ce00fee40e6d38f66ecd770760abc7",
                 "shasum": ""
             },
             "require": {
-                "nette/application": "~2.2",
-                "nette/component-model": "~2.2",
-                "nette/utils": "~2.2",
-                "nextras/latte-macros": "~1.1.0",
-                "php": ">=5.3"
+                "latte/latte": "~2.4",
+                "nette/application": "~2.4",
+                "nette/component-model": "~2.3",
+                "nette/forms": "~2.4",
+                "nette/utils": "~2.4",
+                "php": ">=5.6"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.1-dev"
+                    "dev-master": "3.0-dev"
                 }
             },
             "autoload": {
@@ -2870,9 +2871,8 @@
             ],
             "authors": [
                 {
-                    "name": "Jan Skrasek",
-                    "email": "hrach.cz@gmail.com",
-                    "homepage": "http://jan.skrasek.com"
+                    "name": "Nextras Community",
+                    "homepage": "https://github.com/nextras/forms/graphs/contributors"
                 }
             ],
             "description": "Datagrid component for Nette Framework.",
@@ -2881,7 +2881,7 @@
                 "nette",
                 "nextras"
             ],
-            "time": "2015-07-23 12:44:36"
+            "time": "2018-02-20 14:59:52"
         },
         {
             "name": "nextras/forms",

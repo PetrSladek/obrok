@@ -1,6 +1,6 @@
 {include 'head.latte'}
 <h1>{$data->subject}</h1>
 <p>
-	{$data->content|noescape|nl2br}
+	{$data->content|breaklines}
 </p>
 {include 'foot.latte'}

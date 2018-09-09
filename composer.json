@@ -12,7 +12,7 @@
 		"skautis/skautis": "2.*@dev",
 		"skautis/nette": "2.*@dev",
 		"nextras/forms": "^1.5",
-		"nextras/datagrid": "^2.1",
+		"nextras/datagrid": "^3.0",
 		"nextras/latte-macros": "^1.1",
 		"beberlei/DoctrineExtensions": "^1.0",
 		"vojtech-dobes/nette-ajax-history": "^2.0",

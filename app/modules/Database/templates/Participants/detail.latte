@@ -70,8 +70,8 @@
 
                     <div class="col-md-4">
                         <h4>
-                            <small>Skautis Person ID</small><br />
-                            {if $item->skautisPersonId}{$item->skautisPersonId}{else}<em>- nemá -</em>{/if}
+                            <small>Skautis User ID</small><br />
+                            {if $item->skautisUserId}{$item->skautisUserId}{else}<em>- nemá -</em>{/if}
                         </h4>
                         <h4>
                             <small>Poslední přihlášení</small><br />
@@ -91,7 +91,7 @@
                             <tr>
                                 <td>
                                     <div n:class="$acl->edit ? ajax-edit, wh">
-                                        <div class="ajax-edit-val">{snippet health}{if $item->health}{$item->health|escape|nl2br|noescape}{else}- není -{/if}{/snippet}</div>
+                                        <div class="ajax-edit-val">{snippet health}{if $item->health}{$item->health|breaklines}{else}- není -{/if}{/snippet}</div>
                                         <div class="ajax-edit-target" n:if="$acl->edit">{input health class=>'form-control'}</div>
                                     </div>
                                 </td>
@@ -100,7 +100,7 @@
                             <tr>
                                 <td>
                                     <div n:class="$acl->edit ? ajax-edit">
-                                        <div class="ajax-edit-val">{snippet noteInternal}{if $item->noteInternal}{$item->noteInternal|escape|nl2br|noescape}{else}- není -{/if}{/snippet}</div>
+                                        <div class="ajax-edit-val">{snippet noteInternal}{if $item->noteInternal}{$item->noteInternal|breaklines}{else}- není -{/if}{/snippet}</div>
                                         <div class="ajax-edit-target" n:if="$acl->edit">{input noteInternal class=>'form-control'}</div>
                                     </div>
                                 </td>

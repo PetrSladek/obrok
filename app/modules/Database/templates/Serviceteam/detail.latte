@@ -103,7 +103,7 @@
 								<td>
 									<div n:class="$acl->edit ? ajax-edit, wh">
 										<div
-											class="ajax-edit-val">{snippet health}{if $item->health}{$item->health|escape|nl2br|noescape}{else}- není -{/if}{/snippet}</div>
+											class="ajax-edit-val">{snippet health}{if $item->health}{$item->health|breaklines}{else}- není -{/if}{/snippet}</div>
 										<div class="ajax-edit-target" n:if="$acl->edit">{input health class=>'form-control'}</div>
 									</div>
 								</td>
@@ -115,7 +115,7 @@
 								<td>
 									<div n:class="$acl->edit ? ajax-edit, wh">
 										<div
-											class="ajax-edit-val">{snippet experience}{if $item->experience}{$item->experience|escape|nl2br|noescape}{else}- není -{/if}{/snippet}</div>
+											class="ajax-edit-val">{snippet experience}{if $item->experience}{$item->experience|breaklines}{else}- není -{/if}{/snippet}</div>
 										<div class="ajax-edit-target" n:if="$acl->edit">{input experience class=>'form-control'}</div>
 									</div>
 								</td>
@@ -127,7 +127,7 @@
 								<td>
 									<div n:class="$acl->edit ? ajax-edit, wh">
 										<div
-											class="ajax-edit-val">{snippet note}{if $item->note}{$item->note|escape|nl2br|noescape}{else}- není -{/if}{/snippet}</div>
+											class="ajax-edit-val">{snippet note}{if $item->note}{$item->note|breaklines}{else}- není -{/if}{/snippet}</div>
 										<div class="ajax-edit-target" n:if="$acl->edit">{input note class=>'form-control'}</div>
 									</div>
 								</td>
@@ -139,7 +139,7 @@
 								<td>
 									<div n:class="$acl->edit ? ajax-edit">
 										<div
-											class="ajax-edit-val">{snippet noteInternal}{if $item->noteInternal}{$item->noteInternal|escape|nl2br|noescape}{else}- není -{/if}{/snippet}</div>
+											class="ajax-edit-val">{snippet noteInternal}{if $item->noteInternal}{$item->noteInternal|breaklines}{else}- není -{/if}{/snippet}</div>
 										<div class="ajax-edit-target" n:if="$acl->edit">{input noteInternal class=>'form-control'}</div>
 									</div>
 								</td>
@@ -224,6 +224,16 @@
                                 </span>
 
 						</div>
+
+
+						<h4>
+							<small>Skautis User ID</small><br />
+							{if $item->skautisUserId}{$item->skautisUserId}{else}<em>- nemá -</em>{/if}
+						</h4>
+						<h4>
+							<small>Poslední přihlášení</small><br />
+							{if $item->lastLogin}{$item->lastLogin->format('j.n.Y H:i:s')}{else}-{/if}
+						</h4>
 
 					</div>
 

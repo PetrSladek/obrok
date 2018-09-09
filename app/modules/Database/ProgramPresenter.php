@@ -11,10 +11,8 @@ use App\Query\ProgramsQuery;
 use App\Model\Repositories\ParticipantsRepository;
 use App\Model\Repositories\ProgramsRepository;
 use App\Model\Repositories\ProgramsSectionsRepository;
-use Latte\Template;
 use Nette\Forms\Container;
 use Nette\Http\IResponse;
-use Nette\Utils\DateTime;
 use Nette\Utils\Paginator;
 use Nextras\Datagrid\Datagrid;
 
@@ -282,7 +280,7 @@ class ProgramPresenter extends DatabaseBasePresenter
 
 		$frm->addGroup('O programu');
 		$frm->addSelect('section', 'Sekce', $sections)
-			->setDefaultValue($this->item ? $this->item->section->id : null)
+			->setDefaultValue($this->item ? $this->item->section->getId() : null)
 			->addRule(Form::FILLED);
 
 		$frm->addText('name', 'Název')
@@ -346,7 +344,7 @@ class ProgramPresenter extends DatabaseBasePresenter
 		$this->em->flush();
 
 		$this->flashMessage('Údaje úspěšně uloženy', 'success');
-		$this->redirect('detail', $this->item->id);
+		$this->redirect('detail', $this->item->getId());
 	}
 
 

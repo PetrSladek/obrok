@@ -399,7 +399,7 @@ class ParticipantsPresenter extends DatabaseBasePresenter
 		$frm->addGroup('Skupina');
 
 		$frm->addSelect('group', 'Skupina do které uživatel patří', $this->groups->findPairs("name"))
-			->setDefaultValue($this->item ? $this->item->group->id : $this->getParameter('toGroup'))
+			->setDefaultValue($this->item ? $this->item->group->getId() : $this->getParameter('toGroup'))
 			->setPrompt('- Vyberte skupinu -')
 			->setRequired();
 
@@ -464,13 +464,19 @@ class ParticipantsPresenter extends DatabaseBasePresenter
 			->setDefaultValue($this->item ? $this->item->noteInternal : null);
 
 		$frm->addGroup('Přihlášení');
-		$frm->addText('skautisPersonId', 'Skautis PersonID')
+//		$frm->addText('skautisPersonId', 'Skautis PersonID')
+//			->setRequired(false)
+//			->addRule(Form::INTEGER)
+//			->setDefaultValue($this->item ? $this->item->skautisPersonId : null);
+
+		$frm->addText('skautisUserId', 'Skautis UserID')
+			->setRequired(false)
 			->addRule(Form::INTEGER)
-			->setDefaultValue($this->item ? $this->item->skautisPersonId : null);
+			->setDefaultValue($this->item ? $this->item->skautisUserId : null);
 
 		$frm->addSubmit('send', 'Uložit')->setAttribute('class', 'btn btn-success btn-lg btn-block');
 
-		$frm->onSuccess[] = callback($this, 'frmEditSubmitted');
+		$frm->onSuccess[] = [$this, 'frmEditSubmitted'];
 
 		return $frm;
 	}
@@ -504,7 +510,7 @@ class ParticipantsPresenter extends DatabaseBasePresenter
 		$this->em->flush();
 
 		$this->flashMessage('Údaje úspěšně uloženy', 'success');
-		$this->redirect('detail', $this->item->id);
+		$this->redirect('detail', $this->item->getId());
 
 	}
 

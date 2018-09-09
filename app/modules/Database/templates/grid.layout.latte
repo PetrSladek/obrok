@@ -3,16 +3,16 @@
 {/define}
 
 
-{redefine table-open-tag}
+{define table-open-tag}
 <div class="table-responsive">
 	<table class="table table-bordered table-condensed table-striped table-hover">
-{/redefine}
-{redefine table-close-tag}
+{/define}
+{define table-close-tag}
 	</table>
 </div>
-{/redefine}
+{/define}
 
-{redefine row-head-colums}
+{define row-head-colums}
 	<tr class="grid-columns">
 		{foreach $columns as $column}
 			<th class="grid-col-{$column->name}">
@@ -36,35 +36,35 @@
 				{/if}
 			</th>
 		{/foreach}
-		{if $template->hasActionsColumn}
+		{if $hasActionsColumn}
 			<th class="grid-col-actions">{ifset #global-actions}{include #global-actions}{/ifset}</th>
 		{/if}
 	</tr>
-{/redefine}
+{/define}
 
 
-{redefine global-filter-actions}
+{define global-filter-actions}
 	<button n:name="filter" class="btn btn-primary btn-sm" title="Filtrovat"><i class="fa fa-filter"></i></button>
 	{if $showCancel}
 		{*{input cancel class => "btn btn-default btn-sm"}*}
 		<button n:name="cancel" class="btn btn-default btn-sm" title="Zrušit filtr"><i class="fa fa-times"></i></button>
 	{/if}
-{/redefine}
+{/define}
 
-{redefine col-filter}
+{define col-filter}
 	{input $column->name class=>"form-control input-sm"}
-{/redefine}
+{/define}
 
-{redefine row-actions-edit}
+{define row-actions-edit}
 	{input save class => "btn btn-primary btn-xs"}
 	{input cancel class => "btn btn-default btn-xs"}
-{/redefine}
+{/define}
 
-{redefine row-actions-edit-link}
+{define row-actions-edit-link}
 	<a href="{link edit! $primary}" data-datagrid-edit class="ajax btn btn-primary btn-xs">{$control->translate(Edit)}</a>
-{/redefine}
+{/define}
 
-{redefine pagination}
+{define pagination}
 <ul class="pagination" n:if="$paginator->pageCount > 1">
 {if $paginator->isFirst()}
 	<li class="disabled"><a>« První</a></li>
@@ -86,4 +86,4 @@
 	<li><a href="{link paginate!, 'page' => $paginator->pageCount}" class="ajax">Poslední »</a></li>
 {/if}
 </ul>
-{/redefine}
+{/define}

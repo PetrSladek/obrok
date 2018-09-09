@@ -1,4 +1,4 @@
-{redefine col-fullname}
+{define col-fullname}
 <td>
     <div class="pull-right text-right">
         <a class="btn btn-xs btn-default ajax" href="{plink Participants:detail $row->id}">Otevřít</a><br />
@@ -12,9 +12,9 @@
         <br /><small></small>
     {/if}
 </td>
-{/redefine}
+{/define}
 
-{redefine row-actions}
+{define row-actions}
   <a class="btn btn-xs btn-danger ajax"  href="{plink unattendeeParticipant! $primary}">Vyhodit</a>
-{/redefine}
+{/define}
 

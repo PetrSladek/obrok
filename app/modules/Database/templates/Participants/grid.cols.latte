@@ -1,9 +1,9 @@
-{redefine col-id}
+{define col-id}
 <td width="60">
     #{$row->id}
 </td>
-{/redefine}
-{redefine col-fullname}
+{/define}
+{define col-fullname}
 <td>
     {*<img n:if="$row->group" src="{plink Image: (expand) $row->group->getAvatarType('dbrow')}" alt="foto" style="float: left;margin-right: 10px;" />*}
     {if $row->nickName}
@@ -17,14 +17,14 @@
         <a n:if="$acl->edit" class="btn btn-xs btn-default" href="{plink Participants:loginAs $row->id}">Přihlásit se</a>
     </div>
 </td>
-{/redefine}
-{redefine col-age}
+{/define}
+{define col-age}
 <td>
     {$row->getAge($ageInDate)} let<br />
     <small>{$row->birthdate->format("j.n.Y")}</small>
 </td>
-{/redefine}
-{redefine col-group}
+{/define}
+{define col-group}
 <td>
     <div class="pull-left" style="margin-right: 5px">
         <img n:if="$row->group->getAvatar()" class="img-responsive" n:img="$row->group->getAvatar(), 48, 48, exact, $row->group->getAvatarCrop()" alt="foto" />
@@ -42,19 +42,19 @@
 
 
 </td>
-{/redefine}
-{redefine col-contact}
+{/define}
+{define col-contact}
 <td>
     {$row->getPhone()|phone}
     <br /><small>{$row->email}</small>
 </td>
-{/redefine}
-{redefine col-address}
+{/define}
+{define col-address}
 <td>
     {$row->addressStreet}
     <br /><small>{$row->addressCity} {$row->addressPostcode}</small>
 </td>
-{/redefine}
+{/define}
 
 {define col-confirmed}
 <td n:class="$row->confirmed ? cell-flag-blue, cell-flag">

@@ -344,7 +344,7 @@ class ServiceteamPresenter extends DatabaseBasePresenter
 
 		$frm->addGroup('Zařazení');
 		$frm->addSelect('team', 'Spadá pod tým', $this->teams->findPairs("name"))
-			->setDefaultValue($this->item && $this->item->team ? $this->item->team->id : null)
+			->setDefaultValue($this->item && $this->item->team ? $this->item->team->getId() : null)
 			->setPrompt('- nezařazen -');
 
 		$frm->addTypeahead('workgroup', 'Patří do prac.skupiny', function ($query)  {
@@ -362,12 +362,15 @@ class ServiceteamPresenter extends DatabaseBasePresenter
 
 		$frm->addGroup('Poznámky');
 		$frm->addTextArea('experience', 'Zkušenosti / Dovednosti')
+			->setRequired(false)
 			->setDefaultValue($this->item ? $this->item->experience : null)
 			->addFilter('trim');
 		$frm->addTextArea('note', 'Poznámka při registraci / Omezení (diety)')
+			->setRequired(false)
 			->setDefaultValue($this->item ? $this->item->note : null)
 			->addFilter('trim');
 		$frm->addTextArea('noteInternal', 'Interní poznámka')
+			->setRequired(false)
 			->setDefaultValue($this->item ? $this->item->noteInternal : null)
 			->addFilter('trim');
 
@@ -384,9 +387,15 @@ class ServiceteamPresenter extends DatabaseBasePresenter
 			->setRequired();
 
 		$frm->addGroup('Přihlášení');
-		$frm->addText('skautisPersonId', 'Skautis PersonID')
+//		$frm->addText('skautisPersonId', 'Skautis PersonID')
+//			->setRequired(false)
+//			->addRule(Form::INTEGER)
+//			->setDefaultValue($this->item ? $this->item->skautisPersonId : null);
+
+		$frm->addText('skautisUserId', 'Skautis UserID')
+			->setRequired(false)
 			->addRule(Form::INTEGER)
-			->setDefaultValue($this->item ? $this->item->skautisPersonId : null);
+			->setDefaultValue($this->item ? $this->item->skautisUserId : null);
 
 		$frm->addSubmit('send', 'Uložit')->setAttribute('class', 'btn btn-success btn-lg btn-block');
 		$frm->onSuccess[] = [$this, 'frmEditSuccess'];
@@ -451,7 +460,7 @@ class ServiceteamPresenter extends DatabaseBasePresenter
 		$this->em->flush();
 
 		$this->flashMessage('Údaje úspěšně uloženy', 'success');
-		$this->redirect('detail', $this->item->id);
+		$this->redirect('detail', $this->item->getId());
 	}
 
 

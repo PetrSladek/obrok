@@ -11,7 +11,6 @@ use App\Model\Entity\Program;
 use App\Model\Entity\ProgramSection;
 use App\Model\Repositories\GroupsRepository;
 use App\Services\ImageService;
-use DoctrineExtensions\Query\Mysql\Date;
 use Nette\Utils\AssertionException;
 use Nette\Utils\DateTime;
 
@@ -84,7 +83,7 @@ class HomepagePresenter extends ParticipantAuthBasePresenter
 	public function createComponentFrmEditGroup()
 	{
 
-		$control = $this->groupFormFactory->create($this->me->group->id);
+		$control = $this->groupFormFactory->create($this->me->group->getId());
 		$control->setAgeInDate($this->ageInDate);
 		$control->onSave[] = function ($control, Group $group)
 		{
@@ -175,11 +174,11 @@ class HomepagePresenter extends ParticipantAuthBasePresenter
 			{
 				$this->error('Účastník neexistuje');
 			}
-			if ($this->participant->group->id != $this->me->group->id)
+			if ($this->participant->group->getId() != $this->me->group->getId())
 			{
 				$this->error('Účastník není z vaší skupiny');
 			}
-			if (!($this->participant->id == $id || $this->me->isAdmin()))
+			if (!($this->participant->getId() == $id || $this->me->isAdmin()))
 			{
 				$this->error('Nejste administrator skupiny, muzete editovat jen sebe.');
 			}
@@ -275,7 +274,7 @@ class HomepagePresenter extends ParticipantAuthBasePresenter
 		if ($this->participant)
 		{
 
-			if ($this->participant->id != $this->me->id)
+			if ($this->participant->getId() != $this->me->getId())
 			{
 				$frm['email']->setAttribute('title', 'E-mail, který pravidelně vybírá. Budou tam chodit informace atd..');
 				$frm['phone']->setAttribute('title', 'Mobilní telefon, na kterém bude k zastižení během celé akce');
@@ -317,7 +316,7 @@ class HomepagePresenter extends ParticipantAuthBasePresenter
 		$this->em->flush();
 
 		// Pokud sem to já aktualizuju objekt me
-		if ($this->me->id == $this->participant->id)
+		if ($this->me->getId() == $this->participant->getId())
 		{
 			$this->me = $this->participant;
 		}
@@ -351,7 +350,7 @@ class HomepagePresenter extends ParticipantAuthBasePresenter
 		$frm->addSubmit('send', 'Ano opravdu na Obrok nepřijedu')
 			->setAttribute('class', 'btn btn-primary');
 
-		$frm->onSuccess[] = callback($this, 'frmCancelSubmitted');
+		$frm->onSuccess[] = [$this, 'frmCancelSubmitted'];
 
 		return $frm;
 	}
@@ -409,7 +408,7 @@ class HomepagePresenter extends ParticipantAuthBasePresenter
 		$values = $frm->getValues();
 		$emails = array_map('trim', explode("\n", trim($values->emails)));
 
-		$link = $this->link('//Invitation:toGroup', $this->me->group->id, $this->me->group->getInvitationHash($this->config->hashKey));
+		$link = $this->link('//Invitation:toGroup', $this->me->group->getId(), $this->me->group->getInvitationHash($this->config->hashKey));
 
 		try
 		{

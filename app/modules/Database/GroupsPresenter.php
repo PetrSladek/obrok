@@ -12,6 +12,7 @@ use App\Model\Repositories\ParticipantsRepository;
 use App\Model\Repositories\ServiceteamRepository;
 use App\Services\ImageService;
 use Brabijan\Images\TImagePipe;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\AbstractQuery;
 use Nette\Forms\Container;
 use Nette\Forms\Controls\BaseControl;
@@ -299,7 +300,7 @@ class GroupsPresenter extends DatabaseBasePresenter
 	 */
 	public function renderDetail()
 	{
-		$link = $this->link('//:Front:Participants:Invitation:toGroup', $this->item->id, $this->item->getInvitationHash($this->config->hashKey));
+		$link = $this->link('//:Front:Participants:Invitation:toGroup', $this->item->getId(), $this->item->getInvitationHash($this->config->hashKey));
 		$this->template->invitationLink = $link;
 
 		$this->template->activeParticipants = $this->item->getConfirmedParticipants();
@@ -359,7 +360,7 @@ class GroupsPresenter extends DatabaseBasePresenter
 			->setDefaultValue($this->item ? $this->item->noteInternal : null);
 
 		$frm->addSelect('boss', 'Vedoucí skupiny (18+)', $this->item ? $this->item->getPossibleBosses($this->ageInDate) : [])
-			->setDefaultValue($this->item && $this->item->getBoss() ? $this->item->getBoss()->id : null)
+			->setDefaultValue($this->item && $this->item->getBoss() ? $this->item->getBoss()->getId() : null)
 			->setPrompt('- Vyberte vedoucího sk. -');
 
 //        $frm->addText('paidFor','Zaplaceno za')
@@ -427,7 +428,7 @@ class GroupsPresenter extends DatabaseBasePresenter
 		$this->em->flush();
 
 		$this->flashMessage('Údaje úspěšně uloženy', 'success');
-		$this->redirect('detail', $this->item->id);
+		$this->redirect('detail', $this->item->getId());
 	}
 
 
@@ -440,7 +441,6 @@ class GroupsPresenter extends DatabaseBasePresenter
 		$grid = new Datagrid();
 		$grid->setRowPrimaryKey('id');
 		$grid->addCellsTemplate(__DIR__ . '/../templates/grid.layout.latte');
-//        $grid->addCellsTemplate(__DIR__.'/../templates/Payments/grid.cols.latte');
 
 		$grid->addColumn('id', 'ID')->enableSort();
 		$grid->addColumn('date', 'Datum')->enableSort();
@@ -675,7 +675,6 @@ class GroupsPresenter extends DatabaseBasePresenter
 			$conditions['id'] = $id;
 		}
 
-		/** @var ICollection $collection */
 		$collection = $this->repository->findBy($conditions);
 
 		$template = $this->createTemplate();
