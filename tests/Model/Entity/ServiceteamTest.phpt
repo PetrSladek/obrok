@@ -27,6 +27,9 @@ $container = require_once __DIR__ . '/../../bootstrap.php';
 class ServiceteamTest extends Tester\TestCase
 {
 
+	/**
+	 * @var Serviceteam
+	 */
 	protected $serviceteam;
 
 

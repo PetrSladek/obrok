@@ -38,4 +38,37 @@ class Team
 	 */
 	protected $name;
 
+	/**
+	 * @return mixed
+	 */
+	public function getAbbr()
+	{
+		return $this->abbr;
+	}
+
+	/**
+	 * @param string $abbr
+	 */
+	public function setAbbr($abbr)
+	{
+		$this->abbr = $abbr;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getName()
+	{
+		return $this->name;
+	}
+
+	/**
+	 * @param string $name
+	 */
+	public function setName($name)
+	{
+		$this->name = $name;
+	}
+
+
 }

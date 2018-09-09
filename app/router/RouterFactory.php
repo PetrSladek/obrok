@@ -28,10 +28,10 @@ class RouterFactory
 	 */
 	public static function createRouter()
 	{
-        if (self::isSecure())
-        {
-            Route::$defaultFlags |= Route::SECURED;
-        }
+//        if (self::isSecure())
+//        {
+//            Route::$defaultFlags |= Route::SECURED;
+//        }
 
 		$router = new RouteList();
 		$router[] = new Route('index.php', 'Front:Login:default', Route::ONE_WAY);
