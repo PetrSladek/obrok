@@ -145,6 +145,10 @@ services:
 			- setSubjectFormat(%app.emailSubjectFormat%)
 	router: App\RouterFactory::createRouter
 
+	auditLogListener:
+		class: App\Listeners\AuditLogListener
+		tags: [kdyby.subscriber]
+
 	personsRepository:
 	    class: App\Model\Repositories\PersonsRepository
 	    tags:

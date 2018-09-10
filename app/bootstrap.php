@@ -24,8 +24,7 @@ $container = $configurator->createContainer();
     return $container[$name] = new \Nextras\Forms\Controls\DateTimePicker($label);
 });
 \Nette\Forms\Container::extensionMethod('addTypeahead', function(\Nette\Forms\Container $container, $name, $label = NULL, $callback = NULL) {
-    $control = new \Nextras\Forms\Controls\Typeahead($label, $callback);
-    return $container[$name] = $control;
+    return $container[$name] = new \Nextras\Forms\Controls\Typeahead($label, $callback);
 });
 
 
