@@ -255,6 +255,18 @@ class Participant extends Person
 			throw new InvalidStateException('Kapacita programu je již plná.', 10);
 		}
 
+		return $this->attendeeProgramOverCapacity($program);
+	}
+
+	/**
+	 * @param Program $program
+	 *
+	 * @return $this
+	 * @throws InvalidStateException
+	 */
+	public function attendeeProgramOverCapacity(Program $program)
+	{
+
 		if ($this->isAtendeeProgram($program))
 		{
 			throw new InvalidStateException('Uživatel je již přihlášen na tento program.', 20);

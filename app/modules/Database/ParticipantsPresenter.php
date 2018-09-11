@@ -298,7 +298,8 @@ class ParticipantsPresenter extends DatabaseBasePresenter
 
 		try
 		{
-			$this->item->attendeeProgram($program);
+			// zaregistrujeme program klidne i přes kapacitu
+			$this->item->attendeeProgramOverCapacity($program);
 
 			$this->em->flush();
 			$this->flashMessage('Program úspěšně zaregistrovan.', 'success');
@@ -349,11 +350,10 @@ class ParticipantsPresenter extends DatabaseBasePresenter
 	/**
 	 * Vykreslení šavlony detailu učastníka
 	 *
-	 * @param $id
+	 * @param int $id
 	 */
 	public function renderDetail($id)
 	{
-
 		$this->template->item = $this->item;
 	}
 

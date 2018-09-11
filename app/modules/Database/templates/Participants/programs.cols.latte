@@ -1,6 +1,6 @@
 {define col-registration}
 <td width="90">
-  <a class="btn btn-xs btn-success ajax"  href="{plink addProgram! $row->getId()}">Zaregistrovat</a>
+  <a n:class="btn, btn-xs, $row->isFull() ? btn-warning : btn-success, ajax"  href="{plink addProgram! $row->getId()}">Zaregistrovat</a>
 </td>
 {/define}
 
