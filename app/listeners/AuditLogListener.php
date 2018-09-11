@@ -173,6 +173,11 @@ class AuditLogListener implements Subscriber
 				$delete[] = $this->stringify($entity);
 			}
 
+			if (empty($insert) && empty($delete))
+			{
+				continue;
+			}
+
 			$changes = sprintf('%s: %s%s',
 				$fieldname,
 				$insert ? ('+' . implode(', +', $insert)) : '',
