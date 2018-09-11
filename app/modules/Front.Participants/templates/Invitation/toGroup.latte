@@ -13,15 +13,16 @@
     <div class="col-sm-6 col-md-offset-4">
         <h2>Zaregistovat se do skupiny</h2>
 
-        <div class="pull-left">
+        <div class="pull-left" style="margin-right: 20px; margin-bottom: 20px;">
             <img n:if="$group->getAvatar()" class="img-responsive" n:img="$group->getAvatar(), 150, 150, exact, $group->getAvatarCrop()" alt="foto" />
             <img n:if="!$group->getAvatar()" class="img-responsive" n:img="'avatar_group.jpg', 150, 150, exact" alt="foto" />
         </div>
         <h3>{$group->name}<br /><small>{$group->city}</small></h3>
+        <p>
+            {$group->note}
+        </p>
     </div>
 </div>
-
-
 
 <div class="row">
     <div class="col-sm-6 col-md-offset-4">

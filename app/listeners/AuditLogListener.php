@@ -207,17 +207,21 @@ class AuditLogListener implements Subscriber
 		{
 			return (string) $value;
 		}
-		elseif (preg_match("~App.Model.Entity.(.+)~", get_class($value), $match))
-		{
-			return sprintf('%s#%s', $match[1], $value->getId());
-		}
 		elseif ($value instanceof \DateTime)
 		{
 			return $value->format('j.n.Y H:i:s');
 		}
+		elseif (is_object($value) && preg_match("~App.Model.Entity.(.+)~", get_class($value), $match))
+		{
+			return sprintf('%s#%s', $match[1], $value->getId());
+		}
 		elseif (is_object($value) && method_exists($value, '__toString'))
 		{
 			return (string) $value;
+		}
+		elseif (is_array($value))
+		{
+			return json_encode($value);
 		}
 		elseif (is_null($value))
 		{

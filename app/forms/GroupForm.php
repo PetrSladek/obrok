@@ -127,7 +127,7 @@ class GroupForm extends Control
 			->setAttribute('data-placement', 'right');
 
 		$frm->addSelect('boss', 'Vedoucí skupiny (18+)', $this->group->getPossibleBosses($this->ageInDate))
-			->setDefaultValue($this->group->boss ? $this->group->boss->id : null)
+			->setDefaultValue($this->group->getBoss() ? $this->group->getBoss()->getId() : null)
 			->setPrompt('- Vyberte vedoucího skupiny -');
 //            ->addCondition(Form::FILLED)
 //                ->addRule(callback('Participant','validateBossAge'), 'Věk vedoucího skupiny Obroku 2015 musí být 18 let nebo více');
@@ -160,9 +160,9 @@ class GroupForm extends Control
 	public function processForm(Form $_, $values)
 	{
 
-		$values->locationLat = $values->location->lat;
-		$values->locationLng = $values->location->lng;
-		unset($values->location);
+//		$values->locationLat = $values->location->lat;
+//		$values->locationLng = $values->location->lng;
+//		unset($values->location);
 
 		/** @var \Croppie $avatar */
 		$avatar = $values->avatar;
