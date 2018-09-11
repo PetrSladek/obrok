@@ -5,6 +5,7 @@ namespace App\Services;
 use Nette\Http\FileUpload;
 use Nette\SmartObject;
 use Nette\Utils\Image;
+use Tracy\Debugger;
 
 
 /**
@@ -101,10 +102,19 @@ class ImageService
 	public function getImageUrl($filename, $width = null, $height = null, $flags = Image::FIT, $crop = null)
 	{
 		$flags = $this->convertFlags($flags);
-		$cacheFilename = $this->getCacheFilename($filename, $width, $height, $flags, $crop);
-		if (!file_exists($this->getCacheDir() . $cacheFilename))
+
+		try
 		{
-			$this->processImage($filename, $width, $height, $flags, $crop);
+			$cacheFilename = $this->getCacheFilename($filename, $width, $height, $flags, $crop);
+			if (!file_exists($this->getCacheDir() . $cacheFilename))
+			{
+				$this->processImage($filename, $width, $height, $flags, $crop);
+			}
+		}
+		catch (\Exception $e)
+		{
+			Debugger::log($e);
+			return null;
 		}
 
 		return $this->getCacheUrl() . $cacheFilename;
