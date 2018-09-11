@@ -253,13 +253,11 @@
 {if $group->confirmed}
 <div class="cancel">
     {if $me->isAdmin()}
-    <a href="{plink cancel}">Zrušit registraci skupiny</a>
+    <a href="{plink cancel}">Zrušit registraci skupiny</a><br />
     {else}
-    Zrušit registraci skupiny (Může pouze administrátor skupiny)
+    Zrušit registraci skupiny (Může pouze administrátor skupiny)<br />
     {/if}
 </div>
-
-
 {else}
 <div class="text-danger">
     <strong>Aktuálně se s Vámi na Obroku NEPOČÍTÁ!</strong><br />
@@ -267,6 +265,8 @@
     V případě jakýchkoli nejasností napište prosím na email dole.
 </div>
 {/if}
+
+<a href="{plink toUnspecifiedPerson!}">Zrušit účast ve skupině - Chci do jiné skupiny nebo do Servistýmu</a>
 
 
 
