@@ -563,6 +563,7 @@ class ParticipantsPresenter extends DatabaseBasePresenter
 		$grid->addColumn('time', 'Den a čas');
 		$grid->addColumn('name', 'Název');
 		$grid->addColumn('capacity', 'Obsazeno');//->enableSort();
+		$grid->addColumn('registration', '');
 
 		$grid->setFilterFormFactory(function ()
 		{

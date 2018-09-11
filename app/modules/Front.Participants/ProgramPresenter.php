@@ -290,7 +290,7 @@ class ProgramPresenter extends ParticipantAuthBasePresenter
 		{
 			if (!in_array($programId, $myKrinspiro))
 			{
-				$this->error('Při řazené nelze přidat další aktivitu');
+				$this->error('Při řazení nelze přidat novou aktivitu');
 			}
 
 			// Krinspiro priority

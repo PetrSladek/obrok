@@ -7,6 +7,7 @@ use App\Model\Entity\Person;
 use App\Model\Repositories\PersonsRepository;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Events;
+use Doctrine\ORM\PersistentCollection;
 use Kdyby\Events\Subscriber;
 use Tracy\Debugger;
 
@@ -145,13 +146,50 @@ class AuditLogListener implements Subscriber
 			Debugger::log($description, 'audit');
 		}
 //
-//		foreach ($uow->getScheduledCollectionDeletions() as $col) {
+
+		/** @var PersistentCollection $col */
+		foreach ($uow->getScheduledCollectionDeletions() as $col) {
+			$col->getInsertDiff();
+			$col->getDeleteDiff();
+		}
 //
-//		}
-//
-//		foreach ($uow->getScheduledCollectionUpdates() as $col) {
-//
-//		}
+		/** @var PersistentCollection $col */
+		foreach ($uow->getScheduledCollectionUpdates() as $col) {
+
+
+			$fieldname = $col->getMapping()['fieldName'];
+			$owner = $col->getOwner();
+			$ownerId = $uow->getSingleIdentifierValue($owner);
+
+			$insert = [];
+			foreach ($col->getInsertDiff() as $entity)
+			{
+				$insert[] = $this->stringify($entity);
+			}
+
+			$delete = [];
+			foreach ($col->getDeleteDiff() as $entity)
+			{
+				$delete[] = $this->stringify($entity);
+			}
+
+			$changes = sprintf('%s: %s%s',
+				$fieldname,
+				$insert ? ('+' . implode(', +', $insert)) : '',
+				$delete ? ('-' . implode(', -', $delete)) : ''
+			);
+
+			$description = sprintf(
+				'Změna v %s#%s (%s) od %s v %s',
+				get_class($owner),
+				$ownerId,
+				$changes,
+				$user ? $user->getFullname() : 'nepřihlášený',
+				date('j.n.y H:i:s')
+			);
+
+			Debugger::log($description, 'audit');
+		}
 	}
 
 	/**
@@ -164,6 +202,10 @@ class AuditLogListener implements Subscriber
 		{
 			return (string) $value;
 		}
+		elseif (preg_match("~App.Model.Entity.(.+)~", get_class($value), $match))
+		{
+			return sprintf('%s#%s', $match[1], $value->getId());
+		}
 		elseif ($value instanceof \DateTime)
 		{
 			return $value->format('j.n.Y H:i:s');
@@ -171,6 +213,10 @@ class AuditLogListener implements Subscriber
 		elseif (is_object($value) && method_exists($value, '__toString'))
 		{
 			return (string) $value;
+		}
+		elseif (is_null($value))
+		{
+			return 'NULL';
 		}
 
 		return serialize($value);
@@ -189,8 +235,9 @@ class AuditLogListener implements Subscriber
 			$oldValue = $this->stringify($oldValue);
 			$newValue = $this->stringify($newValue);
 
-			if ($oldValue !== $newValue) {
-				$description[] = sprintf('%s -> %s', $oldValue, $newValue);
+			if ($oldValue !== $newValue)
+			{
+				$description[] = sprintf('%s: %s -> %s', $key, $oldValue, $newValue);
 			}
 		}
 		return $description;

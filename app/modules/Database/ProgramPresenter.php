@@ -299,7 +299,10 @@ class ProgramPresenter extends DatabaseBasePresenter
 
 		$frm->addText('capacity', 'Kapacita programu')
 			->setDefaultValue($this->item ? $this->item->capacity : null)
+			->setType('number')
+			->addRule(Form::NUMERIC)
 			->addRule(Form::FILLED);
+
 
 		$frm->addGroup('Podrobnosti');
 		$frm->addTextArea('perex', 'Perex')
