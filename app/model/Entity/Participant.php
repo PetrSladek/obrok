@@ -274,12 +274,14 @@ class Participant extends Person
 
 		if ($this->hasOtherProgramInTime($program))
 		{
-			throw new InvalidStateException("V tuto dobu máte přihlášený již jiný program.", 30);
+			$otherProgram = $this->findOtherProgramInTime($program);
+			throw new InvalidStateException("V tuto dobu máte přihlášený už zaregistrovaný program \"{$otherProgram->name}\"", 30);
 		}
 
 		if ($this->hasOtherProgramInSection($program))
 		{
-			throw new InvalidStateException("V teto sekci máte přihlášený již jiný program.", 40);
+			$otherProgram = $this->findOtherProgramInSection($program);
+			throw new InvalidStateException("V teto sekci máte přihlášený už zaregistrovaný program \"{$otherProgram->name}\"", 40);
 		}
 
 		$this->programs->add($program);
