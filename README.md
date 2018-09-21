@@ -9,4 +9,4 @@ Pro první rozjetí je potřeba:
 - nastavit správné údaje v konfiguraci v souboru `app/config/config.local.neon`
 - pustit aplikaci v prohlížeči a zaregistrovat se jako servis tým
 - nastavit si v databázi nejvyšší práva pro svou osobu `UPDATE person SET role = 'database serviceteam-edit groups-edit' WHERE person.id = 1;`
-
+- nasintalovat less css `npm install -g less` a povolit si v PHPStormu filewatcher

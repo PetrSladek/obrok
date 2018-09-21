@@ -74,10 +74,15 @@
             <li n:class="$presenter->isLinkCurrent('Program:*') ? active"><a class="ajax" n:href="Program:">Programy</a></li>
           </ul>
 
-          <ul class="nav navbar-nav navbar-right">
+            {*<div class="navbar-text">*}
+                {*<img n:if="$me->getAvatar()" class="img-responsive" n:img="$me->getAvatar(), 32, 32, exact, $me->getAvatarCrop()" alt="foto" />*}
+                {*<img n:if="!$me->getAvatar()" class="img-responsive" n:img="$me->isMale() ? 'avatar_boy.jpg' : 'avatar_girl.jpg', 32, 32, exact" alt="foto" />*}
+            {*</div>*}
+
+           <ul class="nav navbar-nav navbar-right">
             <li class="divider-vertical"></li>
             <li class="dropdown">
-                <a data-toggle="dropdown" class="dropdown-toggle" href="#">{$me->fullname} <b class="caret"></b></a>
+                <a data-toggle="dropdown" class="dropdown-toggle" href="#"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> {$me->fullname} <b class="caret"></b></a>
                 <ul class="dropdown-menu">
                     <li><a href="{plink :Front:Serviceteam:Homepage:}">Moje nástěnka</a></li>
                     <li><a href="{plink logout!}">Odhlásit se</a></li>
