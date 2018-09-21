@@ -195,7 +195,7 @@ abstract class PersonsQuery extends BaseQuery
 		$this->filter[] = function (QueryBuilder $qb) use ($fullname)
 		{
 			// cele jmeno nebo prezdivka
-			$qb->andWhere('(CONCAT(CONCAT(IFNULL(p.firstName, \'\'), \' \'), IFNULL(p.lastName, \'\')) LIKE :fullname OR p.nickName LIKE :fullname)')
+			$qb->andWhere('(CONCAT(IFNULL(p.firstName, \'\'), \' \', IFNULL(p.lastName, \'\')) LIKE :fullname OR p.nickName LIKE :fullname)')
 			   ->setParameter('fullname', "%$fullname%");
 		};
 
@@ -215,7 +215,7 @@ abstract class PersonsQuery extends BaseQuery
 		$this->filter[] = function (QueryBuilder $qb) use ($address)
 		{
 			// cast addressy
-			$qb->andWhere('CONCAT( CONCAT( CONCAT(IFNULL(p.addressStreet, \'\'), \' \'), CONCAT(IFNULL(p.addressCity, \'\'),  \' \')), IFNULL(p.addressPostcode, \'\')) LIKE :address')
+			$qb->andWhere('CONCAT(IFNULL(p.addressStreet, \'\'), \' \', IFNULL(p.addressCity, \'\'),  \' \', IFNULL(p.addressPostcode, \'\')) LIKE :address')
 			   ->setParameter('address', "%$address%");
 		};
 
@@ -237,6 +237,35 @@ abstract class PersonsQuery extends BaseQuery
 			// email nebo telefon
 			$qb->andWhere('(p.email LIKE :contact OR p.phone LIKE :contact)')
 			   ->setParameter('contact', "%$contact%");
+		};
+
+		return $this;
+	}
+
+
+	/**
+	 * Vyhledá fulltextove vy více sloupcích
+	 *
+	 * @param $fullname
+	 *
+	 * @return $this
+	 */
+	public function searchFulltext($query)
+	{
+
+		$this->filter[] = function (QueryBuilder $qb) use ($query)
+		{
+			// cele jmeno nebo prezdivka
+			$qb->andWhere('(
+				CONCAT(IFNULL(p.firstName, \'\'), \' \', IFNULL(p.lastName, \'\')) LIKE :query 
+				OR 
+				p.nickName LIKE :query 
+				OR
+				CONCAT(IFNULL(p.addressStreet, \'\'), \' \', IFNULL(p.addressCity, \'\'),  \' \', IFNULL(p.addressPostcode, \'\')) LIKE :query 
+				OR
+				p.email LIKE :query OR p.phone LIKE :query
+			)')
+			->setParameter('query', "%$query%");
 		};
 
 		return $this;

@@ -1,0 +1,90 @@
+
+{block content}
+
+    <div class="row" n:snippet="data">
+        <div class="col-md-4">
+            <table class="table table-bordered table-condensed table-striped table-hover">
+                <thead>
+                <tr>
+                    <th colspan="99">Servis tým</th>
+                </tr>
+                </thead>
+                <tbody>
+                {foreach $serviceteam as $row}
+                    <tr>
+                        <td width="60">
+                            #{$row->id}<br />
+                            <small>{$row->varSymbol}</small>
+                        </td>
+                        <td>
+                            <a href="{plink Serviceteam:detail $row->id}" class="ajax tr-link"></a>
+
+                            <div class="pull-left" style="margin-right: 5px">
+                                <img n:if="$row->getAvatar()" class="img-responsive" n:img="$row->getAvatar(), 48, 48, exact, $row->getAvatarCrop()" alt="foto"/>
+                                <img n:if="!$row->getAvatar()" class="img-responsive" n:img="$row->isMale() ? 'avatar_boy.jpg' : 'avatar_girl.jpg', 48, 48, exact" alt="foto"/>
+                            </div>
+
+                            {if $row->nickName}
+                                <strong>{$row->nickName}</strong>
+                                <br /><small>{$row->firstName} {$row->lastName|upper}</small>
+                            {else}
+                                <strong>{$row->firstName} {$row->lastName|upper}</strong>
+                                <br /><small></small>
+                            {/if}
+                        </td>
+                        <td>
+                            {$row->getAge($ageInDate)} let<br />
+                            <small>{$row->birthdate->format("j.n.Y")}</small>
+                        </td>
+                    </tr>
+                {/foreach}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="col-md-4">
+            <table class="table table-bordered table-condensed table-striped table-hover">
+                <thead>
+                <tr>
+                    <th colspan="99">Účastníci</th>
+                </tr>
+                </thead>
+                <tbody>
+                {foreach $participants as $row}
+                    <tr>
+                        <td width="60">
+                            #{$row->id}<br />
+                        </td>
+                        <td>
+                            <a href="{plink Participants:detail $row->id}" class="ajax tr-link"></a>
+
+                            {if $row->nickName}
+                                <strong>{$row->nickName}</strong>
+                                <br /><small>{$row->firstName} {$row->lastName|upper}</small>
+                            {else}
+                                <strong>{$row->firstName} {$row->lastName|upper}</strong>
+                                <br /><small></small>
+                            {/if}
+                        </td>
+                        <td>
+                            <div class="pull-left" style="margin-right: 5px">
+                                <img n:if="$row->group->getAvatar()" class="img-responsive" n:img="$row->group->getAvatar(), 48, 48, exact, $row->group->getAvatarCrop()" alt="foto" />
+                                <img n:if="!$row->group->getAvatar()" class="img-responsive" n:img="'avatar_group.jpg', 48, 48, exact" alt="foto" />
+                            </div>
+
+                            <strong n:if="$row->group">{$row->group->name}</strong>
+                            <br /><small n:if="$row->group">{$row->group->city}</small>
+                        </td>
+                        <td>
+                            {$row->getAge($ageInDate)} let<br />
+                            <small>{$row->birthdate->format("j.n.Y")}</small>
+                        </td>
+                    </tr>
+                {/foreach}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+{/block}

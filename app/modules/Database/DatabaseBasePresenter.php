@@ -232,6 +232,38 @@ abstract class DatabaseBasePresenter extends \App\Module\Base\Presenters\BasePre
 		}
 	}
 
+
+	/**
+	 * @return Form
+	 */
+	public function createComponentFrmSearch()
+	{
+		$frm = new Form();
+
+		$frm->addText('query', 'Vyhledat ...')
+			->setDefaultValue($this->getParameter('query'))
+			->setRequired();
+
+		$frm->addSubmit('send', 'Odeslat');
+
+		$frm->onSuccess[] = [$this, 'frmSearchSubmitted'];
+
+		return $frm;
+	}
+
+	/**
+	 * @param Form $frm
+	 */
+	public function frmSearchSubmitted(Form $frm)
+	{
+		$values = $frm->getValues();
+
+		$this->redirect('Search:', ['query' => $values->query]);
+	}
+
+
+
+
 }
 
 

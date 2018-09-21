@@ -65,15 +65,15 @@
               <img src="/assets/img/logo_small.png" alt="Obrok 2019" id="logo" height="33">
           </a>
         </div>
-        <div class="navbar-collapse collapse">
-          <ul class="nav navbar-nav" n:snippet="navbar">
-
+        <div class="navbar-collapse collapse" n:snippet="navbar">
+          <ul class="nav navbar-nav">
             <li n:class="$presenter->isLinkCurrent('Serviceteam:*') ? active"><a class="ajax" n:href="Serviceteam:">Servis tým</a></li>
             <li n:class="$presenter->isLinkCurrent('Groups:*') ? active"><a class="ajax" n:href="Groups:">Skupiny</a></li>
             <li n:class="$presenter->isLinkCurrent('Participants:*') ? active"><a class="ajax" n:href="Participants:">Účastníci</a></li>
             {*<li n:class="$presenter->isLinkCurrent('Payments:*') ? active"><a href="{plink Payments:}">Platby</a></li>*}
             <li n:class="$presenter->isLinkCurrent('Program:*') ? active"><a class="ajax" n:href="Program:">Programy</a></li>
           </ul>
+
           <ul class="nav navbar-nav navbar-right">
             <li class="divider-vertical"></li>
             <li class="dropdown">
@@ -84,7 +84,13 @@
                 </ul>
             </li>
           </ul>
-        </div><!--/.nav-collapse -->
+          <form n:name="frmSearch" class="ajax navbar-form navbar-right">
+            <div class="form-group">
+                <input n:name="query" class="form-control" placeholder=Vyhledat ...">
+            </div>
+            <button n:name="send" class="btn btn-default"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+          </form>
+        </div>
       </div>
     </div>
 

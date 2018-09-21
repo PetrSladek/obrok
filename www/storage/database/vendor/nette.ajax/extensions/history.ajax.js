@@ -1,7 +1,9 @@
 (function($, undefined) {
 
 // Is History API reliably supported? (based on Modernizr & PJAX)
-if (!(window.history && history.pushState && window.history.replaceState && !navigator.userAgent.match(/((iPod|iPhone|iPad).+\bOS\s+[1-4]|WebApps\/.+CFNetwork)/))) return;
+if (!(window.history && history.pushState && window.history.replaceState)) {
+	return;
+}
 
 $.nette.ext('redirect', false);
 
@@ -46,7 +48,7 @@ $.nette.ext('history', {
 			var state = e.originalEvent.state || this.initialState;
 			var initialPop = (!this.popped && initialUrl === state.href);
 			this.popped = true;
-			if (initialPop) {
+			if (initialPop || !e.state) {
 				return;
 			}
 			if (this.cache && state.ui) {
@@ -88,7 +90,8 @@ $.nette.ext('history', {
 				window.location.href = redirect;
 			}
 		}
-		if (this.href && this.href != window.location.href /*&& !this.href.search(/[?&]do=/)*/) {
+		// if (this.href && this.href != window.location.href && !this.href.search(/[?&]do=/)) {
+        if (this.href && this.href != window.location.href) {
 			history.pushState({
 				nette: true,
 				href: this.href,
