@@ -422,9 +422,3 @@ body.modal-open #snippet--flashes {
   right: 28px;
   top: 28px;
 }
-.navbar-text img {
-  max-height: 30px;
-  width: auto;
-  vertical-align: middle;
-  margin: 0;
-}
