@@ -362,9 +362,9 @@ class ServiceteamPresenter extends DatabaseBasePresenter
 			->setDefaultValue($this->item ? $this->item->getHealth() : null);
 
 		$frm->addGroup('Poznámky');
-		$frm->addTextArea('experience', 'Zkušenosti / Dovednosti')
+		$frm->addTextArea('experienceNote', 'Zkušenosti / Dovednosti')
 			->setRequired(false)
-			->setDefaultValue($this->item ? $this->item->getExperience() : null)
+			->setDefaultValue($this->item ? $this->item->getExperienceNote() : null)
 			->addFilter('trim');
 		$frm->addTextArea('note', 'Poznámka při registraci / Omezení (diety)')
 			->setRequired(false)

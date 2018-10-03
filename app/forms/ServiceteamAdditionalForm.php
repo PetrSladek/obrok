@@ -84,8 +84,8 @@ class ServiceteamAdditionalForm extends Control
 //        $frm->addCheckbox('helpSzt', 'Mám zdravotnické vzdělání a chci pomoct SZT (Skautský záchranný tým)');
 //        $frm->addCheckbox('helpSos', 'Mám zájem pomáhat SOSce (Skautská ochraná služba)');
 
-		$frm->addTextArea('experience', 'Zkušenosti / Dovednosti')
-			->setDefaultValue($this->person->getExperience())
+		$frm->addTextArea('experienceNote', 'Zkušenosti / Dovednosti')
+			->setDefaultValue($this->person->getExperienceNote())
 			->setAttribute('class', 'input-xxlarge');
 
 		$frm->addTextArea('health', 'Zdravotní omezení (dieta)')

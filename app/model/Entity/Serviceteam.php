@@ -30,9 +30,33 @@ class Serviceteam extends Person
 
 	/**
 	 * Zkusenosti s podobnymi akcemi
-	 * @Column(type="text", nullable=true)
+	 * @Column(type="json", nullable=true)
+	 *
+	 * @var array|null
 	 */
-	protected $experience;
+	protected $experience = [];
+
+	/**
+	 * Zkusenosti s podobnymi akcemi
+	 * @Column(type="text", nullable=true)
+	 *
+	 * @var string
+	 */
+	protected $experienceNote;
+
+
+	/**
+	 * Zkušenosti/Dovednosti na výběr
+	 */
+	const EXPIRIENCE = [
+		"Program",
+		"Bezpečnost",
+		"Sanita",
+		"Zázemí",
+		"Jídlo",
+		"Logistika",
+		"Registrace"
+	];
 
 	/**
 	 * Chce pomoct s pripravami?
@@ -152,7 +176,7 @@ class Serviceteam extends Person
 	}
 
 	/**
-	 * @return mixed
+	 * @return array|null
 	 */
 	public function getExperience()
 	{
@@ -162,10 +186,28 @@ class Serviceteam extends Person
 	/**
 	 * @param mixed $experience
 	 */
-	public function setExperience($experience)
+	public function setExperience(array $experience)
 	{
 		$this->experience = $experience;
 	}
+
+	/**
+	 * @return string
+	 */
+	public function getExperienceNote()
+	{
+		return $this->experienceNote;
+	}
+
+	/**
+	 * @param string $experienceNote
+	 */
+	public function setExperienceNote($experienceNote)
+	{
+		$this->experienceNote = $experienceNote;
+	}
+
+
 
 	/**
 	 * @return mixed
