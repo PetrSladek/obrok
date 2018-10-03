@@ -113,11 +113,8 @@
 							</tr>
 							<tr>
 								<td>
-									<div n:class="$acl->edit ? ajax-edit, wh">
-										<div
-											class="ajax-edit-val">{snippet experienceNote}{if $item->experienceNote}{$item->experienceNote|breaklines}{else}- není -{/if}{/snippet}</div>
-										<div class="ajax-edit-target" n:if="$acl->edit">{input experienceNote class=>'form-control'}</div>
-									</div>
+									<span n:ifcontent>{$me->getExperience()|implode}<br /></span>
+									<span n:ifcontent>{$me->getExperienceNote()}</span>
 								</td>
 							</tr>
 							<tr>

@@ -142,7 +142,11 @@ class ServiceteamForm extends Control
 		$frm->addCheckbox('helpPreparation', 'Mám zájem a možnost pomoct s přípravami Obroku 2015 už před akcí')
 			->setDefaultValue($this->person->getHelpPreparation());
 
-		$frm->addTextArea('experienceNote', 'Zkušenosti / Dovednosti')
+		$frm->addCheckboxList('experience', 'Zkušenosti / Dovednosti', Serviceteam::EXPIRIENCES)
+			->checkDefaultValue(false)
+			->setDefaultValue($this->person->getExperience() ?: []);
+		$frm->addText('experienceNote', '')
+			->setAttribute('placeholder', 'Jiné')
 			->setDefaultValue($this->person->getExperienceNote());
 
 		$frm->addTextArea('health', 'Zdravotní omezení (dieta)')

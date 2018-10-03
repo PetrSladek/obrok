@@ -60,7 +60,7 @@ class LatteFilters
 	 *
 	 * @return string
 	 */
-	public static function implode($array, $glue = ',')
+	public static function implode($array, $glue = ', ')
 	{
 		return implode($glue, $array);
 	}

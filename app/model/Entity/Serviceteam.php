@@ -30,7 +30,7 @@ class Serviceteam extends Person
 
 	/**
 	 * Zkusenosti s podobnymi akcemi
-	 * @Column(type="json", nullable=true)
+	 * @Column(type="json_array", nullable=true)
 	 *
 	 * @var array|null
 	 */
@@ -48,14 +48,14 @@ class Serviceteam extends Person
 	/**
 	 * Zkušenosti/Dovednosti na výběr
 	 */
-	const EXPIRIENCE = [
-		"Program",
-		"Bezpečnost",
-		"Sanita",
-		"Zázemí",
-		"Jídlo",
-		"Logistika",
-		"Registrace"
+	const EXPIRIENCES = [
+		"Program" => "Program",
+		"Bezpečnost" => "Bezpečnost",
+		"Sanita" => "Sanita",
+		"Zázemí" => "Zázemí",
+		"Jídlo" => "Jídlo",
+		"Logistika" => "Logistika",
+		"Registrace" => "Registrace"
 	];
 
 	/**
@@ -182,6 +182,7 @@ class Serviceteam extends Person
 	{
 		return $this->experience;
 	}
+
 
 	/**
 	 * @param mixed $experience

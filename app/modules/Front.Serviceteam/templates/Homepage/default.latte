@@ -20,7 +20,7 @@
 
                 <table class="table">
                     <tr>
-                        <td>Kontaktní email</td>
+                        <td width="180">Kontaktní email</td>
                         <td><strong>{$me->email}</strong></td>
                     </tr>
                     <tr>
@@ -46,6 +46,14 @@
                     <tr>
                         <td>Odjezd</td>
                         <td><strong>{$me->getDepartureDateTitle()}</strong></td>
+                    </tr>
+                    <tr>
+                        <td>Zkušenosti / Dovednosti</td>
+                        <td>
+                            <strong n:ifcontent>{$me->getExperience()|implode}<br /></strong>
+                            <strong n:ifcontent>{$me->getExperienceNote()}</strong>
+                        </td>
+
                     </tr>
                 </table>
             </div>
