@@ -377,21 +377,109 @@ th.grid-col-city { width: 100px; }
 th.grid-col-age { width: 85px; }
 
 
-.cropImageControl {
-  background: none repeat scroll 0 0 #ddd;
-  border: 1px solid #848484;
-  height: 270px !important;
-  width: 270px;
-
-  .cropImagePlace {
-    float: none !important;
-    margin: 0 auto;
-  }
-}
+//.cropImageControl {
+//  background: none repeat scroll 0 0 #ddd;
+//  border: 1px solid #848484;
+//  height: 270px !important;
+//  width: 270px;
+//
+//  .cropImagePlace {
+//    float: none !important;
+//    margin: 0 auto;
+//  }
+//}
 
 .cropimage-save {
   margin-right: 8px;
   margin-top: -47px;
+}
+
+
+.croppie-container .cr-image {
+  z-index: -1;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: 0 0;
+  max-width: none;
+}
+
+.croppie-container .cr-boundary {
+  position: relative;
+  overflow: hidden;
+  margin: 0 auto;
+  z-index: 1;
+}
+
+.croppie-container .cr-viewport {
+  position: absolute;
+  border: 2px solid #fff;
+  margin: auto;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  box-shadow:0 0 0 899px rgba(0, 0, 0, 0.5);
+  z-index: 0;
+}
+.croppie-container .cr-vp-circle {
+  border-radius: 50%;
+}
+.croppie-container .cr-overlay {
+  z-index: 1;
+  position: absolute;
+  cursor: move;
+}
+.croppie-container .cr-slider-wrap {
+  width: 100%;
+  margin: 25px auto;
+  text-align: center;
+}
+.croppie-result {
+  position: relative;
+  overflow: hidden;
+}
+.croppie-result img {
+  position: absolute;
+}
+/* Just cross hairs for debugging - can be removed upon release */
+.croppie-container .cr-viewport.debug:before,
+.croppie-container .cr-viewport.debug:after {
+  background: white;
+  width: 1px;
+  height: 1px;
+  content: '';
+  position: absolute;
+}
+.croppie-container .cr-viewport.debug:before {
+  top: 0;
+  height: 100%;
+  left: 50%;
+}
+.croppie-container .cr-viewport.debug:after {
+  top: 50%;
+  left: 0;
+  width: 100%;
+}
+
+
+.btn-file {
+  position: relative;
+  overflow: hidden;
+}
+.btn-file input[type=file] {
+  position: absolute;
+  top: 0;
+  right: 0;
+  min-width: 100%;
+  min-height: 100%;
+  font-size: 100px;
+  text-align: right;
+  filter: alpha(opacity=0);
+  opacity: 0;
+  background: red;
+  cursor: inherit;
+  display: block;
 }
 
 

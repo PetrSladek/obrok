@@ -1,7 +1,7 @@
 {define col-varSymbol}
 	<td>
-		#{$row->id}<br/>
-		<small>{$row->varSymbol}</small>
+		#{$row->getId()}<br/>
+		<small>{$row->getVarSymbol()}</small>
 	</td>
 {/define}
 {define col-fullname}
@@ -11,12 +11,12 @@
 			<img n:if="!$row->getAvatar()" class="img-responsive" n:img="$row->isMale() ? 'avatar_boy.jpg' : 'avatar_girl.jpg', 48, 48, exact" alt="foto"/>
 		</div>
 
-		{if $row->nickName}
-			<strong>{$row->nickName}</strong>
+		{if $row->getNickName()}
+			<strong>{$row->getNickName()}</strong>
 			<br/>
-			<small>{$row->firstName} {$row->lastName|upper}</small>
+			<small>{$row->getFirstName()} {$row->getLastName()|upper}</small>
 		{else}
-			<strong>{$row->firstName} {$row->lastName|upper}</strong>
+			<strong>{$row->getFirstName()} {$row->getLastName()|upper}</strong>
 			<br/>
 			<small></small>
 		{/if}
@@ -24,30 +24,36 @@
 {/define}
 {define col-address}
 	<td>
-		{$row->addressCity}
+		{$row->getAddressCity()}
+	</td>
+{/define}
+{define col-arriveAndDeparture}
+	<td>
+		{$row->getArriveDate() ? $row->getArriveDate()->format('j.n.'): ''} -
+		{$row->getDepartureDate() ? $row->getDepartureDate()->format('j.n.'): ''}
 	</td>
 {/define}
 {define col-age}
 	<td>
 		{$row->getAge($ageInDate)} let<br/>
-		<small>{if $row->birthdate}{$row->birthdate->format("j.n.Y")}{/if}</small>
+		<small>{if $row->getBirthdate()}{$row->getBirthdate()->format("j.n.Y")}{/if}</small>
 	</td>
 {/define}
 {define col-group}
 	<td>
-		{if $row->workgroup}
-			{$row->workgroup->name}
+		{if $row->getWorkgroup()}
+			{$row->getWorkgroup()->name}
 		{/if}
 		<br/>
-		<small n:if="$row->job">{$row->job->name}</small>
+		<small n:if="$row->job">{$row->getJob()->name}</small>
 	</td>
 {/define}
 {define col-team}
 	<td>
-		{if $row->team}
-			{$row->team->abbr}
+		{if $row->getTeam()}
+			{$row->getTeam()->abbr}
 			<br/>
-			<small>{$row->team->name}</small>
+			<small>{$row->getTeam()->name}</small>
 		{/if}
 	</td>
 {/define}
@@ -55,12 +61,12 @@
 	<td>
 		{$row->getPhone()|phone}
 		<br/>
-		<small>{$row->email}</small>
+		<small>{$row->getEmail()}</small>
 	</td>
 {/define}
 {define col-tshirtSize}
 	<td>
-		{$row->tshirtSizeName}
+		{$row->getTshirtSizeName()}
 	</td>
 {/define}
 

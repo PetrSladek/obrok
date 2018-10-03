@@ -162,9 +162,9 @@
 									{/if}
 								</td>
 							</tr>
-							<tr>
+							{*<tr>
 								<td>
-									{if $item->arrivesToBuilding}
+									{if $item->getArrivesToBuilding()}
 										<div class="text-success"><i class="ficon-accept"></i> Prijede na stavecku</div>
 									{else}
 										<div class="text-error"><i class="ficon-delete"></i> Prijede az na akci</div>
@@ -173,12 +173,18 @@
 							</tr>
 							<tr>
 								<td>
-									{if $item->stayToDestroy}
+									{if $item->getStayToDestroy()}
 										<div class="text-success"><i class="ficon-accept"></i> Zůstane na bourání</div>
 									{else}
 										<div class="text-error"><i class="ficon-delete"></i> Nezůčastní se bourání</div>
 									{/if}
 								</td>
+							</tr>*}
+							<tr>
+								<td>Příjezd: <strong>{$item->getArriveDateTitle()}</strong></td>
+							</tr>
+							<tr>
+								<td>Odjezd: <strong>{$item->getDepartureDateTitle()}</strong></td>
 							</tr>
 							<tr>
 								<td>

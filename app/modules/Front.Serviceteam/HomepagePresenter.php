@@ -7,8 +7,6 @@ use App\Forms\IServiceteamAdditionalFormFactory;
 use App\Forms\IServiceteamFormFactory;
 use App\Model\Entity\Person;
 use App\Services\ImageService;
-use Brabijan\Images\TImagePipe;
-use DoctrineExtensions\Query\Mysql\Date;
 use Kdyby\Doctrine\EntityRepository;
 use Nette\Utils\DateTime;
 
@@ -55,7 +53,7 @@ class HomepagePresenter extends ServiceteamAuthBasePresenter
 	public function createComponentFrmEdit()
 	{
 
-		$control = $this->serviceteamFormFactory->create($this->me->id);
+		$control = $this->serviceteamFormFactory->create($this->me->getId());
 
 		$control->onSave[] = function ($control, $person)
 		{
@@ -106,7 +104,7 @@ class HomepagePresenter extends ServiceteamAuthBasePresenter
 	 */
 	public function createComponentFrmAdditional()
 	{
-		$control = $this->serviceteamAdditionalFormFactory->create($this->me->id);
+		$control = $this->serviceteamAdditionalFormFactory->create($this->me->getId());
 		$control->onAdditionalSave[] = (function ($control, $person)
 		{
 			$this->flashMessage('Doplňující údaje úspěšně přidány', 'success');

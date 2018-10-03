@@ -79,6 +79,7 @@ class ServiceteamPresenter extends DatabaseBasePresenter
 		$grid->addColumn('varSymbol', 'ID / VS')->enableSort();
 		$grid->addColumn('fullname', 'Jméno')->enableSort();
 		$grid->addColumn('address', 'Město')->enableSort();
+		$grid->addColumn('arriveAndDeparture', 'Příjezd a odjezd')->enableSort();
 		$grid->addColumn('age', 'Věk')->enableSort();
 		$grid->addColumn('contact', 'Kontakt')->enableSort();
 
@@ -312,31 +313,31 @@ class ServiceteamPresenter extends DatabaseBasePresenter
 
 		$frm->addGroup('Osobní informace');
 		$frm->addText('firstName', 'Jméno')
-			->setDefaultValue($this->item ? $this->item->firstName : null)
+			->setDefaultValue($this->item ? $this->item->getFirstName() : null)
 			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat jméno');
 		$frm->addText('lastName', 'Příjmení')
-			->setDefaultValue($this->item ? $this->item->lastName : null)
+			->setDefaultValue($this->item ? $this->item->getLastName() : null)
 			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat Přímení');
 		$frm->addText('nickName', 'Přezdívka')
-			->setDefaultValue($this->item ? $this->item->nickName : null);
+			->setDefaultValue($this->item ? $this->item->getNickName() : null);
 		$frm->addDatePicker('birthdate', 'Datum narození:')//DatePicker
-			->setDefaultValue($this->item ? $this->item->birthdate : null)
+			->setDefaultValue($this->item ? $this->item->getBirthdate() : null)
 			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat Datum narození nebo je ve špatném formátu')
 			->setAttribute('title', 'Tvoje Datum narození ve formátu dd.mm.yyyy');
 		$frm->addText('addressCity', 'Město')
-			->setDefaultValue($this->item ? $this->item->addressCity : null)
+			->setDefaultValue($this->item ? $this->item->getAddressCity() : null)
 			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat Město')
 			->setAttribute('title', 'Město, kde aktuálně bydlí nebo skautuje');
 
 		$frm->addGroup('Kontaktní údaje');
 		$frm->addText('email', 'E-mail')
-			->setDefaultValue($this->item ? $this->item->email : null)
+			->setDefaultValue($this->item ? $this->item->getEmail() : null)
 			->setEmptyValue('@')
 			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat E-mail')
 			->addRule(Form::EMAIL, 'E-mailová adresa není platná')
 			->setAttribute('title', 'E-mail, který pravidelně vybíráš a můžem Tě na něm kontaktovat.  Budou Ti chodit informace atd..');
 		$frm->addText('phone', 'Mobilní telefon')
-			->setDefaultValue($this->item ? $this->item->phone : null)
+			->setDefaultValue($this->item ? $this->item->getPhone() : null)
 			->setEmptyValue('+420')
 			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat Mobilní telefon')
 			->addRule([$frm, 'isPhoneNumber'], 'Telefonní číslo je ve špatném formátu')
@@ -344,47 +345,54 @@ class ServiceteamPresenter extends DatabaseBasePresenter
 
 		$frm->addGroup('Zařazení');
 		$frm->addSelect('team', 'Spadá pod tým', $this->teams->findPairs("name"))
-			->setDefaultValue($this->item && $this->item->team ? $this->item->team->getId() : null)
+			->setDefaultValue($this->item && $this->item->getTeam() ? $this->item->getTeam()->getId() : null)
 			->setPrompt('- nezařazen -');
 
 		$frm->addTypeahead('workgroup', 'Patří do prac.skupiny', function ($query)  {
             return $this->workgroups->findPairs(['name like' => "%{$query}%"], 'name');
-		})->setDefaultValue($this->item && $this->item->workgroup ? $this->item->workgroup->name : null);
+		})->setDefaultValue($this->item && $this->item->getWorkgroup() ? $this->item->getWorkgroup()->name : null);
 
 		$frm->addTypeahead('job', 'Pozice', function ($query) {
 			return $this->jobs->findPairs(['name like' => "%{$query}%"], 'name');
-		})->setDefaultValue($this->item && $this->item->job ? $this->item->job->name : null);
+		})->setDefaultValue($this->item && $this->item->getJob() ? $this->item->getJob()->name : null);
 
 //        $frm->addCheckbox('replacer','Náhradník?');
 		$frm->addGroup('Zdravotní omezení');
 		$frm->addTextarea('health', 'Zdravotní omezení a alergie')
-			->setDefaultValue($this->item ? $this->item->health : null);
+			->setDefaultValue($this->item ? $this->item->getHealth() : null);
 
 		$frm->addGroup('Poznámky');
 		$frm->addTextArea('experience', 'Zkušenosti / Dovednosti')
 			->setRequired(false)
-			->setDefaultValue($this->item ? $this->item->experience : null)
+			->setDefaultValue($this->item ? $this->item->getExperience() : null)
 			->addFilter('trim');
 		$frm->addTextArea('note', 'Poznámka při registraci / Omezení (diety)')
 			->setRequired(false)
-			->setDefaultValue($this->item ? $this->item->note : null)
+			->setDefaultValue($this->item ? $this->item->getNote() : null)
 			->addFilter('trim');
 		$frm->addTextArea('noteInternal', 'Interní poznámka')
 			->setRequired(false)
-			->setDefaultValue($this->item ? $this->item->noteInternal : null)
+			->setDefaultValue($this->item ? $this->item->getNoteInternal() : null)
 			->addFilter('trim');
 
 		$frm->addCroppie('avatar', 'Fotka')
 			->setImageUrl($this->item && $this->item->getAvatar() ? $this->imageService->getImageUrl($this->item->getAvatar()) : null)
+			->setEmptyImageUrl($this->imageService->getImageUrl($this->item && $this->item->isMale() ? 'avatar_boy.jpg' : 'avatar_girl.jpg'))
 			->setDefaultValue($this->item && $this->item->getAvatarCrop() ? $this->item->getAvatarCrop() : null);
 
 		$frm->addGroup('Ostatní');
 		$frm->addCheckbox('helpPreparation', 'Má zájem pomoct s přípravami')
-			->setDefaultValue($this->item ? $this->item->helpPreparation : null);
-		$frm->addSelect('tshirtSize', 'Velikost trička', Serviceteam::$tShirtSizes)
+			->setDefaultValue($this->item ? $this->item->getHelpPreparation() : null);
+		$frm->addSelect('tshirtSize', 'Velikost trička', Serviceteam::TSHIRT_SIZES)
 			->setPrompt('- vyberte velikost -')
-			->setDefaultValue($this->item ? $this->item->tshirtSize : null)
+			->setDefaultValue($this->item ? $this->item->getTshirtSize() : null)
 			->setRequired();
+		$frm->addSelect('arriveDate', 'Příjezd:', Serviceteam::ARRIVE_DATES)
+			->setDefaultValue($this->item && $this->item->getArriveDate() ? $this->item->getArriveDate()->format('Y-m-d') : null)
+			->setRequired(true);
+		$frm->addSelect('departureDate', 'Odjezd:', Serviceteam::DEPARTURE_DATES)
+			->setDefaultValue($this->item && $this->item->getDepartureDate() ? $this->item->getDepartureDate()->format('Y-m-d') : null)
+			->setRequired(true);
 
 		$frm->addGroup('Přihlášení');
 //		$frm->addText('skautisPersonId', 'Skautis PersonID')
@@ -395,7 +403,7 @@ class ServiceteamPresenter extends DatabaseBasePresenter
 		$frm->addText('skautisUserId', 'Skautis UserID')
 			->setRequired(false)
 			->addRule(Form::INTEGER)
-			->setDefaultValue($this->item ? $this->item->skautisUserId : null);
+			->setDefaultValue($this->item ? $this->item->getSkautisUserId() : null);
 
 		$frm->addSubmit('send', 'Uložit')->setAttribute('class', 'btn btn-success btn-lg btn-block');
 		$frm->onSuccess[] = [$this, 'frmEditSuccess'];
@@ -438,6 +446,8 @@ class ServiceteamPresenter extends DatabaseBasePresenter
 			$this->item->removeAvatar();
 		}
 
+		$values->arriveDate = $values->arriveDate ? new \DateTimeImmutable($values->arriveDate) : null;
+		$values->departureDate = $values->departureDate ? new \DateTimeImmutable($values->departureDate) : null;
 
 		foreach ($values as $key => $value)
 		{

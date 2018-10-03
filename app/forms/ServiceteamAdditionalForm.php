@@ -67,10 +67,17 @@ class ServiceteamAdditionalForm extends Control
 
 		$frm->addGroup('Doplňující údaje, aneb prozraď nám něco o sobě, ať ti můžeme najít to nejlepší zařazení ;-)');
 
-		$frm->addCheckbox('arrivesToBuilding', 'Přijedu na stavěcí týden od 4.6.2019')
-			->setDefaultValue((bool) $this->person->arrivesToBuilding);
-        $frm->addCheckbox('stayToDestroy', 'Zůstanu na bourání tábořiště v neděli')
-            ->setDefaultValue((bool) $this->person->stayToDestroy);
+		$frm->addSelect('arriveDate', 'Přijedu:', Serviceteam::ARRIVE_DATES)
+			->setDefaultValue($this->person->getArriveDate() ? $this->person->getArriveDate()->format('Y-m-d') : null)
+			->setRequired(true);
+		$frm->addSelect('departureDate', 'Odjedu:', Serviceteam::DEPARTURE_DATES)
+			->setDefaultValue($this->person->getDepartureDate() ? $this->person->getDepartureDate()->format('Y-m-d') : null)
+			->setRequired(true);
+
+//		$frm->addCheckbox('arrivesToBuilding', 'Přijedu na stavěcí týden od 4.6.2019')
+//			->setDefaultValue((bool) $this->person->getArrivesToBuilding());
+//        $frm->addCheckbox('stayToDestroy', 'Zůstanu na bourání tábořiště v neděli')
+//            ->setDefaultValue((bool) $this->person->getStayToDestroy());
 
 		$frm->addCheckbox('helpPreparation', 'Mám zájem a možnost pomoct s přípravami Obrok 2019 už před akcí');
 
@@ -78,17 +85,17 @@ class ServiceteamAdditionalForm extends Control
 //        $frm->addCheckbox('helpSos', 'Mám zájem pomáhat SOSce (Skautská ochraná služba)');
 
 		$frm->addTextArea('experience', 'Zkušenosti / Dovednosti')
-			->setDefaultValue($this->person->experience)
+			->setDefaultValue($this->person->getExperience())
 			->setAttribute('class', 'input-xxlarge');
 
 		$frm->addTextArea('health', 'Zdravotní omezení (dieta)')
-			->setDefaultValue($this->person->health)
+			->setDefaultValue($this->person->getHealth())
 			->setAttribute('class', 'input-xxlarge')
 			->setOption('description', 'Máš nějaké zdravotní omezení nebo dietu?')
 			->setAttribute('data-placement', 'right');
 
 		$frm->addTextArea('note', 'Poznámka')
-			->setDefaultValue($this->person->note)
+			->setDefaultValue($this->person->getNote())
 			->setAttribute('class', 'input-xxlarge')
 			->setOption('description', 'Chceš nám něco vzkázat? Jsi už domluvený k někomu do týmu?')
 			->setAttribute('data-placement', 'right');
@@ -107,8 +114,8 @@ class ServiceteamAdditionalForm extends Control
 //            ->addRule(Form::FILLED, 'Musíš nahrát fotku');
 
 		$frm->addGroup('Tričko');
-		$frm->addSelect('tshirtSize', 'Velikost případného trička', Serviceteam::$tShirtSizes)
-			->setDefaultValue($this->person->tshirtSize)
+		$frm->addSelect('tshirtSize', 'Velikost případného trička', Serviceteam::TSHIRT_SIZES)
+			->setDefaultValue($this->person->getTshirtSize())
 			->setOption('description', 'Tričko zatím bohužel uplně nemůžeme slíbit. Nicméně pravděpodobně bude :)')
 			->setDefaultValue("man-L"); // L
 
@@ -135,6 +142,9 @@ class ServiceteamAdditionalForm extends Control
 
 //        if($values->avatar && $values->avatar->hasUploadedFile())
 //            $values->avatar->filename = $this->images->saveImage( $values->avatar->getUploadedFile(), 'avatars' );
+
+		$values->arriveDate = $values->arriveDate ? new \DateTimeImmutable($values->arriveDate) : null;
+		$values->departureDate = $values->departureDate ? new \DateTimeImmutable($values->departureDate) : null;
 
 		foreach ($values as $key => $value)
 		{

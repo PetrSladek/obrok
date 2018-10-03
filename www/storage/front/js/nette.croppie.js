@@ -96,8 +96,12 @@ $(function() {
 				url: url,
 				points: [x1, y1, x2, y2]
 			});
-		}
+		};
 
+		image.onerror = function()
+		{
+			console.log('nepodařilo se načíst obrázek ' + image.src);
+		};
 
 	});
 

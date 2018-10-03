@@ -52,6 +52,21 @@ class Serviceteam extends Person
      */
     protected $stayToDestroy = false;
 
+
+	/**
+	 * Datum plánovaného příjezdu
+	 * @var \DateTimeInterface
+	 * @Column(type="date", nullable=true)
+	 */
+	protected $arriveDate = null;
+
+	/**
+	 * Datum plánovaného odjezdu
+	 * @var \DateTimeInterface
+	 * @Column(type="date", nullable=true)
+	 */
+	protected $departureDate = null;
+
 	/**
 	 * Velikost tricka
 	 * @Column(type="string")
@@ -59,9 +74,9 @@ class Serviceteam extends Person
 	protected $tshirtSize = "man-L";
 
 	/**
-	 * @var array
+	 * Výběr velikosti trika
 	 */
-	public static $tShirtSizes = array(
+	const TSHIRT_SIZES = [
 		"man-S"     => 'Pánské S',
 		"man-M"     => 'Pánské M',
 		"man-L"     => 'Pánské L',
@@ -76,7 +91,25 @@ class Serviceteam extends Person
 		"woman-XL"  => 'Dámské XL',
 		"woman-XXL" => 'Dámské XXL',
 		"woman-3XL" => 'Dámské 3XL',
-		"woman-4XL" => 'Dámské 4XL');
+		"woman-4XL" => 'Dámské 4XL'
+	];
+
+	/**
+	 * Výběr datumu příjezdu
+	 */
+	const ARRIVE_DATES = [
+		'2019-06-19' => '19.6 neděle - Nadšenec',
+		'2019-06-20' => '20.6 pondělí - Stavěč',
+		'2019-06-21' => '21.6 úterý - Servisák',
+	];
+
+	/**
+	 * Výběr datumu odjezdu
+	 */
+	const DEPARTURE_DATES = [
+		'2019-06-26' => '26.6 neděle',
+		'2019-06-27' => '27.6 pondělí',
+	];
 
 	/**
 	 * Tym do ktereho spada
@@ -101,6 +134,166 @@ class Serviceteam extends Person
 	 * @var Job|null Pozice kerou v rámci (pod)týmu vykonává
 	 **/
 	protected $job;
+
+	/**
+	 * @return mixed
+	 */
+	public function getRole()
+	{
+		return $this->role;
+	}
+
+	/**
+	 * @param mixed $role
+	 */
+	public function setRole($role)
+	{
+		$this->role = $role;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getExperience()
+	{
+		return $this->experience;
+	}
+
+	/**
+	 * @param mixed $experience
+	 */
+	public function setExperience($experience)
+	{
+		$this->experience = $experience;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getHelpPreparation()
+	{
+		return $this->helpPreparation;
+	}
+
+	/**
+	 * @param mixed $helpPreparation
+	 */
+	public function setHelpPreparation($helpPreparation)
+	{
+		$this->helpPreparation = $helpPreparation;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getArrivesToBuilding()
+	{
+		return $this->arrivesToBuilding;
+	}
+
+	/**
+	 * @param mixed $arrivesToBuilding
+	 */
+	public function setArrivesToBuilding($arrivesToBuilding)
+	{
+		$this->arrivesToBuilding = $arrivesToBuilding;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getStayToDestroy()
+	{
+		return $this->stayToDestroy;
+	}
+
+	/**
+	 * @param mixed $stayToDestroy
+	 */
+	public function setStayToDestroy($stayToDestroy)
+	{
+		$this->stayToDestroy = $stayToDestroy;
+	}
+
+	/**
+	 * @return \DateTimeInterface
+	 */
+	public function getArriveDate()
+	{
+		return $this->arriveDate;
+	}
+
+	/**
+	 * @param \DateTimeInterface $arriveDate
+	 */
+	public function setArriveDate(\DateTimeInterface $arriveDate)
+	{
+		$this->arriveDate = $arriveDate;
+	}
+
+	/**
+	 * Vrátí popisek s datumem
+	 *
+	 * @return string
+	 */
+	public function getArriveDateTitle()
+	{
+		if (!$this->arriveDate)
+		{
+			return '-';
+
+		}
+		return self::ARRIVE_DATES[$this->arriveDate->format('Y-m-d')] ?? '';
+	}
+
+	/**
+	 * @return \DateTimeInterface
+	 */
+	public function getDepartureDate()
+	{
+		return $this->departureDate;
+	}
+
+	/**
+	 * @param \DateTimeInterface $departureDate
+	 */
+	public function setDepartureDate(\DateTimeInterface $departureDate)
+	{
+		$this->departureDate = $departureDate;
+	}
+
+	/**
+	 * Vrátí popisek s datumem
+	 *
+	 * @return string
+	 */
+	public function getDepartureDateTitle()
+	{
+		if (!$this->departureDate)
+		{
+			return '-';
+
+		}
+		return self::DEPARTURE_DATES[$this->departureDate->format('Y-m-d')] ?? '';
+	}
+
+
+	/**
+	 * @return mixed
+	 */
+	public function getTshirtSize()
+	{
+		return $this->tshirtSize;
+	}
+
+	/**
+	 * @param mixed $tshirtSize
+	 */
+	public function setTshirtSize($tshirtSize)
+	{
+		$this->tshirtSize = $tshirtSize;
+	}
+
 
 
 	/**
@@ -157,6 +350,8 @@ class Serviceteam extends Person
 	}
 
 
+
+
 	/**
 	 * @return string
 	 */
@@ -167,7 +362,7 @@ class Serviceteam extends Person
 			return '-';
 		}
 
-		return self::$tShirtSizes[$this->tshirtSize];
+		return self::TSHIRT_SIZES[$this->tshirtSize];
 	}
 
 
@@ -178,7 +373,7 @@ class Serviceteam extends Person
 	 */
 	public function getVarSymbol()
 	{
-		return self::getVarSymbolFromId($this->id);
+		return self::getVarSymbolFromId($this->getId());
 	}
 
 

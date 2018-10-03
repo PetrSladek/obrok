@@ -90,7 +90,7 @@ class DashboardPresenter extends DatabaseBasePresenter
 
 		//tricka
 		$tshirts = new ArrayHash();
-		foreach (Serviceteam::$tShirtSizes as $size => $sizeName)
+		foreach (Serviceteam::TSHIRT_SIZES as $size => $sizeName)
 		{
 			$tshirts[$sizeName] = $this->serviceteams->countBy(['confirmed' => 1, 'tshirtSize' => $size]);
 		}

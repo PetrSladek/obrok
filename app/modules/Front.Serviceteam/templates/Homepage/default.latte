@@ -31,13 +31,21 @@
                         <td>Velikost trička</td>
                         <td><strong>{$me->getTshirtSizeName()}</strong></td>
                     </tr>
-                    <tr>
+                    {*<tr>
                         <td>Příjezd</td>
-                        <td><strong>{$me->arrivesToBuilding ? 'Přijedu na stavečku od 4.6.2019' : 'Přijedu až na Obrok'}</strong></td>
+                        <td><strong>{$me->getArrivesToBuilding() ? 'Přijedu na stavečku od 4.6.2019' : 'Přijedu až na Obrok'}</strong></td>
                     </tr>
                     <tr>
                         <td>Odjezd</td>
-                        <td><strong>{$me->stayToDestroy ? 'Zůstanu i na bourání v neděli' : 'Nemůžu zůstat na bourání tábořiště'}</strong></td>
+                        <td><strong>{$me->getStayToDestroy() ? 'Zůstanu i na bourání v neděli' : 'Nemůžu zůstat na bourání tábořiště'}</strong></td>
+                    </tr>*}
+                    <tr>
+                        <td>Příjezd</td>
+                        <td><strong>{$me->getArriveDateTitle()}</strong></td>
+                    </tr>
+                    <tr>
+                        <td>Odjezd</td>
+                        <td><strong>{$me->getDepartureDateTitle()}</strong></td>
                     </tr>
                 </table>
             </div>

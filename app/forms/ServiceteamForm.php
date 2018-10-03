@@ -86,40 +86,39 @@ class ServiceteamForm extends Control
 	 */
 	public function createComponentForm()
 	{
-
 		$frm = new Form();
 
 		$frm->addGroup('Osobní informace');
 		$frm->addText('firstName', 'Jméno')
 			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat jméno')
 			->setDisabled()
-			->setDefaultValue($this->person->firstName);
+			->setDefaultValue($this->person->getFirstName());
 		$frm->addText('lastName', 'Příjmení')
 			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat Přímení')
 			->setDisabled()
-			->setDefaultValue($this->person->lastName);
+			->setDefaultValue($this->person->getLastName());
 		$frm->addText('nickName', 'Přezdívka')
-			->setDefaultValue($this->person->nickName);
+			->setDefaultValue($this->person->getNickName());
 
 		$frm->addDatepicker('birthdate', 'Datum narození')
-			->setDefaultValue($this->person->birthdate)
+			->setDefaultValue($this->person->getBirthdate())
 			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat Datum narození nebo je ve špatném formátu')
 			->addRule(Form::RANGE, 'Podle data narození vám 7.6.2019 ještě nebude 18 let (což porušuje podmínky účasti)', array(null, DateTime::from('7.6.2019')->modify('-18 years')))
 			->setOption('description', 'Tvoje Datum narození ve formátu dd.mm.yyyy');
 		$frm->addText('addressCity', 'Město')
-			->setDefaultValue($this->person->addressCity)
+			->setDefaultValue($this->person->getAddressCity())
 			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat Město')
 			->setOption('description', 'Město, kde aktuálně bydlíš nebo skautuješ');
 
 		$frm->addGroup('Kontaktní údaje');
 		$frm->addText('email', 'E-mail')
-			->setDefaultValue($this->person->email)
+			->setDefaultValue($this->person->getEmail())
 			->setEmptyValue('@')
 			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat E-mail')
 			->addRule(Form::EMAIL, 'E-mailová adresa není platná')
 			->setOption('description', 'E-mail, který pravidelně vybíráš a můžem Tě na něm kontaktovat.  Budou Ti chodit informace atd..');
 		$frm->addText('phone', 'Mobilní telefon')
-			->setDefaultValue($this->person->phone)
+			->setDefaultValue($this->person->getPhone())
 			->setEmptyValue('+420')
 			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat Mobilní telefon')
 			->addRule([$frm, 'isPhoneNumber'], 'Telefonní číslo je ve špatném formátu')
@@ -128,23 +127,30 @@ class ServiceteamForm extends Control
 
 		$frm->addGroup('Doplňující údaje, aneb prozraď nám něco o sobě, ať ti můžeme najít to nejlepší zařazení ;-)');
 
-        $frm->addCheckbox('arrivesToBuilding', 'Přijedu na stavěcí týden od 4.6.2019')
-            ->setDefaultValue((bool) $this->person->arrivesToBuilding);
-        $frm->addCheckbox('stayToDestroy', 'Zůstanu na bourání tábořiště v neděli')
-            ->setDefaultValue((bool) $this->person->stayToDestroy);
+		$frm->addSelect('arriveDate', 'Přijedu:', Serviceteam::ARRIVE_DATES)
+			->setDefaultValue($this->person->getArriveDate() ? $this->person->getArriveDate()->format('Y-m-d') : null)
+			->setRequired(true);
+		$frm->addSelect('departureDate', 'Odjedu:', Serviceteam::DEPARTURE_DATES)
+			->setDefaultValue($this->person->getDepartureDate() ? $this->person->getDepartureDate()->format('Y-m-d') : null)
+			->setRequired(true);
+
+//        $frm->addCheckbox('arrivesToBuilding', 'Přijedu na stavěcí týden od 4.6.2019')
+//            ->setDefaultValue((bool) $this->person->getArrivesToBuilding());
+//        $frm->addCheckbox('stayToDestroy', 'Zůstanu na bourání tábořiště v neděli')
+//            ->setDefaultValue((bool) $this->person->getStayToDestroy());
 
 		$frm->addCheckbox('helpPreparation', 'Mám zájem a možnost pomoct s přípravami Obroku 2015 už před akcí')
-			->setDefaultValue($this->person->helpPreparation);
+			->setDefaultValue($this->person->getHelpPreparation());
 
 		$frm->addTextArea('experience', 'Zkušenosti / Dovednosti')
-			->setDefaultValue($this->person->experience);
+			->setDefaultValue($this->person->getExperience());
 
 		$frm->addTextArea('health', 'Zdravotní omezení (dieta)')
-			->setDefaultValue($this->person->health)
+			->setDefaultValue($this->person->getHealth())
 			->setOption('description', 'Máš nějaké zdravotní omezení nebo dietu?');
 
 		$frm->addTextArea('note', 'Poznámka')
-			->setDefaultValue($this->person->note)
+			->setDefaultValue($this->person->getNote())
 			->setOption('description', 'Chceš nám něco vzkázat? Jsi už domluvený k někomu do týmu?');
 
         $frm->addGroup('Fotografie');
@@ -156,8 +162,8 @@ class ServiceteamForm extends Control
 
 
 		$frm->addGroup('Tričko');
-		$frm->addSelect('tshirtSize', 'Velikost případného trička', Serviceteam::$tShirtSizes)
-			->setDefaultValue($this->person->tshirtSize)
+		$frm->addSelect('tshirtSize', 'Velikost případného trička', Serviceteam::TSHIRT_SIZES)
+			->setDefaultValue($this->person->getTshirtSize())
 			->setOption('description', 'Tričko zatím bohužel úplně nemůžeme slíbit. Nicméně pravděpodobně bude :)');
 
 		$frm->addSubmit('send', 'Uložit údaje')
@@ -203,6 +209,8 @@ class ServiceteamForm extends Control
 			$this->person->removeAvatar();
 		}
 
+		$values->arriveDate = $values->arriveDate ? new \DateTimeImmutable($values->arriveDate) : null;
+		$values->departureDate = $values->departureDate ? new \DateTimeImmutable($values->departureDate) : null;
 
 		// naplnime data
 		foreach ($values as $key => $value)

@@ -25,29 +25,6 @@ use Nette\Utils\DateTime;
  *  Person::TYPE_UNSPECIFIED = "UnspecifiedPerson"
  * })
  * @DiscriminatorColumn(name="type", columnDefinition="ENUM('unspecified', 'participant', 'serviceteam')"))
- *
- * @property \DateTime $createdAt
- * @property string    $role
- * @property \DateTime $lastLogin
- * @property string    $gender
- * @property string    $firstName
- * @property string    $lastName
- * @property string    $nickName
- * @property string    $addressStreet
- * @property string    $addressCity
- * @property string    $addressPostcode
- * @property bool      $confirmed
- * @property bool      $arrived
- * @property bool      $left
- * @property string    $email
- * @property string    $phone
- * @property \DateTime $birthdate
- * @property string    $health
- * @property string    $note
- * @property string    $noteInternal
- * @property string    $unitNumber
- * @property string    $skautisUserId
- * @property string    $skautisPersonId
  */
 abstract class Person
 {
@@ -206,6 +183,263 @@ abstract class Person
 	{
 		$this->createdAt = new \DateTime("now");
 	}
+
+	/**
+	 * @return \DateTime
+	 */
+	public function getCreatedAt()
+	{
+		return $this->createdAt;
+	}
+
+	/**
+	 * @param \DateTime $createdAt
+	 */
+	public function setCreatedAt($createdAt)
+	{
+		$this->createdAt = $createdAt;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getRole()
+	{
+		return $this->role;
+	}
+
+	/**
+	 * @param string $role
+	 */
+	public function setRole($role)
+	{
+		$this->role = $role;
+	}
+
+	/**
+	 * @return \DateTime
+	 */
+	public function getLastLogin()
+	{
+		return $this->lastLogin;
+	}
+
+	/**
+	 * @param \DateTime $lastLogin
+	 */
+	public function setLastLogin($lastLogin)
+	{
+		$this->lastLogin = $lastLogin;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getGender()
+	{
+		return $this->gender;
+	}
+
+	/**
+	 * @param string $gender
+	 */
+	public function setGender($gender)
+	{
+		$this->gender = $gender;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getAddressStreet()
+	{
+		return $this->addressStreet;
+	}
+
+	/**
+	 * @param string $addressStreet
+	 */
+	public function setAddressStreet($addressStreet)
+	{
+		$this->addressStreet = $addressStreet;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getAddressCity()
+	{
+		return $this->addressCity;
+	}
+
+	/**
+	 * @param string $addressCity
+	 */
+	public function setAddressCity($addressCity)
+	{
+		$this->addressCity = $addressCity;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getAddressPostcode()
+	{
+		return $this->addressPostcode;
+	}
+
+	/**
+	 * @param string $addressPostcode
+	 */
+	public function setAddressPostcode($addressPostcode)
+	{
+		$this->addressPostcode = $addressPostcode;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getEmail()
+	{
+		return $this->email;
+	}
+
+	/**
+	 * @param string $email
+	 */
+	public function setEmail($email)
+	{
+		$this->email = $email;
+	}
+
+	/**
+	 * @return \DateTime
+	 */
+	public function getBirthdate()
+	{
+		return $this->birthdate;
+	}
+
+	/**
+	 * @param \DateTime $birthdate
+	 */
+	public function setBirthdate($birthdate)
+	{
+		$this->birthdate = $birthdate;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getHealth()
+	{
+		return $this->health;
+	}
+
+	/**
+	 * @param string $health
+	 */
+	public function setHealth($health)
+	{
+		$this->health = $health;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getNote()
+	{
+		return $this->note;
+	}
+
+	/**
+	 * @param string $note
+	 */
+	public function setNote($note)
+	{
+		$this->note = $note;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getNoteInternal()
+	{
+		return $this->noteInternal;
+	}
+
+	/**
+	 * @param string $noteInternal
+	 */
+	public function setNoteInternal($noteInternal)
+	{
+		$this->noteInternal = $noteInternal;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getSkautisUserId()
+	{
+		return $this->skautisUserId;
+	}
+
+	/**
+	 * @param string $skautisUserId
+	 */
+	public function setSkautisUserId($skautisUserId)
+	{
+		$this->skautisUserId = $skautisUserId;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getSkautisPersonId()
+	{
+		return $this->skautisPersonId;
+	}
+
+	/**
+	 * @param string $skautisPersonId
+	 */
+	public function setSkautisPersonId($skautisPersonId)
+	{
+		$this->skautisPersonId = $skautisPersonId;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getPaid()
+	{
+		return $this->paid;
+	}
+
+	/**
+	 * @param mixed $paid
+	 */
+	public function setPaid($paid)
+	{
+		$this->paid = $paid;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getQuickLoginHash()
+	{
+		return $this->quickLoginHash;
+	}
+
+	/**
+	 * @param mixed $quickLoginHash
+	 */
+	public function setQuickLoginHash($quickLoginHash)
+	{
+		$this->quickLoginHash = $quickLoginHash;
+	}
+
 
 
 	/**
