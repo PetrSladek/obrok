@@ -369,7 +369,16 @@ class ServiceteamPresenter extends DatabaseBasePresenter
 			->setRequired(false)
 			->setDefaultValue($this->item ? $this->item->getExperienceNote() : null)
 			->addFilter('trim');
-		$frm->addTextArea('note', 'Poznámka při registraci / Omezení (diety)')
+
+		$frm->addCheckboxList('diet', 'Strava (vegetariánská)', Serviceteam::DIET)
+			->checkDefaultValue(false)
+			->setDefaultValue($this->item && $this->item->getDiet() ? $this->item->getDiet() : []);
+		$frm->addText('dietNote', '')
+			->setAttribute('placeholder', 'Jiné')
+			->setDefaultValue($this->item ? $this->item->getDietNote() : null);
+
+
+		$frm->addTextArea('note', 'Poznámka při registraci')
 			->setRequired(false)
 			->setDefaultValue($this->item ? $this->item->getNote() : null)
 			->addFilter('trim');

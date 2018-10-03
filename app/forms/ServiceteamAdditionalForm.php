@@ -87,14 +87,21 @@ class ServiceteamAdditionalForm extends Control
 		$frm->addCheckboxList('experience', 'Zkušenosti / Dovednosti', Serviceteam::EXPIRIENCES)
 			->checkDefaultValue(false)
 			->setDefaultValue($this->person->getExperience() ?: []);
-		$frm->addText('experience', 'Zkušenosti / Dovednosti')
+		$frm->addText('experienceNote', 'Zkušenosti / Dovednosti')
 			->setDefaultValue($this->person->getExperienceNote())
 			->setAttribute('class', 'input-xxlarge');
 
-		$frm->addTextArea('health', 'Zdravotní omezení (dieta)')
+		$frm->addCheckboxList('diet', 'Strava (vegetariánská)', Serviceteam::DIET)
+			->checkDefaultValue(false)
+			->setDefaultValue($this->person->getDiet() ?: []);
+		$frm->addText('dietNote', '')
+			->setAttribute('placeholder', 'Jiné')
+			->setDefaultValue($this->person->getDietNote());
+
+		$frm->addTextArea('health', 'Zdravotní omezení a alergie')
 			->setDefaultValue($this->person->getHealth())
 			->setAttribute('class', 'input-xxlarge')
-			->setOption('description', 'Máš nějaké zdravotní omezení nebo dietu?')
+			->setOption('description', 'Máš nějaké zdravotní omezení či alergii?')
 			->setAttribute('data-placement', 'right');
 
 		$frm->addTextArea('note', 'Poznámka')

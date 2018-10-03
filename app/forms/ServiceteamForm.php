@@ -149,9 +149,16 @@ class ServiceteamForm extends Control
 			->setAttribute('placeholder', 'Jiné')
 			->setDefaultValue($this->person->getExperienceNote());
 
-		$frm->addTextArea('health', 'Zdravotní omezení (dieta)')
+		$frm->addCheckboxList('diet', 'Strava (vegetariánská)', Serviceteam::DIET)
+			->checkDefaultValue(false)
+			->setDefaultValue($this->person->getDiet() ?: []);
+		$frm->addText('dietNote', '')
+			->setAttribute('placeholder', 'Jiné')
+			->setDefaultValue($this->person->getDietNote());
+
+		$frm->addTextArea('health', 'Zdravotní omezení a alergie')
 			->setDefaultValue($this->person->getHealth())
-			->setOption('description', 'Máš nějaké zdravotní omezení nebo dietu?');
+			->setOption('description', 'Máš nějaké zdravotní omezení či alergii?');
 
 		$frm->addTextArea('note', 'Poznámka')
 			->setDefaultValue($this->person->getNote())

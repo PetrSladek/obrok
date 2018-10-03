@@ -59,6 +59,33 @@ class Serviceteam extends Person
 	];
 
 	/**
+	 * Dietologické požadavky
+	 * @Column(type="json_array", nullable=true)
+	 *
+	 * @var array|null
+	 */
+	protected $diet = [];
+
+	/**
+	 * Dietologické požadavky
+	 * @Column(type="text", nullable=true)
+	 *
+	 * @var string
+	 */
+	protected $dietNote;
+
+	/**
+	 * Zkušenosti/Dovednosti na výběr
+	 */
+	const DIET = [
+		"s masem" => "s masem",
+		"vegan" => "vegan",
+		"bez lepku" => "bez lepku",
+		"bez laktózy" => "bez laktózy",
+		"bez mléka" => "bez mléka",
+	];
+
+	/**
 	 * Chce pomoct s pripravami?
 	 * @Column(type="boolean")
 	 */
@@ -206,6 +233,38 @@ class Serviceteam extends Person
 	public function setExperienceNote($experienceNote)
 	{
 		$this->experienceNote = $experienceNote;
+	}
+
+	/**
+	 * @return array|null
+	 */
+	public function getDiet()
+	{
+		return $this->diet;
+	}
+
+	/**
+	 * @param array|null $diet
+	 */
+	public function setDiet(array $diet)
+	{
+		$this->diet = $diet;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getDietNote(): ?string
+	{
+		return $this->dietNote;
+	}
+
+	/**
+	 * @param string $dietNote
+	 */
+	public function setDietNote(?string $dietNote)
+	{
+		$this->dietNote = $dietNote;
 	}
 
 
