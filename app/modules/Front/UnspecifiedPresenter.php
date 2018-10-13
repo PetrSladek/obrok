@@ -2,7 +2,6 @@
 
 namespace App\Module\Front\Presenters;
 
-use Nette;
 
 /**
  * Class UnspecifiedPresenter

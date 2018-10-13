@@ -41,7 +41,7 @@ class RegistrationPresenter extends UnspecifiedPersonAuthBasePresenter
 		$control->onGroupRegistered[] = function ($_, Group $group)
 		{
 			$this->flashMessage('Skupina byla vytvořena! Ted se ještě musíš zaregistrovat ty :)', 'success');
-			$this->redirect('toGroup', $group->id, $group->getInvitationHash($this->config->hashKey));
+			$this->redirect('toGroup', $group->getId(), $group->getInvitationHash($this->config->hashKey));
 		};
 
 		return $control;
@@ -86,7 +86,7 @@ class RegistrationPresenter extends UnspecifiedPersonAuthBasePresenter
 	 */
 	public function createComponentFrmParticipantRegistration()
 	{
-		$control = $this->participantRegistrationFormFactory->create($this->me->id, $this->group->id);
+		$control = $this->participantRegistrationFormFactory->create($this->me->getId(), $this->group->getId());
 		$control->setAgeInDate($this->ageInDate);
 		$control->onParticipantRegistred[] = function ($_, $person, $group)
 		{

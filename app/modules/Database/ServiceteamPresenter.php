@@ -78,7 +78,9 @@ class ServiceteamPresenter extends DatabaseBasePresenter
 
 		$grid->addColumn('varSymbol', 'ID / VS')->enableSort();
 		$grid->addColumn('fullname', 'Jméno')->enableSort();
-		$grid->addColumn('address', 'Město')->enableSort();
+		$grid->addColumn('registeredAt', 'Datum registrace')->enableSort();
+
+//		$grid->addColumn('address', 'Město')->enableSort();
 		$grid->addColumn('arriveAndDeparture', 'Příjezd a odjezd')->enableSort();
 		$grid->addColumn('age', 'Věk')->enableSort();
 		$grid->addColumn('contact', 'Kontakt')->enableSort();

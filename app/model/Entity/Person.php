@@ -48,6 +48,14 @@ abstract class Person
 	 */
 	protected $createdAt;
 
+
+	/**
+	 * Datum registrace (Do ST/Účastníků)
+	 * @var \DateTime|null
+	 * @Column(type="datetime", nullable=true)
+	 */
+	protected $registeredAt;
+
 //    /**
 //     * Hash hesla
 //     * @Column(type="string", length=255, nullable=true)
@@ -199,6 +207,23 @@ abstract class Person
 	{
 		$this->createdAt = $createdAt;
 	}
+
+	/**
+	 * @return \DateTime|null
+	 */
+	public function getRegisteredAt()
+	{
+		return $this->registeredAt;
+	}
+
+	/**
+	 * @param \DateTime|null $registeredAt
+	 */
+	public function setRegisteredAt($registeredAt)
+	{
+		$this->registeredAt = $registeredAt;
+	}
+
 
 	/**
 	 * @return string
