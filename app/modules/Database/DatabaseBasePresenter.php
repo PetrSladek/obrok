@@ -5,6 +5,7 @@ namespace App\Module\Database\Presenters;
 use App\BasePresenter;
 use App\Forms\Form;
 use App\Model\Entity\Serviceteam;
+use App\Model\Phone;
 use App\Model\Repositories\GroupsRepository;
 use App\Model\Repositories\ServiceteamRepository;
 use Kdyby\Doctrine\EntityDao;
@@ -262,7 +263,45 @@ abstract class DatabaseBasePresenter extends \App\Module\Base\Presenters\BasePre
 	}
 
 
+	/**
+	 * Formátovač pro exporty data tables
+	 *
+	 * @param array $row
+	 * @return array
+	 */
+	public function exportFormatter(array $row)
+	{
+		return array_map(function ($value, $key)
+		{
+			if ($key === 'phone')
+			{
+				return (string) (new Phone($value));
+			}
+			else if ($value instanceof \DateTimeInterface)
+			{
+				return (int) $value->format('His')
+					? $value->format('j.n.Y H:i:s')
+					: $value->format('j.n.Y');
+			}
+			elseif (is_array($value) && isset($value['name']))
+			{
+				return $value['name'];
+			}
+			elseif (is_array($value))
+			{
+				return implode(', ', $value);
+			}
+			elseif (is_bool($value))
+			{
+				return $value ? 'ANO' : '';
+			}
 
+			return (string) $value;
+		},
+			array_values($row),
+			array_keys($row)
+		);
+	}
 
 }
 

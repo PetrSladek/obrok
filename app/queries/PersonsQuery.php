@@ -131,6 +131,24 @@ abstract class PersonsQuery extends BaseQuery
 		return $this;
 	}
 
+	/**
+	 * Jen vybraná ID
+	 *
+	 * @param $ids
+	 *
+	 * @return $this
+	 */
+	public function byIDs(array $ids)
+	{
+		$this->filter[] = function (QueryBuilder $qb) use ($ids)
+		{
+			$qb->andWhere('p.id IN (:ids)')
+				->setParameter('ids', $ids);
+		};
+
+		return $this;
+	}
+
 
 	/**
 	 * Jen ve věku

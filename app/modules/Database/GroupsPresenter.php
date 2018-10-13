@@ -188,7 +188,7 @@ class GroupsPresenter extends DatabaseBasePresenter
 
 			return $query->count($this->repository);
 		});
-		$grid->setDatasourceCallback(function ($filter, $sorting, Paginator $paginator = null)
+		$grid->setDataSourceCallback(function ($filter, $sorting, Paginator $paginator = null)
 		{
 
 			$query = $this->getFilteredQuery($filter);
@@ -490,7 +490,7 @@ class GroupsPresenter extends DatabaseBasePresenter
 //                $count = $this->payments->findFiltered($filter)->count();
 //                return $count;
 //        });
-		$grid->setDatasourceCallback(function ($filter, $order, Paginator $paginator = null)
+		$grid->setDataSourceCallback(function ($filter, $order, Paginator $paginator = null)
 		{ // filter pouzivam ze svyho externiho formu
 
 //            $filter['group'] = $this->item->id;

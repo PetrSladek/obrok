@@ -4,6 +4,7 @@ namespace App\Module\Database\Presenters;
 
 use App\Forms\Form;
 use App\Model\Entity\Serviceteam;
+use App\Model\Phone;
 use App\Query\ServiceteamQuery;
 use App\Model\Repositories\JobsRepository;
 use App\Model\Repositories\ServiceteamRepository;
@@ -12,6 +13,9 @@ use App\Model\Repositories\WorkgroupsRepository;
 use App\Services\ImageService;
 
 use Brabijan\Images\TImagePipe;
+use Doctrine\ORM\AbstractQuery;
+use League\Csv\CharsetConverter;
+use League\Csv\Writer;
 use Nette\Forms\Container;
 use Nette\Forms\Controls\BaseControl;
 use Nette\Http\IResponse;
@@ -121,6 +125,12 @@ class ServiceteamPresenter extends DatabaseBasePresenter
 			return $form;
 		});
 
+		$grid->addGlobalAction('export', 'Export', function (array $ids, Datagrid $grid)
+		{
+			$this->redirect('export', ['ids' => array_values($ids)]);
+		});
+
+
 		$grid->setPagination($this->gridItemsPerPage, function ($filter)
 		{
 			$query = $this->getFilteredQuery($filter);
@@ -128,9 +138,8 @@ class ServiceteamPresenter extends DatabaseBasePresenter
 			return $query->count($this->repository);
 		});
 
-		$grid->setDatasourceCallback(function ($filter, $sorting, Paginator $paginator = null)
+		$grid->setDataSourceCallback(function ($filter, $sorting, Paginator $paginator = null)
 		{
-
 			$query = $this->getFilteredQuery($filter);
 
 			$result = $this->repository->fetch($query);
@@ -186,6 +195,8 @@ class ServiceteamPresenter extends DatabaseBasePresenter
 
 		$grid->onRender[] = function($grid)
 		{
+			$grid['form']['actions']['action']->setPrompt('- Vyber akci -');
+			$grid['form']['actions']['process']->caption = 'Dělej';
 			$grid->template->imageService = $this->imageService;
 		};
 
@@ -583,6 +594,41 @@ class ServiceteamPresenter extends DatabaseBasePresenter
 		}
 	}
 
+	/**
+	 * Vyexportuje vyfiltrovaná data
+	 *
+	 * @param array $ids
+	 */
+	public function actionExport(array $ids = [])
+	{
+		/** @var Datagrid $grid */
+		$grid = $this->getComponent('tblGrid');
+
+		$query = $this->getFilteredQuery($grid->filter);
+		if ($ids)
+		{
+			$query->byIDs($ids);
+		}
+		$data = $this->repository->fetch($query, AbstractQuery::HYDRATE_ARRAY);
+
+
+		$encoder = (new CharsetConverter())
+			->inputEncoding('utf-8')
+			->outputEncoding('iso-8859-2');
+
+
+		$csv = Writer::createFromFileObject(new \SplTempFileObject());
+		$csv->addFormatter([$this, 'exportFormatter']);
+		$csv->addFormatter($encoder);
+		$csv->setDelimiter(';');
+
+		$csv->insertOne(array_keys(current($data)));
+		$csv->insertAll($data);
+
+		$csv->output('serviceteam.csv');
+		$this->terminate();
+	}
+
 
 	/**
 	 * Přihlásit se na FronteEnd jako servisák
@@ -612,28 +658,31 @@ class ServiceteamPresenter extends DatabaseBasePresenter
 
 		$this->redirect(":Serviceteam:Login:as", $id, $hash);
 	}
+//	/**
+//	 * Vykreslí PDF s platbami
+//	 *
+//	 * @param null $id
+//	 */
+//	public function renderPayment($id = null)
+//	{
+//
+//		ini_set('memory_limit', '1024M');
+//
+//		$list = $this->repository->findBy(['confirmed' => true]);;
+//
+//		$template = $this->createTemplate()->setFile(APP_DIR . '/ModuleDatabase/templates/Serviceteam/payment.latte');
+//		$template->list = $list;
+//
+//		$pdf = new PdfResponse($template);
+//		$pdf->pageFormat = 'A5';
+////		$pdf->pageOrientaion = PdfResponse::ORIENTATION_LANDSCAPE;
+//		$this->sendResponse($pdf);
 
 
-	/**
-	 * Vykreslí PDF s platbami
-	 *
-	 * @param null $id
-	 */
-	public function renderPayment($id = null)
-	{
 
-		ini_set('memory_limit', '1024M');
+//	}
 
-		$list = $this->repository->findBy(['confirmed' => true]);;
 
-		$template = $this->createTemplate()->setFile(APP_DIR . '/ModuleDatabase/templates/Serviceteam/payment.latte');
-		$template->list = $list;
-
-		$pdf = new PdfResponse($template);
-		$pdf->pageFormat = 'A5';
-//		$pdf->pageOrientaion = PdfResponse::ORIENTATION_LANDSCAPE;
-		$this->sendResponse($pdf);
-	}
 
 
 //    /**

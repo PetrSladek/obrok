@@ -12,6 +12,17 @@
 </div>
 {/define}
 
+{define global-actions}
+	<div class="grid-global-actions pull-left" n:ifset="$form[actions]">
+		<div class="input-group">
+			{input $form[actions][action] class => 'form-control'}
+			<span class="input-group-btn">
+			{input $form[actions][process] class => 'btn btn-primary'}
+			</span>
+		</div>
+	</div>
+{/define}
+
 {define row-head-colums}
 	<tr class="grid-columns">
 		{foreach $columns as $column}

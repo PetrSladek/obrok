@@ -113,7 +113,7 @@ class ParticipantsPresenter extends DatabaseBasePresenter
 
 			return $query->count($this->repository);
 		});
-		$grid->setDatasourceCallback(function ($filter, $sorting, Paginator $paginator = null)
+		$grid->setDataSourceCallback(function ($filter, $sorting, Paginator $paginator = null)
 		{
 
 			$query = $this->getFilteredQuery($filter);
@@ -595,7 +595,7 @@ class ParticipantsPresenter extends DatabaseBasePresenter
 		});
 
 		$grid->setPagination(false);
-		$grid->setDatasourceCallback(function ($filter, $sorting, Paginator $paginator = null)
+		$grid->setDataSourceCallback(function ($filter, $sorting, Paginator $paginator = null)
 		{
 
 			$query = new ProgramsQuery();

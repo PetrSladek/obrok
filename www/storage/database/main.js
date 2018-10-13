@@ -9,7 +9,7 @@ $(function(){
     //
     //    console.log(data);
     //});
-    $.nette.ext('history').cache = false;
+    // $.nette.ext('history').cache = false;
 
     $.nette.ext('fadeSnippets', {
         start: function (xhr, settings) {
@@ -183,15 +183,17 @@ $(function(){
             return;
         }
 
-        $(this).css('cursor', 'pointer');
+        $('td').not('.grid-col-global-actions').each(function () {
+            $(this).css('cursor', 'pointer');
 
-        $(this).find('a').not($link).click(function (e) {
-            e.stopPropagation();
-        });
+            $(this).find('a').not($link).click(function (e) {
+                e.stopPropagation();
+            });
 
-        $(this).click(function(e) {
-            e.preventDefault();
-            $link.click();
+            $(this).click(function(e) {
+                e.preventDefault();
+                $link.click();
+            });
         });
     });
 
