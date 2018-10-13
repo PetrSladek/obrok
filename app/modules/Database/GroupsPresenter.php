@@ -353,9 +353,9 @@ class GroupsPresenter extends DatabaseBasePresenter
 		$frm->addText('city', 'Město')
 			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat %label')
 			->setDefaultValue($this->item ? $this->item->city : null);
-		$frm->addTextarea('note', 'O skupině')
-			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat %label')
-			->setDefaultValue($this->item ? $this->item->note : null);
+//		$frm->addTextarea('note', 'O skupině')
+//			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat %label')
+//			->setDefaultValue($this->item ? $this->item->note : null);
 		$frm->addTextarea('noteInternal', 'Interní poznámka')
 			->setDefaultValue($this->item ? $this->item->noteInternal : null);
 

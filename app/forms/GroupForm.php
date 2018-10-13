@@ -119,12 +119,12 @@ class GroupForm extends Control
 			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat %label')
 			->setAttribute('title', 'Město, ke kterému se skupina "hlásí", ve kterém funguje')
 			->setAttribute('data-placement', 'right');
-		$frm->addTextarea('note', 'O skupině')
-			->setDefaultValue($this->group->note)
-			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat %label')
-			->setAttribute('class', 'input-xxlarge')
-			->setAttribute('title', 'Napišt nám krátkou charakteristku vaší skupiny. Jste fungující kmen nebo skupina "jednotlivců"? Čím se zabýváte? Napiště něco, co by ostatní mohlo zajímat!')
-			->setAttribute('data-placement', 'right');
+//		$frm->addTextarea('note', 'O skupině')
+//			->setDefaultValue($this->group->note)
+//			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat %label')
+//			->setAttribute('class', 'input-xxlarge')
+//			->setAttribute('title', 'Napišt nám krátkou charakteristku vaší skupiny. Jste fungující kmen nebo skupina "jednotlivců"? Čím se zabýváte? Napiště něco, co by ostatní mohlo zajímat!')
+//			->setAttribute('data-placement', 'right');
 
 		$frm->addSelect('boss', 'Vedoucí skupiny (18+)', $this->group->getPossibleBosses($this->ageInDate))
 			->setDefaultValue($this->group->getBoss() ? $this->group->getBoss()->getId() : null)

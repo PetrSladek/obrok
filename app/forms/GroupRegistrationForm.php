@@ -60,9 +60,9 @@ class GroupRegistrationForm extends Control
 		$frm->addText('city', 'Město')
 			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat %label')
 			->setOption('description', 'Město, ke kterému se skupina "hlásí", ve kterém funguje');
-		$frm->addTextArea('note', 'O skupině')
-			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat %label')
-			->setOption('description', 'Napište nám krátkou charakteristku vaší skupiny. Jste fungující kmen nebo skupina "jednotlivců"? Čím se zabýváte? Napiště něco, co by ostatní mohlo zajímat!');
+//		$frm->addTextArea('note', 'O skupině')
+//			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat %label')
+//			->setOption('description', 'Napište nám krátkou charakteristku vaší skupiny. Jste fungující kmen nebo skupina "jednotlivců"? Čím se zabýváte? Napiště něco, co by ostatní mohlo zajímat!');
 
 //		$frm->addGpsPicker('location', 'Mapa roverských kmenů:', [
 //			'zoom' => 11,
