@@ -68,9 +68,19 @@
 
         </div>
 
+        {* Informace o platbě *}
         <div class="row">
             <div class="col-md-6">
-                {if $me->paid}
+                {if true}
+                <table  class="table">
+                    <tr>
+                        <td colspan="2"><h4>Informace k platbě</h4></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><div class="alert alert-warning">Číslo účtu k platbě zveřejníme v lednu 2019, poté budete mít měsíc na provedení platby.</div></td>
+                    </tr>
+                </table>
+                {elseif $me->paid}
                 <table  class="table">
                     <tr>
                         <td colspan="2"><h4>Informace k platbě</h4></td>
@@ -112,7 +122,7 @@
             </div>
 
             <div class="col-md-6">
-                {if !$me->paid}
+                {if false && !$me->paid}
                 <img class="img-responsive" src="https://api.paylibo.com/paylibo/generator/czech/image?compress=false&size=270&accountNumber=2100437022&bankCode=2010&amount=350&currency=CZK&vs={$me->getVarSymbol()}&message={='Obrok 2019 '.$me->getFullName()}" />
                 {/if}
             </div>

@@ -199,7 +199,16 @@
 <div class="row">
     <div class="col-md-6">
         <table class="table">
-            {if $group->isPaid()}
+            {if true}
+            <table  class="table">
+                <tr>
+                    <td colspan="2"><h4>Informace k platbě</h4></td>
+                </tr>
+                <tr>
+                    <td colspan="2"><div class="alert alert-warning">Číslo účtu k platbě zveřejníme v lednu 2019, poté budete mít měsíc na provedení platby.</div></td>
+                </tr>
+            </table>
+            {elseif $group->isPaid()}
             <tr>
                 <td colspan="2"><h4>Informace k platbě</h4></td>
             </tr>
@@ -242,7 +251,7 @@
         V případě, že později budete chtít někoho přidat. Zaplaťte pouze za něj (se stejným Var.Symbolem)
     </div>
     <div class="col-md-6">
-        {if !$group->paid}
+        {if false && !$group->paid}
             <img class="img-responsive" src="https://api.paylibo.com/paylibo/generator/czech/image?compress=false&size=440&accountNumber=2100437022&bankCode=2010&amount={=($group->getConfirmedParticipantsCount()-$group->getPaidParticipantsCount())*700}&currency=CZK&vs={$group->getVarSymbol()}&message={='Obrok 2019 '.$group->name.' ' .$group->city}" />
         {/if}
     </div>
