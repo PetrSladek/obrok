@@ -238,7 +238,7 @@ class ImageService
 	 */
 	public function getCacheUrl()
 	{
-		return str_replace('//', '/', $this->cacheUrl . "/");;
+		return str_replace('//', '/', $this->cacheUrl . "/");
 	}
 
 

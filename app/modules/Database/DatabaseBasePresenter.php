@@ -4,6 +4,7 @@ namespace App\Module\Database\Presenters;
 
 use App\BasePresenter;
 use App\Forms\Form;
+use App\Model\Entity\Person;
 use App\Model\Entity\Serviceteam;
 use App\Model\Phone;
 use App\Model\Repositories\ServiceteamRepository;
@@ -13,6 +14,7 @@ use League\Csv\Writer;
 use Nette\Bridges\ApplicationLatte\Template;
 use Nette\Forms\Controls\BaseControl;
 use Nette\Utils\ArrayHash;
+use Nette\Utils\Image;
 use Nextras\Datagrid\Datagrid;
 
 /**
@@ -258,16 +260,40 @@ abstract class DatabaseBasePresenter extends \App\Module\Base\Presenters\BasePre
 	/**
 	 * Formátovač pro exporty data tables
 	 *
-	 * @param array $row
+	 * @param array $data
 	 * @return array
+	 * @internal param array $row
 	 */
-	public function exportFormatter(array $row)
+	public function exportFormatter(array $data)
 	{
-		return array_map(function ($value, $key)
+		// vyfiltrujeme klice ktere nechceme videt
+		$row = array_filter($data, function ($key) {
+			return !in_array($key, ['avatarCrop']); // klice ktere nechceme exportovat
+		}, ARRAY_FILTER_USE_KEY);
+
+		if (array_keys($row) === array_values($row))
+		{
+			return $row;
+		}
+
+		return array_map(function ($value, $key) use ($data)
 		{
 			if ($key === 'phone')
 			{
 				return (string) (new Phone($value));
+			}
+			elseif ($key === 'avatar')
+			{
+				$baseUrl = rtrim($this->getHttpRequest()->getUrl()->getBaseUrl(), '/');
+
+				if (!$value)
+				{
+					$value = (isset($data['gender']) && $data['gender'] === Person::GENDER_MALE
+						? 'avatar_boy.jpg'
+						: 'avatar_girl.jpg');
+				}
+
+				return $baseUrl . $this->imageService->getImageUrl($value, 800, 800, Image::EXACT, $data['avatarCrop'] ?? null);
 			}
 			else if ($value instanceof \DateTimeInterface)
 			{
@@ -323,7 +349,8 @@ abstract class DatabaseBasePresenter extends \App\Module\Base\Presenters\BasePre
 		$csv->addFormatter($encoder);
 		$csv->setDelimiter(';');
 
-		$csv->insertOne(array_keys(current($data)));
+		$header = array_keys(current($data));
+		$csv->insertOne(array_combine($header, $header));
 		$csv->insertAll($data);
 
 		$csv->output($filename);
