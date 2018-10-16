@@ -10,6 +10,7 @@ use App\Model\Phone;
 use App\Model\Repositories\ServiceteamRepository;
 use Doctrine\ORM\AbstractQuery;
 use League\Csv\CharsetConverter;
+use League\Csv\Reader;
 use League\Csv\Writer;
 use Nette\Bridges\ApplicationLatte\Template;
 use Nette\Forms\Controls\BaseControl;
@@ -338,16 +339,21 @@ abstract class DatabaseBasePresenter extends \App\Module\Base\Presenters\BasePre
 		}
 		$data = $this->repository->fetch($query, AbstractQuery::HYDRATE_ARRAY);
 
-
-		$encoder = (new CharsetConverter())
-			->inputEncoding('utf-8')
-			->outputEncoding('iso-8859-2');
+//
+//		$encoder = (new CharsetConverter())
+//			->inputEncoding('utf-8')
+//			->outputEncoding('ISO-8859-15');
 
 
 		$csv = Writer::createFromFileObject(new \SplTempFileObject());
 		$csv->addFormatter([$this, 'exportFormatter']);
-		$csv->addFormatter($encoder);
+//		$csv->addFormatter($encoder);
 		$csv->setDelimiter(';');
+
+		//let's set the output BOM
+		$csv->setOutputBOM(Writer::BOM_UTF8);
+		//let's convert the incoming data from iso-88959-15 to utf-8
+//		$csv->addStreamFilter('convert.iconv.ISO-8859-15/UTF-8');
 
 		$header = array_keys(current($data));
 		$csv->insertOne(array_combine($header, $header));
