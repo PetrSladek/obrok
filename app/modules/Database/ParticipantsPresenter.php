@@ -107,12 +107,22 @@ class ParticipantsPresenter extends DatabaseBasePresenter
 			return $form;
 		});
 
+		$grid->addGlobalAction('export', 'Export', function (array $ids, Datagrid $grid)
+		{
+			$this->redirect('export', [
+				'ids' => array_values($ids),
+				'filename' => 'export-ucastnici-' . date('YmdHis') . '.csv'
+			]);
+		});
+
+
 		$grid->setPagination($this->gridItemsPerPage, function ($filter)
 		{
 			$query = $this->getFilteredQuery($filter);
 
 			return $query->count($this->repository);
 		});
+
 		$grid->setDataSourceCallback(function ($filter, $sorting, Paginator $paginator = null)
 		{
 

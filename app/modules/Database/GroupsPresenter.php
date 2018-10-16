@@ -182,6 +182,14 @@ class GroupsPresenter extends DatabaseBasePresenter
 			return $form;
 		});
 
+		$grid->addGlobalAction('export', 'Export', function (array $ids, Datagrid $grid)
+		{
+			$this->redirect('export', [
+				'ids' => array_values($ids),
+				'filename' => 'export-skupiny-' . date('YmdHis') . '.csv'
+			]);
+		});
+
 		$grid->setPagination($this->gridItemsPerPage, function ($filter)
 		{
 			$query = $this->getFilteredQuery($filter);

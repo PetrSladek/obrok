@@ -99,12 +99,21 @@ class ProgramPresenter extends DatabaseBasePresenter
 			return $frm;
 		});
 
+		$grid->addGlobalAction('export', 'Export', function (array $ids, Datagrid $grid)
+		{
+			$this->redirect('export', [
+				'ids' => array_values($ids),
+				'filename' => 'export-programy-' . date('YmdHis') . '.csv'
+			]);
+		});
+
 		$grid->setPagination($this->gridItemsPerPage, function ($filter)
 		{
 			$query = $this->getFilteredQuery($filter);
 
 			return $query->count($this->repository);
 		});
+
 		$grid->setDataSourceCallback(function ($filter, $sorting, Paginator $paginator = null)
 		{
 

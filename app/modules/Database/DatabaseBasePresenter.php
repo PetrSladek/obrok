@@ -6,21 +6,13 @@ use App\BasePresenter;
 use App\Forms\Form;
 use App\Model\Entity\Serviceteam;
 use App\Model\Phone;
-use App\Model\Repositories\GroupsRepository;
 use App\Model\Repositories\ServiceteamRepository;
-use Kdyby\Doctrine\EntityDao;
-use Kdyby\Doctrine\EntityManager;
+use Doctrine\ORM\AbstractQuery;
+use League\Csv\CharsetConverter;
+use League\Csv\Writer;
 use Nette\Bridges\ApplicationLatte\Template;
 use Nette\Forms\Controls\BaseControl;
-use Nette\Forms\Controls\Button;
-use Nette\Forms\Controls\Checkbox;
-use Nette\Forms\Controls\CheckboxList;
-use Nette\Forms\Controls\MultiSelectBox;
-use Nette\Forms\Controls\RadioList;
-use Nette\Forms\Controls\SelectBox;
-use Nette\Forms\Controls\TextBase;
 use Nette\Utils\ArrayHash;
-use Nette\Utils\Paginator;
 use Nextras\Datagrid\Datagrid;
 
 /**
@@ -301,6 +293,41 @@ abstract class DatabaseBasePresenter extends \App\Module\Base\Presenters\BasePre
 			array_values($row),
 			array_keys($row)
 		);
+	}
+
+	/**
+	 * Vyexportuje vyfiltrovaná data
+	 *
+	 * @param array $ids
+	 * @param string $filename
+	 */
+	public function actionExport(array $ids = [], $filename = 'export.csv')
+	{
+		/** @var Datagrid $grid */
+		$grid = $this->getComponent('tblGrid');
+
+		$query = $this->getFilteredQuery($grid->filter);
+		if ($ids) {
+			$query->byIDs($ids);
+		}
+		$data = $this->repository->fetch($query, AbstractQuery::HYDRATE_ARRAY);
+
+
+		$encoder = (new CharsetConverter())
+			->inputEncoding('utf-8')
+			->outputEncoding('iso-8859-2');
+
+
+		$csv = Writer::createFromFileObject(new \SplTempFileObject());
+		$csv->addFormatter([$this, 'exportFormatter']);
+		$csv->addFormatter($encoder);
+		$csv->setDelimiter(';');
+
+		$csv->insertOne(array_keys(current($data)));
+		$csv->insertAll($data);
+
+		$csv->output($filename);
+		$this->terminate();
 	}
 
 }

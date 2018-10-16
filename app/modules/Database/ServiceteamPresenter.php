@@ -127,7 +127,10 @@ class ServiceteamPresenter extends DatabaseBasePresenter
 
 		$grid->addGlobalAction('export', 'Export', function (array $ids, Datagrid $grid)
 		{
-			$this->redirect('export', ['ids' => array_values($ids)]);
+			$this->redirect('export', [
+				'ids' => array_values($ids),
+				'filename' => 'export-servistym-' . date('YmdHis') . '.csv'
+			]);
 		});
 
 
@@ -594,41 +597,6 @@ class ServiceteamPresenter extends DatabaseBasePresenter
 		}
 	}
 
-	/**
-	 * Vyexportuje vyfiltrovaná data
-	 *
-	 * @param array $ids
-	 */
-	public function actionExport(array $ids = [])
-	{
-		/** @var Datagrid $grid */
-		$grid = $this->getComponent('tblGrid');
-
-		$query = $this->getFilteredQuery($grid->filter);
-		if ($ids)
-		{
-			$query->byIDs($ids);
-		}
-		$data = $this->repository->fetch($query, AbstractQuery::HYDRATE_ARRAY);
-
-
-		$encoder = (new CharsetConverter())
-			->inputEncoding('utf-8')
-			->outputEncoding('iso-8859-2');
-
-
-		$csv = Writer::createFromFileObject(new \SplTempFileObject());
-		$csv->addFormatter([$this, 'exportFormatter']);
-		$csv->addFormatter($encoder);
-		$csv->setDelimiter(';');
-
-		$csv->insertOne(array_keys(current($data)));
-		$csv->insertAll($data);
-
-		$csv->output('serviceteam.csv');
-		$this->terminate();
-	}
-
 
 	/**
 	 * Přihlásit se na FronteEnd jako servisák
@@ -651,7 +619,7 @@ class ServiceteamPresenter extends DatabaseBasePresenter
 		}
 
 		$hash = Random::generate(22, '0-9A-Za-z./');
-		$this->item->quickLoginHash = Passwords::hash($hash);
+		$this->item->setQuickLoginHash(Passwords::hash($hash));
 
 		$this->em->persist($this->item);
 		$this->em->flush();
