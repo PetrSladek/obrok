@@ -78,6 +78,7 @@ class ParticipantsPresenter extends DatabaseBasePresenter
 		$grid->addColumn('age', 'Věk')->enableSort();
 		$grid->addColumn('contact', 'Kontakt')->enableSort();
 		$grid->addColumn('address', 'Adresa')->enableSort();
+		$grid->addColumn('wantHandbook', 'HB')->enableSort();
 
 		$grid->addColumn('confirmed', 'Přijede?')->enableSort();
 		$grid->addColumn('paid', 'Zaplatil?')->enableSort();

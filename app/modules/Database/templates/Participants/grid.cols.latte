@@ -55,7 +55,11 @@
     <br /><small>{$row->addressCity} {$row->addressPostcode}</small>
 </td>
 {/define}
-
+{define col-wantHandbook}
+<td>
+    <i title="$row->getWantHandbook() ? Ano : Ne" n:class="$row->getWantHandbook() ? ficon-book-add"></i>
+</td>
+{/define}
 {define col-confirmed}
 <td n:class="$row->confirmed ? cell-flag-blue, cell-flag">
     {*<a n:tag-if="$acl->edit" class="ajax" href="{plink status! id=>$row->id, 'confirmed', !$row->confirmed}">*}
