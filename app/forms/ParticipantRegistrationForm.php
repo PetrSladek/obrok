@@ -123,38 +123,38 @@ class ParticipantRegistrationForm extends Control
 
 		$frm->addText('firstName', 'Jméno')
 			->setDisabled()
-			->setDefaultValue($this->person->firstName);
+			->setDefaultValue($this->person->getFirstName());
 		$frm->addText('lastName', 'Příjmení')
 			->setDisabled()
-			->setDefaultValue($this->person->lastName);
+			->setDefaultValue($this->person->getLastName());
 
 		$frm->addText('nickName', 'Přezdívka')
-			->setDefaultValue($this->person->nickName);
+			->setDefaultValue($this->person->getNickName());
 
 		$frm->addDatepicker('birthdate', 'Datum narození:')
-			->setDefaultValue($this->person->birthdate)
+			->setDefaultValue($this->person->getBirthdate())
 			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat Datum narození nebo je ve špatném formátu (musí být dd.mm.yyyy)')
 			->addRule(Form::RANGE, 'Podle data narození vám 7.6.2019 ještě nebude 15 let (což porušuje podmínky účasti)', array(null, DateTime::from('7.6.2019')->modify('-15 years')))
 			->addRule(Form::RANGE, 'Podle data narození vám 7.6.2019 bude už více než 25 let (což porušuje podmínky účasti)', array(DateTime::from('7.6.2019')->modify('-25 years'), null));
 
 		$frm->addRadioList('gender', 'Pohlaví', [Person::GENDER_MALE => 'muž', Person::GENDER_FEMALE => 'žena'])
-			->setDefaultValue($this->person->gender)
+			->setDefaultValue($this->person->getGender())
 			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat %label');
 
 		$frm->addGroup('Trvalé bydliště');
 		$frm->addText('addressStreet', 'Ulice a čp.')
-			->setDefaultValue($this->person->addressStreet)
+			->setDefaultValue($this->person->getAddressStreet())
 			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat %label');
 		$frm->addText('addressCity', 'Město')
-			->setDefaultValue($this->person->addressCity)
+			->setDefaultValue($this->person->getAddressCity())
 			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat %label');
 		$frm->addText('addressPostcode', 'PSČ')
-			->setDefaultValue($this->person->addressPostcode)
+			->setDefaultValue($this->person->getAddressPostcode())
 			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat %label');
 
 		$frm->addGroup('Kontaktní údaje');
 		$frm->addText('phone', 'Mobilní telefon')
-			->setDefaultValue($this->person->phone)
+			->setDefaultValue($this->person->getPhone())
 			->setEmptyValue('+420')
 			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat Mobilní telefon')
 			->addRule([$frm, 'isPhoneNumber'], 'Telefonní číslo je ve špatném formátu')
@@ -162,15 +162,17 @@ class ParticipantRegistrationForm extends Control
 //        $frm->addCheckbox('phoneIsSts', 'je v STS?')
 //            ->setAttribute('description','Je toto telefoní číslo v Skautské telefoní síti?');
 		$frm->addText('email', 'E-mail:')
-			->setDefaultValue($this->person->email)
+			->setDefaultValue($this->person->getEmail())
 			->addRule(Form::FILLED, 'Zadejte E-mail')
 			->setOption('description', 'Tvůj email na který ti budou chodit informace');
 
 		$frm->addGroup('Zdravotní omezení');
-		$frm->addTextarea('health', 'Zdravotní omezení a alergie')
-			->setDefaultValue($this->person->health);
+		$frm->addTextArea('health', 'Zdravotní omezení a alergie')
+			->setDefaultValue($this->person->getHealth());
 
-		$frm->addGroup(null);
+		$frm->addGroup('Souhlas');
+		$frm->addCheckbox('wantHandbook', 'Chci dostat tištěný handbook (sešit s programem, informacemi apod.)')
+			->setDefaultValue(false);
 		$frm->addCheckbox('conditions', Html::el()->setHtml('Souhlasím s <a target="_blank" href="http://www.obrok19.cz/registrace/">podmínkami účasti na akci</a> a s <a target="_blank" href="http://www.obrok19.cz/obecna-ustanoveni-storno-podminky/">obecnými ustanoveními</a>'))
 			->addRule($frm::FILLED, 'Musíte souhlasit s podmínkami účasti')
 			->setOmitted();

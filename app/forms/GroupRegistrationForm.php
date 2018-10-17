@@ -89,10 +89,8 @@ class GroupRegistrationForm extends Control
 	public function processForm($form, $values)
 	{
 
-		$group = new Group();
-		$group->name = $values->name;
-		$group->city = $values->city;
-		$group->note = $values->note;
+		$group = new Group($values->name, $values->city);
+		$group->setNote($values->note ?? null);
 
 //		$group->locationLat = $values->location->lat;
 //		$group->locationLng = $values->location->lng;

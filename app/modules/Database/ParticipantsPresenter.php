@@ -464,13 +464,13 @@ class ParticipantsPresenter extends DatabaseBasePresenter
 			->setAttribute('data-placement', 'right');
 
 		$frm->addGroup('Zdravotní omezení');
-		$frm->addTextarea('health', 'Zdravotní omezení a alergie')
+		$frm->addTextArea('health', 'Zdravotní omezení a alergie')
 			->setDefaultValue($this->item ? $this->item->health : null);
 
 		$frm->addCheckbox('admin', 'Administrátor skupiny')
 			->setDefaultValue($this->item ? $this->item->isAdmin() : null);
 
-		$frm->addTextarea('noteInternal', 'Interní poznámka')
+		$frm->addTextArea('noteInternal', 'Interní poznámka')
 			->setDefaultValue($this->item ? $this->item->noteInternal : null);
 
 		$frm->addGroup('Přihlášení');

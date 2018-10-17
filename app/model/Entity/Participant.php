@@ -83,7 +83,18 @@ class Participant extends Person
 	 */
 	protected $openProgramRegistration = false;
 
+	/**
+	 * Chce tištěný HandBook?
+	 *
+	 * @var bool
+	 *
+	 * @Column(type="boolean")
+	 */
+	protected $wantHandbook = false;
 
+	/**
+	 * Participant constructor.
+	 */
 	public function __construct()
 	{
 		parent::__construct();
@@ -107,6 +118,22 @@ class Participant extends Person
 	public function setAdmin($admin = true)
 	{
 		$this->admin = $admin;
+	}
+
+	/**
+	 * @return boolean
+	 */
+	public function getWantHandbook(): bool
+	{
+		return $this->wantHandbook;
+	}
+
+	/**
+	 * @param boolean $wantHandbook
+	 */
+	public function setWantHandbook(bool $wantHandbook)
+	{
+		$this->wantHandbook = $wantHandbook;
 	}
 
 

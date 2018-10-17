@@ -75,7 +75,7 @@ class HomepagePresenter extends ServiceteamAuthBasePresenter
 		$frm = new Form();
 
 		$frm->addGroup(null);
-		$frm->addTextarea('reason', 'Důvod zrušní účasti')
+		$frm->addTextArea('reason', 'Důvod zrušní účasti')
 			->addRule(Form::FILLED, 'Prosím zadej důvod proč rušíš svou účast.');
 
 		$frm->addSubmit('send', 'Ano opravdu na Obrok nepřijedu')

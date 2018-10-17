@@ -119,7 +119,7 @@ class GroupForm extends Control
 			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat %label')
 			->setAttribute('title', 'Město, ke kterému se skupina "hlásí", ve kterém funguje')
 			->setAttribute('data-placement', 'right');
-//		$frm->addTextarea('note', 'O skupině')
+//		$frm->addTextArea('note', 'O skupině')
 //			->setDefaultValue($this->group->note)
 //			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat %label')
 //			->setAttribute('class', 'input-xxlarge')

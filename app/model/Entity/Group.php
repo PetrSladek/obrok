@@ -23,18 +23,6 @@ use Doctrine\ORM\PersistentCollection;
 /**
  * @Entity(repositoryClass="App\Model\Repositories\GroupsRepository")
  * @Table(name="groups")
- *
- * @property \DateTime        $createdAt
- * @property string           $name
- * @property string           $city
- * @property string           $region
- * @property float            $locationLat
- * @property float            $locationLng
- * @property string           $note
- * @property string           $noteInternal
- * @property string           $avatarFilename
- * @property string           $avatarCrop
- * @property Participant|null $boss
  */
 class Group
 {
@@ -154,11 +142,67 @@ class Group
 	private $boss;
 
 
-	public function __construct()
+	/**
+	 * Group constructor.
+	 * @param string $name
+	 * @param string $city
+	 */
+	public function __construct($name, $city)
 	{
 		$this->createdAt = new \DateTime('now');
 		$this->participants = new ArrayCollection();
+		$this->name = $name;
+		$this->city = $city;
 	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getName()
+	{
+		return $this->name;
+	}
+
+	/**
+	 * @param mixed $name
+	 */
+	public function setName($name)
+	{
+		$this->name = $name;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getCity()
+	{
+		return $this->city;
+	}
+
+	/**
+	 * @param mixed $city
+	 */
+	public function setCity($city)
+	{
+		$this->city = $city;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getNote()
+	{
+		return $this->note;
+	}
+
+	/**
+	 * @param mixed $note
+	 */
+	public function setNote($note)
+	{
+		$this->note = $note;
+	}
+
 
 
 	/**

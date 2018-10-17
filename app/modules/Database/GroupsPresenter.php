@@ -361,10 +361,10 @@ class GroupsPresenter extends DatabaseBasePresenter
 		$frm->addText('city', 'Město')
 			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat %label')
 			->setDefaultValue($this->item ? $this->item->city : null);
-//		$frm->addTextarea('note', 'O skupině')
+//		$frm->addTextArea('note', 'O skupině')
 //			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat %label')
 //			->setDefaultValue($this->item ? $this->item->note : null);
-		$frm->addTextarea('noteInternal', 'Interní poznámka')
+		$frm->addTextArea('noteInternal', 'Interní poznámka')
 			->setDefaultValue($this->item ? $this->item->noteInternal : null);
 
 		$frm->addSelect('boss', 'Vedoucí skupiny (18+)', $this->item ? $this->item->getPossibleBosses($this->ageInDate) : [])
@@ -400,7 +400,7 @@ class GroupsPresenter extends DatabaseBasePresenter
 
 		if (!$this->item)
 		{
-			$this->item = new Group();
+			$this->item = new Group($values->name, $values->city);
 			$this->em->persist($this->item);
 		}
 

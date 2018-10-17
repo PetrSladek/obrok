@@ -374,7 +374,7 @@ class ServiceteamPresenter extends DatabaseBasePresenter
 
 //        $frm->addCheckbox('replacer','Náhradník?');
 		$frm->addGroup('Zdravotní omezení');
-		$frm->addTextarea('health', 'Zdravotní omezení a alergie')
+		$frm->addTextArea('health', 'Zdravotní omezení a alergie')
 			->setDefaultValue($this->item ? $this->item->getHealth() : null);
 
 		$frm->addCheckboxList('experience', 'Zkušenosti / Dovednosti', Serviceteam::EXPIRIENCES)

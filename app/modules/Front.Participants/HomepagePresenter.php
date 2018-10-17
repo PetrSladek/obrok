@@ -208,16 +208,16 @@ class HomepagePresenter extends ParticipantAuthBasePresenter
 		$frm->addGroup('Osobní informace');
 
 		$frm->addText('firstName', 'Jméno')
-			->setDefaultValue($this->participant ? $this->participant->firstName : null)
+			->setDefaultValue($this->participant ? $this->participant->getFirstName() : null)
 			->setRequired();
 		$frm->addText('lastName', 'Příjmení')
-			->setDefaultValue($this->participant ? $this->participant->lastName : null)
+			->setDefaultValue($this->participant ? $this->participant->getLastName() : null)
 			->setRequired();
 		$frm->addText('nickName', 'Přezdívka')
-			->setDefaultValue($this->participant ? $this->participant->nickName : null);
+			->setDefaultValue($this->participant ? $this->participant->getNickName() : null);
 
 		$frm->addDatepicker('birthdate', 'Datum narození:')
-			->setDefaultValue($this->participant ? $this->participant->birthdate : null)
+			->setDefaultValue($this->participant ? $this->participant->getBirthdate() : null)
 			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat Datum narození nebo je ve špatném formátu (musí být dd.mm.yyyy)')
 			->addRule(Form::RANGE, 'Podle data narození vám 7.6.2019 ještě nebude 15 let (což porušuje podmínky účasti)', array(null, DateTime::from('7.6.2019')->modify('-15 years')))
 			->addRule(Form::RANGE, 'Podle data narození vám 7.6.2019 bude už více než 25 let (což porušuje podmínky účasti)', array(DateTime::from('7.6.2019')->modify('-25 years'), null));
@@ -225,30 +225,30 @@ class HomepagePresenter extends ParticipantAuthBasePresenter
 //            ->addRule(callback('Participant','validateAge'), 'Věk účastníka Obroku 2015 musí být od 15 do 24 let');
 
 		$frm->addRadioList('gender', 'Pohlaví', array('male' => 'muž', 'female' => 'žena'))
-			->setDefaultValue($this->participant ? $this->participant->gender : null)
+			->setDefaultValue($this->participant ? $this->participant->getGender() : null)
 			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat %label');
 
 		$frm->addGroup('Trvalé bydliště');
 		$frm->addText('addressStreet', 'Ulice a čp.')
-			->setDefaultValue($this->participant ? $this->participant->addressStreet : null)
+			->setDefaultValue($this->participant ? $this->participant->getAddressStreet() : null)
 			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat %label');
 		$frm->addText('addressCity', 'Město')
-			->setDefaultValue($this->participant ? $this->participant->addressCity : null)
+			->setDefaultValue($this->participant ? $this->participant->getAddressCity() : null)
 			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat %label');
 		$frm->addText('addressPostcode', 'PSČ')
-			->setDefaultValue($this->participant ? $this->participant->addressPostcode : null)
+			->setDefaultValue($this->participant ? $this->participant->getAddressPostcode() : null)
 			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat %label');
 
 		$frm->addGroup('Kontaktní údaje');
 		$frm->addText('email', 'E-mail')
-			->setDefaultValue($this->participant ? $this->participant->email : null)
+			->setDefaultValue($this->participant ? $this->participant->getEmail() : null)
 			->setEmptyValue('@')
 			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat E-mail')
 			->addRule(Form::EMAIL, 'E-mailová adresa není platná')
 			->setAttribute('title', 'E-mail, který pravidelně vybíráš a můžem Tě na něm kontaktovat. Budou Ti chodit informace atd..')
 			->setAttribute('data-placement', 'right');
 		$frm->addText('phone', 'Mobilní telefon')
-			->setDefaultValue($this->participant ? $this->participant->phone : null)
+			->setDefaultValue($this->participant ? $this->participant->getPhone() : null)
 			->setEmptyValue('+420')
 			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat Mobilní telefon')
 			->addRule([$frm, 'isPhoneNumber'], 'Telefonní číslo je ve špatném formátu')
@@ -256,14 +256,19 @@ class HomepagePresenter extends ParticipantAuthBasePresenter
 			->setAttribute('data-placement', 'right');
 
 		$frm->addGroup('Zdravotní omezení');
-		$frm->addTextarea('health', 'Zdravotní omezení a alergie')
-			->setDefaultValue($this->participant ? $this->participant->health : null);
+		$frm->addTextArea('health', 'Zdravotní omezení a alergie')
+			->setDefaultValue($this->participant ? $this->participant->getHealth() : null);
+
+		$frm->addGroup(null);
+		$frm->addCheckbox('wantHandbook', 'Chci dostat tištěný handbook (sešit s programem, informacemi apod.)')
+			->setDefaultValue($this->participant ? $this->participant->getWantHandbook() : null);
+
 
 		// admin
 		if ($this->me->isAdmin())
 		{
 			$frm->addCheckbox('admin', 'Administrátor skupiny')
-				->setDefaultValue($this->participant ? (bool) $this->participant->admin : null);
+				->setDefaultValue($this->participant ? (bool) $this->participant->isAdmin() : null);
 		}
 
 		$frm->addSubmit('send', 'Uložit údaje účastníka')
@@ -279,12 +284,8 @@ class HomepagePresenter extends ParticipantAuthBasePresenter
 				$frm['email']->setAttribute('title', 'E-mail, který pravidelně vybírá. Budou tam chodit informace atd..');
 				$frm['phone']->setAttribute('title', 'Mobilní telefon, na kterém bude k zastižení během celé akce');
 			}
-			$frm['firstName']->setDisabled()->setRequired(false)->setDefaultValue($this->participant->firstName);
-			$frm['lastName']->setDisabled()->setRequired(false)->setDefaultValue($this->participant->lastName);
-
-//            $defaults = $this->participant->toArray(IEntity::TO_ARRAY_RELATIONSHIP_AS_ID);
-//            $defaults['admin'] = ($this->participant->role == 'admin');
-//            $frm->setDefaults($defaults);
+			$frm['firstName']->setDisabled()->setRequired(false)->setDefaultValue($this->participant->getFirstName());
+			$frm['lastName']->setDisabled()->setRequired(false)->setDefaultValue($this->participant->getLastName());
 		}
 
 		return $frm;
@@ -303,7 +304,7 @@ class HomepagePresenter extends ParticipantAuthBasePresenter
 		if (!$this->participant)
 		{
 			$this->participant = new Participant();
-			$this->participant->setGroup($this->me->group);
+			$this->participant->setGroup($this->me->getGroup());
 
 			$this->em->persist($this->participant);
 		}
@@ -344,7 +345,7 @@ class HomepagePresenter extends ParticipantAuthBasePresenter
 		$frm = new Form();
 
 		$frm->addGroup(null);
-		$frm->addTextarea('reason', 'Důvod zrušní účasti')
+		$frm->addTextArea('reason', 'Důvod zrušní účasti')
 			->addRule(Form::FILLED, 'Prosím zadej důvod proč rušíš svou účast.');
 
 		$frm->addSubmit('send', 'Ano opravdu na Obrok nepřijedu')
