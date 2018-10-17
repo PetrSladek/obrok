@@ -259,7 +259,7 @@ class HomepagePresenter extends ParticipantAuthBasePresenter
 		$frm->addTextArea('health', 'Zdravotní omezení a alergie')
 			->setDefaultValue($this->participant ? $this->participant->getHealth() : null);
 
-		$frm->addGroup(null);
+		$frm->addGroup('Další infromace');
 		$frm->addCheckbox('wantHandbook', 'Chci dostat tištěný handbook (sešit s programem, informacemi apod.)')
 			->setDefaultValue($this->participant ? $this->participant->getWantHandbook() : null);
 
