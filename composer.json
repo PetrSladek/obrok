@@ -1,5 +1,5 @@
 {
-	"name": "nette/web-project",
+	"name": "petrsladek/obrok",
 	"description": "Nette: Standard Web Project",
 	"type": "project",
 	"license": ["MIT", "BSD-3-Clause", "GPL-2.0", "GPL-3.0"],
@@ -15,7 +15,7 @@
 		"nextras/datagrid": "^3.0",
 		"nextras/latte-macros": "^1.1",
 		"beberlei/DoctrineExtensions": "^1.0",
-		"vojtech-dobes/nette-ajax-history": "^2.0",
+		"vojtech-dobes/nette-ajax-history": "dev-master",
 		"webchemistry/images": "2.0",
 		"brabijan/images": "^3.0",
 		"dg/adminer-custom": "^1.7",
