@@ -2,6 +2,7 @@
 
 namespace App\Module\Front\Participants\Presenters;
 
+use App\Forms\GroupForm;
 use App\Forms\IGroupFormFactory;
 use App\Model\Entity\Group;
 use App\Model\Entity\Participant;
@@ -85,9 +86,13 @@ class HomepagePresenter extends ParticipantAuthBasePresenter
 
 		$control = $this->groupFormFactory->create($this->me->group->getId());
 		$control->setAgeInDate($this->ageInDate);
-		$control->onSave[] = function ($control, Group $group)
+		$control->onSave[] = function (GroupForm $form, Group $group)
 		{
 			$this->flashMessage('Údaje úspěšně upraveny', 'success');
+			$this->redirect('default');
+		};
+		$control->onCancel[] = function (GroupForm $form, Group $group)
+		{
 			$this->redirect('default');
 		};
 
@@ -274,6 +279,10 @@ class HomepagePresenter extends ParticipantAuthBasePresenter
 		$frm->addSubmit('send', 'Uložit údaje účastníka')
 			->setAttribute('class', 'btn btn-primary');
 
+		$frm->addSubmit('cancel', '	« Zpět na nástěnku')
+			->setAttribute('class', 'btn')
+			->setValidationScope(false);
+
 		$frm->onSuccess[] = [$this, 'frmParticipantSubmitted'];
 
 		if ($this->participant)
@@ -299,6 +308,12 @@ class HomepagePresenter extends ParticipantAuthBasePresenter
 	 */
 	public function frmParticipantSubmitted(Form $frm)
 	{
+		if ($frm->getComponent('cancel')->isSubmittedBy())
+		{
+			$this->redirect('default');
+			return;
+		}
+
 		$values = $frm->getValues();
 
 		if (!$this->participant)

@@ -19,13 +19,24 @@ use Nette\Application\UI\Control;
 use Nette\Http\FileUpload;
 use Nette\Utils\DateTime;
 
+/**
+ * Class ServiceteamForm
+ * @package App\Forms
+ *
+ * @method onCancel(ServiceteamForm $form)
+ * @method onSave(ServiceteamForm $form)
+ */
 class ServiceteamForm extends Control
 {
+	/**
+	 * @var callable[]
+	 */
+	public $onSave = [];
 
 	/**
 	 * @var callable[]
 	 */
-	public $onSave;
+	public $onCancel = [];
 
 	/**
 	 * @var EntityManager
@@ -183,6 +194,10 @@ class ServiceteamForm extends Control
 		$frm->addSubmit('send', 'Uložit údaje')
 			->setAttribute('class', 'btn btn-primary');
 
+		$frm->addSubmit('cancel', '	« Zpět na nástěnku')
+			->setAttribute('class', 'btn')
+			->setValidationScope(false);
+
 		$frm->onSuccess[] = [$this, 'processForm'];
 
 		return $frm;
@@ -191,10 +206,17 @@ class ServiceteamForm extends Control
 
 	/**
 	 * Zpracování formuláře
+	 *
 	 * @param Form $frm
 	 */
 	public function processForm(Form $frm)
 	{
+		if ($frm->getComponent('cancel')->isSubmittedBy())
+		{
+			$this->onCancel($this);
+			return;
+		}
+
 		$values = $frm->getValues();
 
 		// pokud jde o vytvoření nového servisáka, tak ho vytvoříme

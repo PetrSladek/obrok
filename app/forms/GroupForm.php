@@ -12,6 +12,13 @@ use Doctrine\ORM\EntityManager;
 use Nette\Application\UI\Control;
 use Nette\Utils\DateTime;
 
+/**
+ * Class GroupForm
+ * @package App\Forms
+ *
+ * @method onSave(GroupForm $form)
+ * @method onCancel(GroupForm $form)
+ */
 class GroupForm extends Control
 {
 
@@ -19,6 +26,12 @@ class GroupForm extends Control
 	 * @var callable[]
 	 */
 	public $onSave;
+
+	/**
+	 * @var callable[]
+	 */
+	public $onCancel;
+
 
 	/**
 	 * @var EntityManager
@@ -151,14 +164,24 @@ class GroupForm extends Control
 		$frm->addSubmit('send', 'Uložit údaje skupiny')
 			->setAttribute('class', 'btn btn-primary');
 
+		$frm->addSubmit('cancel', '	« Zpět na nástěnku')
+			->setAttribute('class', 'btn')
+			->setValidationScope(false);
+
 		$frm->onSuccess[] = [$this, 'processForm'];
 
 		return $frm;
 	}
 
 
-	public function processForm(Form $_, $values)
+	public function processForm(Form $frm, $values)
 	{
+		if ($frm->getComponent('cancel')->isSubmittedBy())
+		{
+			$this->onCancel($this);
+			return;
+		}
+
 
 //		$values->locationLat = $values->location->lat;
 //		$values->locationLng = $values->location->lng;

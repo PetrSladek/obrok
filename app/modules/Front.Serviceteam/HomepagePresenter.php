@@ -5,6 +5,7 @@ namespace App\Module\Front\Serviceteam\Presenters;
 use App\Forms\Form;
 use App\Forms\IServiceteamAdditionalFormFactory;
 use App\Forms\IServiceteamFormFactory;
+use App\Forms\ServiceteamForm;
 use App\Model\Entity\Person;
 use App\Services\ImageService;
 use Kdyby\Doctrine\EntityRepository;
@@ -55,9 +56,14 @@ class HomepagePresenter extends ServiceteamAuthBasePresenter
 
 		$control = $this->serviceteamFormFactory->create($this->me->getId());
 
-		$control->onSave[] = function ($control, $person)
+		$control->onSave[] = function (ServiceteamForm $form, Person $person)
 		{
 			$this->flashMessage('Údaje úspěšně upraveny', 'success');
+			$this->redirect('default');
+		};
+
+		$control->onCancel[] = function (ServiceteamForm $form)
+		{
 			$this->redirect('default');
 		};
 
