@@ -119,6 +119,15 @@ class Serviceteam extends Person
 	protected $departureDate = null;
 
 	/**
+	 * Chce tištěný HandBook?
+	 *
+	 * @var bool
+	 *
+	 * @Column(type="boolean")
+	 */
+	protected $wantHandbook = false;
+
+	/**
 	 * Velikost tricka
 	 * @Column(type="string")
 	 */
@@ -377,6 +386,23 @@ class Serviceteam extends Person
 
 		}
 		return self::DEPARTURE_DATES[$this->departureDate->format('Y-m-d')] ?? '';
+	}
+
+
+	/**
+	 * @return boolean
+	 */
+	public function getWantHandbook(): bool
+	{
+		return (bool) $this->wantHandbook;
+	}
+
+	/**
+	 * @param boolean $wantHandbook
+	 */
+	public function setWantHandbook(bool $wantHandbook)
+	{
+		$this->wantHandbook = $wantHandbook;
 	}
 
 

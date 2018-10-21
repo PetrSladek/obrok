@@ -92,6 +92,7 @@ class ServiceteamPresenter extends DatabaseBasePresenter
 		$grid->addColumn('team', 'Tým')->enableSort();
 		$grid->addColumn('group', 'Skupina')->enableSort();
 
+		$grid->addColumn('wantHandbook', 'HB')->enableSort();
 		$grid->addColumn('confirmed', 'Přijede?')->enableSort();
 		$grid->addColumn('paid', 'Zaplatil?')->enableSort();
 		$grid->addColumn('arrived', 'Přijel?')->enableSort();

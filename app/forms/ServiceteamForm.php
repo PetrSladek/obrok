@@ -164,6 +164,9 @@ class ServiceteamForm extends Control
 			->setDefaultValue($this->person->getNote())
 			->setOption('description', 'Chceš nám něco vzkázat? Jsi už domluvený k někomu do týmu?');
 
+		$frm->addCheckbox('wantHandbook', 'Chci dostat tištěný handbook (sešit s programem, informacemi apod.)')
+			->setDefaultValue($this->person->getWantHandbook());
+
         $frm->addGroup('Fotografie');
 
 		$frm->addCroppie('avatar', 'Fotka')

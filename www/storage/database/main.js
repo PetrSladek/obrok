@@ -175,7 +175,7 @@ $(function(){
 
 
     // pokud v radku libovolne tabulky existuhe a.tr-link tak se pouzije na proklik z celeho radku
-    $('table.table tr').livequery(function() {
+    $('div.grid table.table tr').livequery(function() {
 
         var $link = $(this).find('a.tr-link');
         if (!$link.length)
@@ -183,7 +183,7 @@ $(function(){
             return;
         }
 
-        $('td').not('.grid-col-global-actions').each(function () {
+        $('td', this).not('.grid-col-global-actions').each(function () {
             $(this).css('cursor', 'pointer');
 
             $(this).find('a').not($link).click(function (e) {

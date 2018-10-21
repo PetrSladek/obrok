@@ -125,7 +125,7 @@ class Participant extends Person
 	 */
 	public function getWantHandbook(): bool
 	{
-		return $this->wantHandbook;
+		return (bool) $this->wantHandbook;
 	}
 
 	/**

@@ -168,6 +168,16 @@
 									{/if}
 								</td>
 							</tr>
+							<tr>
+								<td>
+									{if $item->getWantHandbook()}
+										<div class="text-success"><i class="ficon-book-add"></i> Chce vytištěný Handbook</div>
+									{else}
+										<div class="text-error"><i class="ficon-book-delete"></i> Nechce vytištěný Handbook</div>
+									{/if}
+								</td>
+							</tr>
+
 							{*<tr>
 								<td>
 									{if $item->getArrivesToBuilding()}

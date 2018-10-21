@@ -123,6 +123,9 @@ class ServiceteamAdditionalForm extends Control
 //            ->setDefaultValue( new CropImage(Serviceteam::$defaultAvatar) )
 //            ->addRule(Form::FILLED, 'Musíš nahrát fotku');
 
+		$frm->addCheckbox('wantHandbook', 'Chci dostat tištěný handbook (sešit s programem, informacemi apod.)')
+			->setDefaultValue(false);
+
 		$frm->addGroup('Tričko');
 		$frm->addSelect('tshirtSize', 'Velikost případného trička', Serviceteam::TSHIRT_SIZES)
 			->setDefaultValue($this->person->getTshirtSize())

@@ -36,7 +36,7 @@ class HomepagePresenter extends ServiceteamAuthBasePresenter
      */
     public function renderDefault()
     {
-        $payToDate = DateTime::from($this->me->createdAt);
+        $payToDate = DateTime::from($this->me->getCreatedAt());
         $payToDate->modify('+ 30 days midnight');
 
         $now = new DateTime('now midnight');
