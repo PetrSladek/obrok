@@ -96,9 +96,16 @@
                     <tr n:class="$participant->isPaid() ? cell-flag-green : ($participant->isConfirmed() ? '')" id="pariticpant-{$participant->id}">
                         <td>
                             {$participant->fullname}<br />
-                            <small>
+
+                            <small class="pull-left">
+                                {if $me->getWantHandbook()}
+                                <small>Chce tištěný handbook.</small>
+                                {else}
+                                <small>Nechce tištěný handbook.</small>
+                                {/if}
+                            </small>
+                            <small class="pull-right">
                                 {if ($me->isAdmin() || $user->id == $participant->id) && $open=1}<a class="edit" href="{plink participant $participant->id}">Editovat údaje</a>{/if}
-                               
                             </small>
                         </td>
                         <td>
@@ -129,7 +136,6 @@
                             {if $participant->lastLogin}
                                 <small>naposledy přihlášen</small><br />
                                 {$participant->lastLogin->format('j.n.Y v H:i')}
-
                             {*{elseif $participant->loginInvitation && $me->isAdmin()}
                                 Pozvánka zaslána<br />
                                 <small><a class="ajax" href="{plink sendInvitation! $participant->id}">zaslat znovu</a></small>

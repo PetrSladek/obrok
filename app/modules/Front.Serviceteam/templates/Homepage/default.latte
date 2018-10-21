@@ -61,7 +61,12 @@
                             <strong n:ifcontent>{$me->getDiet()|implode}<br /></strong>
                             <strong n:ifcontent>{$me->getDietNote()}</strong>
                         </td>
-
+                    </tr>
+                    <tr>
+                        <td>Hanbook</td>
+                        <td>
+                            {if $me->getWantHandbook()}Chci tištěný handbook{else}Nechci tištěný handbook{/if}
+                        </td>
                     </tr>
                 </table>
             </div>
