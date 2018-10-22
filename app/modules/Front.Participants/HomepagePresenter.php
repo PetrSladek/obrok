@@ -91,7 +91,7 @@ class HomepagePresenter extends ParticipantAuthBasePresenter
 			$this->flashMessage('Údaje úspěšně upraveny', 'success');
 			$this->redirect('default');
 		};
-		$control->onCancel[] = function (GroupForm $form, Group $group)
+		$control->onCancel[] = function (GroupForm $form)
 		{
 			$this->redirect('default');
 		};
