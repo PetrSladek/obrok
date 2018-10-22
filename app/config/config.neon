@@ -29,7 +29,7 @@ extensions:
 	skautis: Skautis\Nette\SkautisExtension
 	skautislogin: PetrSladek\SkautIS\DI\SkautISExtension
 #	gpspicker: VojtechDobes\NetteForms\GpsPickerExtension
-	ajaxHistory: VojtechDobes\NetteAjax\HistoryExtension
+#	ajaxHistory: VojtechDobes\NetteAjax\HistoryExtension
 	images: Brabijan\Images\DI\ImagesExtension
 
 console:
