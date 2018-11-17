@@ -95,14 +95,18 @@ hr {
    General styles
    ========================================================================== */
 
-
+html {
+	height: 100%;
+}
 body {
 	font-family: themix, Lato, Helvetica, sans-serif;
 	font-weight: 400;
 	font-size: 16px;
-	background-color: #333;
+	/*background-color: #333;*/
+	background-color: white;
 	-webkit-font-smoothing: antialiased;
 	-webkit-overflow-scrolling: touch;
+	min-height: 100%;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -303,10 +307,21 @@ p.zapati.tmavy, a.tmavy, p.tmavy, section h2.section-heading.tmavy {
 	opacity: 1;
 }
 
+#footerwrap-fake {
+	/*padding-top: 10px;*/
+	padding-bottom: 0;
+	/*background-color: #54b7a4;*/
+	height: 90px;
+}
+
 #footerwrap {
 	padding-top: 10px;
 	padding-bottom: 0;
 	background-color: #54b7a4;
+
+	width: 100%;
+	position: fixed;
+	bottom: 0;
 }
 
 #footerwrap p {
@@ -459,10 +474,8 @@ background-color: #315198;
 }
 
 .logoskaut {
-	width: 350px;
-	height: 70px;
-	padding-left: 132px;
-	margin-bottom: -15px;
+	width: 160px;
+	margin-top: 8px;
 }
 
 .ikona {
