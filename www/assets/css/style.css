@@ -3,9 +3,9 @@
    ========================================================================== */
 
 
-@import 'https://fonts.googleapis.com/css?family=Open+Sans';
+/*@import 'https://fonts.googleapis.com/css?family=Open+Sans';*/
 
-@font-face {
+/*@font-face {
     font-family: Montserrat;
     src: url(../fonts/Montserrat-Regular.woff);
 }
@@ -14,6 +14,51 @@
     font-family: Montserrat;
     src: url(../fonts/Montserrat-SemiBold.woff);
     font-weight: bold;
+}*/
+
+
+@font-face {
+	font-family: 'SKAUT-Bold';
+	src: url('../fonts/skaut-bold-webfont.eot'); /* IE9 Compat Modes */
+	src: url('../fonts/skaut-bold-webfont.woff') format('woff'), /* Pretty Modern Browsers */
+	url('../fonts/skaut-bold-webfont.ttf')  format('truetype'), /* Safari, Android, iOS */
+	url('../fonts/skaut-bold-webfont.svg#skaut-bold-webfont') format('svg'); /* Legacy iOS */
+}
+@font-face {
+	font-family: 'themix';
+	src: url('../fonts/TheMix_LT_400.eot');
+	src: url('../fonts/TheMix_LT_400.eot? #iefix') format('embedded-opentype');
+	src: url('../fonts/TheMix_LT_400.woff') format('woff'),
+	url('../fonts/TheMix_LT_400.svg#themix') format('svg');
+	font-weight: 400;
+	font-style: normal;
+}
+@font-face {
+	font-family: 'themix';
+	src: url('../fonts/TheMix_LT_400i.eot');
+	src: url('../fonts/TheMix_LT_400i.eot? #iefix') format('embedded-opentype');
+	src: url('../fonts/TheMix_LT_400i.woff') format('woff'),
+	url('../fonts/TheMix_LT_400i.svg#themix') format('svg');
+	font-weight: 400;
+	font-style: italic;
+}
+@font-face {
+	font-family: 'themix';
+	src: url('../fonts/TheMix_LT_700.eot');
+	src: url('../fonts/TheMix_LT_700.eot? #iefix') format('embedded-opentype');
+	src: url('../fonts/TheMix_LT_700.woff') format('woff'),
+	url('../fonts/TheMix_LT_700.svg#themix') format('svg');
+	font-weight: 700;
+	font-style: normal;
+}
+@font-face {
+	font-family: 'themix';
+	src: url('../fonts/TheMix_LT_700i.eot');
+	src: url('../fonts/TheMix_LT_700i.eot? #iefix') format('embedded-opentype');
+	src: url('../fonts/TheMix_LT_700i.woff') format('woff'),
+	url('../fonts/TheMix_LT_700i.svg#themix') format('svg');
+	font-weight: 700;
+	font-style: italic;
 }
 
 
@@ -52,7 +97,7 @@ hr {
 
 
 body {
-	font-family: 'Montserrat', sans-serif;
+	font-family: themix, Lato, Helvetica, sans-serif;
 	font-weight: 400;
 	font-size: 16px;
 	background-color: #333;
@@ -61,6 +106,7 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
+	font-family: 'SKAUT-Bold', Helvetica, sans-serif;
 	font-weight: 700;
 	color: #FFF;
 }
@@ -88,18 +134,24 @@ height: auto;
 
 .navbar-default {
 	font-weight: 700;
-	background-color: rgba(255, 255, 255, 0.9);
+	background-color: #54b7a4;
 	border-color: transparent;
 }
 
 .navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
-	color: #40b3cb;
+	color: white;
 	background-color: transparent;
-	border-bottom: 2px solid #315198;
+	border-bottom: 3px solid white;
+}
+
+.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+	color: white;
+	background-color: transparent;
+	border-bottom: 1px solid white;
 }
 
 .navbar-default .navbar-nav > li > a {
-	color: #315198;
+	color: white;
 }
 /* ==========================================================================
    Wrap Sections
@@ -109,11 +161,7 @@ height: auto;
 	margin-top: 0;
 	padding-top: 0;
 	width: 100%;
-	/*background: linear-gradient(180deg, #315198, #40b3cb, #d64389, #dfb72b);*/
-	background-size: 100% 400%;
-	-webkit-animation: LogoGradient 30s ease infinite;
-	-moz-animation: LogoGradient 30s ease infinite;
-	animation: LogoGradient 30s ease infinite;
+	background: #54b7a4;
 }
 
 @-webkit-keyframes LogoGradient {
@@ -133,13 +181,13 @@ height: auto;
 }
 
 #headerwrap_logo {
-	background: url(../img/pozadi.png) no-repeat center top;
+	/*background: url(../img/pozadi.png) no-repeat center top;*/
 	margin-top: 0;
-	padding-top: 250px;
+	padding-top: 60px;
 	text-align: center;
 	background-attachment: relative;
 	background-position: center center;
-	min-height: 980px;
+	min-height: 60px;
 	width: 100%;
 	-webkit-background-size: 100%;
 	-moz-background-size: 100%;
@@ -167,7 +215,7 @@ height: auto;
 	}
 
 p.popisek {
-	font-family: Open sans, sans-serif;
+	/*font-family: themix, Lato, Helvetica, sans-serif;*/
 	font-size: 20px;
 	font-weight: 400;
 }
@@ -185,7 +233,7 @@ p.maly{
 p.registrace {
 	line-height: 200%;
 	text-transform: none;
-	font-family: 'Montserrat', sans-serif;
+	font-family: 'SKAUT-Bold', Helvetica, sans-serif;
 	text-transform: uppercase;
 	font-size: 50px;
 	font-style: normal;
@@ -209,7 +257,7 @@ p.zapati{
 #odpocet{
 	font-size: 30px;
 	}
-	
+
 @media (max-width: 992px) {
 p.zapati {
 	padding-bottom: 11px;
@@ -237,7 +285,7 @@ a.svetly, p.svetly {
 }
 
 p.zapati.tmavy, a.tmavy, p.tmavy, section h2.section-heading.tmavy {
-	color: #315198;
+	color: white;
 }
 
 #social {
@@ -248,17 +296,17 @@ p.zapati.tmavy, a.tmavy, p.tmavy, section h2.section-heading.tmavy {
 
 #social i {
 	font-size: 20px;
-	color: #4a4a4a
+	opacity: 0.9;
 }
 
 #social i:hover {
-	color: #315198
+	opacity: 1;
 }
 
 #footerwrap {
 	padding-top: 10px;
 	padding-bottom: 0;
-	background-color: #fff;
+	background-color: #54b7a4;
 }
 
 #footerwrap p {
@@ -463,7 +511,7 @@ section h2.section-heading {
 section h3.section-subheading {
 	margin-bottom: 25px;
 	text-transform: none;
-	font-family: Open sans, sans-serif;
+	font-family: 'SKAUT-Bold', Helvetica, sans-serif;
 	font-size: 20px;
 	font-style: normal;
 	font-weight: 400;

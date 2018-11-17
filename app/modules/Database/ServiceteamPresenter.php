@@ -68,6 +68,30 @@ class ServiceteamPresenter extends DatabaseBasePresenter
 	}
 
 
+//	public function createComponentFrmFilter()
+//	{
+//		$form = new Form();
+//		$form->addText('fullname', 'Jméno');
+//		$form->addText('address', 'Adresa');
+//		$form->addText('age', 'Věk')
+//			 ->setRequired(false)
+//			 ->addRule(Form::INTEGER);
+//		$form->addText('contact', 'Kontakt');
+//
+//		$form->addMultiSelect('team', null, $this->teams->findPairs("name"), 'Tým');
+//		$form->addText('group', 'Skupina');
+//
+//		$form->addSelect('confirmed', 'Přijede', array(1 => 'Ano', 0 => 'Ne'))->setPrompt('--')->setDefaultValue(true);
+//		$form->addSelect('paid', 'Zaplatil', array(1 => 'Ano', 0 => 'Ne'))->setPrompt('--');
+//		$form->addSelect('arrived', 'Přijel', array(1 => 'Ano', 0 => 'Ne'))->setPrompt('--');
+//		$form->addSelect('left', 'Odjede', array(1 => 'Ano', 0 => 'Ne'))->setPrompt('--');
+//
+//		$form->addSubmit('send', 'Vyfiltrovat');
+//
+//		return $form;
+//	}
+
+
 	/**
 	 * Továrna na komponentu tabulky
 	 *
