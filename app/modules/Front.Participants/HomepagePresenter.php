@@ -279,7 +279,7 @@ class HomepagePresenter extends ParticipantAuthBasePresenter
 		$frm->addSubmit('send', 'Uložit údaje účastníka')
 			->setAttribute('class', 'btn btn-primary');
 
-		$frm->addSubmit('cancel', '	« Zpět na nástěnku')
+		$frm->addSubmit('cancel', 'Zrušit')
 			->setAttribute('class', 'btn')
 			->setValidationScope(false);
 

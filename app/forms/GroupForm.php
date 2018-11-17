@@ -164,7 +164,7 @@ class GroupForm extends Control
 		$frm->addSubmit('send', 'Uložit údaje skupiny')
 			->setAttribute('class', 'btn btn-primary');
 
-		$frm->addSubmit('cancel', '	« Zpět na nástěnku')
+		$frm->addSubmit('cancel', 'Zrušit')
 			->setAttribute('class', 'btn')
 			->setValidationScope(false);
 
