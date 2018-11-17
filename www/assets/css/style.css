@@ -322,6 +322,7 @@ p.zapati.tmavy, a.tmavy, p.tmavy, section h2.section-heading.tmavy {
 	width: 100%;
 	position: fixed;
 	bottom: 0;
+	z-index: 1;
 }
 
 #footerwrap p {
