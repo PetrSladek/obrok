@@ -169,13 +169,13 @@
 									{/if}
 								</td>
 							</tr>*}
+							{if $item->isSpeakEnglish()}
 							<tr>
 								<td>
-									{if $item->isSpeakEnglish()}
-										<img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/160/twitter/154/flag-for-united-kingdom_1f1ec-1f1e7.png" width="16"> Domluví se anglicky
-									{/if}
+									<img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/160/twitter/154/flag-for-united-kingdom_1f1ec-1f1e7.png" width="16"> Domluví se anglicky
 								</td>
 							</tr>
+							{/if}
 							<tr>
 								<td>
 									{if $item->getWantHandbook()}
