@@ -397,26 +397,44 @@ class ServiceteamPresenter extends DatabaseBasePresenter
 			return $this->jobs->findPairs(['name like' => "%{$query}%"], 'name');
 		})->setDefaultValue($this->item && $this->item->getJob() ? $this->item->getJob()->name : null);
 
+
+        $frm->addGroup('Činnosti');
+
+        $frm->addCheckboxList('experience', 'Zajímá mě:', Serviceteam::EXPIRIENCES)
+            ->checkDefaultValue(false)
+            ->setDefaultValue($this->item->getExperience() ?: []);
+        $frm->addText('experienceNote', 'Jiné')
+            ->setDefaultValue($this->item->getExperienceNote())
+            ->setAttribute('class', 'input-xxlarge');
+        $frm->addCheckbox('speakEnglish', "Domluvím se anglicky")
+            ->setDefaultValue($this->item->isSpeakEnglish());
+
+        $frm->addGroup('Zájmy a záliby');
+        $frm->addTextArea('hobbies', 'Umíš něco, co by chtěl umět každý (žonglovat, pískat na prsty, triky s kartami, skákat šipku,..)? Nebo něco, co těmoc baví a co si sám troufáš ostatní učit (nějaký sport, divadlo, hudba, příroda či cokoli dalšího)? Pokud máš nějaký instruktorský kurz (horolezectví, plavčík, vodní turistika,..), prosím, i tohle nám napiš, abychom mohli udělat program, který bude bavit i tebe!! Každá tvá superschopnost nás zajímá!!')
+            ->setDefaultValue($this->item->getHobbies())
+            ->setAttribute('class', 'input-xxlarge')
+            ->setHtmlAttribute('rows', 10);
+
+        $frm->addGroup('Strava');
+
+        $frm->addSelect('diet', 'Strava', Serviceteam::DIET)
+            ->checkDefaultValue(false)
+            ->setDefaultValue($this->item->getDiet() ?: null);
+
+        $frm->addCheckboxList('dietSpecification', '', Serviceteam::DIET_SPECIFICATION)
+            ->checkDefaultValue(false)
+            ->setDefaultValue($this->item->getDietSpecification() ?: []);
+
+        $frm->addText('dietNote', '')
+            ->setAttribute('placeholder', 'Jiné omezení')
+            ->setDefaultValue($this->item->getDietNote());
+
+
+
 //        $frm->addCheckbox('replacer','Náhradník?');
 		$frm->addGroup('Zdravotní omezení');
 		$frm->addTextArea('health', 'Zdravotní omezení a alergie')
 			->setDefaultValue($this->item ? $this->item->getHealth() : null);
-
-		$frm->addCheckboxList('experience', 'Zkušenosti / Dovednosti', Serviceteam::EXPIRIENCES)
-			->checkDefaultValue(false)
-			->setDefaultValue($this->item && $this->item->getExperience() ? $this->item->getExperience() : []);
-		$frm->addGroup('Poznámky');
-		$frm->addText('experienceNote', 'Zkušenosti / Dovednosti')
-			->setRequired(false)
-			->setDefaultValue($this->item ? $this->item->getExperienceNote() : null)
-			->addFilter('trim');
-
-		$frm->addCheckboxList('diet', 'Strava (vegetariánská)', Serviceteam::DIET)
-			->checkDefaultValue(false)
-			->setDefaultValue($this->item && $this->item->getDietSpecification() ? $this->item->getDietSpecification() : []);
-		$frm->addText('dietNote', '')
-			->setAttribute('placeholder', 'Jiné')
-			->setDefaultValue($this->item ? $this->item->getDietNote() : null);
 
 
 		$frm->addTextArea('note', 'Poznámka při registraci')
@@ -434,8 +452,8 @@ class ServiceteamPresenter extends DatabaseBasePresenter
 			->setDefaultValue($this->item && $this->item->getAvatarCrop() ? $this->item->getAvatarCrop() : null);
 
 		$frm->addGroup('Ostatní');
-		$frm->addCheckbox('helpPreparation', 'Má zájem pomoct s přípravami')
-			->setDefaultValue($this->item ? $this->item->getHelpPreparation() : null);
+//		$frm->addCheckbox('helpPreparation', 'Má zájem pomoct s přípravami')
+//			->setDefaultValue($this->item ? $this->item->getHelpPreparation() : null);
 		$frm->addSelect('tshirtSize', 'Velikost trička', Serviceteam::TSHIRT_SIZES)
 			->setPrompt('- vyberte velikost -')
 			->setDefaultValue($this->item ? $this->item->getTshirtSize() : null)
@@ -444,10 +462,10 @@ class ServiceteamPresenter extends DatabaseBasePresenter
             ->checkDefaultValue(false)
 			->setDefaultValue($this->item && $this->item->getArriveDate() ? $this->item->getArriveDate()->format('Y-m-d') : null)
 			->setRequired(true);
-		$frm->addSelect('departureDate', 'Odjezd:', Serviceteam::DEPARTURE_DATES)
-            ->checkDefaultValue(false)
-			->setDefaultValue($this->item && $this->item->getDepartureDate() ? $this->item->getDepartureDate()->format('Y-m-d') : null)
-			->setRequired(true);
+//		$frm->addSelect('departureDate', 'Odjezd:', Serviceteam::DEPARTURE_DATES)
+//            ->checkDefaultValue(false)
+//			->setDefaultValue($this->item && $this->item->getDepartureDate() ? $this->item->getDepartureDate()->format('Y-m-d') : null)
+//			->setRequired(true);
 
 		$frm->addGroup('Přihlášení');
 //		$frm->addText('skautisPersonId', 'Skautis PersonID')
