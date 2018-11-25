@@ -204,7 +204,7 @@ class ServiceteamForm extends Control
 
 		$frm->addTextArea('health', 'Zdravotní omezení a alergie')
 			->setDefaultValue($this->person->getHealth())
-			->setOption('description', 'Máš nějaké zdravotní omezení či alergii?');
+            ->setOption('description', Html::el('')->setHtml('Pokud máte nějaký handicap a potřebujete poradit, může se kdykoliv ozvat zde: Ladislava Blažková <a href="mailto:ladkablazkova@gmail.com">ladkablazkova@gmail.com</a> | +420 728 120 498'));
 
 
         $frm->addSelect('tshirtSize', 'Velikost případného trička', Serviceteam::TSHIRT_SIZES)

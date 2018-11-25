@@ -168,6 +168,7 @@ class ParticipantRegistrationForm extends Control
 
 		$frm->addGroup('Zdravotní omezení');
 		$frm->addTextArea('health', 'Zdravotní omezení a alergie')
+            ->setOption('description', Html::el('')->setHtml('Pokud máte nějaký handicap a potřebujete poradit, může se kdykoliv ozvat zde: Ladislava Blažková <a href="mailto:ladkablazkova@gmail.com">ladkablazkova@gmail.com</a> | +420 728 120 498'))
 			->setDefaultValue($this->person->getHealth());
 
 		$frm->addGroup('Souhlas');
