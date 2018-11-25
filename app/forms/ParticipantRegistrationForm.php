@@ -175,6 +175,7 @@ class ParticipantRegistrationForm extends Control
                 0 => 'Stačí mi elektronický, šetřím naše lesy',
                 1 => 'Potřebuji i papírovou verzi'
             ])
+            ->checkDefaultValue(false)
             ->setDefaultValue(0);
 
 		$frm->addCheckbox('conditions', Html::el()->setHtml('Souhlasím s <a target="_blank" href="http://www.obrok19.cz/registrace/">podmínkami účasti na akci</a> a s <a target="_blank" href="http://www.obrok19.cz/obecna-ustanoveni-storno-podminky/">obecnými ustanoveními</a>'))

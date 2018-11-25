@@ -102,9 +102,11 @@ class Serviceteam extends Person
 
 	/**
 	 * Prijede na stavecku?
-	 * @Column(type="boolean")
+     * @Column(type="text", nullable=true)
+     *
+     * @var string
 	 */
-	protected $arrivesToBuilding = false;
+	protected $hobbies;
 
     /**
      * Zůstane na bouračku na stavecku?
@@ -324,17 +326,17 @@ class Serviceteam extends Person
 	/**
 	 * @return mixed
 	 */
-	public function getArrivesToBuilding()
+	public function getHobbies()
 	{
-		return $this->arrivesToBuilding;
+		return $this->hobbies;
 	}
 
 	/**
-	 * @param mixed $arrivesToBuilding
+	 * @param mixed $hobbies
 	 */
-	public function setArrivesToBuilding($arrivesToBuilding)
+	public function setHobbies($hobbies)
 	{
-		$this->arrivesToBuilding = $arrivesToBuilding;
+		$this->hobbies = $hobbies;
 	}
 
 	/**
@@ -342,7 +344,7 @@ class Serviceteam extends Person
 	 */
 	public function isSpeakEnglish() : bool
 	{
-		return $this->speakEnglish;
+		return (bool) $this->speakEnglish;
 	}
 
 	/**

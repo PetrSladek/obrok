@@ -101,6 +101,12 @@ class ServiceteamAdditionalForm extends Control
         $frm->addCheckbox('speakEnglish', "Domluvím se anglicky")
             ->setDefaultValue($this->person->isSpeakEnglish());
 
+        $frm->addGroup('Zájmy a záliby');
+        $frm->addTextArea('hobbies', 'Umíš něco, co by chtěl umět každý (žonglovat, pískat na prsty, triky s kartami, skákat šipku,..)? Nebo něco, co těmoc baví a co si sám troufáš ostatní učit (nějaký sport, divadlo, hudba, příroda či cokoli dalšího)? Pokud máš nějaký instruktorský kurz (horolezectví, plavčík, vodní turistika,..), prosím, i tohle nám napiš, abychom mohli udělat program, který bude bavit i tebe!! Každá tvá superschopnost nás zajímá!!')
+            ->setDefaultValue($this->person->getHobbies())
+            ->setAttribute('class', 'input-xxlarge')
+            ->setHtmlAttribute('rows', 10);
+
         $frm->addGroup('Strava');
 
 		$frm->addSelect('diet', 'Strava', Serviceteam::DIET)
@@ -122,6 +128,7 @@ class ServiceteamAdditionalForm extends Control
                 0 => 'Stačí mi elektronický, šetřím naše lesy',
                 1 => 'Potřebuji i papírovou verzi'
             ])
+            ->checkDefaultValue(false)
             ->setDefaultValue(0);
 
 
@@ -154,7 +161,6 @@ class ServiceteamAdditionalForm extends Control
 //            })
 //            ->setDefaultValue( new CropImage(Serviceteam::$defaultAvatar) )
 //            ->addRule(Form::FILLED, 'Musíš nahrát fotku');
-
 
 
 

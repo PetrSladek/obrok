@@ -122,12 +122,13 @@
 							</tr>
 							<tr>
 								<td>
-									<span n:ifcontent>{$me->getDiet()|implode}<br /></span>
+									<span n:ifcontent>{$me->getDiet()}</span>
+									<span n:ifcontent>{$me->getDietSpecification()|implode}<br /></span>
 									<span n:ifcontent>{$me->getDietNote()}</span>
 								</td>
 							</tr>
 							<tr>
-								<th>Poznámka při registraci / Omezení (diety)</th>
+								<th>Poznámka při registraci</th>
 							</tr>
 							<tr>
 								<td>
@@ -155,7 +156,7 @@
 					<div class="col-md-5">
 
 						<table class="table table-little">
-							<tr>
+							{*<tr>
 								<td>
 									{if $item->helpPreparation}
 										<div class="text-success"><i class="ficon-accept"></i> Má zájem pomoct s
@@ -165,6 +166,13 @@
 										<div class="text-error"><i class="ficon-delete"></i> Nemá zájem pomoct s
 											přípravami
 										</div>
+									{/if}
+								</td>
+							</tr>*}
+							<tr>
+								<td>
+									{if $item->isSpeakEnglish()}
+										<img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/160/twitter/154/flag-for-united-kingdom_1f1ec-1f1e7.png" width="16"> Domluví se anglicky
 									{/if}
 								</td>
 							</tr>
@@ -199,9 +207,9 @@
 							<tr>
 								<td>Příjezd: <strong>{$item->getArriveDateTitle()}</strong></td>
 							</tr>
-							<tr>
+							{*<tr>
 								<td>Odjezd: <strong>{$item->getDepartureDateTitle()}</strong></td>
-							</tr>
+							</tr>*}
 							<tr>
 								<td>
 									<div><i class="ficon-user"></i> Velikost trika:
