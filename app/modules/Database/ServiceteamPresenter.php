@@ -413,7 +413,7 @@ class ServiceteamPresenter extends DatabaseBasePresenter
 
 		$frm->addCheckboxList('diet', 'Strava (vegetariánská)', Serviceteam::DIET)
 			->checkDefaultValue(false)
-			->setDefaultValue($this->item && $this->item->getDiet() ? $this->item->getDiet() : []);
+			->setDefaultValue($this->item && $this->item->getDietSpecification() ? $this->item->getDietSpecification() : []);
 		$frm->addText('dietNote', '')
 			->setAttribute('placeholder', 'Jiné')
 			->setDefaultValue($this->item ? $this->item->getDietNote() : null);
@@ -441,9 +441,11 @@ class ServiceteamPresenter extends DatabaseBasePresenter
 			->setDefaultValue($this->item ? $this->item->getTshirtSize() : null)
 			->setRequired();
 		$frm->addSelect('arriveDate', 'Příjezd:', Serviceteam::ARRIVE_DATES)
+            ->checkDefaultValue(false)
 			->setDefaultValue($this->item && $this->item->getArriveDate() ? $this->item->getArriveDate()->format('Y-m-d') : null)
 			->setRequired(true);
 		$frm->addSelect('departureDate', 'Odjezd:', Serviceteam::DEPARTURE_DATES)
+            ->checkDefaultValue(false)
 			->setDefaultValue($this->item && $this->item->getDepartureDate() ? $this->item->getDepartureDate()->format('Y-m-d') : null)
 			->setRequired(true);
 

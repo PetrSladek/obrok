@@ -72,26 +72,26 @@ class ServiceteamRegistrationForm extends Control
 
 		$frm->addText('firstName', 'Jméno')
 			->setDisabled()
-			->setDefaultValue($this->person->firstName);
+			->setDefaultValue($this->person->getFirstName());
 		$frm->addText('lastName', 'Příjmení')
 			->setDisabled()
-			->setDefaultValue($this->person->lastName);
+			->setDefaultValue($this->person->getLastName());
 		$frm->addText('nickName', 'Přezdívka')
-			->setDefaultValue($this->person->nickName);
+			->setDefaultValue($this->person->getNickName());
 
 		$frm->addDatepicker('birthdate', 'Datum narození')
-			->setDefaultValue($this->person->birthdate)
+			->setDefaultValue($this->person->getBirthdate())
 			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat Datum narození nebo je ve špatném formátu')
 			->addRule(Form::RANGE, 'Podle data narození vám 7.6.2019 ještě nebude 18 let (což porušuje podmínky účasti)', array(null, DateTime::from('7.6.2019')->modify('-18 years')))
 			->setAttribute('description', 'Tvoje Datum narození ve formátu dd.mm.yyyy');
 		$frm->addText('addressCity', 'Město')
-			->setDefaultValue($this->person->addressCity)
+			->setDefaultValue($this->person->getAddressCity())
 			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat Město')
 			->setAttribute('description', 'Město, kde aktuálně bydlíš nebo skautuješ');
 
 		$frm->addGroup('Kontaktní údaje');
 		$frm->addText('phone', 'Mobilní telefon')
-			->setDefaultValue($this->person->phone)
+			->setDefaultValue($this->person->getPhone())
 			->setEmptyValue('+420')
 			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat Mobilní telefon')
 			->addRule([$frm, 'isPhoneNumber'], 'Telefonní číslo je ve špatném formátu')
@@ -99,7 +99,7 @@ class ServiceteamRegistrationForm extends Control
 			->setAttribute('description', 'Mobilní telefon, na kterém budeš k zastižení během celé akce');
 
 		$frm->addText('email', 'E-mail')
-			->setDefaultValue($this->person->email)
+			->setDefaultValue($this->person->getEmail())
 			->setEmptyValue('@')
 			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat E-mail')
 			->addRule(Form::EMAIL, 'E-mailová adresa není platná')
@@ -119,10 +119,14 @@ class ServiceteamRegistrationForm extends Control
 	}
 
 
-	/**
-	 * Zpracování formuláře
-	 * @param Form $frm
-	 */
+    /**
+     * Zpracování formuláře
+     *
+     * @param Form $frm
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
 	public function processForm(Form $frm)
 	{
 		$values = $frm->getValues();

@@ -49,14 +49,21 @@ class Serviceteam extends Person
 	 * Zkušenosti/Dovednosti na výběr
 	 */
 	const EXPIRIENCES = [
-		"Program" => "Program",
-		"Bezpečnost" => "Bezpečnost",
-		"Sanita" => "Sanita",
-		"Zázemí" => "Zázemí",
-		"Jídlo" => "Jídlo",
-		"Logistika" => "Logistika",
-		"Registrace" => "Registrace"
+		"realizace programu" => "realizace programu",
+		"registrace lidí" => " registrace lidí",
+		"obsluha jídelny" => "obsluha jídelny",
+		"zajištění zázemí" => "zajištění zázemí",
+		"čistota na akci" => "čistota na akci",
+		"hlídání areálu" => "hlídání areálu",
 	];
+
+    /**
+     * Dietologické požadavky
+     * @Column(type="string", nullable=true)
+     *
+     * @var string|null
+     */
+    protected $diet;
 
 	/**
 	 * Dietologické požadavky
@@ -64,7 +71,7 @@ class Serviceteam extends Person
 	 *
 	 * @var array|null
 	 */
-	protected $diet = [];
+	protected $dietSpecification = [];
 
 	/**
 	 * Dietologické požadavky
@@ -75,15 +82,17 @@ class Serviceteam extends Person
 	protected $dietNote;
 
 	/**
-	 * Zkušenosti/Dovednosti na výběr
+	 * Diety na výběr
 	 */
 	const DIET = [
+	    "vegetariánská" => "vegetariánská",
 		"s masem" => "s masem",
 		"vegan" => "vegan",
-		"bez lepku" => "bez lepku",
-		"bez laktózy" => "bez laktózy",
-		"bez mléka" => "bez mléka",
 	];
+	const DIET_SPECIFICATION = [
+        "bez lepku" => "bez lepku",
+        "bez mléka" => "bez mléka",
+    ];
 
 	/**
 	 * Chce pomoct s pripravami?
@@ -101,7 +110,7 @@ class Serviceteam extends Person
      * Zůstane na bouračku na stavecku?
      * @Column(type="boolean")
      */
-    protected $stayToDestroy = false;
+    protected $speakEnglish = false;
 
 
 	/**
@@ -137,6 +146,7 @@ class Serviceteam extends Person
 	 * Výběr velikosti trika
 	 */
 	const TSHIRT_SIZES = [
+		"man-XS"    => 'Pánské XS',
 		"man-S"     => 'Pánské S',
 		"man-M"     => 'Pánské M',
 		"man-L"     => 'Pánské L',
@@ -158,17 +168,17 @@ class Serviceteam extends Person
 	 * Výběr datumu příjezdu
 	 */
 	const ARRIVE_DATES = [
-		'2019-06-19' => '19.6 neděle - Nadšenec',
-		'2019-06-20' => '20.6 pondělí - Stavěč',
-		'2019-06-21' => '21.6 úterý - Servisák',
+		'2019-05-20' => '20.5 pondělí - nadšenec',
+        '2019-05-21' => '21.5 úterý - stavěc',
+		'2019-05-22' => '22.5 středa - servisák',
 	];
 
 	/**
 	 * Výběr datumu odjezdu
 	 */
 	const DEPARTURE_DATES = [
-		'2019-06-26' => '26.6 neděle',
-		'2019-06-27' => '27.6 pondělí',
+		'2019-05-26' => '26.5 neděle',
+//		'2019-05-27' => '27.5 pondělí',
 	];
 
 	/**
@@ -244,20 +254,37 @@ class Serviceteam extends Person
 		$this->experienceNote = $experienceNote;
 	}
 
+    /**
+     * @return null|string
+     */
+    public function getDiet(): ?string
+    {
+        return $this->diet;
+    }
+
+    /**
+     * @param null|string $diet
+     */
+    public function setDiet(?string $diet): void
+    {
+        $this->diet = $diet;
+    }
+
+
 	/**
 	 * @return array|null
 	 */
-	public function getDiet()
+	public function getDietSpecification()
 	{
-		return $this->diet;
+		return $this->dietSpecification;
 	}
 
 	/**
-	 * @param array|null $diet
+	 * @param array|null $dietSpecification
 	 */
-	public function setDiet(array $diet)
+	public function setDietSpecification(array $dietSpecification)
 	{
-		$this->diet = $diet;
+		$this->dietSpecification = $dietSpecification;
 	}
 
 	/**
@@ -311,19 +338,19 @@ class Serviceteam extends Person
 	}
 
 	/**
-	 * @return mixed
+	 * @return bool
 	 */
-	public function getStayToDestroy()
+	public function isSpeakEnglish() : bool
 	{
-		return $this->stayToDestroy;
+		return $this->speakEnglish;
 	}
 
 	/**
-	 * @param mixed $stayToDestroy
+	 * @param bool $speakEnglish
 	 */
-	public function setStayToDestroy($stayToDestroy)
+	public function setSpeakEnglish(bool $speakEnglish = true) : void
 	{
-		$this->stayToDestroy = $stayToDestroy;
+		$this->speakEnglish = $speakEnglish;
 	}
 
 	/**

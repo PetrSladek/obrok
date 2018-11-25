@@ -31,22 +31,14 @@
                         <td>Velikost trička</td>
                         <td><strong>{$me->getTshirtSizeName()}</strong></td>
                     </tr>
-                    {*<tr>
-                        <td>Příjezd</td>
-                        <td><strong>{$me->getArrivesToBuilding() ? 'Přijedu na stavečku od 4.6.2019' : 'Přijedu až na Obrok'}</strong></td>
-                    </tr>
-                    <tr>
-                        <td>Odjezd</td>
-                        <td><strong>{$me->getStayToDestroy() ? 'Zůstanu i na bourání v neděli' : 'Nemůžu zůstat na bourání tábořiště'}</strong></td>
-                    </tr>*}
                     <tr>
                         <td>Příjezd</td>
                         <td><strong>{$me->getArriveDateTitle()}</strong></td>
                     </tr>
-                    <tr>
-                        <td>Odjezd</td>
-                        <td><strong>{$me->getDepartureDateTitle()}</strong></td>
-                    </tr>
+                    {*<tr>*}
+                        {*<td>Odjezd</td>*}
+                        {*<td><strong>{$me->getDepartureDateTitle()}</strong></td>*}
+                    {*</tr>*}
                     <tr>
                         <td>Zkušenosti / Dovednosti</td>
                         <td>
@@ -57,15 +49,15 @@
                     <tr>
                         <td>Strava</td>
                         <td>
-                            Vegetariánská
-                            <strong n:ifcontent>{$me->getDiet()|implode}<br /></strong>
+                            <strong n:ifcontent>{$me->getDiet()}</strong>
+                            <strong n:ifcontent>{$me->getDietSpecification()|implode}</strong>
                             <strong n:ifcontent>{$me->getDietNote()}</strong>
                         </td>
                     </tr>
                     <tr>
                         <td>Hanbook</td>
                         <td>
-                            {if $me->getWantHandbook()}Chci tištěný handbook{else}Nechci tištěný handbook{/if}
+                            <strong>{if $me->getWantHandbook()}Chci tištěný handbook{else}Nechci tištěný handbook{/if}</strong>
                         </td>
                     </tr>
                 </table>

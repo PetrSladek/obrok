@@ -6,6 +6,7 @@ use App\Model\Entity\Serviceteam;
 use App\Model\Repositories\ServiceteamRepository;
 use Doctrine\ORM\EntityManager;
 use Nette\Application\UI\Control;
+use Nette\Utils\Html;
 
 class ServiceteamAdditionalForm extends Control
 {
@@ -65,49 +66,80 @@ class ServiceteamAdditionalForm extends Control
 
 		$frm = new Form();
 
-		$frm->addGroup('Doplňující údaje, aneb prozraď nám něco o sobě, ať ti můžeme najít to nejlepší zařazení ;-)');
+		$frm->addGroup('Příjezd a odjezd');
 
 		$frm->addSelect('arriveDate', 'Přijedu:', Serviceteam::ARRIVE_DATES)
+            ->checkDefaultValue(false)
 			->setDefaultValue($this->person->getArriveDate() ? $this->person->getArriveDate()->format('Y-m-d') : null)
+            ->setOption('description', Html::el('')
+                ->addHtml('<strong>Pro nadšence a stavěče budou na pondělní a úterní večer nachytané posezení s dobrým jídlem</strong>')
+            )
 			->setRequired(true);
+
 		$frm->addSelect('departureDate', 'Odjedu:', Serviceteam::DEPARTURE_DATES)
-			->setDefaultValue($this->person->getDepartureDate() ? $this->person->getDepartureDate()->format('Y-m-d') : null)
+            ->checkDefaultValue(false)
+            ->setDisabled(true)
+			->setDefaultValue('2019-05-26')
+            ->setOption('description', Html::el('')
+                ->addHtml('<span>S odjezdem počtej v neděli odpoledne, budeme bourat celé tábořiště. Jako odměnu máme nachystaný skvělý nedělní oběd s poděkováním!</span>')
+            )
 			->setRequired(true);
 
-//		$frm->addCheckbox('arrivesToBuilding', 'Přijedu na stavěcí týden od 4.6.2019')
-//			->setDefaultValue((bool) $this->person->getArrivesToBuilding());
-//        $frm->addCheckbox('stayToDestroy', 'Zůstanu na bourání tábořiště v neděli')
-//            ->setDefaultValue((bool) $this->person->getStayToDestroy());
 
-		$frm->addCheckbox('helpPreparation', 'Mám zájem a možnost pomoct s přípravami Obrok 2019 už před akcí');
+//		$frm->addCheckbox('helpPreparation', 'Mám zájem a možnost pomoct s přípravami Obrok 2019 už před akcí');
+//      $frm->addCheckbox('helpSzt', 'Mám zdravotnické vzdělání a chci pomoct SZT (Skautský záchranný tým)');
+//      $frm->addCheckbox('helpSos', 'Mám zájem pomáhat SOSce (Skautská ochraná služba)');
 
-//        $frm->addCheckbox('helpSzt', 'Mám zdravotnické vzdělání a chci pomoct SZT (Skautský záchranný tým)');
-//        $frm->addCheckbox('helpSos', 'Mám zájem pomáhat SOSce (Skautská ochraná služba)');
+        $frm->addGroup('Činnosti');
 
-		$frm->addCheckboxList('experience', 'Zkušenosti / Dovednosti', Serviceteam::EXPIRIENCES)
+		$frm->addCheckboxList('experience', 'Zajímá mě:', Serviceteam::EXPIRIENCES)
 			->checkDefaultValue(false)
 			->setDefaultValue($this->person->getExperience() ?: []);
-		$frm->addText('experienceNote', 'Zkušenosti / Dovednosti')
+		$frm->addText('experienceNote', 'Jiné')
 			->setDefaultValue($this->person->getExperienceNote())
 			->setAttribute('class', 'input-xxlarge');
+        $frm->addCheckbox('speakEnglish', "Domluvím se anglicky")
+            ->setDefaultValue($this->person->isSpeakEnglish());
 
-		$frm->addCheckboxList('diet', 'Strava (vegetariánská)', Serviceteam::DIET)
+        $frm->addGroup('Strava');
+
+		$frm->addSelect('diet', 'Strava', Serviceteam::DIET)
 			->checkDefaultValue(false)
-			->setDefaultValue($this->person->getDiet() ?: []);
+			->setDefaultValue($this->person->getDiet() ?: null);
+
+        $frm->addCheckboxList('dietSpecification', '', Serviceteam::DIET_SPECIFICATION)
+            ->checkDefaultValue(false)
+            ->setDefaultValue($this->person->getDietSpecification() ?: []);
+
 		$frm->addText('dietNote', '')
-			->setAttribute('placeholder', 'Jiné')
+			->setAttribute('placeholder', 'Jiné omezení')
 			->setDefaultValue($this->person->getDietNote());
 
-		$frm->addTextArea('health', 'Zdravotní omezení a alergie')
+
+        $frm->addGroup('Ostatní');
+
+        $frm->addSelect('wantHandbook', 'Handbook',  [
+                0 => 'Stačí mi elektronický, šetřím naše lesy',
+                1 => 'Potřebuji i papírovou verzi'
+            ])
+            ->setDefaultValue(0);
+
+
+        $frm->addTextArea('health', 'Zdravotní omezení a alergie')
 			->setDefaultValue($this->person->getHealth())
 			->setAttribute('class', 'input-xxlarge')
 			->setOption('description', 'Máš nějaké zdravotní omezení či alergii?')
 			->setAttribute('data-placement', 'right');
 
+        $frm->addSelect('tshirtSize', 'Velikost případného trička', Serviceteam::TSHIRT_SIZES)
+            ->setDefaultValue($this->person->getTshirtSize())
+            ->setOption('description', 'Tričko zatím bohužel uplně nemůžeme slíbit. Nicméně pravděpodobně bude :)')
+            ->setDefaultValue("man-L"); // L
+
 		$frm->addTextArea('note', 'Poznámka')
 			->setDefaultValue($this->person->getNote())
 			->setAttribute('class', 'input-xxlarge')
-			->setOption('description', 'Chceš nám něco vzkázat? Jsi už domluvený k někomu do týmu?')
+			->setOption('description', 'Chceš nám něco vzkázat? Jsi už domluvený k někomu do týmu nebo podobně?')
 			->setAttribute('data-placement', 'right');
 
 //        $frm->addGroup('Fotografie');
@@ -123,14 +155,8 @@ class ServiceteamAdditionalForm extends Control
 //            ->setDefaultValue( new CropImage(Serviceteam::$defaultAvatar) )
 //            ->addRule(Form::FILLED, 'Musíš nahrát fotku');
 
-		$frm->addCheckbox('wantHandbook', 'Chci dostat tištěný handbook (sešit s programem, informacemi apod.)')
-			->setDefaultValue(false);
 
-		$frm->addGroup('Tričko');
-		$frm->addSelect('tshirtSize', 'Velikost případného trička', Serviceteam::TSHIRT_SIZES)
-			->setDefaultValue($this->person->getTshirtSize())
-			->setOption('description', 'Tričko zatím bohužel uplně nemůžeme slíbit. Nicméně pravděpodobně bude :)')
-			->setDefaultValue("man-L"); // L
+
 
 		$frm->addSubmit('send', 'Dokončit registraci')
 			->setAttribute('class', 'btn btn-primary');
@@ -157,7 +183,7 @@ class ServiceteamAdditionalForm extends Control
 //            $values->avatar->filename = $this->images->saveImage( $values->avatar->getUploadedFile(), 'avatars' );
 
 		$values->arriveDate = $values->arriveDate ? new \DateTimeImmutable($values->arriveDate) : null;
-		$values->departureDate = $values->departureDate ? new \DateTimeImmutable($values->departureDate) : null;
+//		$values->departureDate = $values->departureDate ? new \DateTimeImmutable($values->departureDate) : null;
 
 		foreach ($values as $key => $value)
 		{

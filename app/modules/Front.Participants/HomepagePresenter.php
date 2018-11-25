@@ -30,7 +30,7 @@ class HomepagePresenter extends ParticipantAuthBasePresenter
 	public $groups;
 
 	/** @var Participant */
-	public $participant;
+	public $person;
 
 	/** @var IGroupFormFactory @inject */
 	public $groupFormFactory;
@@ -118,17 +118,17 @@ class HomepagePresenter extends ParticipantAuthBasePresenter
         }
 
 
-		$this->participant = $this->participants->find($id);
-		if (!$this->participant)
+		$this->person = $this->participants->find($id);
+		if (!$this->person)
 		{
 			$this->error("Item not found");
 		}
-		if ($this->participant->group !== $this->me->group)
+		if ($this->person->group !== $this->me->group)
 		{
 			$this->error("Access denied");
 		}
 
-		$this->participant->setConfirmed(true);
+		$this->person->setConfirmed(true);
 		$this->em->flush();
 
 		$this->isAjax() ? $this->redrawControl() : $this->redirect('this');
@@ -145,17 +145,17 @@ class HomepagePresenter extends ParticipantAuthBasePresenter
 	public function handleGoOut($id)
 	{
 
-		$this->participant = $this->participants->find($id);
-		if (!$this->participant)
+		$this->person = $this->participants->find($id);
+		if (!$this->person)
 		{
 			$this->error("Item not found");
 		}
-		if ($this->participant->group !== $this->me->group)
+		if ($this->person->group !== $this->me->group)
 		{
 			$this->error("Access denied");
 		}
 
-		$this->participant->setConfirmed(false);
+		$this->person->setConfirmed(false);
 		$this->em->flush();
 
 		$this->isAjax() ? $this->redrawControl() : $this->redirect('this');
@@ -174,16 +174,16 @@ class HomepagePresenter extends ParticipantAuthBasePresenter
 	{
 		if ($id)
 		{
-			$this->participant = $this->participants->find($id);
-			if (!$this->participant)
+			$this->person = $this->participants->find($id);
+			if (!$this->person)
 			{
 				$this->error('Účastník neexistuje');
 			}
-			if ($this->participant->group->getId() != $this->me->group->getId())
+			if ($this->person->group->getId() != $this->me->group->getId())
 			{
 				$this->error('Účastník není z vaší skupiny');
 			}
-			if (!($this->participant->getId() == $id || $this->me->isAdmin()))
+			if (!($this->person->getId() == $id || $this->me->isAdmin()))
 			{
 				$this->error('Nejste administrator skupiny, muzete editovat jen sebe.');
 			}
@@ -197,7 +197,7 @@ class HomepagePresenter extends ParticipantAuthBasePresenter
 			$this->error('Členy může přidávat jen administrátor skupiny');
 		}
 
-		$this->template->item = $this->participant;
+		$this->template->item = $this->person;
 	}
 
 
@@ -213,16 +213,16 @@ class HomepagePresenter extends ParticipantAuthBasePresenter
 		$frm->addGroup('Osobní informace');
 
 		$frm->addText('firstName', 'Jméno')
-			->setDefaultValue($this->participant ? $this->participant->getFirstName() : null)
+			->setDefaultValue($this->person ? $this->person->getFirstName() : null)
 			->setRequired();
 		$frm->addText('lastName', 'Příjmení')
-			->setDefaultValue($this->participant ? $this->participant->getLastName() : null)
+			->setDefaultValue($this->person ? $this->person->getLastName() : null)
 			->setRequired();
 		$frm->addText('nickName', 'Přezdívka')
-			->setDefaultValue($this->participant ? $this->participant->getNickName() : null);
+			->setDefaultValue($this->person ? $this->person->getNickName() : null);
 
 		$frm->addDatepicker('birthdate', 'Datum narození:')
-			->setDefaultValue($this->participant ? $this->participant->getBirthdate() : null)
+			->setDefaultValue($this->person ? $this->person->getBirthdate() : null)
 			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat Datum narození nebo je ve špatném formátu (musí být dd.mm.yyyy)')
 			->addRule(Form::RANGE, 'Podle data narození vám 7.6.2019 ještě nebude 15 let (což porušuje podmínky účasti)', array(null, DateTime::from('7.6.2019')->modify('-15 years')))
 			->addRule(Form::RANGE, 'Podle data narození vám 7.6.2019 bude už více než 25 let (což porušuje podmínky účasti)', array(DateTime::from('7.6.2019')->modify('-25 years'), null));
@@ -230,30 +230,30 @@ class HomepagePresenter extends ParticipantAuthBasePresenter
 //            ->addRule(callback('Participant','validateAge'), 'Věk účastníka Obroku 2015 musí být od 15 do 24 let');
 
 		$frm->addRadioList('gender', 'Pohlaví', array('male' => 'muž', 'female' => 'žena'))
-			->setDefaultValue($this->participant ? $this->participant->getGender() : null)
+			->setDefaultValue($this->person ? $this->person->getGender() : null)
 			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat %label');
 
 		$frm->addGroup('Trvalé bydliště');
 		$frm->addText('addressStreet', 'Ulice a čp.')
-			->setDefaultValue($this->participant ? $this->participant->getAddressStreet() : null)
+			->setDefaultValue($this->person ? $this->person->getAddressStreet() : null)
 			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat %label');
 		$frm->addText('addressCity', 'Město')
-			->setDefaultValue($this->participant ? $this->participant->getAddressCity() : null)
+			->setDefaultValue($this->person ? $this->person->getAddressCity() : null)
 			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat %label');
 		$frm->addText('addressPostcode', 'PSČ')
-			->setDefaultValue($this->participant ? $this->participant->getAddressPostcode() : null)
+			->setDefaultValue($this->person ? $this->person->getAddressPostcode() : null)
 			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat %label');
 
 		$frm->addGroup('Kontaktní údaje');
 		$frm->addText('email', 'E-mail')
-			->setDefaultValue($this->participant ? $this->participant->getEmail() : null)
+			->setDefaultValue($this->person ? $this->person->getEmail() : null)
 			->setEmptyValue('@')
 			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat E-mail')
 			->addRule(Form::EMAIL, 'E-mailová adresa není platná')
 			->setAttribute('title', 'E-mail, který pravidelně vybíráš a můžem Tě na něm kontaktovat. Budou Ti chodit informace atd..')
 			->setAttribute('data-placement', 'right');
 		$frm->addText('phone', 'Mobilní telefon')
-			->setDefaultValue($this->participant ? $this->participant->getPhone() : null)
+			->setDefaultValue($this->person ? $this->person->getPhone() : null)
 			->setEmptyValue('+420')
 			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat Mobilní telefon')
 			->addRule([$frm, 'isPhoneNumber'], 'Telefonní číslo je ve špatném formátu')
@@ -262,18 +262,21 @@ class HomepagePresenter extends ParticipantAuthBasePresenter
 
 		$frm->addGroup('Zdravotní omezení');
 		$frm->addTextArea('health', 'Zdravotní omezení a alergie')
-			->setDefaultValue($this->participant ? $this->participant->getHealth() : null);
+			->setDefaultValue($this->person ? $this->person->getHealth() : null);
 
 		$frm->addGroup('Další infromace');
-		$frm->addCheckbox('wantHandbook', 'Chci dostat tištěný handbook (sešit s programem, informacemi apod.)')
-			->setDefaultValue($this->participant ? $this->participant->getWantHandbook() : null);
+        $frm->addSelect('wantHandbook', 'Handbook',  [
+                0 => 'Stačí mi elektronický, šetřím naše lesy',
+                1 => 'Potřebuji i papírovou verzi'
+            ])
+            ->setDefaultValue($this->person ? $this->person->getWantHandbook() : 0);
 
 
 		// admin
 		if ($this->me->isAdmin())
 		{
 			$frm->addCheckbox('admin', 'Administrátor skupiny')
-				->setDefaultValue($this->participant ? (bool) $this->participant->isAdmin() : null);
+				->setDefaultValue($this->person ? (bool) $this->person->isAdmin() : null);
 		}
 
 		$frm->addSubmit('send', 'Uložit údaje účastníka')
@@ -285,16 +288,16 @@ class HomepagePresenter extends ParticipantAuthBasePresenter
 
 		$frm->onSuccess[] = [$this, 'frmParticipantSubmitted'];
 
-		if ($this->participant)
+		if ($this->person)
 		{
 
-			if ($this->participant->getId() != $this->me->getId())
+			if ($this->person->getId() != $this->me->getId())
 			{
 				$frm['email']->setAttribute('title', 'E-mail, který pravidelně vybírá. Budou tam chodit informace atd..');
 				$frm['phone']->setAttribute('title', 'Mobilní telefon, na kterém bude k zastižení během celé akce');
 			}
-			$frm['firstName']->setDisabled()->setRequired(false)->setDefaultValue($this->participant->getFirstName());
-			$frm['lastName']->setDisabled()->setRequired(false)->setDefaultValue($this->participant->getLastName());
+			$frm['firstName']->setDisabled()->setRequired(false)->setDefaultValue($this->person->getFirstName());
+			$frm['lastName']->setDisabled()->setRequired(false)->setDefaultValue($this->person->getLastName());
 		}
 
 		return $frm;
@@ -316,25 +319,25 @@ class HomepagePresenter extends ParticipantAuthBasePresenter
 
 		$values = $frm->getValues();
 
-		if (!$this->participant)
+		if (!$this->person)
 		{
-			$this->participant = new Participant();
-			$this->participant->setGroup($this->me->getGroup());
+			$this->person = new Participant();
+			$this->person->setGroup($this->me->getGroup());
 
-			$this->em->persist($this->participant);
+			$this->em->persist($this->person);
 		}
 
 		foreach ($values as $key => $value)
 		{
-			$this->participant->$key = $value;
+			$this->person->$key = $value;
 		}
 
 		$this->em->flush();
 
 		// Pokud sem to já aktualizuju objekt me
-		if ($this->me->getId() == $this->participant->getId())
+		if ($this->me->getId() == $this->person->getId())
 		{
-			$this->me = $this->participant;
+			$this->me = $this->person;
 		}
 
 		$this->flashMessage('Údaje úspěšně upraveny', 'success');

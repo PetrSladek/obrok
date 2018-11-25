@@ -18,6 +18,7 @@ use Doctrine\ORM\EntityManager;
 use Nette\Application\UI\Control;
 use Nette\Http\FileUpload;
 use Nette\Utils\DateTime;
+use Nette\Utils\Html;
 
 /**
  * Class ServiceteamForm
@@ -136,60 +137,84 @@ class ServiceteamForm extends Control
 			//->addRule(Form::REGEXP,'Telefonní číslo je ve špatném formátu','/^[+0-9. ()-]*$/ui')
 			->setOption('description', 'Mobilní telefon, na kterém budeš k zastižení během celé akce');
 
-		$frm->addGroup('Doplňující údaje, aneb prozraď nám něco o sobě, ať ti můžeme najít to nejlepší zařazení ;-)');
+		$frm->addGroup('Příjezd a odjezd');
 
-		$frm->addSelect('arriveDate', 'Přijedu:', Serviceteam::ARRIVE_DATES)
-			->setDefaultValue($this->person->getArriveDate() ? $this->person->getArriveDate()->format('Y-m-d') : null)
-			->setRequired(true);
-		$frm->addSelect('departureDate', 'Odjedu:', Serviceteam::DEPARTURE_DATES)
-			->setDefaultValue($this->person->getDepartureDate() ? $this->person->getDepartureDate()->format('Y-m-d') : null)
-			->setRequired(true);
+        $frm->addSelect('arriveDate', 'Přijedu:', Serviceteam::ARRIVE_DATES)
+            ->checkDefaultValue(false)
+            ->setDefaultValue($this->person->getArriveDate() ? $this->person->getArriveDate()->format('Y-m-d') : null)
+            ->setOption('description', Html::el('')
+                ->addHtml('<strong>Pro nadšence a stavěče budou na pondělní a úterní večer nachytané posezení s dobrým jídlem</strong>')
+            )
+            ->setRequired(true);
 
-//        $frm->addCheckbox('arrivesToBuilding', 'Přijedu na stavěcí týden od 4.6.2019')
-//            ->setDefaultValue((bool) $this->person->getArrivesToBuilding());
-//        $frm->addCheckbox('stayToDestroy', 'Zůstanu na bourání tábořiště v neděli')
-//            ->setDefaultValue((bool) $this->person->getStayToDestroy());
+        $frm->addSelect('departureDate', 'Odjedu:', Serviceteam::DEPARTURE_DATES)
+            ->checkDefaultValue(false)
+            ->setDisabled(true)
+            ->setDefaultValue('2019-05-26')
+            ->setOption('description', Html::el('')
+                ->addHtml('<span>S odjezdem počtej v neděli odpoledne, budeme bourat celé tábořiště. Jako odměnu máme nachystaný skvělý nedělní oběd s poděkováním!</span>')
+            )
+            ->setRequired(true);
 
-		$frm->addCheckbox('helpPreparation', 'Mám zájem a možnost pomoct s přípravami Obroku 2015 už před akcí')
-			->setDefaultValue($this->person->getHelpPreparation());
+//		$frm->addCheckbox('helpPreparation', 'Mám zájem a možnost pomoct s přípravami Obroku 2019 už před akcí')
+//			->setDefaultValue($this->person->getHelpPreparation());
+//		$frm->addCheckbox('helpPreparation', 'Mám zájem a možnost pomoct s přípravami Obrok 2019 už před akcí');
+//      $frm->addCheckbox('helpSzt', 'Mám zdravotnické vzdělání a chci pomoct SZT (Skautský záchranný tým)');
+//      $frm->addCheckbox('helpSos', 'Mám zájem pomáhat SOSce (Skautská ochraná služba)');
 
-		$frm->addCheckboxList('experience', 'Zkušenosti / Dovednosti', Serviceteam::EXPIRIENCES)
-			->checkDefaultValue(false)
-			->setDefaultValue($this->person->getExperience() ?: []);
-		$frm->addText('experienceNote', '')
-			->setAttribute('placeholder', 'Jiné')
-			->setDefaultValue($this->person->getExperienceNote());
+        $frm->addGroup('Činnosti');
 
-		$frm->addCheckboxList('diet', 'Strava (vegetariánská)', Serviceteam::DIET)
-			->checkDefaultValue(false)
-			->setDefaultValue($this->person->getDiet() ?: []);
-		$frm->addText('dietNote', '')
-			->setAttribute('placeholder', 'Jiné')
-			->setDefaultValue($this->person->getDietNote());
+        $frm->addCheckboxList('experience', 'Zajímá mě:', Serviceteam::EXPIRIENCES)
+            ->checkDefaultValue(false)
+            ->setDefaultValue($this->person->getExperience() ?: []);
+        $frm->addText('experienceNote', 'Jiné')
+            ->setDefaultValue($this->person->getExperienceNote())
+            ->setAttribute('class', 'input-xxlarge');
+        $frm->addCheckbox('speakEnglish', "Domluvím se anglicky")
+            ->setDefaultValue($this->person->isSpeakEnglish());
+
+        $frm->addGroup('Strava');
+
+        $frm->addSelect('diet', 'Strava', Serviceteam::DIET)
+            ->checkDefaultValue(false)
+            ->setDefaultValue($this->person->getDiet() ?: null);
+
+        $frm->addCheckboxList('dietSpecification', '', Serviceteam::DIET_SPECIFICATION)
+            ->checkDefaultValue(false)
+            ->setDefaultValue($this->person->getDietSpecification() ?: []);
+
+        $frm->addText('dietNote', '')
+            ->setAttribute('placeholder', 'Jiné omezení')
+            ->setDefaultValue($this->person->getDietNote());
+
+        $frm->addGroup('Ostatní');
+
+        $frm->addSelect('wantHandbook', 'Handbook',  [
+            0 => 'Stačí mi elektronický, šetřím naše lesy',
+            1 => 'Potřebuji i papírovou verzi'
+        ])
+            ->setDefaultValue($this->person ? $this->person->getWantHandbook() : 0);
 
 		$frm->addTextArea('health', 'Zdravotní omezení a alergie')
 			->setDefaultValue($this->person->getHealth())
 			->setOption('description', 'Máš nějaké zdravotní omezení či alergii?');
 
+
+        $frm->addSelect('tshirtSize', 'Velikost případného trička', Serviceteam::TSHIRT_SIZES)
+            ->setDefaultValue($this->person->getTshirtSize())
+            ->setOption('description', 'Tričko zatím bohužel úplně nemůžeme slíbit. Nicméně pravděpodobně bude :)');
+
+        $frm->addCroppie('avatar', 'Fotka')
+            ->setImageUrl($this->person->getAvatar() ? $this->imageService->getImageUrl($this->person->getAvatar()) : null)
+            ->setEmptyImageUrl($this->imageService->getImageUrl($this->person->isMale() ? 'avatar_boy.jpg' : 'avatar_girl.jpg'))
+            ->setDefaultValue($this->person->getAvatarCrop() ?: null);
+
 		$frm->addTextArea('note', 'Poznámka')
 			->setDefaultValue($this->person->getNote())
 			->setOption('description', 'Chceš nám něco vzkázat? Jsi už domluvený k někomu do týmu?');
 
-		$frm->addCheckbox('wantHandbook', 'Chci dostat tištěný handbook (sešit s programem, informacemi apod.)')
-			->setDefaultValue($this->person->getWantHandbook());
-
-        $frm->addGroup('Fotografie');
-
-		$frm->addCroppie('avatar', 'Fotka')
-			->setImageUrl($this->person->getAvatar() ? $this->imageService->getImageUrl($this->person->getAvatar()) : null)
-            ->setEmptyImageUrl($this->imageService->getImageUrl($this->person->isMale() ? 'avatar_boy.jpg' : 'avatar_girl.jpg'))
-			->setDefaultValue($this->person->getAvatarCrop() ?: null);
 
 
-		$frm->addGroup('Tričko');
-		$frm->addSelect('tshirtSize', 'Velikost případného trička', Serviceteam::TSHIRT_SIZES)
-			->setDefaultValue($this->person->getTshirtSize())
-			->setOption('description', 'Tričko zatím bohužel úplně nemůžeme slíbit. Nicméně pravděpodobně bude :)');
 
 		$frm->addSubmit('send', 'Uložit údaje')
 			->setAttribute('class', 'btn btn-primary');
@@ -246,7 +271,7 @@ class ServiceteamForm extends Control
 		}
 
 		$values->arriveDate = $values->arriveDate ? new \DateTimeImmutable($values->arriveDate) : null;
-		$values->departureDate = $values->departureDate ? new \DateTimeImmutable($values->departureDate) : null;
+//		$values->departureDate = $values->departureDate ? new \DateTimeImmutable($values->departureDate) : null;
 
 		// naplnime data
 		foreach ($values as $key => $value)

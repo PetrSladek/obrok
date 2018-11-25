@@ -171,8 +171,12 @@ class ParticipantRegistrationForm extends Control
 			->setDefaultValue($this->person->getHealth());
 
 		$frm->addGroup('Souhlas');
-		$frm->addCheckbox('wantHandbook', 'Chci dostat tištěný handbook (sešit s programem, informacemi apod.)')
-			->setDefaultValue(false);
+        $frm->addSelect('wantHandbook', 'Handbook',  [
+                0 => 'Stačí mi elektronický, šetřím naše lesy',
+                1 => 'Potřebuji i papírovou verzi'
+            ])
+            ->setDefaultValue(0);
+
 		$frm->addCheckbox('conditions', Html::el()->setHtml('Souhlasím s <a target="_blank" href="http://www.obrok19.cz/registrace/">podmínkami účasti na akci</a> a s <a target="_blank" href="http://www.obrok19.cz/obecna-ustanoveni-storno-podminky/">obecnými ustanoveními</a>'))
 			->addRule($frm::FILLED, 'Musíte souhlasit s podmínkami účasti')
 			->setOmitted();
