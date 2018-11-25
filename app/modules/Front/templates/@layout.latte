@@ -85,7 +85,7 @@
 	<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
 
 	<!-- Custom styles for this template-->
-	<link href="/assets/css/style.css?v=2" rel="stylesheet">
+	<link href="/assets/css/style.css?v=3" rel="stylesheet">
 	<link href="/assets/css/reg-style.css?v=2" rel="stylesheet">
 	<link href="/assets/css/font-awesome.min.css" rel="stylesheet">
 
@@ -170,71 +170,6 @@
 	</div>
 </section>
 
-
-{*<section id="odpocetBox">
-	<div class="container">
-		<div class="col-lg-12 text-center">
-             <h2 class="section-heading tmavy">7.–11. 6. 2019<br>Trutnov</h2>
-        </div>
-		<div class="col-lg-12 text-center">
-			<script>
-				var vterina = 1000;
-				var minuta = vterina * 60;
-				var hodina = minuta * 60;
-				var den = hodina * 24;
-				var rok = den * 365.24219;
-
-				var slova = {
-					roku: ["rok", "roky", "let"],
-					dnu: ["den", "dny", "dnů"],
-					hodin: ["hodina", "hodiny", "hodin"],
-					minut: ["minuta", "minuty", "minut"],
-					vterin: ["vteřina", "vteřiny", "vteřin"]
-				};
-
-				function sklonovani(pocet, co) {
-					if (pocet == 1) return slova[co][0];
-					if (pocet < 5 && pocet > 0) return slova[co][1];
-					return slova[co][2];
-				}
-
-				function odpocet(el) {
-					var konec = new Date(el.getAttribute("data-konec"));
-					var ted = new Date();
-					var rozdil = konec - ted;
-					if (rozdil < vterina) {
-						el.innerHTML = el.getAttribute("data-hlaska");
-						return;
-					}
-					var zbyva = {
-						roku: Math.floor(rozdil / rok),
-						dnu: Math.floor(rozdil % rok / den),
-						hodin: Math.floor((rozdil % den) / hodina),
-						minut: Math.floor((rozdil % hodina) / minuta),
-						vterin: Math.floor((rozdil % minuta) / vterina)
-					};
-
-					var vypis = el.getAttribute("data-zbyva");
-					for (co in zbyva) {
-						var pocet = zbyva[co];
-						if (pocet > 0) vypis += " " + pocet + "&nbsp;" + sklonovani(pocet, co);
-
-					}
-
-					el.innerHTML = vypis;
-					setTimeout(function() {
-						odpocet(el);
-					}, vterina);
-				}
-			</script> <br>
-			<h2 class="section-heading tmavy mensi" style="color: white;">Do Obroku 2019 zbývá:</h2>
-			<p style="color: white;" id="odpocet" data-konec="6/7/2019 14:00:00" data-hlaska="Obrok právě probíhá" data-zbyva=""></p>
-			<script>
-				odpocet(document.getElementById('odpocet'));
-			</script>
-		</div>
-	</div>
-</section>*}
 
 <div id="footerwrap-fake">
 </div>

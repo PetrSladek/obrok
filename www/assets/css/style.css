@@ -258,9 +258,11 @@ p.zapati{
 	padding-top: 11px;
 	}
 	
-#odpocet{
+#odpocet,
+#odpocet-ucastnici
+{
 	font-size: 30px;
-	}
+}
 
 @media (max-width: 992px) {
 p.zapati {

@@ -1,10 +1,75 @@
 
 {block content}
 
+<section id="odpocetBox">
+    <div class="container">
+        <div class="col-lg-12 text-center">
+            <script>
+                var vterina = 1000;
+                var minuta = vterina * 60;
+                var hodina = minuta * 60;
+                var den = hodina * 24;
+                var rok = den * 365.24219;
+
+                var slova = {
+                    roku: ["rok", "roky", "let"],
+                    dnu: ["den", "dny", "dnů"],
+                    hodin: ["hodina", "hodiny", "hodin"],
+                    minut: ["minuta", "minuty", "minut"],
+                    vterin: ["vteřina", "vteřiny", "vteřin"]
+                };
+
+                function sklonovani(pocet, co) {
+                    if (pocet == 1) return slova[co][0];
+                    if (pocet < 5 && pocet > 0) return slova[co][1];
+                    return slova[co][2];
+                }
+
+                function odpocet(el) {
+                    var konec = new Date(el.getAttribute("data-konec"));
+                    var ted = new Date();
+                    var rozdil = konec - ted;
+                    if (rozdil < vterina) {
+                        el.innerHTML = el.getAttribute("data-hlaska");
+                        return;
+                    }
+                    var zbyva = {
+                        roku: Math.floor(rozdil / rok),
+                        dnu: Math.floor(rozdil % rok / den),
+                        hodin: Math.floor((rozdil % den) / hodina),
+                        minut: Math.floor((rozdil % hodina) / minuta),
+                        vterin: Math.floor((rozdil % minuta) / vterina)
+                    };
+
+                    var vypis = el.getAttribute("data-zbyva");
+                    for (co in zbyva) {
+                        var pocet = zbyva[co];
+                        if (pocet > 0) vypis += " " + pocet + "&nbsp;" + sklonovani(pocet, co);
+
+                    }
+
+                    el.innerHTML = vypis;
+                    setTimeout(function() {
+                        odpocet(el);
+                    }, vterina);
+                }
+            </script> <br>
+            <h2 class="section-heading tmavy mensi">Do začátku registrace zbývá:</h2>
+            <p id="odpocet" data-konec="2018-12-01 09:00:00" data-hlaska="Registrace servis týmu spuštěna" data-zbyva="Do registrace servis týmu: "></p>
+            <p id="odpocet-ucastnici" data-konec="2018-12-03 09:00:00" data-hlaska="Registrace účastníku spuštěna" data-zbyva="Do registrace učastníků: "></p>
+            <script>
+                odpocet(document.getElementById('odpocet'));
+                odpocet(document.getElementById('odpocet-ucastnici'));
+            </script>
+        </div>
+    </div>
+</section>
+
 <div class="row" n:if="!$user->isLoggedIn()">
     <div class="col-sm-6 col-md-offset-4">
-        <br /><br /><br /><br /><br />
+        {*<br /><br /><br /><br /><br />*}
         <a n:href="skautisLogin-open!" class="btn btn-success btn-block btn-lg">Přihlásit se přes SkautIS</a>
         <br /><br /><br /><br /><br />
     </div>
 </div>
+
