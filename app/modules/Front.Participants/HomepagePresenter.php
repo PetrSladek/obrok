@@ -271,6 +271,7 @@ class HomepagePresenter extends ParticipantAuthBasePresenter
                 0 => 'Stačí mi elektronický, šetřím naše lesy',
                 1 => 'Potřebuji i papírovou verzi'
             ])
+            ->checkDefaultValue(false)
             ->setDefaultValue($this->person ? $this->person->getWantHandbook() : 0);
 
 
