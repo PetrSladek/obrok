@@ -134,8 +134,8 @@ class ParticipantRegistrationForm extends Control
 		$frm->addDatepicker('birthdate', 'Datum narození:')
 			->setDefaultValue($this->person->getBirthdate())
 			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat Datum narození nebo je ve špatném formátu (musí být dd.mm.yyyy)')
-			->addRule(Form::RANGE, 'Podle data narození vám 7.6.2019 ještě nebude 15 let (což porušuje podmínky účasti)', array(null, DateTime::from('7.6.2019')->modify('-15 years')))
-			->addRule(Form::RANGE, 'Podle data narození vám 7.6.2019 bude už více než 25 let (což porušuje podmínky účasti)', array(DateTime::from('7.6.2019')->modify('-25 years'), null));
+			->addRule(Form::RANGE, 'Podle data narození Vám 22.5.2019 ještě nebude 15 let (což porušuje podmínky účasti)', array(null, DateTime::from('22.5.2019')->modify('-15 years')))
+			->addRule(Form::RANGE, 'Podle data narození Vám 26.5.2019 bude už více než 25 let (což porušuje podmínky účasti)', array(DateTime::from('27.5.2019')->modify('-25 years'), null));
 
 		$frm->addRadioList('gender', 'Pohlaví', [Person::GENDER_MALE => 'muž', Person::GENDER_FEMALE => 'žena'])
 			->setDefaultValue($this->person->getGender())
@@ -168,7 +168,7 @@ class ParticipantRegistrationForm extends Control
 
 		$frm->addGroup('Zdravotní omezení');
 		$frm->addTextArea('health', 'Zdravotní omezení a alergie')
-            ->setOption('description', Html::el('')->setHtml('Pokud máte nějaký handicap a potřebujete poradit, může se kdykoliv ozvat zde: Ladislava Blažková <a href="mailto:ladkablazkova@gmail.com">ladkablazkova@gmail.com</a> | +420 728 120 498'))
+            ->setOption('description', Html::el('')->setHtml('Pokud máte nějaký handicap a potřebujete více informací, může se kdykoliv ozvat zde: Ladislava Blažková <a href="mailto:ladkablazkova@gmail.com">ladkablazkova@gmail.com</a> | +420 728 120 498'))
 			->setDefaultValue($this->person->getHealth());
 
 		$frm->addGroup('Souhlas');

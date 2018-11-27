@@ -225,8 +225,8 @@ class HomepagePresenter extends ParticipantAuthBasePresenter
 		$frm->addDatepicker('birthdate', 'Datum narození:')
 			->setDefaultValue($this->person ? $this->person->getBirthdate() : null)
 			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat Datum narození nebo je ve špatném formátu (musí být dd.mm.yyyy)')
-			->addRule(Form::RANGE, 'Podle data narození vám 7.6.2019 ještě nebude 15 let (což porušuje podmínky účasti)', array(null, DateTime::from('7.6.2019')->modify('-15 years')))
-			->addRule(Form::RANGE, 'Podle data narození vám 7.6.2019 bude už více než 25 let (což porušuje podmínky účasti)', array(DateTime::from('7.6.2019')->modify('-25 years'), null));
+            ->addRule(Form::RANGE, 'Podle data narození Vám 22.5.2019 ještě nebude 15 let (což porušuje podmínky účasti)', array(null, DateTime::from('22.5.2019')->modify('-15 years')))
+            ->addRule(Form::RANGE, 'Podle data narození Vám 26.5.2019 bude už více než 25 let (což porušuje podmínky účasti)', array(DateTime::from('27.5.2019')->modify('-25 years'), null));
 
 //            ->addRule(callback('Participant','validateAge'), 'Věk účastníka Obroku 2015 musí být od 15 do 24 let');
 
@@ -263,7 +263,7 @@ class HomepagePresenter extends ParticipantAuthBasePresenter
 
 		$frm->addGroup('Zdravotní omezení');
 		$frm->addTextArea('health', 'Zdravotní omezení a alergie')
-            ->setOption('description', Html::el('')->setHtml('Pokud máte nějaký handicap a potřebujete poradit, může se kdykoliv ozvat zde: Ladislava Blažková <a href="mailto:ladkablazkova@gmail.com">ladkablazkova@gmail.com</a> | +420 728 120 498'))
+            ->setOption('description', Html::el('')->setHtml('Pokud máte nějaký handicap a potřebujete více informací, může se kdykoliv ozvat zde: Ladislava Blažková <a href="mailto:ladkablazkova@gmail.com">ladkablazkova@gmail.com</a> | +420 728 120 498'))
 			->setDefaultValue($this->person ? $this->person->getHealth() : null);
 
 		$frm->addGroup('Další infromace');

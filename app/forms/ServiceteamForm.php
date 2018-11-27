@@ -115,7 +115,7 @@ class ServiceteamForm extends Control
 		$frm->addDatepicker('birthdate', 'Datum narození')
 			->setDefaultValue($this->person->getBirthdate())
 			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat Datum narození nebo je ve špatném formátu')
-			->addRule(Form::RANGE, 'Podle data narození vám 7.6.2019 ještě nebude 18 let (což porušuje podmínky účasti)', array(null, DateTime::from('7.6.2019')->modify('-18 years')))
+            ->addRule(Form::RANGE, 'Podle data narození vám 22.5.2019 ještě nebude 18 let (což porušuje podmínky účasti)', array(null, DateTime::from('22.5.2019')->modify('-18 years')))
 			->setOption('description', 'Tvoje Datum narození ve formátu dd.mm.yyyy');
 		$frm->addText('addressCity', 'Město')
 			->setDefaultValue($this->person->getAddressCity())
@@ -152,7 +152,7 @@ class ServiceteamForm extends Control
             ->setDisabled(true)
             ->setDefaultValue('2019-05-26')
             ->setOption('description', Html::el('')
-                ->addHtml('<span>S odjezdem počtej v neděli odpoledne, budeme bourat celé tábořiště. Jako odměnu máme nachystaný skvělý nedělní oběd s poděkováním!</span>')
+                ->addHtml('<span>S odjezdem počítej v neděli odpoledne, budeme bourat celé tábořiště. Jako odměnu máme nachystaný skvělý nedělní oběd s poděkováním!</span>')
             )
             ->setRequired(true);
 
@@ -174,7 +174,7 @@ class ServiceteamForm extends Control
             ->setDefaultValue($this->person->isSpeakEnglish());
 
         $frm->addGroup('Zájmy a záliby');
-        $frm->addTextArea('hobbies', 'Umíš něco, co by chtěl umět každý (žonglovat, pískat na prsty, triky s kartami, skákat šipku,..)? Nebo něco, co těmoc baví a co si sám troufáš ostatní učit (nějaký sport, divadlo, hudba, příroda či cokoli dalšího)? Pokud máš nějaký instruktorský kurz (horolezectví, plavčík, vodní turistika,..), prosím, i tohle nám napiš, abychom mohli udělat program, který bude bavit i tebe!! Každá tvá superschopnost nás zajímá!!')
+        $frm->addTextArea('hobbies', 'Umíš něco, co by chtěl umět každý (žonglovat, pískat na prsty, triky s kartami, skákat šipku,..)? Nebo něco, co tě moc baví a co si sám troufáš ostatní učit (nějaký sport, divadlo, hudba, příroda či cokoli dalšího)? Pokud máš nějaký instruktorský kurz (horolezectví, plavčík, vodní turistika,..), prosím, i tohle nám napiš, abychom mohli udělat program, který bude bavit i tebe!! Každá tvá superschopnost nás zajímá!!')
             ->setDefaultValue($this->person->getHobbies())
             ->setAttribute('class', 'input-xxlarge')
             ->setHtmlAttribute('rows', 10);
@@ -204,7 +204,7 @@ class ServiceteamForm extends Control
 
 		$frm->addTextArea('health', 'Zdravotní omezení a alergie')
 			->setDefaultValue($this->person->getHealth())
-            ->setOption('description', Html::el('')->setHtml('Pokud máte nějaký handicap a potřebujete poradit, může se kdykoliv ozvat zde: Ladislava Blažková <a href="mailto:ladkablazkova@gmail.com">ladkablazkova@gmail.com</a> | +420 728 120 498'));
+            ->setOption('description', Html::el('')->setHtml('Pokud máte nějaký handicap a potřebujete více informací, může se kdykoliv ozvat zde: Ladislava Blažková <a href="mailto:ladkablazkova@gmail.com">ladkablazkova@gmail.com</a> | +420 728 120 498'));
 
 
         $frm->addSelect('tshirtSize', 'Velikost případného trička', Serviceteam::TSHIRT_SIZES)

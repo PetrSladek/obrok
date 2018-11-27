@@ -411,7 +411,7 @@ class ServiceteamPresenter extends DatabaseBasePresenter
             ->setDefaultValue($this->item->isSpeakEnglish());
 
         $frm->addGroup('Zájmy a záliby');
-        $frm->addTextArea('hobbies', 'Umíš něco, co by chtěl umět každý (žonglovat, pískat na prsty, triky s kartami, skákat šipku,..)? Nebo něco, co těmoc baví a co si sám troufáš ostatní učit (nějaký sport, divadlo, hudba, příroda či cokoli dalšího)? Pokud máš nějaký instruktorský kurz (horolezectví, plavčík, vodní turistika,..), prosím, i tohle nám napiš, abychom mohli udělat program, který bude bavit i tebe!! Každá tvá superschopnost nás zajímá!!')
+        $frm->addTextArea('hobbies', 'Umíš něco, co by chtěl umět každý (žonglovat, pískat na prsty, triky s kartami, skákat šipku,..)? Nebo něco, co tě moc baví a co si sám troufáš ostatní učit (nějaký sport, divadlo, hudba, příroda či cokoli dalšího)? Pokud máš nějaký instruktorský kurz (horolezectví, plavčík, vodní turistika,..), prosím, i tohle nám napiš, abychom mohli udělat program, který bude bavit i tebe!! Každá tvá superschopnost nás zajímá!!')
             ->setDefaultValue($this->item->getHobbies())
             ->setAttribute('class', 'input-xxlarge')
             ->setHtmlAttribute('rows', 10);
@@ -435,7 +435,7 @@ class ServiceteamPresenter extends DatabaseBasePresenter
 //        $frm->addCheckbox('replacer','Náhradník?');
 		$frm->addGroup('Zdravotní omezení');
 		$frm->addTextArea('health', 'Zdravotní omezení a alergie')
-            ->setOption('description', Html::el('')->setHtml('Pokud máte nějaký handicap a potřebujete poradit, může se kdykoliv ozvat zde: Ladislava Blažková <a href="mailto:ladkablazkova@gmail.com">ladkablazkova@gmail.com</a> | +420 728 120 498'))
+            ->setOption('description', Html::el('')->setHtml('Pokud máte nějaký handicap a potřebujete více informací, může se kdykoliv ozvat zde: Ladislava Blažková <a href="mailto:ladkablazkova@gmail.com">ladkablazkova@gmail.com</a> | +420 728 120 498'))
 			->setDefaultValue($this->item ? $this->item->getHealth() : null);
 
 

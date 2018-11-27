@@ -97,7 +97,6 @@ class ImageService
 	 * @param int[]|null $crop ořez obrázku x,y,w,h
 	 *
 	 * @return string
-	 * @throws ImageServiceException
 	 */
 	public function getImageUrl($filename, $width = null, $height = null, $flags = Image::FIT, $crop = null)
 	{
