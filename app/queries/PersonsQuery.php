@@ -63,6 +63,38 @@ abstract class PersonsQuery extends BaseQuery
 		return $this;
 	}
 
+    /**
+     * Jen zaplacení
+     *
+     * @return $this
+     */
+    public function onlyPaid()
+    {
+        $this->filter[] = function (QueryBuilder $qb)
+        {
+            $qb->andWhere('p.paid = :paid')->setParameter('paid', true);
+        };
+
+        return $this;
+    }
+
+
+    /**
+     * Jen nezaplacení
+     *
+     * @return $this
+     */
+    public function onlyNotPaid()
+    {
+        $this->filter[] = function (QueryBuilder $qb)
+        {
+            $qb->andWhere('p.paid = :paid')->setParameter('paid', false);
+        };
+
+        return $this;
+    }
+
+
 
 	/**
 	 * Jen nepřijetí

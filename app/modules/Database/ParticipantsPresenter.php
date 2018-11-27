@@ -217,19 +217,19 @@ class ParticipantsPresenter extends DatabaseBasePresenter
 				$query->searchAddress($val);
 			}
 
-			elseif ($key == 'confirmed')
+			elseif ($key == 'confirmed' && $val !== null)
 			{
 				$val ? $query->onlyConfirmed() : $query->onlyNotConfirmed();
 			}
-			elseif ($key == 'paid')
+			elseif ($key == 'paid' && $val !== null)
 			{
 				$val ? $query->onlyPaid() : $query->onlyNotPaid();
 			}
-			elseif ($key == 'arrived')
+			elseif ($key == 'arrived' && $val !== null)
 			{
 				$val ? $query->onlyArrived() : $query->onlyNotArrived();
 			}
-			elseif ($key == 'left')
+			elseif ($key == 'left' && $val !== null)
 			{
 				$val ? $query->onlyLeft() : $query->onlyNotLeft();
 			}
