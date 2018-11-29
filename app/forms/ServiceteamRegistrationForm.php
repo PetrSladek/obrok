@@ -105,7 +105,7 @@ class ServiceteamRegistrationForm extends Control
 			->addRule(Form::EMAIL, 'E-mailová adresa není platná')
 			->setAttribute('description', 'Kontaktní e-mail na který vám budou chodit informace');
 
-		$frm->addCheckbox('conditions', Html::el()->setHtml('Souhlasím s <a target="_blank" href="http://www.obrok19.cz/registrace/">podmínkami účasti na akci</a> a s <a target="_blank" href="http://www.obrok19.cz/obecna-ustanoveni-storno-podminky/">obecnými ustanoveními</a>'))
+        $frm->addCheckbox('conditions', Html::el()->setHtml('Souhlasím s <a href="https://www.obrok19.cz/pravidla-obroku-2019/">podmínkami akce Obrok 2019</a>'))
 			->addRule($frm::FILLED, 'Musíte souhlasit s podmínkami účasti')
 			->setOmitted();
 
