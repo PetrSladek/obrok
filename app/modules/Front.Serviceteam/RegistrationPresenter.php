@@ -37,7 +37,7 @@ class RegistrationPresenter extends UnspecifiedPersonAuthBasePresenter
 	 */
 	protected function createComponentFrmRegistration()
 	{
-		$control = $this->serviceteamRegistrationFormFactory->create($this->me->id);
+		$control = $this->serviceteamRegistrationFormFactory->create($this->me->getId());
 
 		$control->onServiceteamRegistered[] = function ($control, Serviceteam $me)
 		{

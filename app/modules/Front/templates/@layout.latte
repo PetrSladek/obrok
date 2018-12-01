@@ -136,7 +136,7 @@
 				{/block}
 			</div>
 			<div class="pull-right">
-				{if $user->isLoggedIn()}
+				{if $user->isLoggedIn() && $me}
 					Přihlášen:
 					<strong>{$me->getFullname()}</strong>
 					|

@@ -396,7 +396,7 @@ class Group
     /**
      * @param string $region
      */
-    public function setRegion(string $region): void
+    public function setRegion($region)
     {
         $this->region = $region;
     }
