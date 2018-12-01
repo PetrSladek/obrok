@@ -21,8 +21,9 @@
 		"dg/adminer-custom": "^1.7",
 		"dg/ftp-deployment": "^3.0",
 		"vlucas/phpdotenv": "^2.5",
-		"league/csv": "^9.1"
-	},
+		"league/csv": "^9.1",
+      "ext-json": "*"
+    },
 	"require-dev": {
 		"nette/tester": "~2.0"
 	}

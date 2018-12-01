@@ -92,6 +92,7 @@ class Group
 	 * Kraj
 	 *
 	 * @Column(type="string", length=255, nullable=true)
+     * @var string
 	 */
 	protected $region;
 
@@ -383,6 +384,22 @@ class Group
 	{
 		return (bool) $this->left;
 	}
+
+    /**
+     * @return mixed
+     */
+    public function getRegion()
+    {
+        return $this->region;
+    }
+
+    /**
+     * @param string $region
+     */
+    public function setRegion(string $region): void
+    {
+        $this->region = $region;
+    }
 
 
 

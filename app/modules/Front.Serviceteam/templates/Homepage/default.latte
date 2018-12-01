@@ -39,8 +39,8 @@
                         <td>Strava</td>
                         <td>
                             <strong n:ifcontent>{$me->getDiet()}</strong>
-                            <strong n:ifcontent>{$me->getDietSpecification()|implode}</strong>
-                            <strong n:ifcontent>{$me->getDietNote()}</strong>
+                            <span n:ifcontent>{$me->getDietSpecification()|implode}</span>
+                            <span n:ifcontent>{$me->getDietNote()}</span>
                         </td>
                     </tr>
                     <tr>

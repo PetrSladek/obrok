@@ -743,12 +743,12 @@ class GroupsPresenter extends DatabaseBasePresenter
 		foreach ($groups as $group)
 		{
 
-            if ($group->region)
+            if ($group->getRegion())
             {
                 continue;
             }
 
-			$data = file_get_contents("http://maps.googleapis.com/maps/api/geocode/json?address=" . urlencode($group->city . ' ,Česká republika') . "&sensor=false&language=cs");
+			$data = file_get_contents("http://maps.googleapis.com/maps/api/geocode/json?address=" . urlencode($group->getCity() . ' ,Česká republika') . "&sensor=false&language=cs");
 			$data = json_decode($data);
 
 			if (empty($data->results[0]->address_components))
@@ -764,8 +764,8 @@ class GroupsPresenter extends DatabaseBasePresenter
 					break;
 				}
 			}
-			$group->region = $region;
-			echo "{$group->city} : {$group->region}\n";
+			$group->setRegion($region);
+			echo "{$group->getCity()} : {$group->getRegion()}\n";
 
 		}
         $this->em->flush();
