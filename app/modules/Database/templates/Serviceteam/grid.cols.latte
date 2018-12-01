@@ -34,8 +34,8 @@
 {/define}
 {define col-arriveAndDeparture}
 	<td>
-		{$row->getArriveDate() ? $row->getArriveDate()->format('j.n.'): ''} -
-		{$row->getDepartureDate() ? $row->getDepartureDate()->format('j.n.Y'): ''}
+		{$row->getArriveDate() ? $row->getArriveDate()->format('j.n.'): ''}
+		{*$row->getDepartureDate() ? $row->getDepartureDate()->format('j.n.Y'): ''*}
 	</td>
 {/define}
 {define col-age}

@@ -109,12 +109,20 @@
 								</td>
 							</tr>
 							<tr>
-								<th>Zkušenosi / Dovednosti</th>
+								<th>Zajímá ho</th>
 							</tr>
 							<tr>
 								<td>
-									<span n:ifcontent>{$me->getExperience()|implode}<br /></span>
-									<span n:ifcontent>{$me->getExperienceNote()}</span>
+									<span n:ifcontent>{$item->getExperience()|implode}<br /></span>
+									<span n:ifcontent>{$item->getExperienceNote()}</span>
+								</td>
+							</tr>
+							<tr>
+								<th>Zájmy / končíky</th>
+							</tr>
+							<tr>
+								<td>
+									<span n:ifcontent>{$item->getHobbies()</span>
 								</td>
 							</tr>
 							<tr>
@@ -122,9 +130,9 @@
 							</tr>
 							<tr>
 								<td>
-									<span n:ifcontent>{$me->getDiet()}</span>
-									<span n:ifcontent>{$me->getDietSpecification()|implode}<br /></span>
-									<span n:ifcontent>{$me->getDietNote()}</span>
+									<span n:ifcontent>{$item->getDiet()}</span>
+									<span n:ifcontent>{$item->getDietSpecification()|implode}<br /></span>
+									<span n:ifcontent>{$item->getDietNote()}</span>
 								</td>
 							</tr>
 							<tr>
