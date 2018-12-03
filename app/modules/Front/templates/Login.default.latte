@@ -55,8 +55,8 @@
                 }
             </script> <br>
             <h2 class="section-heading tmavy mensi">Do začátku registrace zbývá:</h2>
-            <p id="odpocet" data-konec="2018-12-01 09:00:00" data-hlaska="Registrace servis týmu spuštěna" data-zbyva="Do registrace servis týmu: "></p>
-            <p id="odpocet-ucastnici" data-konec="2018-12-03 20:00:00" data-hlaska="Registrace účastníku spuštěna" data-zbyva="Do registrace učastníků: "></p>
+            <p id="odpocet" data-konec="2018-12-01 09:00:00" data-hlaska="{if $openRegistrationServiceteam}Registrace servis týmu spuštěna{else}Registrace servis týmu je uzavřena/zaplněna{/if}" data-zbyva="Do registrace servis týmu: "></p>
+            <p id="odpocet-ucastnici" data-konec="2018-12-03 20:00:00" data-hlaska="{if true || $openRegistrationParticipants}Registrace účastníku spuštěna{else}Registrace účastníků je uzavřena/zaplněna{/if}" data-zbyva="Do registrace učastníků: "></p>
             <script>
                 odpocet(document.getElementById('odpocet'));
                 odpocet(document.getElementById('odpocet-ucastnici'));

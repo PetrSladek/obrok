@@ -48,14 +48,15 @@ class RegistrationPresenter extends UnspecifiedPersonAuthBasePresenter
 	}
 
 
-	/**
-	 * Registrace do existující skupiny (z pozvánky nebo z presmerování po zalození skupiny)
-	 *
-	 * @param $id
-	 * @param $hash
-	 *
-	 * @throws \Nette\Application\BadRequestException
-	 */
+    /**
+     * Registrace do existující skupiny (z pozvánky nebo z presmerování po zalození skupiny)
+     *
+     * @param int $id
+     * @param string $hash
+     *
+     * @throws \Nette\Application\AbortException
+     * @throws \Nette\Application\BadRequestException
+     */
 	public function actionToGroup($id, $hash)
 	{
 		$this->group = $this->groups->find($id);
