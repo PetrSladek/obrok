@@ -109,6 +109,7 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 		parent::startup();
 
 		$this->config = ArrayHash::from($this->context->parameters['app']);
+        $this->template->storageUrl = $this->config->storageUrl;
 
 		// Sablona pro emaily
 		$this->emails->setTemplate($this->createTemplate());
