@@ -245,3 +245,22 @@ h2 {
 	cursor: inherit;
 	display: block;
 }
+
+/*.btn-obrok19 {*/
+	/*#54b7a4*/
+/*}*/
+
+.btn-obrok19 {
+	color: #fff;
+	background-color: #54b7a4;
+	border-color: #55bdaa;
+}
+.btn-obrok19:hover,
+.btn-obrok19:focus,
+.btn-obrok19:active,
+.btn-obrok19.active,
+.open .dropdown-toggle.btn-obrok19 {
+	color: #fff;
+	background-color: #51a28f;
+	border-color: #57a895;
+}
