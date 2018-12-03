@@ -369,7 +369,7 @@ class HomepagePresenter extends ParticipantAuthBasePresenter
 		$frm->addTextArea('reason', 'Důvod zrušní účasti')
 			->addRule(Form::FILLED, 'Prosím zadej důvod proč rušíš svou účast.');
 
-		$frm->addSubmit('send', 'Ano opravdu na Obrok nepřijedu')
+		$frm->addSubmit('send', 'Ano, opravdu na Obrok nepřijedu')
 			->setAttribute('class', 'btn btn-primary');
 
 		$frm->onSuccess[] = [$this, 'frmCancelSubmitted'];
