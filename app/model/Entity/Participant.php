@@ -145,6 +145,14 @@ class Participant extends Person
 		$this->group = $group;
 	}
 
+    /**
+     * Vyhodi ucasnika ze skupiny
+     */
+	public function clearGroup()
+    {
+        $this->group = null;
+    }
+
 
 	/**
 	 * @return Group

@@ -126,7 +126,6 @@ class HomepagePresenter extends ServiceteamAuthBasePresenter
 	 */
 	public function handleToUnspecifiedPerson()
 	{
-
 		$this->persons->changePersonTypeTo($this->me, Person::TYPE_UNSPECIFIED);
 
 		$this->user->login($this->me->toIdentity());

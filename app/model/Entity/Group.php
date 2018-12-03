@@ -325,7 +325,7 @@ class Group
 	 */
 	public function removeParticipant(Participant $participant)
 	{
-		if ($participant->getGroup() != $this)
+		if ($participant->getGroup() !== $this)
 		{
 			throw new \InvalidArgumentException('Ucastnik neni v teto skupine');
 		}
@@ -339,6 +339,8 @@ class Group
 		{
 			$this->setBoss(null);
 		}
+
+		$participant->clearGroup();
 
 		$this->participants->removeElement($participant);
 
