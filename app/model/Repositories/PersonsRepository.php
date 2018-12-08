@@ -12,10 +12,12 @@ use Kdyby\Doctrine\EntityDao;
 class PersonsRepository extends EntityDao
 {
 
-	/**
-	 * @param Person $entity
-	 * @param        $type
-	 */
+    /**
+     * @param Person $entity
+     * @param        $type
+     *
+     * @return null|Person
+     */
 	public function changePersonTypeTo(Person &$entity, $type)
 	{
 		$em = $this->getEntityManager();
@@ -25,8 +27,10 @@ class PersonsRepository extends EntityDao
 		$em->getConnection()
 		   ->executeUpdate("UPDATE {$table} SET type = ? WHERE id = ? LIMIT 1", [$type, $entity->getId()]);
 
-		// vratim parametrem
+		/** @var Person $entity */
 		$entity = $this->find($entity->getId());
+
+        return $entity;
 	}
 
 //

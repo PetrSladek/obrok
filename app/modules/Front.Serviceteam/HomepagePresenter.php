@@ -128,10 +128,10 @@ class HomepagePresenter extends ServiceteamAuthBasePresenter
 	{
 		$this->persons->changePersonTypeTo($this->me, Person::TYPE_UNSPECIFIED);
 
-		$this->user->login($this->me->toIdentity());
+        $this->user->login($this->me->toIdentity());
 
-		$this->flashMessage('Tvá účast v ST je zrušena');
-		$this->redirect(":Front:Unspecified:");
+        $this->flashMessage('Tvá účast v ST je zrušena');
+        $this->redirect(":Front:Unspecified:");
 	}
 
 }

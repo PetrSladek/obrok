@@ -8,12 +8,23 @@
 
     <div class="row">
         <div class="pull-left">
-           {if $item->nickName}
-               <h1>{$item->nickName} <small>/{$item->firstName} {$item->lastName}/</small></h1>
-           {else}
-               <h1>{$item->firstName} {$item->lastName}</h1>
-           {/if}
+            <h1>
+               {if $item->nickName}
+                   {$item->nickName} <small>/{$item->firstName} {$item->lastName}/</small>
+               {else}
+                   {$item->firstName} {$item->lastName}
+               {/if}
+            </h1>
         </div>
+        <a href="{plink Groups:detail $item->getGroup()->getId()}" class="pull-left" style="margin-top: 20px; margin-bottom: 10px; margin-left: 20px">
+            <div class="pull-left" style="margin-right: 5px">
+                <img n:if="$item->getGroup()->getAvatar()" class="img-responsive" n:img="$item->getGroup()->getAvatar(), 48, 48, exact, $item->getGroup()->getAvatarCrop()" alt="foto" />
+                <img n:if="!$item->getGroup()->getAvatar()" class="img-responsive" n:img="'avatar_group.jpg', 48, 48, exact" alt="foto" />
+            </div>
+
+            <strong n:if="$item->getGroup()">#{$item->getGroup()->id} {$item->getGroup()->name}</strong>
+            <br /><small n:if="$item->getGroup()">{$item->getGroup()->city}</small>
+        </a>
         <div class="pull-right">
            <a n:if="$acl->edit" n:href="loginAs $item->id" class="btn btn-default"><i class="fa fa-sign-in"></i> Přihlásit se</a>
            <a n:if="$acl->edit" n:href="edit $item->id" class="btn btn-warning ajax">Editovat údaje</a>
@@ -33,6 +44,7 @@
             {form frmEdit data-object-id=>$item->id, data-edit-link=>$control->link('ajaxEdit!')}
                 <div class="row">
                     <div class="col-md-4">
+
                         <h4 n:class="$acl->edit ? ajax-edit">
                             <small>Ulice a č.p.</small><br />
                             <div class="ajax-edit-val">{snippet addressStreet}{$item->addressStreet}{/snippet}</div>

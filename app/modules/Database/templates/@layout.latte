@@ -106,12 +106,16 @@
     <section class="wrapper scrollable extended">
 
             <div class="container-fluid">
-                     {snippet flashes}
-                     <div n:foreach="$flashes as $flash" class="alert alert-{$flash->type}">
-                         <button type="button" class="close" data-dismiss="alert">×</button>
-                         {$flash->message}
+                    {snippet flashes}
+                    <div class="row" n:if="$flashes">
+                        <div class="col-xs-12">
+                            <div n:foreach="$flashes as $flash" class="alert alert-{$flash->type}">
+                                <button type="button" class="close" data-dismiss="alert">×</button>
+                                {$flash->message}
+                            </div>
+                        </div>
                      </div>
-                     {/snippet}
+                    {/snippet}
 
                     {snippet content}
                         {include #content}

@@ -69,8 +69,11 @@
                             {if $item->lastLogin}{$item->lastLogin->format('j.n.Y H:i:s')}{else}-{/if}
                         </h4>
                     </div>
-
-
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        {control frmToParticipant}
+                    </div>
                 </div>
             </div>
         </div>

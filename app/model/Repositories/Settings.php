@@ -32,7 +32,7 @@ class Settings
     public function __construct(SettingsRepository $settings, IStorage $cacheStorage)
     {
         $this->settings = $settings;
-        $this->cache = new Cache($cacheStorage);
+        $this->cache = new Cache($cacheStorage, 'settings');
     }
 
 
@@ -41,6 +41,7 @@ class Settings
      * @param mixed $default
      *
      * @return mixed
+     * @throws \Throwable
      */
     public function get($key, $default = null)
     {
@@ -62,6 +63,7 @@ class Settings
      * @param string $value
      *
      * @return string
+     * @throws \Throwable
      */
     public function set($key, $value)
     {

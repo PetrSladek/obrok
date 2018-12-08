@@ -8,6 +8,7 @@ use App\Model\Entity\Participant;
 use App\Model\Entity\Person;
 use App\Model\Entity\Program;
 use App\Model\Entity\UnspecifiedPerson;
+use App\Model\Repositories\PersonsRepository;
 use App\Model\Repositories\UnspecifiedPersonsRepository;
 use App\Query\ParticipantsQuery;
 use App\Query\ProgramsQuery;
@@ -40,6 +41,11 @@ class UnspecifiedPersonsPresenter extends DatabaseBasePresenter
 
 	/** @var UnspecifiedPersonsRepository @inject */
 	public $repository;
+
+    /**
+     * @var PersonsRepository @inject
+     */
+	public $persons;
 
 	/** @var GroupsRepository @inject */
 	public $groups;
@@ -266,6 +272,54 @@ class UnspecifiedPersonsPresenter extends DatabaseBasePresenter
 	}
 
 
+    /**
+     * @throws \Exception
+     */
+    public function createComponentFrmToParticipant()
+    {
+        $frm = new Form();
+        $frm->addGroup('Převést na účastníka');
+        $frm->addSelect('group', 'Zařadit do skupiny',
+            array_map(function (Group $data) {
+                return '#' . $data->getId() . ' ' . $data->getName();
+            }, $this->groups->findAssoc([], 'id')))
+            ->setPrompt('- Vyberte skupinu -')
+            ->setRequired();
+
+        $frm->addSubmit('send', 'Uložit')->setAttribute('class', 'btn btn-success btn-lg btn-block');
+
+        $frm->onSuccess[] = [$this, 'frmToParticipantSubmitted'];
+
+        return $frm;
+    }
+
+    /**
+     * Akce po odeslání formuláře
+     *
+     * @param Form $frm
+     *
+     * @throws \Nette\Application\AbortException
+     */
+    public function frmToParticipantSubmitted(Form $frm)
+    {
+        $values = $frm->getValues();
+
+        /** @var Participant $participant */
+        $participant = $this->persons->changePersonTypeTo($this->item, Person::TYPE_PARTICIPANT);
+
+        /** @var Group $group */
+        $group = $this->groups->find($values->group);
+        if (!$group)
+        {
+            throw new \RuntimeException('Skupina "' . $values->group . '" neexistuje!');
+        }
+
+        $participant->setGroup($group);
+        $this->em->flush($participant);
+
+        $this->flashMessage('Nezúčastněná osoba byla převedena na účastníka skupiny #' . $group->getId() . ' ' . $group->getName());
+        $this->redirect("Participants:detail", $this->item->getId());
+    }
 
 
 
