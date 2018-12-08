@@ -6,14 +6,20 @@ use App\Forms\Form;
 use App\Forms\IGroupFormFactory;
 use App\Model\Entity\Group;
 use App\Model\Entity\Participant;
+use App\Model\Entity\Person;
+use App\Model\Entity\Serviceteam;
+use App\Model\Entity\UnspecifiedPerson;
+use App\Model\Repositories\PersonsRepository;
 use App\Query\GroupsQuery;
 use App\Model\Repositories\GroupsRepository;
 use App\Model\Repositories\ParticipantsRepository;
 use App\Model\Repositories\ServiceteamRepository;
+use App\Query\PersonsQuery;
 use App\Services\ImageService;
 use Brabijan\Images\TImagePipe;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\AbstractQuery;
+use Kdyby\Doctrine\ResultSet;
 use Nette\Forms\Container;
 use Nette\Forms\Controls\BaseControl;
 use Nette\Http\IResponse;
@@ -50,6 +56,12 @@ class GroupsPresenter extends DatabaseBasePresenter
 	 * @inject
 	 */
 	public $groups;
+
+    /**
+     * @var PersonsRepository
+     * @inject
+     */
+    public $persons;
 
 	/**
 	 * @var ParticipantsRepository
@@ -99,13 +111,14 @@ class GroupsPresenter extends DatabaseBasePresenter
 	}
 
 
-	/**
-	 * Přihlásit se do FrontEndu jako skupina
-	 *
-	 * @param $id
-	 *
-	 * @throws \Nette\Application\BadRequestException
-	 */
+    /**
+     * Přihlásit se do FrontEndu jako skupina
+     *
+     * @param $id
+     *
+     * @throws \Nette\Application\AbortException
+     * @throws \Nette\Application\BadRequestException
+     */
 	public function actionLoginAs($id)
 	{
 		if (!$this->acl->edit)
@@ -357,15 +370,15 @@ class GroupsPresenter extends DatabaseBasePresenter
 
 		$frm->addText('name', 'Název skupiny')
 			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat %label')
-			->setDefaultValue($this->item ? $this->item->name : null);
+			->setDefaultValue($this->item ? $this->item->getName() : null);
 		$frm->addText('city', 'Město')
 			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat %label')
-			->setDefaultValue($this->item ? $this->item->city : null);
+			->setDefaultValue($this->item ? $this->item->getCity() : null);
 //		$frm->addTextArea('note', 'O skupině')
 //			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat %label')
 //			->setDefaultValue($this->item ? $this->item->note : null);
 		$frm->addTextArea('noteInternal', 'Interní poznámka')
-			->setDefaultValue($this->item ? $this->item->noteInternal : null);
+			->setDefaultValue($this->item ? $this->item->getNoteInternal() : null);
 
 		$frm->addSelect('boss', 'Vedoucí skupiny (18+)', $this->item ? $this->item->getPossibleBosses($this->ageInDate) : [])
 			->setDefaultValue($this->item && $this->item->getBoss() ? $this->item->getBoss()->getId() : null)
@@ -389,11 +402,12 @@ class GroupsPresenter extends DatabaseBasePresenter
 	}
 
 
-	/**
-	 * Akce při uspěšnéím odeslání formuláře
-	 *
-	 * @param Form $frm
-	 */
+    /**
+     * Akce při uspěšnéím odeslání formuláře
+     *
+     * @param Form $frm
+     * @throws \Nette\Application\AbortException
+     */
 	public function frmEditSuccess($frm)
 	{
 		$values = $frm->getValues();
@@ -773,6 +787,85 @@ class GroupsPresenter extends DatabaseBasePresenter
 		$this->terminate();
 	}
 
+
+    /**
+     * @throws \Exception
+     */
+    public function createComponentFrmAddParticipant()
+    {
+        $frm = new Form();
+        $frm->addGroup('Převést do této skupiny účastníka');
+        $frm->addTypeahead('person', 'Vyhledat účastníka', function ($q)  {
+
+            $query = new PersonsQuery();
+            $query->searchFulltext($q);
+
+            /** @var Person[]|ResultSet $result */
+            $result = $this->persons->fetch($query);
+
+            $found = [];
+            foreach ($result as $item)
+            {
+                if ($item instanceof Serviceteam)
+                {
+                    $found[$item->getId()] = 'ze servis týmu: ' . $item->getFullname(). ' (#' . $item->getId() . ')';
+                }
+                elseif ($item instanceof Participant)
+                {
+                    $found[$item->getId()] = 'ze skupiny #' . $item->getGroup()->getId() . ': ' . $item->getFullname(). ' (#' . $item->getId() . ')';
+                }
+                elseif ($item instanceof UnspecifiedPerson)
+                {
+                    $found[$item->getId()] = 'ze nezúčastněných: ' . $item->getFullname(). ' (#' . $item->getId() . ')';
+                }
+            }
+
+            return $found;
+        });
+
+        $frm->addSubmit('send', 'Potvrdit')->setAttribute('class', 'btn btn-success');
+
+        $frm->onSuccess[] = [$this, 'frmAddParticipantSubmitted'];
+
+        return $frm;
+    }
+
+    /**
+     * Akce po odeslání formuláře
+     *
+     * @param Form $frm
+     *
+     * @throws \Nette\Application\AbortException
+     */
+    public function frmAddParticipantSubmitted(Form $frm)
+    {
+        $values = $frm->getValues();
+        if (!preg_match('/\(#(\d+)\)/', $values->person, $matches))
+        {
+            throw new \RuntimeException('Nepodarilo se zjistit ID osoby');
+        }
+
+        $person = $this->persons->find($matches[1]);
+
+        if (!$person)
+        {
+            throw new \RuntimeException('Nepodarilo se najit osobu #' . $matches[1]);
+        }
+
+
+        if (! $person instanceof Participant)
+        {
+            /** @var Participant $person */
+            $person = $this->persons->changePersonTypeTo($person, Person::TYPE_PARTICIPANT);
+        }
+
+
+        $person->setGroup($this->item);
+        $this->em->flush();
+
+        $this->flashMessage('Účastník úspěšně zařazen do této skupiny');
+        $this->redirect('this');
+    }
 }
 
 

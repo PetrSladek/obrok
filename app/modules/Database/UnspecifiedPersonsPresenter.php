@@ -274,8 +274,8 @@ class UnspecifiedPersonsPresenter extends DatabaseBasePresenter
 
 
     /**
- * @throws \Exception
- */
+     * @throws \Exception
+     */
     public function createComponentFrmToParticipant()
     {
         $frm = new Form();
@@ -287,7 +287,7 @@ class UnspecifiedPersonsPresenter extends DatabaseBasePresenter
             ->setPrompt('- Vyberte skupinu -')
             ->setRequired();
 
-        $frm->addSubmit('send', 'Převést')->setAttribute('class', 'btn btn-success btn-lg btn-block');
+        $frm->addSubmit('send', 'Převést')->setAttribute('class', 'btn btn-success');
 
         $frm->onSuccess[] = [$this, 'frmToParticipantSubmitted'];
 
@@ -331,7 +331,7 @@ class UnspecifiedPersonsPresenter extends DatabaseBasePresenter
         $frm = new Form();
         $frm->addGroup('Převést na servisáka');
 
-        $frm->addSubmit('send', 'Převést')->setAttribute('class', 'btn btn-success btn-lg btn-block');
+        $frm->addSubmit('send', 'Převést')->setAttribute('class', 'btn btn-success');
 
         $frm->onSuccess[] = [$this, 'frmToServiceteamSubmitted'];
 

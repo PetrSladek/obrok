@@ -9,6 +9,12 @@ use Nette\Forms\Controls;
 use VojtechDobes\NetteForms\GpsPicker;
 use VojtechDobes\NetteForms\GpsPositionPicker;
 
+/**
+ * Class Form
+ * @package App\Forms
+ *
+ * @method addTypeahead():self
+ */
 class Form extends Nette\Application\UI\Form
 {
 

@@ -1,6 +1,7 @@
 <?php
 namespace App\Query;
 
+use App\Model\Entity\Person;
 use App\Model\Entity\Serviceteam;
 use App\Model\Entity\Team;
 use Doctrine\ORM\QueryBuilder;
@@ -13,7 +14,7 @@ use Nette\Utils\DateTime;
  * @package App\Query
  * @see     https://github.com/kdyby/doctrine/blob/master/docs/en/resultset.md
  */
-abstract class PersonsQuery extends BaseQuery
+class PersonsQuery extends BaseQuery
 {
 
 	/**
@@ -355,6 +356,15 @@ abstract class PersonsQuery extends BaseQuery
 	 *
 	 * @return mixed
 	 */
-	abstract protected function createBasicDql(Queryable $repository);
+	protected function createBasicDql(Queryable $repository)
+    {
+        $qb = $repository->createQueryBuilder()
+            ->select('p')// person
+            ->from(Person::class, 'p');
+
+        $this->applyFilterTo($qb);
+
+        return $qb;
+    }
 
 }

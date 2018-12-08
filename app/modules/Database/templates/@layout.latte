@@ -107,8 +107,8 @@
 
             <div class="container-fluid">
                     {snippet flashes}
-                    <div class="row" n:if="$flashes">
-                        <div class="col-xs-12">
+                    <div class="container" n:if="$flashes">
+                        <div class="row">
                             <div n:foreach="$flashes as $flash" class="alert alert-{$flash->type}">
                                 <button type="button" class="close" data-dismiss="alert">×</button>
                                 {$flash->message}

@@ -204,6 +204,21 @@ class Group
 		$this->note = $note;
 	}
 
+    /**
+     * @return mixed
+     */
+    public function getNoteInternal()
+    {
+        return $this->noteInternal;
+    }
+
+    /**
+     * @param mixed $noteInternal
+     */
+    public function setNoteInternal($noteInternal): void
+    {
+        $this->noteInternal = $noteInternal;
+    }
 
 
 	/**
