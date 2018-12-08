@@ -821,7 +821,7 @@ class GroupsPresenter extends DatabaseBasePresenter
             }
 
             return $found;
-        });
+        })->setRequired();
 
         $frm->addSubmit('send', 'Potvrdit')->setAttribute('class', 'btn btn-success');
 

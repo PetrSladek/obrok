@@ -13,7 +13,7 @@ use VojtechDobes\NetteForms\GpsPositionPicker;
  * Class Form
  * @package App\Forms
  *
- * @method addTypeahead():self
+ * @method \Nextras\Forms\Controls\Typeahead addTypeahead()
  */
 class Form extends Nette\Application\UI\Form
 {
