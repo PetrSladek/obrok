@@ -467,7 +467,7 @@ class Participant extends Person
 	 */
 	public function toIdentity()
 	{
-		return new \Nette\Security\Identity($this->id, Person::TYPE_PARTICIPANT);
+		return new \Nette\Security\Identity($this->getId(), Person::TYPE_PARTICIPANT);
 	}
 
 

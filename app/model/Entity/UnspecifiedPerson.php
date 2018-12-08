@@ -23,7 +23,7 @@ use Nette\InvalidStateException;
 use Nette\Utils\DateTime;
 
 /**
- * @Entity(repositoryClass="App\Model\Repositories\UnspecifiedsRepository")
+ * @Entity(repositoryClass="App\Model\Repositories\UnspecifiedPersonsRepository")
  */
 class UnspecifiedPerson extends Person
 {
@@ -33,7 +33,7 @@ class UnspecifiedPerson extends Person
 	 */
 	public function toIdentity()
 	{
-		return new \Nette\Security\Identity($this->id, Person::TYPE_UNSPECIFIED);
+		return new \Nette\Security\Identity($this->getId(), Person::TYPE_UNSPECIFIED);
 	}
 
 }

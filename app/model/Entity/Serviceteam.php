@@ -595,7 +595,7 @@ class Serviceteam extends Person
 	 */
 	public function toIdentity()
 	{
-		return new \Nette\Security\Identity($this->id, array_merge([Person::TYPE_SERVICETEAM], explode(" ", $this->role)));
+		return new \Nette\Security\Identity($this->getId(), array_merge([Person::TYPE_SERVICETEAM], explode(" ", $this->role)));
 	}
 
 }

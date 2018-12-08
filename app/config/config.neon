@@ -157,12 +157,12 @@ services:
 	    class: App\Model\Repositories\ParticipantsRepository
 	    tags:
 	        doctrine.repositoryEntity: App\Model\Entity\Participant
-	ServiceteamRepository:
+	serviceteamRepository:
 	    class: App\Model\Repositories\ServiceteamRepository
 	    tags:
 	        doctrine.repositoryEntity: App\Model\Entity\Serviceteam
-	unspecifiedsRepository:
-	    class: App\Model\Repositories\UnspecifiedsRepository
+	unspecifiedPersonsRepository:
+	    class: App\Model\Repositories\UnspecifiedPersonsRepository
 	    tags:
 	        doctrine.repositoryEntity: App\Model\Entity\UnspecifiedPerson
 	groupsRepository:

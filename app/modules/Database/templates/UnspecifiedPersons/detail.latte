@@ -1,0 +1,80 @@
+{var $title => "Nezúčastnění / ".$item->getFullName()}
+
+
+{block content}
+
+
+<div class="container">
+
+    <div class="row">
+        <div class="pull-left">
+           {if $item->nickName}
+               <h1>{$item->nickName} <small>/{$item->firstName} {$item->lastName}/</small></h1>
+           {else}
+               <h1>{$item->firstName} {$item->lastName}</h1>
+           {/if}
+        </div>
+        <div class="pull-right">
+           <a n:if="$acl->edit" n:href="loginAs $item->id" class="btn btn-default"><i class="fa fa-sign-in"></i> Přihlásit se</a>
+        </div>
+    </div>
+    <div class="row">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+            <li class="active"><a href="#info" role="tab" data-toggle="tab">Info</a></li>
+        </ul>
+
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <div class="tab-pane active" id="info">
+                <div class="row">
+                    <div class="col-md-4">
+                        <h4>
+                            <small>Ulice a č.p.</small><br />
+                            {$item->addressStreet}
+                        </h4>
+                        <h4>
+                            <small>Město</small><br />
+                            {$item->addressCity}
+                        </h4>
+                        <h4>
+                            <small>PSČ</small><br />
+                            {$item->addressPostcode}
+                        </h4>
+
+                    </div>
+                    <div class="col-md-4">
+                        <h4>
+                            <small>E-mail</small><br />
+                            {$item->email}
+                        </h4>
+                        <h3>
+                            <small>telefon:</small><br />
+                            {$item->getPhone()|phone|noescape}
+                        </h3>
+                        <h4>
+                            <small>věk na O19</small><br />
+                            <abbr title="datum narození: {$item->birthdate->format('j.n.Y')}">{$item->getAge($ageInDate)} let</abbr>
+                        </h4>
+                    </div>
+
+                    <div class="col-md-4">
+                        <h4>
+                            <small>Skautis User ID</small><br />
+                            {if $item->skautisUserId}{$item->skautisUserId}{else}<em>- nemá -</em>{/if}
+                        </h4>
+                        <h4>
+                            <small>Poslední přihlášení</small><br />
+                            {if $item->lastLogin}{$item->lastLogin->format('j.n.Y H:i:s')}{else}-{/if}
+                        </h4>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{/block}

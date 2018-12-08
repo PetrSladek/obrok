@@ -1,0 +1,39 @@
+{define col-id}
+<td width="60">
+    #{$row->id}
+</td>
+{/define}
+{define col-fullname}
+<td>
+    {*<img n:if="$row->group" src="{plink Image: (expand) $row->group->getAvatarType('dbrow')}" alt="foto" style="float: left;margin-right: 10px;" />*}
+    {if $row->nickName}
+        <strong>{$row->nickName}</strong>
+        <br /><small>{$row->firstName} {$row->lastName|upper}</small>
+    {else}
+        <strong>{$row->firstName} {$row->lastName|upper}</strong>
+        <br /><small></small>
+    {/if}
+    <div class="pull-right text-right">
+        <a n:if="$acl->edit" class="btn btn-xs btn-default" href="{plink UnspecifiedPersons:loginAs $row->id}">Přihlásit se</a>
+    </div>
+</td>
+{/define}
+{define col-age}
+<td>
+    {$row->getAge($ageInDate)} let<br />
+    <small>{$row->birthdate->format("j.n.Y")}</small>
+</td>
+{/define}
+{define col-contact}
+<td>
+    {$row->getPhone()|phone}
+    <br /><small>{$row->email}</small>
+</td>
+{/define}
+{define col-address}
+<td>
+    {$row->addressStreet}
+    <br /><small>{$row->addressCity} {$row->addressPostcode}</small>
+</td>
+{/define}
+

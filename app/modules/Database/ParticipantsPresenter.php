@@ -27,6 +27,7 @@ use Nextras\Datagrid\Datagrid;
 
 /**
  * Class ParticipantsPresenter
+ *
  * @package App\Module\Database\Presenters
  * @author  psl <petr.sladek@webnode.com>
  * @persistent(tblGrid)
@@ -183,7 +184,7 @@ class ParticipantsPresenter extends DatabaseBasePresenter
 
 
 	/**
-	 * @param $filter
+	 * @param array $filter
 	 *
 	 * @return ParticipantsQuery
 	 */
@@ -246,7 +247,7 @@ class ParticipantsPresenter extends DatabaseBasePresenter
 	/**
 	 * Detail uřastníka
 	 *
-	 * @param $id
+	 * @param int $id
 	 *
 	 * @throws \Nette\Application\BadRequestException
 	 */
@@ -260,13 +261,14 @@ class ParticipantsPresenter extends DatabaseBasePresenter
 	}
 
 
-	/**
-	 * Příkaz smazání programu učastníkovi
-	 *
-	 * @param $idProgram
-	 *
-	 * @throws \Nette\Application\BadRequestException
-	 */
+    /**
+     * Příkaz smazání programu učastníkovi
+     *
+     * @param int $idProgram
+     *
+     * @throws \Nette\Application\AbortException
+     * @throws \Nette\Application\BadRequestException
+     */
 	public function handleDeleteProgram($idProgram)
 	{
 
@@ -293,13 +295,14 @@ class ParticipantsPresenter extends DatabaseBasePresenter
 	}
 
 
-	/**
-	 * Přidání programu učastníkovi
-	 *
-	 * @param $idProgram
-	 *
-	 * @throws \Nette\Application\BadRequestException
-	 */
+    /**
+     * Přidání programu učastníkovi
+     *
+     * @param int $idProgram
+     *
+     * @throws \Nette\Application\AbortException
+     * @throws \Nette\Application\BadRequestException
+     */
 	public function handleAddProgram($idProgram)
 	{
 		/** @var Program $program */
@@ -501,11 +504,13 @@ class ParticipantsPresenter extends DatabaseBasePresenter
 	}
 
 
-	/**
-	 * Akce po odeslání formuláře
-	 *
-	 * @param Form $frm
-	 */
+    /**
+     * Akce po odeslání formuláře
+     *
+     * @param Form $frm
+     *
+     * @throws \Nette\Application\AbortException
+     */
 	public function frmEditSubmitted(Form $frm)
 	{
 		$values = $frm->getValues();
@@ -534,13 +539,14 @@ class ParticipantsPresenter extends DatabaseBasePresenter
 	}
 
 
-	/**
-	 * Přihlásit se na FrontEnd jako účastník
-	 *
-	 * @param $id
-	 *
-	 * @throws \Nette\Application\BadRequestException
-	 */
+    /**
+     * Přihlásit se na FrontEnd jako účastník
+     *
+     * @param $id
+     *
+     * @throws \Nette\Application\AbortException
+     * @throws \Nette\Application\BadRequestException
+     */
 	public function actionLoginAs($id)
 	{
 		if (!$this->acl->edit)
@@ -555,7 +561,7 @@ class ParticipantsPresenter extends DatabaseBasePresenter
 		}
 
 		$hash = Random::generate(22, '0-9A-Za-z./');
-		$this->item->quickLoginHash = Passwords::hash($hash);
+		$this->item->setQuickLoginHash(Passwords::hash($hash));
 
 		$this->em->persist($this->item);
 		$this->em->flush();
@@ -566,6 +572,7 @@ class ParticipantsPresenter extends DatabaseBasePresenter
 
 	/**
 	 * Továrna na komponentu tabulky programů
+     *
 	 * @return Datagrid
 	 */
 	public function createComponentTblPrograms()

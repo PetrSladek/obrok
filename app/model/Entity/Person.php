@@ -623,7 +623,7 @@ abstract class Person
 	 */
 	public function toIdentity()
 	{
-		return new \Nette\Security\Identity($this->id, self::TYPE_UNSPECIFIED);
+		return new \Nette\Security\Identity($this->getId(), self::TYPE_UNSPECIFIED);
 	}
 
 	/**
