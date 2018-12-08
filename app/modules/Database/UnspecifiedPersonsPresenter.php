@@ -7,6 +7,7 @@ use App\Model\Entity\Group;
 use App\Model\Entity\Participant;
 use App\Model\Entity\Person;
 use App\Model\Entity\Program;
+use App\Model\Entity\Serviceteam;
 use App\Model\Entity\UnspecifiedPerson;
 use App\Model\Repositories\PersonsRepository;
 use App\Model\Repositories\UnspecifiedPersonsRepository;
@@ -273,8 +274,8 @@ class UnspecifiedPersonsPresenter extends DatabaseBasePresenter
 
 
     /**
-     * @throws \Exception
-     */
+ * @throws \Exception
+ */
     public function createComponentFrmToParticipant()
     {
         $frm = new Form();
@@ -286,7 +287,7 @@ class UnspecifiedPersonsPresenter extends DatabaseBasePresenter
             ->setPrompt('- Vyberte skupinu -')
             ->setRequired();
 
-        $frm->addSubmit('send', 'Uložit')->setAttribute('class', 'btn btn-success btn-lg btn-block');
+        $frm->addSubmit('send', 'Převést')->setAttribute('class', 'btn btn-success btn-lg btn-block');
 
         $frm->onSuccess[] = [$this, 'frmToParticipantSubmitted'];
 
@@ -322,7 +323,40 @@ class UnspecifiedPersonsPresenter extends DatabaseBasePresenter
     }
 
 
+    /**
+     * @throws \Exception
+     */
+    public function createComponentFrmToServiceteam()
+    {
+        $frm = new Form();
+        $frm->addGroup('Převést na servisáka');
 
+        $frm->addSubmit('send', 'Převést')->setAttribute('class', 'btn btn-success btn-lg btn-block');
+
+        $frm->onSuccess[] = [$this, 'frmToServiceteamSubmitted'];
+
+        return $frm;
+    }
+
+    /**
+     * Akce po odeslání formuláře
+     *
+     * @param Form $frm
+     *
+     * @throws \Nette\Application\AbortException
+     */
+    public function frmToServiceteamSubmitted(Form $frm)
+    {
+        $values = $frm->getValues();
+
+        /** @var Serviceteam $serviceteam */
+        $serviceteam = $this->persons->changePersonTypeTo($this->item, Person::TYPE_SERVICETEAM);
+
+        $this->em->flush($serviceteam);
+
+        $this->flashMessage('Nezúčastněná osoba byla převedena na servisáka');
+        $this->redirect("Serviceteam:detail", $this->item->getId());
+    }
 
 
 }
