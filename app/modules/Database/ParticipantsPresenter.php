@@ -3,6 +3,7 @@
 namespace App\Module\Database\Presenters;
 
 use App\Forms\Form;
+use App\Model\Entity\Group;
 use App\Model\Entity\Participant;
 use App\Model\Entity\Person;
 use App\Model\Entity\Program;
@@ -397,11 +398,13 @@ class ParticipantsPresenter extends DatabaseBasePresenter
 	}
 
 
-	/**
-	 * Továrna na komponentu formuláře editace
-	 *
-	 * @return Form
-	 */
+    /**
+     * Továrna na komponentu formuláře editace
+     *
+     * @return Form
+     *
+     * @throws \Exception
+     */
 	public function createComponentFrmEdit()
 	{
 
@@ -410,7 +413,10 @@ class ParticipantsPresenter extends DatabaseBasePresenter
 
 		$frm->addGroup('Skupina');
 
-		$frm->addSelect('group', 'Skupina do které uživatel patří', $this->groups->findPairs("name"))
+		$frm->addSelect('group', 'Skupina do které uživatel patří',
+            array_map(function (Group $data) {
+		        return '#' . $data->getId() . ' ' . $data->getName();
+            }, $this->groups->findAssoc([], 'id')))
 			->setDefaultValue($this->item ? $this->item->group->getId() : $this->getParameter('toGroup'))
 			->setPrompt('- Vyberte skupinu -')
 			->setRequired();
@@ -418,16 +424,16 @@ class ParticipantsPresenter extends DatabaseBasePresenter
 		$frm->addGroup('Osobní informace');
 
 		$frm->addText('firstName', 'Jméno')
-			->setDefaultValue($this->item ? $this->item->firstName : null)
+			->setDefaultValue($this->item ? $this->item->getFirstName() : null)
 			->setRequired();
 		$frm->addText('lastName', 'Příjmení')
-			->setDefaultValue($this->item ? $this->item->lastName : null)
+			->setDefaultValue($this->item ? $this->item->getLastName() : null)
 			->setRequired();
 		$frm->addText('nickName', 'Přezdívka')
-			->setDefaultValue($this->item ? $this->item->nickName : null);
+			->setDefaultValue($this->item ? $this->item->getNickName() : null);
 
 		$frm->addDatepicker('birthdate', 'Datum narození:')
-			->setDefaultValue($this->item ? $this->item->birthdate->format('j.n.Y') : null)
+			->setDefaultValue($this->item ? $this->item->getBirthdate()->format('j.n.Y') : null)
 			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat Datum narození nebo je ve špatném formátu (musí být dd.mm.yyyy)')
             ->addRule(Form::RANGE, 'Podle data narození Vám 22.5.2019 ještě nebude 15 let (což porušuje podmínky účasti)', array(null, DateTime::from('22.5.2019')->modify('-15 years')))
             ->addRule(Form::RANGE, 'Podle data narození Vám 22.5.2019 bude už více než 24 let (což porušuje podmínky účasti)', array(DateTime::from('22.5.2019')->modify('-25 years'), null));
@@ -435,30 +441,30 @@ class ParticipantsPresenter extends DatabaseBasePresenter
 //            ->addRule(callback('Participant','validateAge'), 'Věk účastníka Obroku 2015 musí být od 15 do 24 let');
 
 		$frm->addRadioList('gender', 'Pohlaví', array(Person::GENDER_MALE => 'muž', Person::GENDER_FEMALE => 'žena'))
-			->setDefaultValue($this->item ? $this->item->gender : null)
+			->setDefaultValue($this->item ? $this->item->getGender() : null)
 			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat %label');
 
 		$frm->addGroup('Trvalé bydliště');
 		$frm->addText('addressStreet', 'Ulice a čp.')
-			->setDefaultValue($this->item ? $this->item->addressStreet : null)
+			->setDefaultValue($this->item ? $this->item->getAddressStreet() : null)
 			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat %label');
 		$frm->addText('addressCity', 'Město')
-			->setDefaultValue($this->item ? $this->item->addressCity : null)
+			->setDefaultValue($this->item ? $this->item->getAddressCity() : null)
 			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat %label');
 		$frm->addText('addressPostcode', 'PSČ')
-			->setDefaultValue($this->item ? $this->item->addressPostcode : null)
+			->setDefaultValue($this->item ? $this->item->getAddressPostcode() : null)
 			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat %label');
 
 		$frm->addGroup('Kontaktní údaje');
 		$frm->addText('email', 'E-mail')
-			->setDefaultValue($this->item ? $this->item->email : null)
+			->setDefaultValue($this->item ? $this->item->getEmail() : null)
 			->setEmptyValue('@')
 			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat E-mail')
 			->addRule(Form::EMAIL, 'E-mailová adresa není platná')
 			->setAttribute('title', 'E-mail, který pravidelně vybíráš a můžem Tě na něm kontaktovat. Budou Ti chodit informace atd..')
 			->setAttribute('data-placement', 'right');
 		$frm->addText('phone', 'Mobilní telefon')
-			->setDefaultValue($this->item ? $this->item->phone : null)
+			->setDefaultValue($this->item ? $this->item->getPhone() : null)
 			->setEmptyValue('+420')
 			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat Mobilní telefon')
 			->addRule([$frm, 'isPhoneNumber'], 'Telefonní číslo je ve špatném formátu')
@@ -468,13 +474,13 @@ class ParticipantsPresenter extends DatabaseBasePresenter
 		$frm->addGroup('Zdravotní omezení');
 		$frm->addTextArea('health', 'Zdravotní omezení a alergie')
             ->setOption('description', Html::el('')->setHtml('Pokud máte nějaký handicap a potřebujete více informací, může se kdykoliv ozvat zde: Ladislava Blažková <a href="mailto:ladkablazkova@gmail.com">ladkablazkova@gmail.com</a> | +420 728 120 498'))
-			->setDefaultValue($this->item ? $this->item->health : null);
+			->setDefaultValue($this->item ? $this->item->getHealth() : null);
 
 		$frm->addCheckbox('admin', 'Administrátor skupiny')
 			->setDefaultValue($this->item ? $this->item->isAdmin() : null);
 
 		$frm->addTextArea('noteInternal', 'Interní poznámka')
-			->setDefaultValue($this->item ? $this->item->noteInternal : null);
+			->setDefaultValue($this->item ? $this->item->getNoteInternal() : null);
 
 		$frm->addGroup('Přihlášení');
 //		$frm->addText('skautisPersonId', 'Skautis PersonID')
@@ -485,7 +491,7 @@ class ParticipantsPresenter extends DatabaseBasePresenter
 		$frm->addText('skautisUserId', 'Skautis UserID')
 			->setRequired(false)
 			->addRule(Form::INTEGER)
-			->setDefaultValue($this->item ? $this->item->skautisUserId : null);
+			->setDefaultValue($this->item ? $this->item->getSkautisUserId() : null);
 
 		$frm->addSubmit('send', 'Uložit')->setAttribute('class', 'btn btn-success btn-lg btn-block');
 
