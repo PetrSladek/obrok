@@ -842,14 +842,16 @@ class GroupsPresenter extends DatabaseBasePresenter
         $values = $frm->getValues();
         if (!preg_match('/\(#(\d+)\)/', $values->person, $matches))
         {
-            throw new \RuntimeException('Nepodarilo se zjistit ID osoby');
+            $frm->addError('Nepodarilo se zjistit ID osoby');
+            return;
         }
 
         $person = $this->persons->find($matches[1]);
 
         if (!$person)
         {
-            throw new \RuntimeException('Nepodarilo se najit osobu #' . $matches[1]);
+            $frm->addError('Nepodarilo se najit osobu #' . $matches[1]);
+            return;
         }
 
 
