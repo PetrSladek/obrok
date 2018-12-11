@@ -92,6 +92,15 @@ class Participant extends Person
 	 */
 	protected $wantHandbook = false;
 
+    /**
+     * Je to maturant s definovanými výhodami?
+     *
+     * @var bool
+     *
+     * @Column(type="boolean")
+     */
+	protected $graduateStudent = false;
+
 	/**
 	 * Participant constructor.
 	 */
@@ -135,6 +144,22 @@ class Participant extends Person
 	{
 		$this->wantHandbook = $wantHandbook;
 	}
+
+    /**
+     * @return bool
+     */
+    public function isGraduateStudent(): bool
+    {
+        return (bool) $this->graduateStudent;
+    }
+
+    /**
+     * @param bool $graduateStudent
+     */
+    public function setGraduateStudent(bool $graduateStudent): void
+    {
+        $this->graduateStudent = $graduateStudent;
+    }
 
 
 	/**

@@ -83,7 +83,9 @@ class ParticipantsPresenter extends DatabaseBasePresenter
 		$grid->addColumn('address', 'Adresa')->enableSort();
 		$grid->addColumn('wantHandbook', 'HB')->enableSort();
 
+		$grid->addColumn('graduateStudent', 'Maturant?')->enableSort();
 		$grid->addColumn('confirmed', 'Přijede?')->enableSort();
+
 		$grid->addColumn('paid', 'Zaplatil?')->enableSort();
 		$grid->addColumn('arrived', 'Přijel?')->enableSort();
 		$grid->addColumn('left', 'Odjel?')->enableSort();
@@ -98,6 +100,8 @@ class ParticipantsPresenter extends DatabaseBasePresenter
 			$form->addText('age');
 			$form->addText('contact');
 			$form->addText('address');
+
+			$form->addSelect('graduateStudent', null, array(1 => 'Ano', 0 => 'Ne'))->setPrompt('--');
 
 			$form->addSelect('confirmed', null, array(1 => 'Ano', 0 => 'Ne'))->setPrompt('--')->setDefaultValue(true);
 			$form->addSelect('paid', null, array(1 => 'Ano', 0 => 'Ne'))->setPrompt('--');
@@ -235,6 +239,10 @@ class ParticipantsPresenter extends DatabaseBasePresenter
 			{
 				$val ? $query->onlyLeft() : $query->onlyNotLeft();
 			}
+            elseif ($key == 'graduateStudent' && $val !== null)
+            {
+                $val ? $query->onlyGraduateStudent() : $query->onlyNotGraduateStudent();
+            }
 		}
 
 		// Pida do selectu zavislosti aby se pak nemuseli tahat solo
@@ -694,6 +702,56 @@ class ParticipantsPresenter extends DatabaseBasePresenter
 		$this->terminate();
 	}
 
+
+    /**
+     * Změna statusu
+     *
+     * @param string $status confirmed | paid | arrived | left
+     * @param bool   $value
+     *
+     * @param int|null   $id
+     *
+     * @throws \Exception
+     * @throws \Nette\Application\BadRequestException
+     */
+    public function handleStatus($status, $value = true, $id = null)
+    {
+        if (!$this->acl->edit)
+        {
+            $this->error('Nemate opravneni', IResponse::S403_FORBIDDEN);
+        }
+
+        try
+        {
+            if (!in_array($status, ['graduateStudent', 'confirmed', 'paid', 'arrived', 'left']))
+            {
+                throw new \InvalidArgumentException("Wrong status name");
+            }
+
+            if($id)
+            {
+                $this->item = $this->repository->find($id);
+            }
+
+            // zavola metody setConfirmed, setPaid,...
+            $method = "set" . ucfirst($status);
+            $this->item->$method($value);
+
+            $this->em->flush();
+        }
+        catch (\InvalidArgumentException $e)
+        {
+            $this->flashMessage($e->getMessage(), 'danger');
+        }
+
+        $this->redrawControl('flags');
+        $this->redrawControl('tblGrid');
+
+        if (!$this->isAjax())
+        {
+            $this->redirect('this');
+        }
+    }
 
 
 

@@ -139,9 +139,6 @@ i[class^='ficon-'] {
 .ficon-book-add {
   background-image: url('img/datagrid/icons/book_add.png');
 }
-.ficon-book-delete {
-  background-image: url('img/datagrid/icons/book_delete.png');
-}
 .ficon-edit {
   background-image: url('img/datagrid/icons/page_edit.png');
 }
@@ -220,6 +217,10 @@ i[class^='ficon-'] {
   background-image: url('img/datagrid/icons/flag_red.png');
 }
 /* Zrušena účast */
+.ficon-flag-purple {
+  background-image: url('img/datagrid/icons/flag_purple.png');
+}
+/* Maturant */
 .cell-flag-blue {
   color: #012785 !important;
   background-color: #BCE5FF !important;
@@ -239,6 +240,10 @@ i[class^='ficon-'] {
 .cell-flag-red {
   color: #D8000C !important;
   background-color: #FFBABA !important;
+}
+.cell-flag-purple {
+  color: #8f18fe !important;
+  background-color: #dcb4ff !important;
 }
 .grid-col-actions {
   width: 50px;

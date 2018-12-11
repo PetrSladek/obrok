@@ -15,6 +15,37 @@ use Kdyby\Persistence\Queryable;
 class ParticipantsQuery extends PersonsQuery
 {
 
+    /**
+     * Jen maturanti
+     *
+     * @return $this
+     */
+    public function onlyGraduateStudent()
+    {
+        $this->filter[] = function (QueryBuilder $qb)
+        {
+            $qb->andWhere('p.graduateStudent = :graduateStudent')->setParameter('graduateStudent', true);
+        };
+
+        return $this;
+    }
+
+
+    /**
+     * Jen NE maturanti
+     *
+     * @return $this
+     */
+    public function onlyNotGraduateStudent()
+    {
+        $this->filter[] = function (QueryBuilder $qb)
+        {
+            $qb->andWhere('p.graduateStudent = :graduateStudent')->setParameter('graduateStudent', false);
+        };
+
+        return $this;
+    }
+
 	/**
 	 * Najde podle variabilniho symoblu nebo ID
 	 *

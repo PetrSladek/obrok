@@ -60,6 +60,13 @@
     <i title="$row->getWantHandbook() ? Ano : Ne" n:class="$row->getWantHandbook() ? ficon-book-add"></i>
 </td>
 {/define}
+{define col-graduateStudent}
+<td n:class="$row->isGraduateStudent() ? cell-flag-purple, cell-flag">
+    <a n:tag-if="$acl->edit" class="ajax" href="{plink status! id=>$row->id, 'graduateStudent', !$row->isGraduateStudent()}">
+        <i n:class="$row->isGraduateStudent() ? ficon-flag-purple : ficon-flag-gray"></i>
+    </a>
+</td>
+{/define}
 {define col-confirmed}
 <td n:class="$row->confirmed ? cell-flag-blue, cell-flag">
     {*<a n:tag-if="$acl->edit" class="ajax" href="{plink status! id=>$row->id, 'confirmed', !$row->confirmed}">*}

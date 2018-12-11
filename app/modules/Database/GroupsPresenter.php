@@ -578,14 +578,15 @@ class GroupsPresenter extends DatabaseBasePresenter
 	}
 
 
-	/**
-	 * Akce změna stavu
-	 *
-	 * @param string $status
-	 * @param bool   $value
-	 *
-	 * @throws \Nette\Application\BadRequestException
-	 */
+    /**
+     * Akce změna stavu
+     *
+     * @param string $status
+     * @param bool $value
+     *
+     * @throws \Nette\Application\AbortException
+     * @throws \Nette\Application\BadRequestException
+     */
 	public function handleStatus($status = 'confirmed', $value = true)
 	{
 		if (!$this->acl->edit)
