@@ -26,6 +26,7 @@
 {/define}
 {define col-group}
 <td>
+    {if $row->group}
     <div class="pull-left" style="margin-right: 5px">
         <img n:if="$row->group->getAvatar()" class="img-responsive" n:img="$row->group->getAvatar(), 48, 48, exact, $row->group->getAvatarCrop()" alt="foto" />
         <img n:if="!$row->group->getAvatar()" class="img-responsive" n:img="'avatar_group.jpg', 48, 48, exact" alt="foto" />
@@ -39,8 +40,9 @@
 
     <strong n:if="$row->group">#{$row->group->id} {$row->group->name}</strong>
     <br /><small n:if="$row->group">{$row->group->city}</small>
-
-
+    {else}
+        -
+    {/if}
 </td>
 {/define}
 {define col-contact}
