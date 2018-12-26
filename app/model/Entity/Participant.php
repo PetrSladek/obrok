@@ -31,6 +31,16 @@ use Nette\Utils\DateTime;
  */
 class Participant extends Person
 {
+    /**
+     * Cena obroku pro 1 ucastnika
+     */
+    public const PRICE = 850;
+
+    /**
+     * Cena obroku pro 1 ucastnika maturanta
+     */
+    public const PRICE_GRADUATE = 550;
+
 
 	/**
 	 * Je admin skupiny? (muze editovat/vyhodit cleny atd..)
@@ -265,6 +275,38 @@ class Participant extends Person
 
 		return $this;
 	}
+
+    /**
+     * Vrati variabilni symbol této skupiny
+     *
+     * @return int
+     */
+    public function getVarSymbol()
+    {
+        return self::getVarSymbolFromId($this->getId());
+    }
+
+    /**
+     * Vrati variabilni symbol skupiny
+     *
+     * @param int $id ID Skupiny
+     *
+     * @return int|null
+     */
+    public static function getVarSymbolFromId($id)
+    {
+        if (empty($id))
+        {
+            return null;
+        }
+
+        // 35100001 - 35199999
+        $base = 35100000;
+        $max = 99999;
+
+        return $base + $id;
+    }
+
 
 	/**
 	 * @param Program $program
@@ -557,6 +599,15 @@ class Participant extends Person
 		$this->openProgramRegistration = false;
 	}
 
+    /**
+     * Vrati cenu za Obrok
+     *
+     * @return int
+     */
+    public function getPrice()
+    {
+        return $this->isGraduateStudent() ? self::PRICE_GRADUATE : self::PRICE;
+    }
 
 
 }

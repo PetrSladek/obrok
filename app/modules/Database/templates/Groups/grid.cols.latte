@@ -28,7 +28,7 @@
 
 {define col-participantsCount}
 <td>
-    {$row->getConfirmedParticipantsCount()} členů <br> {$row->getConfirmedParticipantsCount()*700},- Kč
+    {$row->getConfirmedParticipantsCount()} členů <br /> {$row->getTotalAmount()} Kč
     {*<br /><small>Zaplaceno za: {$row->paidFor}</small>*}
 </td>
 {/define}

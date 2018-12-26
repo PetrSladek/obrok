@@ -57,7 +57,7 @@
         {* Informace o platbě *}
         <div class="row">
             <div class="col-md-6">
-                {if true}
+                {if !$showPaymentDetails}
                 <table  class="table">
                     <tr>
                         <td colspan="2"><h4>Informace k platbě</h4></td>
@@ -66,7 +66,7 @@
                         <td colspan="2"><div class="alert alert-warning">Číslo účtu k platbě zveřejníme v lednu 2019, poté budete mít 14 dní na provedení platby.</div></td>
                     </tr>
                 </table>
-                {elseif $me->paid}
+                {elseif $me->isPaid()}
                 <table  class="table">
                     <tr>
                         <td colspan="2"><h4>Informace k platbě</h4></td>
@@ -89,7 +89,7 @@
                     </tr>
                     <tr>
                         <td>Částka:</td>
-                        <td><strong>350 Kč</strong></td>
+                        <td><strong>{$me->getPrice()} Kč</strong></td>
                     </tr>
                     <tr>
                         <td>Číslo účtu</td>
@@ -108,8 +108,8 @@
             </div>
 
             <div class="col-md-6">
-                {if false && !$me->paid}
-                <img class="img-responsive" src="https://api.paylibo.com/paylibo/generator/czech/image?compress=false&size=270&accountNumber=2100437022&bankCode=2010&amount=350&currency=CZK&vs={$me->getVarSymbol()}&message={='Obrok 2019 '.$me->getFullName()}" />
+                {if $showPaymentDetails && !$me->paid}
+                <img class="img-responsive" src="https://api.paylibo.com/paylibo/generator/czech/image?compress=false&size=270&accountNumber=2100437022&bankCode=2010&amount={$me->getPrice()}&currency=CZK&vs={$me->getVarSymbol()}&message={='Obrok 2019 '.$me->getFullName()}" />
                 {/if}
             </div>
         </div>

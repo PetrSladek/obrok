@@ -691,4 +691,21 @@ abstract class Person
 	}
 
 
+    /**
+     * Datum do kdy musi zaplatit
+     *
+     * @return DateTime
+     */
+    public function getPayToDate()
+    {
+        $createDate = DateTime::from($this->getCreatedAt());
+        $publicationDate = new DateTime('2019-01-01');
+
+        $payToDate = $createDate > $publicationDate ? $createDate : $publicationDate;
+        $payToDate->modify('+ 30 days midnight');
+
+        return $payToDate;
+    }
+
+
 }

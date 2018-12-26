@@ -563,8 +563,8 @@ class Group
 			return null;
 		}
 
-		// 35100001 - 35199999
-        $base = 35100000;
+		// 35300001 - 35399999
+        $base = 35300000;
         $max = 99999;
 
 		return $base + $id;
@@ -601,6 +601,40 @@ class Group
 
 		return (int) $id;
 	}
+
+
+    public function getTotalAmount()
+    {
+        $amount = 0;
+        foreach ($this->getConfirmedParticipants() as $participant)
+        {
+            $amount += $participant->getPrice();
+        }
+
+        return $amount;
+    }
+
+	public function getAmountToPay()
+    {
+        $amount = 0;
+        foreach ($this->getConfirmedParticipants() as $participant)
+        {
+            $amount += ($participant->isPaid() ? 0 : $participant->getPrice());
+        }
+
+        return $amount;
+    }
+
+	public function getPaidAmount()
+    {
+        $amount = 0;
+        foreach ($this->getPaidParticipants() as $participant)
+        {
+            $amount += $participant->getPrice();
+        }
+
+        return $amount;
+    }
 
 
 	/**

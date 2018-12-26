@@ -13,6 +13,7 @@ use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\JoinColumn;
 
 use Kdyby\Doctrine;
+use Nette\Utils\DateTime;
 
 /**
  * @Entity(repositoryClass="App\Model\Repositories\ServiceteamRepository")
@@ -24,6 +25,13 @@ use Kdyby\Doctrine;
 class Serviceteam extends Person
 {
 	use Avatarable;
+
+    /**
+     * Cena obroku pro 1 servisaka
+     */
+    public const PRICE = 400;
+    
+
 
 	/** @Column(type="string", length=512, nullable=true) */
 	protected $role;
@@ -548,7 +556,7 @@ class Serviceteam extends Person
 			return null;
 		}
 
-		// 15200001 - 15299999
+		// 35200001 - 35299999
 		$base = 35200000;
 		$max = 99999;
 
@@ -589,6 +597,31 @@ class Serviceteam extends Person
 		return (int) $id;
 	}
 
+    /**
+     * Vrati cenu za Obrok
+     * @return int
+     */
+	public function getPrice()
+    {
+        return self::PRICE;
+    }
+
+
+    /**
+     * Datum do kdy musi zaplatit
+     *
+     * @return DateTime
+     */
+    public function getPayToDate()
+    {
+        $createDate = DateTime::from($this->getCreatedAt());
+        $publicationDate = new DateTime('2019-01-01');
+
+        $payToDate = $createDate > $publicationDate ? $createDate : $publicationDate;
+        $payToDate->modify('+ 30 days midnight');
+
+        return $payToDate;
+    }
 
 	/**
 	 * Vrati objekt s nette identitou

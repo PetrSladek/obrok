@@ -187,12 +187,14 @@
                     {/snippet}
                 </div>
                 </div>
-                   <p>Počet účastníků ve skupině: {=$item->getConfirmedParticipantsCount()} <br>
-                   Cena celkem: {=$item->getConfirmedParticipantsCount()*700},- Kč</p>
-                  {if $item->getPaidParticipantsCount()>=1}
-                     <p> <small>Zaplaceno: {=$item->getPaidParticipantsCount()*700},- Kč ({=$item->getPaidParticipantsCount()}x) </small> </p>
-                     <p> Zbývá:<strong> {=($item->getConfirmedParticipantsCount()-$item->getPaidParticipantsCount())*700} Kč</strong></p>
-                  {/if}
+                <p>
+                    Počet účastníků ve skupině: {=$item->getConfirmedParticipantsCount()} <br />
+                    Cena celkem: {=$item->getTotalAmount()} Kč
+                </p>
+                {if $item->getPaidParticipantsCount()>=1}
+                    <p><small>Zaplaceno: {=$item->getPaidAmount()} Kč ({=$item->getPaidParticipantsCount()} os.) </small> </p>
+                    <p> Zbývá:<strong> {=$item->getAmountToPay()} Kč</strong></p>
+                {/if}
                 <div class="row">
                     <div class="col-md-3">
                         <div class="btn-group-vertical btn-block" data-toggle="buttons" n:snippet="flags">

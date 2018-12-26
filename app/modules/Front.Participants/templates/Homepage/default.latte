@@ -98,10 +98,13 @@
                             {$participant->fullname}<br />
 
                             <small class="pull-left">
-                                {if $me->getWantHandbook()}
+                                {if $participant->getWantHandbook()}
                                 <small>Chce tištěný handbook.</small>
                                 {else}
                                 <small>Nechce tištěný handbook.</small>
+                                {/if}
+                                {if $participant->isGraduateStudent()}
+                                <small> / Maturant</small>
                                 {/if}
                             </small>
                             <small class="pull-right">
@@ -175,6 +178,80 @@
     </div>
 </div>
 
+
+
+<div class="row">
+    <div class="col-md-6">
+        <table class="table">
+            {if !$showPaymentDetails}
+                <table  class="table">
+                    <tr>
+                        <td colspan="2"><h4>Informace k platbě</h4></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><div class="alert alert-warning">Číslo účtu k platbě zveřejníme v lednu 2019, poté budete mít 14 dní na provedení platby.</div></td>
+                    </tr>
+                </table>
+            {elseif $group->isPaid()}
+                <tr>
+                    <td colspan="2"><h4>Informace k platbě</h4></td>
+                </tr>
+                <tr>
+                    <td colspan="2"><div class="alert alert-success">Účastnický poplatek byl úspěšně přijat</div></td>
+                </tr>
+            {else}
+                <tr>
+                    <td colspan="2"><h4>Informace k platbě</h4></td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <div n:class="alert, $daysToPay < 10 ? alert-danger : alert-warning">
+                            Na zaplacení máte už jen {$daysToPay} {$daysToPay == 1 ? 'den' : in_array($daysToPay, [2,3,4]) ? 'dny' : 'dní'}!
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Částka:</td>
+                    <td>
+                        <strong>{$me->getPrice()} Kč</strong>
+                       {* {if $group->getPaidParticipantsCount()>=1}
+                            Zbývá:
+                        {/if}
+                        <strong>
+                            {=$group->getAmountToPay()} Kč (850 Kč pro účastníky, 550 Kč pro účastníky maturanty)
+                        </strong><br />
+                        {if $group->getPaidParticipantsCount()>=1}
+                            <small>Zaplaceno: {=$group->getPaidAmount()} Kč (za {=$group->getPaidParticipantsCount()} os.) </small>
+                        {/if}*}
+                    </td>
+                </tr>
+                <tr>
+                    <td>Číslo účtu</td>
+                    <td><strong>2100437022/2010</strong></td>
+                </tr>
+                <tr>
+                    <td>Variabilní symbol</td>
+                    <td><strong>{$me->getVarSymbol()}</strong></td>
+                </tr>
+                <tr>
+                    <td>Poznámka pro příjemce</td>
+                    <td><strong>Obrok 2019 {$me->getFullName()}</strong></td>
+                </tr>
+            {/if}
+        </table>
+
+        {*Platbu provádějte až budete mít splněné všechny podmínky učasti!<br />*}
+        {*<strong>Zaplaťte prosím za všechny registrované účastníky najednou.</strong><br />*}
+        {*V případě, že později budete chtít někoho přidat. Zaplaťte pouze za něj (se stejným Var.Symbolem)*}
+    </div>
+    <div class="col-md-6">
+        {if $showPaymentDetails && !$group->paid}
+            <img class="img-responsive" src="https://api.paylibo.com/paylibo/generator/czech/image?compress=false&size=440&accountNumber=2100437022&bankCode=2010&amount={=$me->getPrice()}&currency=CZK&vs={$me->getVarSymbol()}&message={='Obrok 2019 '.$me->getFullName()}" />
+        {/if}
+    </div>
+
+</div>
+
 <br /><br />
 
 
@@ -205,67 +282,6 @@
 
 <br /><br />
 
-<div class="row">
-    <div class="col-md-6">
-        <table class="table">
-            {if true}
-            <table  class="table">
-                <tr>
-                    <td colspan="2"><h4>Informace k platbě</h4></td>
-                </tr>
-                <tr>
-                    <td colspan="2"><div class="alert alert-warning">Číslo účtu k platbě zveřejníme v lednu 2019, poté budete mít 14 dní na provedení platby.</div></td>
-                </tr>
-            </table>
-            {elseif $group->isPaid()}
-            <tr>
-                <td colspan="2"><h4>Informace k platbě</h4></td>
-            </tr>
-            <tr>
-                <td colspan="2"><div class="alert alert-success">Účastnický poplatek byl úspěšně přijat</div></td>
-            </tr>
-            {else}
-            <tr>
-                <td colspan="2"><h4>Informace k platbě</h4></td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div n:class="alert, $daysToPay < 10 ? alert-danger : alert-warning">
-                        Na zaplacení máte už jen {$daysToPay} {$daysToPay == 1 ? 'den' : in_array($daysToPay, [2,3,4]) ? 'dny' : 'dní'}!
-                    </div>
-                </td>
-            </tr>
-           <tr>
-               <td>Částka:</td>
-               <td>{if $group->getPaidParticipantsCount()>=1}Zbývá:{/if}<strong> {=($group->getConfirmedParticipantsCount()-$group->getPaidParticipantsCount())*700} Kč (700 Kč/os.)</strong><br>
-            {if $group->getPaidParticipantsCount()>=1}   <small>Zaplaceno: {=$group->getPaidParticipantsCount()*700},- Kč ({=$group->getPaidParticipantsCount()}x) </small> {/if} </td>
-           </tr>
-           <tr>
-               <td>Číslo účtu</td>
-               <td><strong>2100437022/2010</strong></td>
-           </tr>
-           <tr>
-               <td>Variabilní symbol</td>
-               <td><strong>{$group->getVarSymbol()}</strong></td>
-           </tr>
-           <tr>
-               <td>Poznámka pro příjemce</td>
-               <td><strong>Obrok 2019 {$group->name} {$group->city}</strong></td>
-           </tr>
-            {/if}
-       </table>
-
-        Platbu provádějte až budete mít splněné všechny podmínky učasti!<br />
-        <strong>Zaplaťte prosím za všechny registrované účastníky najednou.</strong><br />
-        V případě, že později budete chtít někoho přidat. Zaplaťte pouze za něj (se stejným Var.Symbolem)
-    </div>
-    <div class="col-md-6">
-        {if false && !$group->paid}
-            <img class="img-responsive" src="https://api.paylibo.com/paylibo/generator/czech/image?compress=false&size=440&accountNumber=2100437022&bankCode=2010&amount={=($group->getConfirmedParticipantsCount()-$group->getPaidParticipantsCount())*700}&currency=CZK&vs={$group->getVarSymbol()}&message={='Obrok 2019 '.$group->name.' ' .$group->city}" />
-        {/if}
-    </div>
-
-</div>
 
 
 {if $group->confirmed}

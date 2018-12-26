@@ -50,15 +50,25 @@ class HomepagePresenter extends ParticipantAuthBasePresenter
 
 		$this->template->programs = $programs;
 
-        $fromDate = new DateTime('2019-01-25 20:00');
+//        $fromDate = new DateTime('2019-01-25 20:00');
+//
+//        $payToDate = DateTime::from($fromDate);
+//        $payToDate->modify('+ 30 days midnight');
+//
+//        $now = new DateTime('now midnight');
+//
+//        $diff = $now->diff($payToDate);
+//        $this->template->daysToPay = $payToDate > $now ? $diff->days : 0;
+//
 
-        $payToDate = DateTime::from($fromDate);
-        $payToDate->modify('+ 30 days midnight');
+
+        $payToDate = $this->me->getPayToDate();
 
         $now = new DateTime('now midnight');
 
         $diff = $now->diff($payToDate);
         $this->template->daysToPay = $payToDate > $now ? $diff->days : 0;
+        $this->template->showPaymentDetails = true;
 
 	}
 

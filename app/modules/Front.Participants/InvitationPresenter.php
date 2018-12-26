@@ -78,7 +78,7 @@ class InvitationPresenter extends FrontBasePresenter
 
         if (!$this->openRegistrationParticipants/* && !$this->group->getFreePlaces()*/) {
             $this->flashMessage('Nelze registrovat nové učastníky. Kapacita je již zaplněná', 'warning');
-            $this->redirect('Homepage:');
+            $this->redirect(':Front:Unspecified:');
         }
 
 
