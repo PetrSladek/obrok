@@ -74,7 +74,7 @@ class ParticipantsPresenter extends DatabaseBasePresenter
 		$grid->addCellsTemplate(__DIR__ . '/templates/grid.layout.latte');
 		$grid->addCellsTemplate(__DIR__ . '/templates/Participants/grid.cols.latte');
 
-		$grid->addColumn('id', 'Id')->enableSort();
+        $grid->addColumn('varSymbol', 'ID / VS')->enableSort();
 		$grid->addColumn('fullname', 'Jméno')->enableSort();
 		$grid->addColumn('group', 'Skupina')->enableSort();
 
@@ -94,7 +94,7 @@ class ParticipantsPresenter extends DatabaseBasePresenter
 		{
 
 			$form = new Container();
-			$form->addText('id');
+			$form->addText('varSymbol');
 			$form->addText('fullname');
 			$form->addText('group');
 			$form->addText('age');
@@ -146,7 +146,11 @@ class ParticipantsPresenter extends DatabaseBasePresenter
             {
                 list($column, $order) = $sorting;
 
-                if ($column == 'fullname')
+                if ($column == 'varSymbol')
+                {
+                    $column = 'p.id';
+                }
+                else if ($column == 'fullname')
                 {
                     $column = 'p.lastName';
                 }
@@ -202,6 +206,10 @@ class ParticipantsPresenter extends DatabaseBasePresenter
 			{
 				$query->byId($val);
 			}
+            else if ($key == 'varSymbol')
+            {
+                $query->byVarSymbol($val);
+            }
 			elseif ($key == 'fullname')
 			{
 				$query->searchFullname($val);

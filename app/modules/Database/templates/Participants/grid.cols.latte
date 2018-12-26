@@ -3,6 +3,12 @@
     #{$row->id}
 </td>
 {/define}
+{define col-varSymbol}
+    <td>
+        #{$row->getId()}<br/>
+        <small>{$row->getVarSymbol()}</small>
+    </td>
+{/define}
 {define col-fullname}
 <td>
     {*<img n:if="$row->group" src="{plink Image: (expand) $row->group->getAvatarType('dbrow')}" alt="foto" style="float: left;margin-right: 10px;" />*}
@@ -71,30 +77,30 @@
 {/define}
 {define col-confirmed}
 <td n:class="$row->confirmed ? cell-flag-blue, cell-flag">
-    {*<a n:tag-if="$acl->edit" class="ajax" href="{plink status! id=>$row->id, 'confirmed', !$row->confirmed}">*}
+    <a n:tag-if="$acl->edit" class="ajax" href="{plink status! id=>$row->id, 'confirmed', !$row->confirmed}">
         <i n:class="$row->confirmed ? ficon-flag-blue : ficon-flag-gray"></i>
-    {*</a>*}
+    </a>
 </td>
 {/define}
 {define col-paid}
 <td n:class="$row->paid ? cell-flag-green, cell-flag">
-    {*<a n:tag-if="$acl->edit" class="ajax" href="{plink status! id=>$row->id, 'paid', !$row->paid}">*}
+    <a n:tag-if="$acl->edit" class="ajax" href="{plink status! id=>$row->id, 'paid', !$row->paid}">
         <i n:class="$row->paid ? ficon-flag-green : ficon-flag-gray"></i>
-    {*</a>*}
+    </a>
 </td>
 {/define}
 {define col-arrived}
 <td n:class="$row->arrived ? cell-flag-pink, cell-flag">
-    {*<a n:tag-if="$acl->edit" class="ajax" href="{plink status! id=>$row->id, 'arrived', !$row->arrived}">*}
+    <a n:tag-if="$acl->edit" class="ajax" href="{plink status! id=>$row->id, 'arrived', !$row->arrived}">
         <i n:class="$row->arrived ? ficon-flag-pink : ficon-flag-gray"></i>
-    {*</a>*}
+    </a>
 </td>
 {/define}
 {define col-left}
 <td n:class="$row->left ? cell-flag-yellow, cell-flag">
-    {*<a n:tag-if="$acl->edit" class="ajax" href="{plink status! id=>$row->id, 'left', !$row->left}">*}
+    <a n:tag-if="$acl->edit" class="ajax" href="{plink status! id=>$row->id, 'left', !$row->left}">
         <i n:class="$row->left ? ficon-flag-yellow : ficon-flag-gray"></i>
-    {*</a>*}
+    </a>
 </td>
 {/define}
 

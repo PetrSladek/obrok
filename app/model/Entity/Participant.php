@@ -307,6 +307,37 @@ class Participant extends Person
         return $base + $id;
     }
 
+    /**
+     * Vrati ID serviska
+     *
+     * @param $varSymbol
+     *
+     * @return int|null
+     */
+    public static function getIdFromVarSymbol($varSymbol)
+    {
+        if (empty($varSymbol))
+        {
+            return null;
+        }
+
+        $varSymbol = str_replace(' ', '', $varSymbol);
+        $varSymbol = (int) $varSymbol;
+
+        $base = 35100000;
+        $max = 99999;
+        // Kdyz bude ID vetsi jak 9999 tak jsme v haji =)
+
+        if ($varSymbol <= $base || $varSymbol > $base + $max)
+        {
+            return null;
+        }
+
+        $id = $varSymbol - $base;
+
+        return (int) $id;
+    }
+
 
 	/**
 	 * @param Program $program

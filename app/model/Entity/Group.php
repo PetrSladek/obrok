@@ -588,8 +588,8 @@ class Group
 		$varSymbol = str_replace(' ', '', $varSymbol);
 		$varSymbol = (int) $varSymbol;
 
-		// 35100001 - 35199999
-		$base = 35100000;
+		// 35300001 - 35399999
+		$base = 35300000;
 		$max = 99999;
 		// Kdyz bude ID vetsi jak 9999 tak jsme v haji =)
 

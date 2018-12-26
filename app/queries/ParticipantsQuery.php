@@ -56,7 +56,7 @@ class ParticipantsQuery extends PersonsQuery
 	public function byVarSymbol($varSymbol)
 	{
 		// zkuzsi zjistit varSymbol z ID
-		$id = Group::getIdFromVarSymbol($varSymbol);
+		$id = Participant::getIdFromVarSymbol($varSymbol);
 		// pokud to neni var symbol tak jde o ID
 		if ($id == null)
 		{
