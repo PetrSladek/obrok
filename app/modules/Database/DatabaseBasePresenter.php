@@ -4,6 +4,7 @@ namespace App\Module\Database\Presenters;
 
 use App\BasePresenter;
 use App\Forms\Form;
+use App\Model\Entity\Participant;
 use App\Model\Entity\Person;
 use App\Model\Entity\Serviceteam;
 use App\Model\Phone;
@@ -283,6 +284,14 @@ abstract class DatabaseBasePresenter extends \App\Module\Base\Presenters\BasePre
 			{
 				return (string) (new Phone($value));
 			}
+			else if ($key === 'id' && $this instanceof ParticipantsPresenter)
+            {
+                return Participant::getVarSymbolFromId($value);
+            }
+            else if ($key === 'id' && $this instanceof Serviceteam)
+            {
+                return Serviceteam::getVarSymbolFromId($value);
+            }
 			elseif ($key === 'avatar')
 			{
 				$baseUrl = rtrim($this->getHttpRequest()->getUrl()->getBaseUrl(), '/');
@@ -321,6 +330,8 @@ abstract class DatabaseBasePresenter extends \App\Module\Base\Presenters\BasePre
 			array_keys($row)
 		);
 	}
+
+
 
 	/**
 	 * Vyexportuje vyfiltrovaná data

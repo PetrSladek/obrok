@@ -36,14 +36,14 @@
 			<tr>
 				<td>Účastníci</td>
 				<td class="cell-flag-blue cell-flag">{$participants->confirmed}</td>
-				<td class="cell-flag-green cell-flag">{$participants->paid} <br><small>{=$participants->paid*700} Kč</small> </td>
+				<td class="cell-flag-green cell-flag">{$participants->paid}</td>
 				<td class="cell-flag-pink cell-flag">{$participants->arrived}</td>
 				<td class="cell-flag-yellow cell-flag">{$participants->left}</td>
 			</tr>
       			<tr>
 				<td>Celkem</td>
 				<td class="cell-flag-blue cell-flag">{=$participants->confirmed+$serviceteam->confirmed}</td>
-				<td class="cell-flag-green cell-flag">{=$participants->paid+$serviceteam->paid} <br><small>{=$serviceteam->paid*350+$participants->paid*700} Kč</small> </td>
+				<td class="cell-flag-green cell-flag">{=$participants->paid+$serviceteam->paid}</td>
 				<td class="cell-flag-pink cell-flag"></td>
 				<td class="cell-flag-yellow cell-flag"></td>
 			</tr>
