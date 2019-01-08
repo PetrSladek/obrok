@@ -18,6 +18,7 @@ use Nette\Forms\Controls\BaseControl;
 use Nette\Forms\IControl;
 use Nette\Http\IResponse;
 use Nette\InvalidStateException;
+use Nette\Mail\Message;
 use Nette\Security\Passwords;
 use Nette\Utils\DateTime;
 use Nette\Utils\Html;
@@ -761,7 +762,69 @@ class ParticipantsPresenter extends DatabaseBasePresenter
         }
     }
 
+    /**
+     * @param bool $force
+     * @throws \Nette\Application\AbortException
+     */
+    public function actionSendPaymentInstruction($force = false)
+    {
+        set_time_limit(0);
 
+        $query = new ParticipantsQuery();
+        $query->onlyConfirmed();
+        $query->onlyNotSentParticipantInfo();
+
+        $result = $this->repository->fetch($query);
+        $result->applyPaging(0, 100);
+
+        $sent = 0;
+
+        if (!$force)
+        {
+            $participant = new Participant();
+            $participant->setFullName('Test', 'Testovic', 'Testov');
+            $participant->setEmail('peggy@skaut.cz');
+            $result = [$participant];
+        }
+
+        $failed = [];
+        /** @var Participant $participant */
+        foreach ($result as $participant)
+        {
+            try {
+                $mail = $this->emails->create(
+                    'participantPaymentInstruction',
+                    'Pokyny k platbě!',
+                    [
+                        'participant' => $participant
+                    ],
+                    $this
+                );
+                $mail->addTo($participant->getEmail(), $participant->getFullname());
+
+                $this->emails->send($mail);
+
+                $participant->setSentPaymentInfoEmail(true);
+                $this->em->flush();
+
+                $sent++;
+            }
+            catch (\Exception $e)
+            {
+                $failed[$participant->getEmail()] = $e;
+            }
+        }
+
+
+        echo "Odeslano $sent emailu\n";
+
+        foreach ($failed as $email => $e)
+        {
+            echo "Nepodarilo se odslat $email: {$e->getMessage()}\n";
+        }
+
+        $this->terminate();
+    }
 
 }
 

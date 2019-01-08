@@ -123,6 +123,21 @@ class ParticipantsQuery extends PersonsQuery
 	}
 
 
+    /**
+     * @return $this
+     */
+	public function onlyNotSentParticipantInfo()
+    {
+        $this->filter[] = function (QueryBuilder $qb)
+        {
+            $qb->andWhere('p.sentPaymentInfoEmail = :sentPaymentInfoEmail')
+               ->setParameter('sentPaymentInfoEmail', false);
+        };
+
+        return $this;
+    }
+
+
 	/**
 	 * @param Queryable $repository
 	 *

@@ -111,6 +111,15 @@ class Participant extends Person
      */
 	protected $graduateStudent = false;
 
+    /**
+     * Byl odeslán email s platebními informacemi
+     *
+     * @var bool
+     *
+     * @Column(type="boolean")
+     */
+	protected $sentPaymentInfoEmail = false;
+
 	/**
 	 * Participant constructor.
 	 */
@@ -639,6 +648,23 @@ class Participant extends Person
     {
         return $this->isGraduateStudent() ? self::PRICE_GRADUATE : self::PRICE;
     }
+
+    /**
+     * @return bool
+     */
+    public function isSentPaymentInfoEmail(): bool
+    {
+        return $this->sentPaymentInfoEmail;
+    }
+
+    /**
+     * @param bool $sentPaymentInfoEmail
+     */
+    public function setSentPaymentInfoEmail(bool $sentPaymentInfoEmail): void
+    {
+        $this->sentPaymentInfoEmail = $sentPaymentInfoEmail;
+    }
+
 
 
 }
