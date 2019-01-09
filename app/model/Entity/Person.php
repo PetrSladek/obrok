@@ -702,7 +702,7 @@ abstract class Person
         $publicationDate = new DateTime('2019-01-09');
 
         $payToDate = $createDate > $publicationDate ? $createDate : $publicationDate;
-        $payToDate->modify('+ 30 days midnight');
+        $payToDate->modify('+ 14 days midnight');
 
         return $payToDate;
     }

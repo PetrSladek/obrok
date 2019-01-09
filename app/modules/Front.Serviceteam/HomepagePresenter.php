@@ -43,7 +43,7 @@ class HomepagePresenter extends ServiceteamAuthBasePresenter
 
         $diff = $now->diff($payToDate);
         $this->template->daysToPay = $payToDate > $now ? $diff->days : 0;
-        $this->template->showPaymentDetails = false;
+        $this->template->showPaymentDetails = true;
     }
 
 

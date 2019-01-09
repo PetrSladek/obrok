@@ -160,8 +160,24 @@ class ServiceteamQuery extends PersonsQuery
 		return $this->byId($id);
 	}
 
+    /**
+     * @return $this
+     */
+    public function onlyNotSentParticipantInfo()
+    {
+        $this->filter[] = function (QueryBuilder $qb)
+        {
+            $qb->andWhere('p.sentPaymentInfoEmail = :sentPaymentInfoEmail')
+                ->setParameter('sentPaymentInfoEmail', false);
+        };
 
-	/**
+        return $this;
+    }
+
+
+
+
+    /**
 	 * @param Queryable $repository
 	 *
 	 * @return \Kdyby\Doctrine\QueryBuilder

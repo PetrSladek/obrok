@@ -698,6 +698,70 @@ class ServiceteamPresenter extends DatabaseBasePresenter
 //	}
 
 
+    /**
+     * @param bool $force
+     * @throws \Nette\Application\AbortException
+     */
+    public function actionSendPaymentInstruction($force = false)
+    {
+        set_time_limit(0);
+
+        $query = new ServiceteamQuery();
+        $query->onlyConfirmed();
+        $query->onlyNotSentParticipantInfo();
+
+        $result = $this->repository->fetch($query);
+        $result->applyPaging(0, 100);
+
+        $sent = 0;
+
+        if (!$force)
+        {
+            $serviceteam = new Serviceteam();
+            $serviceteam->setFullName('Test', 'Testovic', 'Testov');
+            $serviceteam->setEmail('peggy@skaut.cz');
+            $result = [$serviceteam];
+        }
+
+        $failed = [];
+        /** @var Serviceteam $serviceteam */
+        foreach ($result as $serviceteam)
+        {
+            try {
+                $mail = $this->emails->create(
+                    'serviceteamPaymentInstruction',
+                    'Pokyny k platbě!',
+                    [
+                        'serviceteam' => $serviceteam
+                    ],
+                    $this
+                );
+                $mail->addTo($serviceteam->getEmail(), $serviceteam->getFullname());
+
+                $this->emails->send($mail);
+
+                $serviceteam->setSentPaymentInfoEmail(true);
+                $this->em->flush();
+
+                $sent++;
+            }
+            catch (\Exception $e)
+            {
+                $failed[$serviceteam->getEmail()] = $e;
+            }
+        }
+
+
+        echo "Odeslano $sent emailu\n";
+
+        foreach ($failed as $email => $e)
+        {
+            echo "Nepodarilo se odslat $email: {$e->getMessage()}\n";
+        }
+
+        $this->terminate();
+    }
+
 
 
 //    /**

@@ -1,0 +1,29 @@
+{include 'head.latte'}
+<p>
+ Ahoj, Posíláme slíbené údaje k platbě servisáckého poplatku na Obrok 2019.
+</p>
+<p>
+    <b style="color: red;"> Platbu je nutno provést do 14 dní (tzn. do 23.1.2019)! <br />
+    Pokud tak neučiníte, registrace Vám může být zrušena dle znění registračních podmínek. </b><br />
+</p>
+
+<h2>Údaje k platbě</h2>
+<p>
+    Částka: <strong>{$serviceteam->getPrice()} Kč</strong><br />
+    Číslo účtu: <strong>2100437022/2010</strong><br />
+    Variabilní symbol: <strong>{$serviceteam->getVarSymbol()}</strong><br />
+    Poznámka pro příjemce: <strong>Obrok 2019 - {$serviceteam->getFullName()}</strong>
+</p>
+<p>
+    Platební údaje a stav platby je také vidět po přihlášení na https://registrace.obrok19.cz/
+</p>
+
+<p>
+    Kdybyste měli jakékoliv dotazi či připomínky, neváhejte napsat e-mail, FB message nebo cokoliv ;).
+</p>
+
+<p>
+S přáním krásného dne!<br />
+Obrok 2019 tým
+</p>
+{include 'foot.latte'}

@@ -146,6 +146,15 @@ class Serviceteam extends Person
 	 */
 	protected $wantHandbook = false;
 
+    /**
+     * Byl odeslán email s platebními informacemi
+     *
+     * @var bool
+     *
+     * @Column(type="boolean")
+     */
+    protected $sentPaymentInfoEmail = false;
+
 	/**
 	 * Velikost tricka
 	 * @Column(type="string")
@@ -214,6 +223,8 @@ class Serviceteam extends Person
 	 * @var Job|null Pozice kerou v rámci (pod)týmu vykonává
 	 **/
 	protected $job;
+
+
 
 	/**
 	 * @return mixed
@@ -615,13 +626,31 @@ class Serviceteam extends Person
     public function getPayToDate()
     {
         $createDate = DateTime::from($this->getCreatedAt());
-        $publicationDate = new DateTime('2019-01-01');
+        $publicationDate = new DateTime('2019-01-10');
 
         $payToDate = $createDate > $publicationDate ? $createDate : $publicationDate;
-        $payToDate->modify('+ 30 days midnight');
+        $payToDate->modify('+ 14 days midnight');
 
         return $payToDate;
     }
+
+    /**
+     * @return bool
+     */
+    public function isSentPaymentInfoEmail(): bool
+    {
+        return $this->sentPaymentInfoEmail;
+    }
+
+    /**
+     * @param bool $sentPaymentInfoEmail
+     */
+    public function setSentPaymentInfoEmail(bool $sentPaymentInfoEmail): void
+    {
+        $this->sentPaymentInfoEmail = $sentPaymentInfoEmail;
+    }
+
+
 
 	/**
 	 * Vrati objekt s nette identitou
