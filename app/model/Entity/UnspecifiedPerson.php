@@ -29,11 +29,38 @@ class UnspecifiedPerson extends Person
 {
 
 	/**
+	 * Byl odeslán email s platebními informacemi
+	 *
+	 * @var bool
+	 *
+	 * @Column(type="boolean")
+	 */
+	protected $sentPaymentInfoEmail = false;
+
+
+	/**
 	 * Vrati objekt s nette identitou
 	 */
 	public function toIdentity()
 	{
 		return new \Nette\Security\Identity($this->getId(), Person::TYPE_UNSPECIFIED);
 	}
+
+	/**
+	 * @return bool
+	 */
+	public function isSentPaymentInfoEmail(): bool
+	{
+		return $this->sentPaymentInfoEmail;
+	}
+
+	/**
+	 * @param bool $sentPaymentInfoEmail
+	 */
+	public function setSentPaymentInfoEmail(bool $sentPaymentInfoEmail): void
+	{
+		$this->sentPaymentInfoEmail = $sentPaymentInfoEmail;
+	}
+
 
 }

@@ -359,6 +359,67 @@ class UnspecifiedPersonsPresenter extends DatabaseBasePresenter
     }
 
 
+	/**
+	 * @param bool $force
+	 * @throws \Nette\Application\AbortException
+	 */
+	public function actionSendPaymentInstruction($force = false)
+	{
+		set_time_limit(0);
+
+		$query = new UnspecifiedPersonsQuery();
+		$query->onlyNotSentParticipantInfo();
+
+		$result = $this->repository->fetch($query);
+		$result->applyPaging(0, 100);
+
+		$sent = 0;
+
+		if (!$force)
+		{
+			$unspecified = new UnspecifiedPerson();
+			$unspecified->setFullName('Test', 'Testovic', 'Testov');
+			$unspecified->setEmail('peggy@skaut.cz');
+			$result = [$unspecified];
+		}
+
+		$failed = [];
+		/** @var Serviceteam $unspecified */
+		foreach ($result as $unspecified)
+		{
+			try {
+				$mail = $this->emails->create(
+					'unspecifiedPaymentInstruction',
+					'Info',
+					[],
+					$this
+				);
+				$mail->addTo($unspecified->getEmail(), $unspecified->getFullname());
+
+				$this->emails->send($mail);
+
+				$unspecified->setSentPaymentInfoEmail(true);
+				$this->em->flush();
+
+				$sent++;
+			}
+			catch (\Exception $e)
+			{
+				$failed[$unspecified->getEmail()] = $e;
+			}
+		}
+
+
+		echo "Odeslano $sent emailu\n";
+
+		foreach ($failed as $email => $e)
+		{
+			echo "Nepodarilo se odslat $email: {$e->getMessage()}\n";
+		}
+
+		$this->terminate();
+	}
+
 }
 
 
