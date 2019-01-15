@@ -3,6 +3,7 @@
 namespace App\Module\Front\Presenters;
 
 use App\Hydrators\SkautisHydrator;
+use App\Model\Entity\Person;
 use App\Model\Entity\UnspecifiedPerson;
 use App\Model\Repositories\ParticipantsRepository;
 use App\Model\Repositories\PersonsRepository;
@@ -56,7 +57,7 @@ abstract class FrontBasePresenter extends BasePresenter
 
 			try
 			{
-
+			    /** @var Person $person */
 				$person = $this->persons->findBySkautisUserId($skautisUserId);
 
 				// Pokud existuje jako ucastnik, servisak nebo guest (jeste si nezvolil co bude)

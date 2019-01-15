@@ -1,11 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "hash": "a143787c701e43ad6926a46bee5a6fd6",
-    "content-hash": "49909512776cea635126ee34a30b9513",
+    "content-hash": "4e0185187fef26d9cdc261bc60a9ed83",
     "packages": [
         {
             "name": "beberlei/DoctrineExtensions",
@@ -59,7 +58,7 @@
                 "doctrine",
                 "orm"
             ],
-            "time": "2018-09-26 16:18:17"
+            "time": "2018-09-26T16:18:17+00:00"
         },
         {
             "name": "brabijan/images",
@@ -107,7 +106,7 @@
                 "images",
                 "nette"
             ],
-            "time": "2018-06-02 16:46:31"
+            "time": "2018-06-02T16:46:31+00:00"
         },
         {
             "name": "dg/adminer-custom",
@@ -136,7 +135,7 @@
                 "postgresql",
                 "sqlite"
             ],
-            "time": "2018-06-29 10:30:14"
+            "time": "2018-06-29T10:30:14+00:00"
         },
         {
             "name": "dg/ftp-deployment",
@@ -198,7 +197,7 @@
                 "ftp",
                 "ssh"
             ],
-            "time": "2018-06-06 10:58:13"
+            "time": "2018-06-06T10:58:13+00:00"
         },
         {
             "name": "doctrine/annotations",
@@ -266,7 +265,7 @@
                 "docblock",
                 "parser"
             ],
-            "time": "2017-12-06 07:11:42"
+            "time": "2017-12-06T07:11:42+00:00"
         },
         {
             "name": "doctrine/cache",
@@ -341,7 +340,7 @@
                 "cache",
                 "caching"
             ],
-            "time": "2018-08-21 18:01:43"
+            "time": "2018-08-21T18:01:43+00:00"
         },
         {
             "name": "doctrine/collections",
@@ -408,7 +407,7 @@
                 "collections",
                 "iterator"
             ],
-            "time": "2017-07-22 10:37:32"
+            "time": "2017-07-22T10:37:32+00:00"
         },
         {
             "name": "doctrine/common",
@@ -491,7 +490,7 @@
                 "persistence",
                 "spl"
             ],
-            "time": "2018-07-12 21:16:12"
+            "time": "2018-07-12T21:16:12+00:00"
         },
         {
             "name": "doctrine/dbal",
@@ -570,7 +569,7 @@
                 "persistence",
                 "queryobject"
             ],
-            "time": "2018-07-13 03:16:35"
+            "time": "2018-07-13T03:16:35+00:00"
         },
         {
             "name": "doctrine/event-manager",
@@ -644,7 +643,7 @@
                 "eventdispatcher",
                 "eventmanager"
             ],
-            "time": "2018-06-11 11:59:03"
+            "time": "2018-06-11T11:59:03+00:00"
         },
         {
             "name": "doctrine/inflector",
@@ -711,7 +710,7 @@
                 "singularize",
                 "string"
             ],
-            "time": "2018-01-09 20:05:19"
+            "time": "2018-01-09T20:05:19+00:00"
         },
         {
             "name": "doctrine/instantiator",
@@ -765,7 +764,7 @@
                 "constructor",
                 "instantiate"
             ],
-            "time": "2017-07-22 11:58:36"
+            "time": "2017-07-22T11:58:36+00:00"
         },
         {
             "name": "doctrine/lexer",
@@ -819,19 +818,19 @@
                 "lexer",
                 "parser"
             ],
-            "time": "2014-09-09 13:34:57"
+            "time": "2014-09-09T13:34:57+00:00"
         },
         {
             "name": "doctrine/orm",
             "version": "v2.6.2",
             "source": {
                 "type": "git",
-                "url": "https://github.com/doctrine/doctrine2.git",
+                "url": "https://github.com/doctrine/orm.git",
                 "reference": "d2b4dd71d2a276edd65d0c170375b445f8a4a4a8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/doctrine2/zipball/d2b4dd71d2a276edd65d0c170375b445f8a4a4a8",
+                "url": "https://api.github.com/repos/doctrine/orm/zipball/d2b4dd71d2a276edd65d0c170375b445f8a4a4a8",
                 "reference": "d2b4dd71d2a276edd65d0c170375b445f8a4a4a8",
                 "shasum": ""
             },
@@ -901,7 +900,7 @@
                 "database",
                 "orm"
             ],
-            "time": "2018-07-12 20:47:13"
+            "time": "2018-07-12T20:47:13+00:00"
         },
         {
             "name": "doctrine/persistence",
@@ -979,7 +978,7 @@
             "keywords": [
                 "persistence"
             ],
-            "time": "2018-07-12 12:37:50"
+            "time": "2018-07-12T12:37:50+00:00"
         },
         {
             "name": "doctrine/reflection",
@@ -1054,7 +1053,7 @@
             "keywords": [
                 "reflection"
             ],
-            "time": "2018-06-14 14:45:07"
+            "time": "2018-06-14T14:45:07+00:00"
         },
         {
             "name": "kdyby/annotations",
@@ -1125,7 +1124,7 @@
                 "kdyby",
                 "nette"
             ],
-            "time": "2017-12-10 20:44:38"
+            "time": "2017-12-10T20:44:38+00:00"
         },
         {
             "name": "kdyby/console",
@@ -1195,7 +1194,7 @@
                 "kdyby",
                 "nette"
             ],
-            "time": "2017-12-03 18:35:49"
+            "time": "2017-12-03T18:35:49+00:00"
         },
         {
             "name": "kdyby/doctrine",
@@ -1263,7 +1262,7 @@
                 "nette",
                 "orm"
             ],
-            "time": "2018-08-18 18:40:36"
+            "time": "2018-08-18T18:40:36+00:00"
         },
         {
             "name": "kdyby/doctrine-cache",
@@ -1333,7 +1332,7 @@
                 "kdyby",
                 "nette"
             ],
-            "time": "2018-03-21 07:48:08"
+            "time": "2018-03-21T07:48:08+00:00"
         },
         {
             "name": "kdyby/events",
@@ -1403,7 +1402,7 @@
                 "kdyby",
                 "nette"
             ],
-            "time": "2017-12-05 10:14:38"
+            "time": "2017-12-05T10:14:38+00:00"
         },
         {
             "name": "kdyby/strict-objects",
@@ -1461,7 +1460,7 @@
                 "scream",
                 "strict"
             ],
-            "time": "2016-08-26 06:34:41"
+            "time": "2016-08-26T06:34:41+00:00"
         },
         {
             "name": "latte/latte",
@@ -1533,7 +1532,7 @@
                 "template",
                 "twig"
             ],
-            "time": "2018-06-03 17:34:15"
+            "time": "2018-06-03T17:34:15+00:00"
         },
         {
             "name": "league/csv",
@@ -1600,7 +1599,172 @@
                 "read",
                 "write"
             ],
-            "time": "2018-05-01 18:32:48"
+            "time": "2018-05-01T18:32:48+00:00"
+        },
+        {
+            "name": "markbaker/complex",
+            "version": "1.4.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/MarkBaker/PHPComplex.git",
+                "reference": "1ea674a8308baf547cbcbd30c5fcd6d301b7c000"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/MarkBaker/PHPComplex/zipball/1ea674a8308baf547cbcbd30c5fcd6d301b7c000",
+                "reference": "1ea674a8308baf547cbcbd30c5fcd6d301b7c000",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.6.0|^7.0.0"
+            },
+            "require-dev": {
+                "dealerdirect/phpcodesniffer-composer-installer": "^0.4.3",
+                "phpcompatibility/php-compatibility": "^8.0",
+                "phpdocumentor/phpdocumentor": "2.*",
+                "phploc/phploc": "2.*",
+                "phpmd/phpmd": "2.*",
+                "phpunit/phpunit": "^4.8.35|^5.4.0",
+                "sebastian/phpcpd": "2.*",
+                "squizlabs/php_codesniffer": "^3.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Complex\\": "classes/src/"
+                },
+                "files": [
+                    "classes/src/functions/abs.php",
+                    "classes/src/functions/acos.php",
+                    "classes/src/functions/acosh.php",
+                    "classes/src/functions/acot.php",
+                    "classes/src/functions/acoth.php",
+                    "classes/src/functions/acsc.php",
+                    "classes/src/functions/acsch.php",
+                    "classes/src/functions/argument.php",
+                    "classes/src/functions/asec.php",
+                    "classes/src/functions/asech.php",
+                    "classes/src/functions/asin.php",
+                    "classes/src/functions/asinh.php",
+                    "classes/src/functions/atan.php",
+                    "classes/src/functions/atanh.php",
+                    "classes/src/functions/conjugate.php",
+                    "classes/src/functions/cos.php",
+                    "classes/src/functions/cosh.php",
+                    "classes/src/functions/cot.php",
+                    "classes/src/functions/coth.php",
+                    "classes/src/functions/csc.php",
+                    "classes/src/functions/csch.php",
+                    "classes/src/functions/exp.php",
+                    "classes/src/functions/inverse.php",
+                    "classes/src/functions/ln.php",
+                    "classes/src/functions/log2.php",
+                    "classes/src/functions/log10.php",
+                    "classes/src/functions/negative.php",
+                    "classes/src/functions/pow.php",
+                    "classes/src/functions/rho.php",
+                    "classes/src/functions/sec.php",
+                    "classes/src/functions/sech.php",
+                    "classes/src/functions/sin.php",
+                    "classes/src/functions/sinh.php",
+                    "classes/src/functions/sqrt.php",
+                    "classes/src/functions/tan.php",
+                    "classes/src/functions/tanh.php",
+                    "classes/src/functions/theta.php",
+                    "classes/src/operations/add.php",
+                    "classes/src/operations/subtract.php",
+                    "classes/src/operations/multiply.php",
+                    "classes/src/operations/divideby.php",
+                    "classes/src/operations/divideinto.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Mark Baker",
+                    "email": "mark@lange.demon.co.uk"
+                }
+            ],
+            "description": "PHP Class for working with complex numbers",
+            "homepage": "https://github.com/MarkBaker/PHPComplex",
+            "keywords": [
+                "complex",
+                "mathematics"
+            ],
+            "time": "2018-10-13T23:28:42+00:00"
+        },
+        {
+            "name": "markbaker/matrix",
+            "version": "1.1.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/MarkBaker/PHPMatrix.git",
+                "reference": "6ea97472b5baf12119b4f31f802835b820dd6d64"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/MarkBaker/PHPMatrix/zipball/6ea97472b5baf12119b4f31f802835b820dd6d64",
+                "reference": "6ea97472b5baf12119b4f31f802835b820dd6d64",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.6.0|^7.0.0"
+            },
+            "require-dev": {
+                "dealerdirect/phpcodesniffer-composer-installer": "^0.4.3",
+                "phpcompatibility/php-compatibility": "^8.0",
+                "phpdocumentor/phpdocumentor": "2.*",
+                "phploc/phploc": "2.*",
+                "phpmd/phpmd": "2.*",
+                "phpunit/phpunit": "^4.8.35|^5.4.0",
+                "sebastian/phpcpd": "2.*",
+                "squizlabs/php_codesniffer": "^3.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Matrix\\": "classes/src/"
+                },
+                "files": [
+                    "classes/src/functions/adjoint.php",
+                    "classes/src/functions/antidiagonal.php",
+                    "classes/src/functions/cofactors.php",
+                    "classes/src/functions/determinant.php",
+                    "classes/src/functions/diagonal.php",
+                    "classes/src/functions/identity.php",
+                    "classes/src/functions/inverse.php",
+                    "classes/src/functions/minors.php",
+                    "classes/src/functions/trace.php",
+                    "classes/src/functions/transpose.php",
+                    "classes/src/operations/add.php",
+                    "classes/src/operations/directsum.php",
+                    "classes/src/operations/subtract.php",
+                    "classes/src/operations/multiply.php",
+                    "classes/src/operations/divideby.php",
+                    "classes/src/operations/divideinto.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Mark Baker",
+                    "email": "mark@lange.demon.co.uk"
+                }
+            ],
+            "description": "PHP Class for working with matrices",
+            "homepage": "https://github.com/MarkBaker/PHPMatrix",
+            "keywords": [
+                "mathematics",
+                "matrix",
+                "vector"
+            ],
+            "time": "2018-11-04T22:12:12+00:00"
         },
         {
             "name": "nette/application",
@@ -1687,7 +1851,7 @@
                 "routing",
                 "seo"
             ],
-            "time": "2018-05-16 09:28:51"
+            "time": "2018-05-16T09:28:51+00:00"
         },
         {
             "name": "nette/bootstrap",
@@ -1763,7 +1927,7 @@
                 "configurator",
                 "nette"
             ],
-            "time": "2018-05-17 12:52:20"
+            "time": "2018-05-17T12:52:20+00:00"
         },
         {
             "name": "nette/caching",
@@ -1832,7 +1996,7 @@
                 "nette",
                 "sqlite"
             ],
-            "time": "2018-03-21 11:04:32"
+            "time": "2018-03-21T11:04:32+00:00"
         },
         {
             "name": "nette/component-model",
@@ -1893,7 +2057,7 @@
                 "components",
                 "nette"
             ],
-            "time": "2018-03-20 16:32:50"
+            "time": "2018-03-20T16:32:50+00:00"
         },
         {
             "name": "nette/database",
@@ -1965,7 +2129,7 @@
                 "queries",
                 "sqlite"
             ],
-            "time": "2018-10-16 12:52:07"
+            "time": "2018-10-16T12:52:07+00:00"
         },
         {
             "name": "nette/deprecated",
@@ -2028,7 +2192,7 @@
             "keywords": [
                 "nette"
             ],
-            "time": "2018-02-06 16:29:40"
+            "time": "2018-02-06T16:29:40+00:00"
         },
         {
             "name": "nette/di",
@@ -2097,7 +2261,7 @@
                 "nette",
                 "static"
             ],
-            "time": "2018-09-17 15:47:40"
+            "time": "2018-09-17T15:47:40+00:00"
         },
         {
             "name": "nette/finder",
@@ -2159,7 +2323,7 @@
                 "iterator",
                 "nette"
             ],
-            "time": "2018-06-28 11:49:23"
+            "time": "2018-06-28T11:49:23+00:00"
         },
         {
             "name": "nette/forms",
@@ -2227,7 +2391,7 @@
                 "nette",
                 "validation"
             ],
-            "time": "2018-09-16 18:32:29"
+            "time": "2018-09-16T18:32:29+00:00"
         },
         {
             "name": "nette/http",
@@ -2299,7 +2463,7 @@
                 "session",
                 "url"
             ],
-            "time": "2018-09-03 19:16:55"
+            "time": "2018-09-03T19:16:55+00:00"
         },
         {
             "name": "nette/mail",
@@ -2367,7 +2531,7 @@
                 "nette",
                 "smtp"
             ],
-            "time": "2018-03-18 16:30:02"
+            "time": "2018-03-18T16:30:02+00:00"
         },
         {
             "name": "nette/neon",
@@ -2428,7 +2592,7 @@
                 "nette",
                 "yaml"
             ],
-            "time": "2018-03-21 12:12:21"
+            "time": "2018-03-21T12:12:21+00:00"
         },
         {
             "name": "nette/nette",
@@ -2505,7 +2669,7 @@
                 "mvc",
                 "templating"
             ],
-            "time": "2016-05-03 15:59:52"
+            "time": "2016-05-03T15:59:52+00:00"
         },
         {
             "name": "nette/php-generator",
@@ -2567,7 +2731,7 @@
                 "php",
                 "scaffolding"
             ],
-            "time": "2018-04-26 16:47:39"
+            "time": "2018-04-26T16:47:39+00:00"
         },
         {
             "name": "nette/reflection",
@@ -2631,7 +2795,7 @@
                 "nette",
                 "reflection"
             ],
-            "time": "2017-07-11 19:28:57"
+            "time": "2017-07-11T19:28:57+00:00"
         },
         {
             "name": "nette/robot-loader",
@@ -2697,7 +2861,7 @@
                 "nette",
                 "trait"
             ],
-            "time": "2017-08-14 20:23:02"
+            "time": "2017-08-14T20:23:02+00:00"
         },
         {
             "name": "nette/safe-stream",
@@ -2758,7 +2922,7 @@
                 "nette",
                 "safe"
             ],
-            "time": "2017-07-13 18:20:37"
+            "time": "2017-07-13T18:20:37+00:00"
         },
         {
             "name": "nette/security",
@@ -2822,7 +2986,7 @@
                 "authorization",
                 "nette"
             ],
-            "time": "2018-04-02 19:47:47"
+            "time": "2018-04-02T19:47:47+00:00"
         },
         {
             "name": "nette/tokenizer",
@@ -2877,7 +3041,7 @@
             ],
             "description": "Nette Tokenizer",
             "homepage": "https://nette.org",
-            "time": "2017-09-08 14:16:06"
+            "time": "2017-09-08T14:16:06+00:00"
         },
         {
             "name": "nette/utils",
@@ -2959,7 +3123,7 @@
                 "utility",
                 "validation"
             ],
-            "time": "2018-09-18 10:22:16"
+            "time": "2018-09-18T10:22:16+00:00"
         },
         {
             "name": "nextras/datagrid",
@@ -3010,7 +3174,7 @@
                 "nette",
                 "nextras"
             ],
-            "time": "2018-02-20 14:59:52"
+            "time": "2018-02-20T14:59:52+00:00"
         },
         {
             "name": "nextras/forms",
@@ -3073,7 +3237,7 @@
                 "form",
                 "nette"
             ],
-            "time": "2016-07-12 11:15:27"
+            "time": "2016-07-12T11:15:27+00:00"
         },
         {
             "name": "nextras/latte-macros",
@@ -3123,7 +3287,101 @@
                 "nette",
                 "nextras"
             ],
-            "time": "2015-06-21 16:22:22"
+            "time": "2015-06-21T16:22:22+00:00"
+        },
+        {
+            "name": "phpoffice/phpspreadsheet",
+            "version": "1.6.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/PHPOffice/PhpSpreadsheet.git",
+                "reference": "bf00f0cc5f55c354018f9a9ef15e6e3e1a229051"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/PHPOffice/PhpSpreadsheet/zipball/bf00f0cc5f55c354018f9a9ef15e6e3e1a229051",
+                "reference": "bf00f0cc5f55c354018f9a9ef15e6e3e1a229051",
+                "shasum": ""
+            },
+            "require": {
+                "ext-ctype": "*",
+                "ext-dom": "*",
+                "ext-fileinfo": "*",
+                "ext-gd": "*",
+                "ext-iconv": "*",
+                "ext-libxml": "*",
+                "ext-mbstring": "*",
+                "ext-simplexml": "*",
+                "ext-xml": "*",
+                "ext-xmlreader": "*",
+                "ext-xmlwriter": "*",
+                "ext-zip": "*",
+                "ext-zlib": "*",
+                "markbaker/complex": "^1.4",
+                "markbaker/matrix": "^1.1",
+                "php": "^5.6|^7.0",
+                "psr/simple-cache": "^1.0"
+            },
+            "require-dev": {
+                "doctrine/instantiator": "^1.0.0",
+                "dompdf/dompdf": "^0.8.0",
+                "friendsofphp/php-cs-fixer": "@stable",
+                "jpgraph/jpgraph": "^4.0",
+                "mpdf/mpdf": "^7.0.0",
+                "phpcompatibility/php-compatibility": "^8.0",
+                "phpunit/phpunit": "^5.7",
+                "squizlabs/php_codesniffer": "^3.3",
+                "tecnickcom/tcpdf": "^6.2"
+            },
+            "suggest": {
+                "dompdf/dompdf": "Option for rendering PDF with PDF Writer",
+                "jpgraph/jpgraph": "Option for rendering charts, or including charts with PDF or HTML Writers",
+                "mpdf/mpdf": "Option for rendering PDF with PDF Writer",
+                "tecnickcom/tcpdf": "Option for rendering PDF with PDF Writer"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "PhpOffice\\PhpSpreadsheet\\": "src/PhpSpreadsheet"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL-2.1-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Erik Tilt"
+                },
+                {
+                    "name": "Adrien Crivelli"
+                },
+                {
+                    "name": "Maarten Balliauw",
+                    "homepage": "https://blog.maartenballiauw.be"
+                },
+                {
+                    "name": "Mark Baker",
+                    "homepage": "https://markbakeruk.net"
+                },
+                {
+                    "name": "Franck Lefevre",
+                    "homepage": "https://rootslabs.net"
+                }
+            ],
+            "description": "PHPSpreadsheet - Read, Create and Write Spreadsheet documents in PHP - Spreadsheet engine",
+            "homepage": "https://github.com/PHPOffice/PhpSpreadsheet",
+            "keywords": [
+                "OpenXML",
+                "excel",
+                "gnumeric",
+                "ods",
+                "php",
+                "spreadsheet",
+                "xls",
+                "xlsx"
+            ],
+            "time": "2019-01-02T04:42:54+00:00"
         },
         {
             "name": "psr/log",
@@ -3170,7 +3428,55 @@
                 "psr",
                 "psr-3"
             ],
-            "time": "2016-10-10 12:19:37"
+            "time": "2016-10-10T12:19:37+00:00"
+        },
+        {
+            "name": "psr/simple-cache",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/simple-cache.git",
+                "reference": "408d5eafb83c57f6365a3ca330ff23aa4a5fa39b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/simple-cache/zipball/408d5eafb83c57f6365a3ca330ff23aa4a5fa39b",
+                "reference": "408d5eafb83c57f6365a3ca330ff23aa4a5fa39b",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Psr\\SimpleCache\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
+                }
+            ],
+            "description": "Common interfaces for simple caching",
+            "keywords": [
+                "cache",
+                "caching",
+                "psr",
+                "psr-16",
+                "simple-cache"
+            ],
+            "time": "2017-10-23T01:57:42+00:00"
         },
         {
             "name": "skautis/nette",
@@ -3224,7 +3530,7 @@
                 "nette",
                 "skautis"
             ],
-            "time": "2018-04-19 05:34:23"
+            "time": "2018-04-19T05:34:23+00:00"
         },
         {
             "name": "skautis/skautis",
@@ -3282,7 +3588,7 @@
                 "soap",
                 "wsdl"
             ],
-            "time": "2017-03-07 09:02:13"
+            "time": "2017-03-07T09:02:13+00:00"
         },
         {
             "name": "symfony/console",
@@ -3351,7 +3657,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2018-10-02 16:33:53"
+            "time": "2018-10-02T16:33:53+00:00"
         },
         {
             "name": "symfony/debug",
@@ -3407,7 +3713,7 @@
             ],
             "description": "Symfony Debug Component",
             "homepage": "https://symfony.com",
-            "time": "2018-10-02 16:33:53"
+            "time": "2018-10-02T16:33:53+00:00"
         },
         {
             "name": "symfony/polyfill-mbstring",
@@ -3466,7 +3772,7 @@
                 "portable",
                 "shim"
             ],
-            "time": "2018-08-06 14:22:27"
+            "time": "2018-08-06T14:22:27+00:00"
         },
         {
             "name": "tracy/tracy",
@@ -3532,7 +3838,7 @@
                 "nette",
                 "profiler"
             ],
-            "time": "2018-09-24 22:35:07"
+            "time": "2018-09-24T22:35:07+00:00"
         },
         {
             "name": "vlucas/phpdotenv",
@@ -3582,7 +3888,7 @@
                 "env",
                 "environment"
             ],
-            "time": "2018-07-29 20:33:41"
+            "time": "2018-07-29T20:33:41+00:00"
         },
         {
             "name": "vojtech-dobes/nette-ajax-history",
@@ -3628,7 +3934,7 @@
                 "nette",
                 "nette.ajax.js"
             ],
-            "time": "2016-10-04 08:44:47"
+            "time": "2016-10-04T08:44:47+00:00"
         },
         {
             "name": "webchemistry/images",
@@ -3665,7 +3971,7 @@
                 "images",
                 "storage"
             ],
-            "time": "2016-02-04 11:26:53"
+            "time": "2016-02-04T11:26:53+00:00"
         }
     ],
     "packages-dev": [
@@ -3729,7 +4035,70 @@
                 "testing",
                 "unit"
             ],
-            "time": "2018-10-10 12:35:10"
+            "time": "2018-10-10T12:35:10+00:00"
+        },
+        {
+            "name": "phpoffice/phpexcel",
+            "version": "1.8.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/PHPOffice/PHPExcel.git",
+                "reference": "1441011fb7ecdd8cc689878f54f8b58a6805f870"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/PHPOffice/PHPExcel/zipball/1441011fb7ecdd8cc689878f54f8b58a6805f870",
+                "reference": "1441011fb7ecdd8cc689878f54f8b58a6805f870",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "ext-xml": "*",
+                "ext-xmlwriter": "*",
+                "php": "^5.2|^7.0"
+            },
+            "require-dev": {
+                "squizlabs/php_codesniffer": "2.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "PHPExcel": "Classes/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL-2.1"
+            ],
+            "authors": [
+                {
+                    "name": "Maarten Balliauw",
+                    "homepage": "http://blog.maartenballiauw.be"
+                },
+                {
+                    "name": "Erik Tilt"
+                },
+                {
+                    "name": "Franck Lefevre",
+                    "homepage": "http://rootslabs.net"
+                },
+                {
+                    "name": "Mark Baker",
+                    "homepage": "http://markbakeruk.net"
+                }
+            ],
+            "description": "PHPExcel - OpenXML - Read, Create and Write Spreadsheet documents in PHP - Spreadsheet engine",
+            "homepage": "https://github.com/PHPOffice/PHPExcel",
+            "keywords": [
+                "OpenXML",
+                "excel",
+                "php",
+                "spreadsheet",
+                "xls",
+                "xlsx"
+            ],
+            "abandoned": "phpoffice/phpspreadsheet",
+            "time": "2018-11-22T23:07:24+00:00"
         }
     ],
     "aliases": [],
@@ -3742,7 +4111,8 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": ">= 7.1.0"
+        "php": ">= 7.1.0",
+        "ext-json": "*"
     },
     "platform-dev": []
 }
