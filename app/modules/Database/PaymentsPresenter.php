@@ -63,7 +63,7 @@ class PaymentsPresenter extends DatabaseBasePresenter
 	    $frm->addUpload('file', 'XLSX soubor s importem')
 //            ->addRule(Form::MIME_TYPE, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
             ->setRequired()
-        ->setHtmlAttribute('accept', '.xls,.xlsx,.csv');
+        ->setHtmlAttribute('accept', '.xls,.xlsx');
 
 	    $frm->addSubmit('send', 'Odeslat');
 
