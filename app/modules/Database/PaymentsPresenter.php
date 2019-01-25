@@ -140,7 +140,7 @@ class PaymentsPresenter extends DatabaseBasePresenter
                     $this->em->flush();
                     $this->em->clear();
                 }
-                elseif ($id = Serviceteam::getVarSymbolFromId($varSymbol))
+                elseif ($id = Serviceteam::getIdFromVarSymbol($varSymbol))
                 {
                     /** @var Serviceteam $serviceteam */
                     $serviceteam = $this->serviceteam->find($id);

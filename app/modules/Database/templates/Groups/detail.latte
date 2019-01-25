@@ -119,10 +119,13 @@
                                              {if $participant->nickName}
                                                 <strong>{$participant->nickName}</strong>
                                                 <br /><small>{$participant->firstName} {$participant->lastName|upper}</small>
+                                                <br /><small><small>#{$participant->getId()} / {$participant->getVarSymbol()}</small></small>
                                             {else}
                                                 <strong>{$participant->firstName} {$participant->lastName|upper}</strong>
+                                                <br /><small><small>#{$participant->getId()} / {$participant->getVarSymbol()}</small></small>
                                                 <br /><small></small>
                                             {/if}
+
                                         </td>
                                         <td>
                                             {if empty($participant->addressStreet) || empty($participant->addressCity)}
