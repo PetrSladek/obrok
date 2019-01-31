@@ -699,7 +699,7 @@ abstract class Person
     public function getPayToDate()
     {
         $createDate = DateTime::from($this->getCreatedAt());
-        $publicationDate = new DateTime('2019-01-09');
+        $publicationDate = new DateTime('2019-02-01');
 
         $payToDate = $createDate > $publicationDate ? $createDate : $publicationDate;
         $payToDate->modify('+ 14 days midnight');
