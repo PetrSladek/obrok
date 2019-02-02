@@ -157,7 +157,7 @@ class DashboardPresenter extends DatabaseBasePresenter
 				$chartData[$item->region] = array('count' => 0, 'name' => $item->region, 'count_participants' => 0);
 			}
 			$chartData[$item->region]['count']++;
-			$chartData[$item->region]['count_participants'] += $item->getConfirmedParticipantsCount();
+//			$chartData[$item->region]['count_participants'] += $item->getConfirmedParticipantsCount();
 		}
 		usort($chartData, function ($a, $b)
 		{
@@ -168,11 +168,13 @@ class DashboardPresenter extends DatabaseBasePresenter
 	}
 
 
-	/**
-	 * Přkaz k otevření registrace
-	 *
-	 * @throws \Nette\Application\BadRequestException
-	 */
+    /**
+     * Přkaz k otevření registrace
+     *
+     * @throws \Nette\Application\AbortException
+     * @throws \Nette\Application\BadRequestException
+     * @throws \Throwable
+     */
 	public function handleOpenParticipantRegistration()
 	{
 		if (!$this->user->isInRole('groups-edit'))

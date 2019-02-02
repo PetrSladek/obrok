@@ -70,7 +70,7 @@
                         <br /><small>{$row->city}</small>
                     </td>
                     <td>
-                        {$row->getConfirmedParticipantsCount()} členů
+                        {*{$row->getConfirmedParticipantsCount()} členů*}
                     </td>
                 </tr>
             {/define}
@@ -357,7 +357,7 @@
                                 <br /><small></small>
                             {/if}
                         </td>
-                        <td>
+                       <td>
                             <strong n:if="$row->group">{$row->group->name}</strong>
                             <br /><small n:if="$row->group">{$row->group->city}</small>
                         </td>
