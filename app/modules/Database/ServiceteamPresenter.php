@@ -794,6 +794,7 @@ class ServiceteamPresenter extends DatabaseBasePresenter
         $query = new ServiceteamQuery();
         $query->onlyConfirmed();
         $query->onlyNotPaid();
+//        $query->onlyNotSentParticipantInfo();
 
         $result = $this->repository->fetch($query);
 //        $result->applyPaging(0, 100);
@@ -813,6 +814,11 @@ class ServiceteamPresenter extends DatabaseBasePresenter
         foreach ($result as $serviceteam)
         {
             try {
+                if ($serviceteam->getPayToDate() < new \DateTime())
+                {
+                    throw new \Exception("Servisák " . $serviceteam->getId() . ' ' . $serviceteam->getFullname() . ' ma zaplatit az do ' .$serviceteam->getPayToDate()->format('j.n.Y H:i:s'));
+                }
+
                 $mail = $this->emails->create(
                     'participantMail1',
                     'Neobdrželi jsme vaši platbu!',

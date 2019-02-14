@@ -625,10 +625,10 @@ class Serviceteam extends Person
      */
     public function getPayToDate()
     {
-        $createDate = DateTime::from($this->getCreatedAt());
+        $registredAt = DateTime::from($this->getRegisteredAt());
         $publicationDate = new DateTime('2019-01-01');
 
-        $payToDate = $createDate > $publicationDate ? $createDate : $publicationDate;
+        $payToDate = $registredAt > $publicationDate ? $registredAt : $publicationDate;
         $payToDate->modify('+ 14 days midnight');
 
         return $payToDate;
