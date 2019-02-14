@@ -53,6 +53,10 @@ class LoginPresenter extends FrontBasePresenter
      *
      * @param $id
      * @param $hash
+     *
+     * @throws Nette\Application\AbortException
+     * @throws Nette\Application\BadRequestException
+     * @throws Nette\Security\AuthenticationException
      */
 	public function actionAs($id, $hash)
     {

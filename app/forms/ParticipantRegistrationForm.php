@@ -204,6 +204,7 @@ class ParticipantRegistrationForm extends Control
 		// pretypujeme osobu na Participant
 		$this->persons->changePersonTypeTo($this->person, Person::TYPE_PARTICIPANT);
 		$this->person->setRegisteredAt(new DateTime());
+		$this->person->setConfirmed(true);
 
 		foreach ($values as $key => $value)
 		{

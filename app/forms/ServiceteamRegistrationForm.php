@@ -134,6 +134,7 @@ class ServiceteamRegistrationForm extends Control
 		// Zmenim na Servisaka
 		$this->persons->changePersonTypeTo($this->person, Person::TYPE_SERVICETEAM);
 		$this->person->setRegisteredAt(new DateTime());
+        $this->person->setConfirmed(true);
 
 		foreach ($values as $key => $value)
 		{

@@ -3,7 +3,9 @@
 namespace App\Module\Front\Presenters;
 
 use App\Hydrators\SkautisHydrator;
+use App\Model\Entity\Participant;
 use App\Model\Entity\Person;
+use App\Model\Entity\Serviceteam;
 use App\Model\Entity\UnspecifiedPerson;
 use App\Model\Repositories\ParticipantsRepository;
 use App\Model\Repositories\PersonsRepository;
@@ -82,6 +84,27 @@ abstract class FrontBasePresenter extends BasePresenter
 
 						}
 					}
+
+					if ($person instanceof Participant && !$person->isConfirmed() && $this->openRegistrationParticipants)
+                    {
+                        $person->setRegisteredAt(new \DateTime());
+                        $person->setConfirmed(true);
+
+                        if ($person->getGroup())
+                        {
+                            $person->getGroup()->updateStatus();
+                        }
+
+                        $this->em->flush();
+                    }
+                    if ($person instanceof Serviceteam && !$person->isConfirmed() && $this->openRegistrationServiceteam)
+                    {
+                        $person->setRegisteredAt(new \DateTime());
+                        $person->setConfirmed(true);
+
+                        $this->em->flush();
+                    }
+
 
 					$this->getUser()->login($person->toIdentity());
 				}
