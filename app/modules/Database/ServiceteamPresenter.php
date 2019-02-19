@@ -814,7 +814,7 @@ class ServiceteamPresenter extends DatabaseBasePresenter
         foreach ($result as $serviceteam)
         {
             try {
-                if ($serviceteam->getPayToDate() < new \DateTime())
+                if ($serviceteam->getPayToDate() > new \DateTime())
                 {
                     throw new \Exception("Servisák " . $serviceteam->getId() . ' ' . $serviceteam->getFullname() . ' ma zaplatit az do ' .$serviceteam->getPayToDate()->format('j.n.Y H:i:s'));
                 }
@@ -843,6 +843,7 @@ class ServiceteamPresenter extends DatabaseBasePresenter
         }
 
 
+        echo '<pre>';
         echo "Odeslano $sent emailu\n";
 
         foreach ($failed as $email => $e)

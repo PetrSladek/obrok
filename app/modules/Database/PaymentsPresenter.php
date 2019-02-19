@@ -111,11 +111,11 @@ class PaymentsPresenter extends DatabaseBasePresenter
                 continue;
             }
 
-            $varSymbol = (int) $row['C'];
-            $amount = (int) $row['E'];
-            $fullName = $row['M'];
-            $note = $row['D'];
-            $bankAccount = $row['K'];
+            $varSymbol = (int) $row['D'];
+            $amount = (int) $row['G'];
+            $fullName = $row['L'];
+            $note = $row['F'];
+            $bankAccount = $row['M'];
 
             try {
                 if ($id = Participant::getIdFromVarSymbol($varSymbol))
