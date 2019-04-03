@@ -626,7 +626,7 @@ class Serviceteam extends Person
     public function getPayToDate()
     {
         $registredAt = DateTime::from($this->getRegisteredAt());
-        $publicationDate = new DateTime('2019-01-01');
+        $publicationDate = new DateTime('2019-04-03');
 
         $payToDate = $registredAt > $publicationDate ? $registredAt : $publicationDate;
         $payToDate->modify('+ 14 days midnight');
