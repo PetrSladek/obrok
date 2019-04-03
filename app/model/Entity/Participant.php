@@ -221,7 +221,7 @@ class Participant extends Person
 		{
 			$this->confirmed = false;
 
-			if ($this->group->isBoss($this))
+			if ($this->group && $this->group->isBoss($this))
 			{
 				$this->group->setBoss(null); // zrusime ho jako sefa
 				$this->group->tryDefineBoss(); // zkusime najit jinyho vhodnyho
@@ -233,7 +233,10 @@ class Participant extends Person
 		}
 
 
-		$this->group->updateStatus();
+		if ($this->group)
+		{
+            $this->group->updateStatus();
+        }
 
 		return $this;
 	}
