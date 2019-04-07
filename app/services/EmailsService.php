@@ -144,7 +144,7 @@ class EmailsService
 	{
 		try
 		{
-			$this->getMailer()->send($message);
+//			$this->getMailer()->send($message);
 		}
 		catch (\Exception $e)
 		{

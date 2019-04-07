@@ -3,7 +3,7 @@
 require __DIR__ . '/../vendor/autoload.php';
 
 $configurator = new Nette\Configurator;
-$configurator->setDebugMode(['46.149.121.35']);
+$configurator->setDebugMode(['46.149.121.35', '193.86.73.180']);
 $configurator->enableDebugger(__DIR__ . '/../log');
 $configurator->setTempDirectory(__DIR__ . '/../temp');
 
