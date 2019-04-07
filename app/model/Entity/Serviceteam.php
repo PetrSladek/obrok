@@ -385,7 +385,7 @@ class Serviceteam extends Person
 	/**
 	 * @param \DateTimeInterface $arriveDate
 	 */
-	public function setArriveDate(\DateTimeInterface $arriveDate)
+	public function setArriveDate(?\DateTimeInterface $arriveDate)
 	{
 		$this->arriveDate = $arriveDate;
 	}
@@ -416,7 +416,7 @@ class Serviceteam extends Person
 	/**
 	 * @param \DateTimeInterface $departureDate
 	 */
-	public function setDepartureDate(\DateTimeInterface $departureDate)
+	public function setDepartureDate(?\DateTimeInterface $departureDate)
 	{
 		$this->departureDate = $departureDate;
 	}

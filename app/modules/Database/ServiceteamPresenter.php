@@ -487,11 +487,13 @@ class ServiceteamPresenter extends DatabaseBasePresenter
 	}
 
 
-	/**
-	 * Událost po uspěšném odeslání formuláře
-	 *
-	 * @param Form $frm
-	 */
+    /**
+     * Událost po uspěšném odeslání formuláře
+     *
+     * @param Form $frm
+     *
+     * @throws \Nette\Application\AbortException
+     */
 	public function frmEditSuccess(Form $frm)
 	{
 		$values = $frm->getValues();
