@@ -521,8 +521,8 @@ class ServiceteamPresenter extends DatabaseBasePresenter
 			$this->item->removeAvatar();
 		}
 
-		$values->arriveDate = $values->arriveDate ? new \DateTimeImmutable($values->arriveDate) : null;
-		$values->departureDate = $values->departureDate ? new \DateTimeImmutable($values->departureDate) : null;
+		$values->arriveDate = isset($values->arriveDate) ? new \DateTimeImmutable($values->arriveDate) : null;
+		$values->departureDate = isset($values->departureDate) ? new \DateTimeImmutable($values->departureDate) : null;
 
 		foreach ($values as $key => $value)
 		{
