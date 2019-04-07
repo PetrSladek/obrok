@@ -234,7 +234,10 @@ class Participant extends Person
 
 if ($this->group)
 
-		$this->group->updateStatus();
+		if ($this->group)
+		{
+            $this->group->updateStatus();
+        }
 
 		return $this;
 	}
