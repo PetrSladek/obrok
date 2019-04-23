@@ -162,7 +162,7 @@ class ProgramPresenter extends ParticipantAuthBasePresenter
 			$this->me->attendeeProgram($program);
 			$this->em->flush();
 		}
-		catch (InvalidStateException $e)
+		catch (\Exception $e)
 		{
 			$this->flashMessage($e->getMessage(), 'danger');
 		}

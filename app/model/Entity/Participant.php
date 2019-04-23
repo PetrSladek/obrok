@@ -513,6 +513,45 @@ if ($this->group)
 	}
 
 
+    /**
+     * Najde program z jineho bloku ve stejnem case jako zadany program
+     *
+     * @param Program $program
+     * @return Program|null
+     */
+	public function findOtherProgramInTimeFromOtherSection(Program $program)
+    {
+        foreach ($this->programs as $otherProgram)
+        {
+            if ($otherProgram->getId() == $program->getId())
+            {
+                continue;
+            }
+            if ($otherProgram->getSection() === $program->getSection())
+            {
+                continue;
+            }
+
+            if ($otherProgram->start >= $program->start && $otherProgram->start < $program->end)
+            {
+                return $otherProgram;
+            }
+
+            if ($otherProgram->end > $program->start && $otherProgram->end <= $program->end)
+            {
+                return $otherProgram;
+            }
+
+            if ($otherProgram->start <= $program->start && $otherProgram->end >= $program->end)
+            {
+                return $otherProgram;
+            }
+        }
+
+        return null;
+    }
+
+
 	/**
 	 * Ma uz jiny program ve stejne sekci jako tento program?
 	 *

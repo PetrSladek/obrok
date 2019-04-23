@@ -13,8 +13,8 @@
 			class="btn btn-defaut btn-xs"
 			data-toggle="popover" data-trigger="focus" data-html="true"
 			title="{$program->name} - {$program->lector}"
-			data-content="{$program->perex}{if $program->tools}<br /><br /><strong>Pomůcky a potřeby:</strong> {$program->tools}{/if}{if $program->location}<br /><br /><strong>Místo:</strong> {$program->location}{/if}
-									">
+			data-content="{$program->perex}{if $program->tools}<br /><br /><strong>Pomůcky a potřeby:</strong> {$program->tools}{/if}{if $program->location}<br /><br /><strong>Místo:</strong> {$program->location}{/if}"
+    >
 		<i class="fa fa-info-circle"></i> info
 	</button><br />
 	<em n:ifcontent>{$program->lector}</em>
@@ -122,11 +122,22 @@
                                     <td>
                                         {include #programInfo}
                                     </td>
-                                    <td>
+                                    <td width="350">
+                                        <div class="pull-right" n:if="$otherProgram = $me->findOtherProgramInTimeFromOtherSection($program)">
+                                            <small>
+                                            <small class="text-warning">
+                                                <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                                                V tomto čase už máš program<br />
+                                                <strong>{$otherProgram->getSection()->getTitle()}{if $otherProgram->getSection()->getSubTitle()} - {$otherProgram->getSection()->getSubTitle()}{/if}</strong>
+                                                - registrací tohoto si ho zrušíš
+                                            </small>
+                                            </small>
+                                        </div>
+
                                         {$program->start|day} {$program->start->format('j.n.')}<br />
                                         {$program->start->format('H:i')} - {$program->end->format('H:i')}
                                     </td>
-                                    <td>
+                                    <td width="100">
                                         {$program->getOccupied()} / {$program->getCapacity()}
                                     </td>
                                     <td width="1" class="text-right">

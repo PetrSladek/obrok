@@ -163,6 +163,14 @@ class Program
 		return $this;
 	}
 
+    /**
+     * @return ProgramSection
+     */
+    public function getSection(): ProgramSection
+    {
+        return $this->section;
+    }
+
 
 //	/**
 //	 * Je program vapro?
