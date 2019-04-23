@@ -138,7 +138,7 @@ height: auto;
 
 .navbar-default {
 	font-weight: 700;
-	background-color: #54b7a4;
+	background-color: #299172;
 	border-color: transparent;
 }
 
@@ -165,7 +165,7 @@ height: auto;
 	margin-top: 0;
 	padding-top: 0;
 	width: 100%;
-	background: #54b7a4;
+	background: #299172;
 }
 
 @-webkit-keyframes LogoGradient {
@@ -312,14 +312,14 @@ p.zapati.tmavy, a.tmavy, p.tmavy, section h2.section-heading.tmavy {
 #footerwrap-fake {
 	/*padding-top: 10px;*/
 	padding-bottom: 0;
-	/*background-color: #54b7a4;*/
+	/*background-color: #299172;*/
 	height: 90px;
 }
 
 #footerwrap {
 	padding-top: 10px;
 	padding-bottom: 0;
-	background-color: #54b7a4;
+	background-color: #299172;
 
 	width: 100%;
 	position: fixed;
