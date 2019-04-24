@@ -162,6 +162,7 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 	public function beforeRender()
 	{
 		// Variables
+        $this->template->template = $this->template;
 		$this->template->config = $this->config;
 		$this->template->storageUrl = $this->config->storageUrl;
 		$this->template->user = $this->getUser();
