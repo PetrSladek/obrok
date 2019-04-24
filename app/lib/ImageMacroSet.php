@@ -124,24 +124,24 @@ class ImageMacroSet extends MacroSet
 	}
 
 
-
-	/**
-	 * @param \Latte\Runtime\Template $template
-	 * @throws InvalidStateException
-	 */
-	public static function validateTemplateParams(\Latte\Runtime\Template $template)
-	{
-		$params = $template->getParameters();
-		if (!isset($params['imageService']) || !$params['imageService'] instanceof ImageService) {
-			$where = isset($params['control']) ?
-				" of component " . get_class($params['control']) . '(' . $params['control']->getName() . ')'
-				: NULL;
-
-			throw new InvalidStateException(
-				'Please provide an instanceof ImageService ' .
-				'as a parameter $imageService to template' . $where
-			);
-		}
-	}
+//
+//	/**
+//	 * @param \Latte\Runtime\Template $template
+//	 * @throws InvalidStateException
+//	 */
+//	public static function validateTemplateParams(\Latte\Runtime\Template $template)
+//	{
+//		$params = $template->getParameters();
+//		if (!isset($params['imageService']) || !$params['imageService'] instanceof ImageService) {
+//			$where = isset($params['control']) ?
+//				" of component " . get_class($params['control']) . '(' . $params['control']->getName() . ')'
+//				: NULL;
+//
+//			throw new InvalidStateException(
+//				'Please provide an instanceof ImageService ' .
+//				'as a parameter $imageService to template' . $where
+//			);
+//		}
+//	}
 
 }
