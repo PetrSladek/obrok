@@ -105,23 +105,23 @@ class ImageMacroSet extends MacroSet
 	}
 
 
-
-	/**
-	 * Finishes template parsing.
-	 *
-	 * @return array(prolog, epilog)
-	 */
-	public function finalize()
-	{
-		if (!$this->isUsed) {
-			return array();
-		}
-
-		return array(
-			get_called_class() . '::validateTemplateParams($template);',
-			NULL
-		);
-	}
+//
+//	/**
+//	 * Finishes template parsing.
+//	 *
+//	 * @return array(prolog, epilog)
+//	 */
+//	public function finalize()
+//	{
+//		if (!$this->isUsed) {
+//			return array();
+//		}
+//
+//		return array(
+//			get_called_class() . '::validateTemplateParams($template);',
+//			NULL
+//		);
+//	}
 
 
 //
