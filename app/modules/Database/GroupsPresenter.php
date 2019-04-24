@@ -27,6 +27,7 @@ use Nette\Security\Passwords;
 use Nette\Utils\Paginator;
 use Nette\Utils\Random;
 use Nextras\Datagrid\Datagrid;
+use PdfResponse\PdfResponse;
 
 /**
  * Class GroupsPresenter
@@ -711,11 +712,13 @@ class GroupsPresenter extends DatabaseBasePresenter
 	}
 
 
-	/**
-	 * Vykreslené PDF potvrzení platby
-	 *
-	 * @param null $id
-	 */
+    /**
+     * Vykreslené PDF potvrzení platby
+     *
+     * @param int|null $id
+     *
+     * @throws \Nette\Application\AbortException
+     */
 	public function renderPayment($id = null)
 	{
 
@@ -728,19 +731,17 @@ class GroupsPresenter extends DatabaseBasePresenter
 			$conditions['id'] = $id;
 		}
 
-		/** @var ICollection $collection */
+
 		$collection = $this->repository->findBy($conditions);
 
 		$template = $this->createTemplate();
-		$template->setFile($this->context->expand("%appDir%/ModuleDatabase/templates/Groups/payment.latte"));
+		$template->setFile($this->context->expand("%appDir%/modules/Database/templates/Groups/payment.latte"));
 
-		$list = $collection->fetchAll();
-		$template->list = $list;
-		//$this->template->list = $list;
+		$template->list = $collection;
 
-		$pdf = new PdfResponse($template);
+		$pdf = new PdfResponse((string) $template);
 		$pdf->pageFormat = 'A5';
-//		$pdf->pageOrientaion = PdfResponse::ORIENTATION_LANDSCAPE;
+		// $pdf->pageOrientaion = PdfResponse::ORIENTATION_LANDSCAPE;
 		$this->sendResponse($pdf);
 	}
 
