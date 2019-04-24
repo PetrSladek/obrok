@@ -10,7 +10,6 @@
 		table td,
 		table th {
 			text-align: left;
-			padding: 1px 6px;
 		}
 		table tr.boss { background: #cccccc; }
 
@@ -119,7 +118,7 @@
 		<tr>
 			<td style="text-align: left">
 				<h1>
-					<em>#{$group->id}</em> {$group->name}<br /><small>({$group->city} | {$group->region})</small>
+					<em>#{$group->id}</em> {$group->name}<br /><small>({$group->city})</small>
 				</h1>
 			</td>
 			<td style="text-align: right">
@@ -160,6 +159,8 @@
 		{$group->boss->getFullName()}, vedoucí skupiny {$group->name}
 		{/if}
 	</p>
+
+	<pagebreak />
 
 {/foreach}
 </body>

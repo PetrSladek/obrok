@@ -740,7 +740,7 @@ class GroupsPresenter extends DatabaseBasePresenter
 		$template->list = $collection;
 
 		$pdf = new PdfResponse((string) $template);
-		$pdf->pageFormat = 'A5';
+		$pdf->pageFormat = 'A4';
 		// $pdf->pageOrientaion = PdfResponse::ORIENTATION_LANDSCAPE;
 		$this->sendResponse($pdf);
 	}
