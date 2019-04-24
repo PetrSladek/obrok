@@ -23,7 +23,8 @@
 		"vlucas/phpdotenv": "^2.5",
 		"league/csv": "^9.1",
       	"ext-json": "*",
-		"phpoffice/phpspreadsheet": "^1.6"
+		"phpoffice/phpspreadsheet": "^1.6",
+		"jkuchar/pdfresponse": "dev-master"
     },
 	"require-dev": {
 		"nette/tester": "~2.0"
