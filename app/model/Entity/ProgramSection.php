@@ -14,6 +14,7 @@ use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\Table;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\OneToMany;
+use Doctrine\ORM\Mapping\OrderBy;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\ManyToMany;
 use Doctrine\ORM\Mapping\JoinColumn;
@@ -53,7 +54,8 @@ class ProgramSection
 	/**
 	 * Programy v teto kategorii
 	 * @OneToMany(targetEntity="Program", mappedBy="section", cascade={"persist"})
-	 * @var Participant[]|ArrayCollection
+     * @OrderBy({"start" = "ASC"})
+	 * @var Program[]|ArrayCollection
 	 **/
 	private $programs;
 
