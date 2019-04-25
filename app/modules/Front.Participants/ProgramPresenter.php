@@ -62,13 +62,14 @@ class ProgramPresenter extends ParticipantAuthBasePresenter
 	}
 
 
-	/**
-	 * Příkaz smazání programu učastníkovi
-	 *
-	 * @param $programId
-	 *
-	 * @throws \Nette\Application\BadRequestException
-	 */
+    /**
+     * Příkaz smazání programu učastníkovi
+     *
+     * @param $programId
+     *
+     * @throws \Nette\Application\AbortException
+     * @throws \Nette\Application\BadRequestException
+     */
 	public function handleUnattendeeProgram($programId)
 	{
 		if (!$this->openRegistrationProgram)
@@ -90,11 +91,13 @@ class ProgramPresenter extends ParticipantAuthBasePresenter
 	}
 
 
-	/**
-	 * Přidání programu učastníkovi
-	 *
-	 * @param $programId
-	 */
+    /**
+     * Přidání programu učastníkovi
+     *
+     * @param $programId
+     * @throws \Nette\Application\AbortException
+     * @throws \Nette\Application\BadRequestException
+     */
 	public function handleAttendeeProgram($programId)
 	{
 		if (!$this->openRegistrationProgram)
@@ -110,7 +113,10 @@ class ProgramPresenter extends ParticipantAuthBasePresenter
 		}
 
 		try
-		{
+        {
+            try
+            {
+                $this->em->getConnection()->beginTransaction();
 //			// ma uz zaregistrovana 3 vapra, ale zadne z nich neni sport
 //			if ($program->isVapro())
 //			{
@@ -147,25 +153,30 @@ class ProgramPresenter extends ParticipantAuthBasePresenter
 //				}
 //			}
 
-			if ($this->me->hasOtherProgramInTime($program))
-			{
-				$otherProgram = $this->me->findOtherProgramInTime($program);
-				$this->me->unattendeeProgram($otherProgram);
-			}
+                if ($this->me->hasOtherProgramInTime($program)) {
+                    $otherProgram = $this->me->findOtherProgramInTime($program);
+                    $this->me->unattendeeProgram($otherProgram);
+                }
 
-			if ($this->me->hasOtherProgramInSection($program))
-			{
-				$otherProgram = $this->me->findOtherProgramInSection($program);
-				$this->me->unattendeeProgram($otherProgram);
-			}
+                if ($this->me->hasOtherProgramInSection($program)) {
+                    $otherProgram = $this->me->findOtherProgramInSection($program);
+                    $this->me->unattendeeProgram($otherProgram);
+                }
 
-			$this->me->attendeeProgram($program);
-			$this->em->flush();
-		}
+                $this->me->attendeeProgram($program);
+                $this->em->flush();
+                $this->em->getConnection()->commit();
+            }
+            catch (\Exception $e)
+            {
+                $this->em->getConnection()->rollBack();
+                throw $e;
+            }
+        }
 		catch (\Exception $e)
-		{
-			$this->flashMessage($e->getMessage(), 'danger');
-		}
+        {
+            $this->flashMessage($e->getMessage(), 'danger');
+        }
 
 		$this->isAjax() ? $this->redrawControl() : $this->redirect('this');
 	}
