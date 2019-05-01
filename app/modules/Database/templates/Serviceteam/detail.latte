@@ -213,10 +213,20 @@
 								</td>
 							</tr>*}
 							<tr>
-								<td>Příjezd: <strong>{$item->getArriveDateTitle()}</strong></td>
+								<td>
+									<div n:class="$acl->edit ? ajax-edit">
+										<div class="ajax-edit-val">{snippet arriveDate}Příjezd: <strong>{$item->getArriveDateTitle()}</strong>{/snippet}</div>
+										<div class="ajax-edit-target" n:if="$acl->edit">{input arriveDate class=>'form-control'}</div>
+									</div>
+								</td>
 							</tr>
 							<tr>
-								<td>Odjezd: <strong>{$item->getDepartureDateTitle()}</strong></td>
+								<td>
+									<div n:class="$acl->edit ? ajax-edit">
+										<div class="ajax-edit-val">{snippet departureDate}Odjezd: <strong>{$item->getDepartureDateTitle()}</strong>{/snippet}</div>
+										<div class="ajax-edit-target" n:if="$acl->edit">{input departureDate class=>'form-control'}</div>
+									</div>
+								</td>
 							</tr>
 							<tr>
 								<td>
