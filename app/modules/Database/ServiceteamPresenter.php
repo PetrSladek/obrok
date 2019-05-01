@@ -464,10 +464,10 @@ class ServiceteamPresenter extends DatabaseBasePresenter
             ->checkDefaultValue(false)
 			->setDefaultValue($this->item && $this->item->getArriveDate() ? $this->item->getArriveDate()->format('Y-m-d') : null)
 			->setRequired(true);
-//		$frm->addSelect('departureDate', 'Odjezd:', Serviceteam::DEPARTURE_DATES)
-//            ->checkDefaultValue(false)
-//			->setDefaultValue($this->item && $this->item->getDepartureDate() ? $this->item->getDepartureDate()->format('Y-m-d') : null)
-//			->setRequired(true);
+		$frm->addSelect('departureDate', 'Odjezd:', Serviceteam::DEPARTURE_DATES)
+            ->checkDefaultValue(false)
+			->setDefaultValue($this->item && $this->item->getDepartureDate() ? $this->item->getDepartureDate()->format('Y-m-d') : null)
+			->setRequired(true);
 
 		$frm->addGroup('Přihlášení');
 //		$frm->addText('skautisPersonId', 'Skautis PersonID')

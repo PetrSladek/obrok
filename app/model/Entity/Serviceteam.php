@@ -187,18 +187,33 @@ class Serviceteam extends Person
 	 * Výběr datumu příjezdu
 	 */
 	const ARRIVE_DATES = [
-		'2019-05-20' => '20.5. pondělí - nadšenec',
-        '2019-05-21' => '21.5. úterý - stavěč',
-		'2019-05-22' => '22.5. středa - servisák',
+//		'2019-05-20' => '20.5. pondělí - nadšenec',
+//        '2019-05-21' => '21.5. úterý - stavěč',
+//		'2019-05-22' => '22.5. středa - servisák',
+
+        '2019-05-19' => '19.5. neděle',
+        '2019-05-20' => '20.5. pondělí',
+        '2019-05-21' => '21.5. úterý',
+        '2019-05-22' => '22.5. středa',
+        '2019-05-23' => '23.5. čtvrtek',
+        '2019-05-24' => '24.5. pátek',
 	];
+
 
 	/**
 	 * Výběr datumu odjezdu
 	 */
 	const DEPARTURE_DATES = [
-		'2019-05-26' => '26.5. neděle',
-//		'2019-05-27' => '27.5. pondělí',
+//		'2019-05-26' => '26.5. neděle',
+
+        '2019-05-23' => '23.5. čtvrtek',
+        '2019-05-24' => '24.5. pátek',
+        '2019-05-25' => '25.5. sobota',
+        '2019-05-26' => '26.5. neděle'
 	];
+
+
+
 
 	/**
 	 * Tym do ktereho spada
