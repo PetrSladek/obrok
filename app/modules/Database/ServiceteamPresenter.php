@@ -526,6 +526,7 @@ class ServiceteamPresenter extends DatabaseBasePresenter
 		$values->arriveDate = isset($values->arriveDate) ? new \DateTimeImmutable($values->arriveDate) : null;
 		$values->departureDate = isset($values->departureDate) ? new \DateTimeImmutable($values->departureDate) : null;
 
+
 		foreach ($values as $key => $value)
 		{
 			if ($key == 'workgroup')
@@ -578,6 +579,17 @@ class ServiceteamPresenter extends DatabaseBasePresenter
 				$val = $frm['team']->getValue();
 				$this->item->team = $val ? $this->teams->find($val) : null;
 				break;
+
+            case 'arriveDate':
+				$val = $frm['arriveDate']->getValue();
+				$this->item->setArriveDate($val ? new \DateTimeImmutable($val) : null);
+				break;
+
+            case 'departureDate':
+                $val = $frm['departureDate']->getValue();
+                $this->item->setDepartureDate($val ? new \DateTimeImmutable($val) : null);
+                break;
+
 			default:
 				foreach ($data as $key => $val)
 				{

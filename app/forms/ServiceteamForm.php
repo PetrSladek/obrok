@@ -278,7 +278,7 @@ class ServiceteamForm extends Control
 		}
 
 		$values->arriveDate = $values->arriveDate ? new \DateTimeImmutable($values->arriveDate) : null;
-		$values->departureDate = $values->departureDate ? new \DateTimeImmutable($values->departureDate) : null;
+//		$values->departureDate = $values->departureDate ? new \DateTimeImmutable($values->departureDate) : null;
 
 		// naplnime data
 		foreach ($values as $key => $value)
