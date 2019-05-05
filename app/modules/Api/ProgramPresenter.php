@@ -123,5 +123,15 @@ class ProgramPresenter extends \Nette\Application\UI\Presenter
         }
     }
 
+    /**
+     * @throws \Nette\Application\AbortException
+     */
+    public function actionSections()
+    {
+        // vytahnu vsechny sekce, aby pak nebyli jako proxy objecty
+        $sections = $this->sectionRepository->fetch(new ProgramsSectionsQuery());
+        $sections = $sections->toArray();
 
+        $this->sendJson($sections);
+    }
 }
