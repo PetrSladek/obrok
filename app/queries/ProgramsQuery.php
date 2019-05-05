@@ -10,6 +10,7 @@ use App\Model\Entity\Serviceteam;
 use App\Model\Entity\Team;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
+use Kdyby\Doctrine\Dql\Join;
 use Kdyby\Doctrine\QueryObject;
 use Kdyby\Persistence\Queryable;
 use Nette\Utils\DateTime;
@@ -46,7 +47,7 @@ class ProgramsQuery extends BaseQuery
 	/**
 	 * Je v jednom z techto sekci
 	 *
-	 * @param ProgramSection[]|array $sections
+	 * @param ProgramSection[]|int[]|array $sections
 	 *
 	 * @return $this
 	 */
@@ -124,8 +125,21 @@ class ProgramsQuery extends BaseQuery
 		return $this;
 	}
 
+    /**
+     * @param $participantId
+     */
+    public function forAttendee($participantId)
+    {
+        $this->filter[] = function (QueryBuilder $qb) use ($participantId)
+        {
+            $qb->leftJoin('p.attendees', 'a')
+                ->andWhere('a.id = :id')
+                ->setParameter('id', $participantId);
+        };
+    }
 
-	/**
+
+    /**
 	 * @param Queryable $repository
 	 *
 	 * @return \Kdyby\Doctrine\QueryBuilder

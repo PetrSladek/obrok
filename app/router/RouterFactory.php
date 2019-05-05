@@ -36,6 +36,9 @@ class RouterFactory
 		$router = new RouteList();
 		$router[] = new Route('index.php', 'Front:Login:default', Route::ONE_WAY);
 
+        $router[] = $apiRouter = new RouteList('Api');
+        $apiRouter[] = new Route('api/<presenter>/<action>[/<id>]', 'Dashboard:default');
+
 		$router[] = $databaseRouter = new RouteList('Database');
 		$databaseRouter[] = new Route('database/<presenter>/<action>[/<id>]', 'Dashboard:default');
 

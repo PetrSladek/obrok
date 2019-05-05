@@ -28,7 +28,7 @@ use Nette\NotImplementedException;
  * @property string    $title
  * @property string    $subTitle
  */
-class ProgramSection
+class ProgramSection implements \JsonSerializable
 {
 
 	use \Kdyby\Doctrine\Entities\Attributes\Identifier; // Using Identifier trait for id column
@@ -75,5 +75,11 @@ class ProgramSection
 	{
 		return $this->programs->toArray();
 	}
+
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
+    }
+
 
 }

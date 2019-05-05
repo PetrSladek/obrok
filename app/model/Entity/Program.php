@@ -39,7 +39,7 @@ use Nette\NotImplementedException;
  *
  * @property ProgramSection $section
  */
-class Program
+class Program implements \JsonSerializable
 {
 
 	use \Kdyby\Doctrine\Entities\Attributes\Identifier; // Using Identifier trait for id column
@@ -121,7 +121,7 @@ class Program
 
 
 	/**
-	 * @return mixed
+	 * @return int
 	 */
 	public function getOccupied()
 	{
@@ -196,4 +196,20 @@ class Program
 //		return $this->isVapro() && preg_match('/sport/i', $this->name);
 //	}
 
+    /**
+     * Specify data which should be serialized to JSON
+     * @link https://php.net/manual/en/jsonserializable.jsonserialize.php
+     * @return mixed data which can be serialized by <b>json_encode</b>,
+     * which is a value of any type other than a resource.
+     * @since 5.4.0
+     */
+    public function jsonSerialize()
+    {
+        $data = get_object_vars($this);
+        $data['occupied'] = $this->getOccupied();
+        $data['isFull'] = $this->isFull();
+
+//        $data['section'] = $this->getSection();
+        return $data;
+    }
 }

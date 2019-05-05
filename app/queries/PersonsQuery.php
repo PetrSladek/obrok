@@ -164,6 +164,24 @@ class PersonsQuery extends BaseQuery
 		return $this;
 	}
 
+    /**
+     * Jen s skautisID
+     *
+     * @param $skautisUserId
+     *
+     * @return $this
+     */
+    public function bySkautisUserId($skautisUserId)
+    {
+        $this->filter[] = function (QueryBuilder $qb) use ($skautisUserId)
+        {
+            $qb->andWhere('p.skautisUserId = :skautisUserId')
+                ->setParameter('skautisUserId', $skautisUserId);
+        };
+
+        return $this;
+    }
+
 	/**
 	 * Jen vybraná ID
 	 *
