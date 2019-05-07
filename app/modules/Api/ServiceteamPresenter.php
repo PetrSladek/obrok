@@ -46,7 +46,7 @@ class ServiceteamPresenter extends \Nette\Application\UI\Presenter
      * @param null $sectionId
      * @throws \Nette\Application\AbortException
      */
-	public function actionAvatars()
+	public function actionAvatars($onlyFill = 0)
 	{
 		set_time_limit (0);
 	    $query = new ServiceteamQuery();
@@ -56,9 +56,14 @@ class ServiceteamPresenter extends \Nette\Application\UI\Presenter
         $avatars = [];
         foreach($serviceteams as $serviceteam)
         {
+		if ($onlyFill && !$serviceteam->getAvatar())
+		{
+			continue;
+		}
+		
           $avatars[] = [
             'id' => $serviceteam->getId(),
-            'url' => $serviceteam->getAvatar() ? 'https://registrace.obrok19.cz/' . $this->images->getImageUrl($serviceteam->getAvatar(), 1024, 1024, Image::EXACT, $serviceteam->getAvatarCrop()) : null,
+            'url' => $serviceteam->getAvatar() ? 'https://registrace.obrok19.cz' . $this->images->getImageUrl($serviceteam->getAvatar(), 1024, 1024, Image::EXACT, $serviceteam->getAvatarCrop()) : null,
           ];
         }
       
