@@ -58,7 +58,7 @@ class ServiceteamPresenter extends \Nette\Application\UI\Presenter
         {
           $avatars[] = [
             'id' => $serviceteam->getId(),
-            'url' => $serviceteam->getAvatar() ? $this->images->getImageUrl($serviceteam->getAvatar(), 1024, 1024, Image::EXACT, $serviceteam->getAvatarCrop()) : '',
+            'url' => $serviceteam->getAvatar() ? 'https://registrace.obrok19.cz/' . $this->images->getImageUrl($serviceteam->getAvatar(), 1024, 1024, Image::EXACT, $serviceteam->getAvatarCrop()) : null,
           ];
         }
       
