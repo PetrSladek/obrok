@@ -48,6 +48,7 @@ class ServiceteamPresenter extends \Nette\Application\UI\Presenter
      */
 	public function actionAvatars()
 	{
+		set_time_limit (0);
 	    $query = new ServiceteamQuery();
 
         $serviceteams = $this->serviceteamRepository->fetch($query);
