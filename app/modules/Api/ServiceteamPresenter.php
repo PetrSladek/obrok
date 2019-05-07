@@ -21,7 +21,6 @@ use App\Services\ImageService;
 use Nette\Utils\AssertionException;
 use Nette\Utils\DateTime;
 use Nette\Utils\Html;
-use App\Services\ImageService;
 use Nette\Utils\Image;
 
 /**
