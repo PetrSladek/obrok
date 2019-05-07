@@ -34,10 +34,10 @@ class ServiceteamPresenter extends \Nette\Application\UI\Presenter
      * @var ServiceteamRepository
      * @inject
      */
-    public $serviceteamRepostitory;
+    public $serviceteamRepository;
     
-    /** @var ImageService @inject */
-	  public $images;
+    	/** @var ImageService @inject */
+	public $images;
 
    
     /**
