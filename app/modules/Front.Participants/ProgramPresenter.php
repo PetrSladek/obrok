@@ -43,6 +43,7 @@ class ProgramPresenter extends ParticipantAuthBasePresenter
 	public function renderDefault()
 	{
 		$query = (new ProgramsSectionsQuery())
+            ->onlyForRegistration()
 			->withPrograms()
 			->withAttendies();
 		$sections = $this->sections->fetch($query);

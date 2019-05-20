@@ -5,6 +5,7 @@ namespace App\Query;
 use App\Model\Entity\Participant;
 use App\Model\Entity\Program;
 use App\Model\Entity\ProgramSection;
+use Doctrine\ORM\QueryBuilder;
 use Kdyby\Persistence\Queryable;
 
 /**
@@ -39,6 +40,22 @@ class ProgramsSectionsQuery extends BaseQuery
 
 		return $this;
 	}
+
+    /**
+     * Připojí načtení programů
+     *
+     * @return $this
+     */
+    public function onlyForRegistration()
+    {
+        $this->filter[__METHOD__] = function (QueryBuilder $qb)
+        {
+            $qb->andWhere('s.forRegistration = 1');
+        };
+
+        return $this;
+    }
+
 
 	/**
 	 * Připojí načtení proxy attendies

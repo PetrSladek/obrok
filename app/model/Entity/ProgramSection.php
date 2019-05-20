@@ -51,7 +51,15 @@ class ProgramSection implements \JsonSerializable
 	 */
 	protected $subTitle;
 
-	/**
+    /**
+     * Zobrazuje se programova sekce v registraci?
+     *
+     * @Column(type="boolean")
+     */
+    protected $forRegistration = true;
+
+
+    /**
 	 * Programy v teto kategorii
 	 * @OneToMany(targetEntity="Program", mappedBy="section", cascade={"persist"})
      * @OrderBy({"start" = "ASC"})
