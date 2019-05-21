@@ -682,11 +682,12 @@ class GroupsPresenter extends DatabaseBasePresenter
 	}
 
 
-	/**
-	 * Vykreslení PDF potvrzení příjezdu
-	 *
-	 * @param null $id
-	 */
+    /**
+     * Vykreslení PDF potvrzení příjezdu
+     *
+     * @param null $id
+     * @throws \Nette\Application\AbortException
+     */
 	public function renderConfirmations($id = null)
 	{
 
@@ -702,10 +703,9 @@ class GroupsPresenter extends DatabaseBasePresenter
 		$collection = $this->repository->findBy($conditions);
 
 		$template = $this->createTemplate();
-		$template->setFile($this->context->expand("%appDir%/ModuleDatabase/templates/Groups/confirmations.latte"));
+        $template->setFile($this->context->expand("%appDir%/modules/Database/templates/Groups/confirmations.latte"));
 
-		$list = $collection->fetchAll();
-		$template->list = $list;
+        $template->list = $collection;
 
 //        $this->template->list = $list;
 		$this->sendResponse(new PdfResponse($template));
