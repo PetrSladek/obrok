@@ -67,7 +67,7 @@ class ProgramPresenter extends \Nette\Application\UI\Presenter
         }
 
         $programs = $this->programRepository->fetch($query);
-        $programs->applySorting(['start' => 'ASC']);
+        // $programs->applySorting(['start' => 'ASC']);
         $programs = $programs->toArray();
 
         $this->sendJson($programs);
