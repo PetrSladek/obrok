@@ -403,16 +403,16 @@ class ServiceteamPresenter extends DatabaseBasePresenter
 
         $frm->addCheckboxList('experience', 'Zajímá mě:', Serviceteam::EXPIRIENCES)
             ->checkDefaultValue(false)
-            ->setDefaultValue($this->item->getExperience() ?: []);
+            ->setDefaultValue($this->item && $this->item->getExperience() ? $this->item->getExperience() : []);
         $frm->addText('experienceNote', 'Jiné')
-            ->setDefaultValue($this->item->getExperienceNote())
+            ->setDefaultValue($this->item && $this->item->getExperienceNote() ? $this->item->getExperienceNote() : null)
             ->setAttribute('class', 'input-xxlarge');
         $frm->addCheckbox('speakEnglish', "Domluvím se anglicky")
-            ->setDefaultValue($this->item->isSpeakEnglish());
+            ->setDefaultValue($this->item && $this->item->isSpeakEnglish() ? $this->item->isSpeakEnglish() : false);
 
         $frm->addGroup('Zájmy a záliby');
         $frm->addTextArea('hobbies', 'Umíš něco, co by chtěl umět každý (žonglovat, pískat na prsty, triky s kartami, skákat šipku,..)? Nebo něco, co tě moc baví a co si sám troufáš ostatní učit (nějaký sport, divadlo, hudba, příroda či cokoli dalšího)? Pokud máš nějaký instruktorský kurz (horolezectví, plavčík, vodní turistika,..), prosím, i tohle nám napiš, abychom mohli udělat program, který bude bavit i tebe!! Každá tvá superschopnost nás zajímá!!')
-            ->setDefaultValue($this->item->getHobbies())
+            ->setDefaultValue($this->item && $this->item->getHobbies() ? $this->item->getHobbies() : null)
             ->setAttribute('class', 'input-xxlarge')
             ->setHtmlAttribute('rows', 10);
 
@@ -420,15 +420,15 @@ class ServiceteamPresenter extends DatabaseBasePresenter
 
         $frm->addSelect('diet', 'Strava', Serviceteam::DIET)
             ->checkDefaultValue(false)
-            ->setDefaultValue($this->item->getDiet() ?: null);
+            ->setDefaultValue($this->item && $this->item->getDiet() ? $this->item->getDiet() : null);
 
         $frm->addCheckboxList('dietSpecification', '', Serviceteam::DIET_SPECIFICATION)
             ->checkDefaultValue(false)
-            ->setDefaultValue($this->item->getDietSpecification() ?: []);
+            ->setDefaultValue($this->item && $this->item->getDietSpecification() ? $this->item->getDietSpecification() : []);
 
         $frm->addText('dietNote', '')
             ->setAttribute('placeholder', 'Jiné omezení')
-            ->setDefaultValue($this->item->getDietNote());
+            ->setDefaultValue($this->item && $this->item->getDietNote() ? $this->item->getDietNote() : null);
 
 
 
