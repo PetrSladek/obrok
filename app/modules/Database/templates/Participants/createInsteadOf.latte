@@ -1,0 +1,27 @@
+{block content}
+<div class="container">
+
+        <h1>
+            Přidat nového účastníka
+            <small>
+            místo
+            </small>
+
+            {if $item->nickName}
+                {$item->nickName} <small>/{$item->firstName} {$item->lastName}/</small>
+            {else}
+                {$item->firstName} {$item->lastName}
+            {/if}
+        </h1>
+        <p>
+           Přidá nového učastnía do skupiny a původního vyřadí. Novému připadne <strong>platba</strong> i <strong>zaregistrovaný program</strong> původního účastníka
+        </p>
+
+    <div class="row">
+        <div class="col-md-8 col-md-offset-0">
+            {control frmCreateInsteadOf}
+        </div>
+    </div>
+
+</div>
+{/block}

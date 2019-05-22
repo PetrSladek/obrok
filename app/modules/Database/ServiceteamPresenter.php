@@ -478,7 +478,7 @@ class ServiceteamPresenter extends DatabaseBasePresenter
 		$frm->addText('skautisUserId', 'Skautis UserID')
 			->setRequired(false)
 			->addRule(Form::INTEGER)
-			->setDefaultValue($this->item ? $this->item->getSkautisUserId() : 1);
+			->setDefaultValue($this->item ? $this->item->getSkautisUserId() : 0);
 
 		$frm->addSubmit('send', 'Uložit')->setAttribute('class', 'btn btn-success btn-lg btn-block');
 		$frm->onSuccess[] = [$this, 'frmEditSuccess'];

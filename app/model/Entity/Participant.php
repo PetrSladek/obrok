@@ -232,8 +232,6 @@ class Participant extends Person
 			$this->confirmed = true;
 		}
 
-if ($this->group)
-
 		if ($this->group)
 		{
             $this->group->updateStatus();

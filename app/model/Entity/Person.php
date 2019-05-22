@@ -169,13 +169,13 @@ abstract class Person
 	 * Skautis User ID
 	 * @Column(type="integer", nullable=true)
 	 */
-	protected $skautisUserId;
+	protected $skautisUserId = 0;
 
 	/**
 	 * Skautis Person ID
 	 * @Column(type="integer", nullable=true)
 	 */
-	protected $skautisPersonId;
+	protected $skautisPersonId = 0;
 
 	/**
 	 * Slouzi ke kratkodobmeu ulozeni hash pro prihlaseni z adminu pred redirectem

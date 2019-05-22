@@ -20,6 +20,7 @@
         <br /><small></small>
     {/if}
     <div class="pull-right text-right">
+        <a n:if="$acl->edit" class="btn btn-xs btn-default" href="{plink Participants:detail $row->id}">Otevřít</a>
         <a n:if="$acl->edit" class="btn btn-xs btn-default" href="{plink Participants:loginAs $row->id}">Přihlásit se</a>
     </div>
 </td>

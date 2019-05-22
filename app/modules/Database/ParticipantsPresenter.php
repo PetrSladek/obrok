@@ -419,6 +419,126 @@ class ParticipantsPresenter extends DatabaseBasePresenter
 
 
     /**
+     * Výměna učastníka za nového
+     *
+     * @param int $id
+     *
+     * @throws \Nette\Application\BadRequestException
+     */
+    public function actionCreateInsteadOf($id)
+    {
+
+        if (!$this->acl->edit)
+        {
+            $this->error('Nemáte oprávnění', IResponse::S401_UNAUTHORIZED);
+        }
+
+        if ($id)
+        {
+            $this->item = $this->repository->find($id);
+            if (!$this->item)
+            {
+                $this->error("Item not found");
+            }
+        }
+        $this->template->item = $this->item;
+    }
+
+
+    public function createComponentFrm()
+    {
+        $frm = new Form();
+        $frm->setAjax();
+
+        $frm->addGroup('Skupina');
+
+        $frm->addSelect('group', 'Skupina do které uživatel patří',
+            array_map(function (Group $data) {
+                return '#' . $data->getId() . ' ' . $data->getName();
+            }, $this->groups->findAssoc([], 'id')))
+            ->setDefaultValue($this->item ? $this->item->group->getId() : $this->getParameter('toGroup'))
+            ->setPrompt('- Vyberte skupinu -')
+            ->setRequired();
+
+        $frm->addGroup('Osobní informace');
+
+        $frm->addText('firstName', 'Jméno')
+            ->setDefaultValue($this->item ? $this->item->getFirstName() : null)
+            ->setRequired();
+        $frm->addText('lastName', 'Příjmení')
+            ->setDefaultValue($this->item ? $this->item->getLastName() : null)
+            ->setRequired();
+        $frm->addText('nickName', 'Přezdívka')
+            ->setDefaultValue($this->item ? $this->item->getNickName() : null);
+
+        $frm->addDatepicker('birthdate', 'Datum narození:')
+            ->setDefaultValue($this->item ? $this->item->getBirthdate()->format('j.n.Y') : null)
+            ->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat Datum narození nebo je ve špatném formátu (musí být dd.mm.yyyy)')
+            ->addRule(Form::RANGE, 'Podle data narození Vám 22.5.2019 ještě nebude 15 let (což porušuje podmínky účasti)', array(null, DateTime::from('22.5.2019')->modify('-15 years')))
+            ->addRule(Form::RANGE, 'Podle data narození Vám 22.5.2019 bude už více než 24 let (což porušuje podmínky účasti)', array(DateTime::from('22.5.2019')->modify('-25 years'), null));
+
+//            ->addRule(callback('Participant','validateAge'), 'Věk účastníka Obroku 2015 musí být od 15 do 24 let');
+
+        $frm->addRadioList('gender', 'Pohlaví', array(Person::GENDER_MALE => 'muž', Person::GENDER_FEMALE => 'žena'))
+            ->setDefaultValue($this->item ? $this->item->getGender() : null)
+            ->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat %label');
+
+        $frm->addGroup('Trvalé bydliště');
+        $frm->addText('addressStreet', 'Ulice a čp.')
+            ->setDefaultValue($this->item ? $this->item->getAddressStreet() : null)
+            ->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat %label');
+        $frm->addText('addressCity', 'Město')
+            ->setDefaultValue($this->item ? $this->item->getAddressCity() : null)
+            ->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat %label');
+        $frm->addText('addressPostcode', 'PSČ')
+            ->setDefaultValue($this->item ? $this->item->getAddressPostcode() : null)
+            ->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat %label');
+
+        $frm->addGroup('Kontaktní údaje');
+        $frm->addText('email', 'E-mail')
+            ->setDefaultValue($this->item ? $this->item->getEmail() : null)
+            ->setEmptyValue('@')
+            ->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat E-mail')
+            ->addRule(Form::EMAIL, 'E-mailová adresa není platná')
+            ->setAttribute('title', 'E-mail, který pravidelně vybíráš a můžem Tě na něm kontaktovat. Budou Ti chodit informace atd..')
+            ->setAttribute('data-placement', 'right');
+        $frm->addText('phone', 'Mobilní telefon')
+            ->setDefaultValue($this->item ? $this->item->getPhone() : null)
+            ->setEmptyValue('+420')
+            ->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat Mobilní telefon')
+            ->addRule([$frm, 'isPhoneNumber'], 'Telefonní číslo je ve špatném formátu')
+            ->setAttribute('title', 'Mobilní telefon, na kterém budeš k zastižení během celé akce')
+            ->setAttribute('data-placement', 'right');
+
+        $frm->addGroup('Zdravotní omezení');
+        $frm->addTextArea('health', 'Zdravotní omezení a alergie')
+            ->setOption('description', Html::el('')->setHtml('Pokud máte nějaký handicap a potřebujete více informací, může se kdykoliv ozvat zde: Ladislava Blažková <a href="mailto:ladkablazkova@gmail.com">ladkablazkova@gmail.com</a> | +420 728 120 498'))
+            ->setDefaultValue($this->item ? $this->item->getHealth() : null);
+
+        $frm->addCheckbox('admin', 'Administrátor skupiny')
+            ->setDefaultValue($this->item ? $this->item->isAdmin() : null);
+
+        $frm->addTextArea('noteInternal', 'Interní poznámka')
+            ->setDefaultValue($this->item ? $this->item->getNoteInternal() : null);
+
+        $frm->addGroup('Přihlášení');
+//		$frm->addText('skautisPersonId', 'Skautis PersonID')
+//			->setRequired(false)
+//			->addRule(Form::INTEGER)
+//			->setDefaultValue($this->item ? $this->item->skautisPersonId : null);
+
+        $frm->addText('skautisUserId', 'Skautis UserID')
+            ->setRequired(false)
+            ->addRule(Form::INTEGER)
+            ->setDefaultValue($this->item ? $this->item->getSkautisUserId() : 0);
+
+        $frm->addSubmit('send', 'Uložit')->setAttribute('class', 'btn btn-success btn-lg btn-block');
+
+        return $frm;
+    }
+
+
+    /**
      * Továrna na komponentu formuláře editace
      *
      * @return Form
@@ -427,98 +547,85 @@ class ParticipantsPresenter extends DatabaseBasePresenter
      */
 	public function createComponentFrmEdit()
 	{
-
-		$frm = new Form();
-		$frm->setAjax();
-
-		$frm->addGroup('Skupina');
-
-		$frm->addSelect('group', 'Skupina do které uživatel patří',
-            array_map(function (Group $data) {
-		        return '#' . $data->getId() . ' ' . $data->getName();
-            }, $this->groups->findAssoc([], 'id')))
-			->setDefaultValue($this->item ? $this->item->group->getId() : $this->getParameter('toGroup'))
-			->setPrompt('- Vyberte skupinu -')
-			->setRequired();
-
-		$frm->addGroup('Osobní informace');
-
-		$frm->addText('firstName', 'Jméno')
-			->setDefaultValue($this->item ? $this->item->getFirstName() : null)
-			->setRequired();
-		$frm->addText('lastName', 'Příjmení')
-			->setDefaultValue($this->item ? $this->item->getLastName() : null)
-			->setRequired();
-		$frm->addText('nickName', 'Přezdívka')
-			->setDefaultValue($this->item ? $this->item->getNickName() : null);
-
-		$frm->addDatepicker('birthdate', 'Datum narození:')
-			->setDefaultValue($this->item ? $this->item->getBirthdate()->format('j.n.Y') : null)
-			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat Datum narození nebo je ve špatném formátu (musí být dd.mm.yyyy)')
-            ->addRule(Form::RANGE, 'Podle data narození Vám 22.5.2019 ještě nebude 15 let (což porušuje podmínky účasti)', array(null, DateTime::from('22.5.2019')->modify('-15 years')))
-            ->addRule(Form::RANGE, 'Podle data narození Vám 22.5.2019 bude už více než 24 let (což porušuje podmínky účasti)', array(DateTime::from('22.5.2019')->modify('-25 years'), null));
-
-//            ->addRule(callback('Participant','validateAge'), 'Věk účastníka Obroku 2015 musí být od 15 do 24 let');
-
-		$frm->addRadioList('gender', 'Pohlaví', array(Person::GENDER_MALE => 'muž', Person::GENDER_FEMALE => 'žena'))
-			->setDefaultValue($this->item ? $this->item->getGender() : null)
-			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat %label');
-
-		$frm->addGroup('Trvalé bydliště');
-		$frm->addText('addressStreet', 'Ulice a čp.')
-			->setDefaultValue($this->item ? $this->item->getAddressStreet() : null)
-			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat %label');
-		$frm->addText('addressCity', 'Město')
-			->setDefaultValue($this->item ? $this->item->getAddressCity() : null)
-			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat %label');
-		$frm->addText('addressPostcode', 'PSČ')
-			->setDefaultValue($this->item ? $this->item->getAddressPostcode() : null)
-			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat %label');
-
-		$frm->addGroup('Kontaktní údaje');
-		$frm->addText('email', 'E-mail')
-			->setDefaultValue($this->item ? $this->item->getEmail() : null)
-			->setEmptyValue('@')
-			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat E-mail')
-			->addRule(Form::EMAIL, 'E-mailová adresa není platná')
-			->setAttribute('title', 'E-mail, který pravidelně vybíráš a můžem Tě na něm kontaktovat. Budou Ti chodit informace atd..')
-			->setAttribute('data-placement', 'right');
-		$frm->addText('phone', 'Mobilní telefon')
-			->setDefaultValue($this->item ? $this->item->getPhone() : null)
-			->setEmptyValue('+420')
-			->addRule(Form::FILLED, 'Zapoměl(a) jsi zadat Mobilní telefon')
-			->addRule([$frm, 'isPhoneNumber'], 'Telefonní číslo je ve špatném formátu')
-			->setAttribute('title', 'Mobilní telefon, na kterém budeš k zastižení během celé akce')
-			->setAttribute('data-placement', 'right');
-
-		$frm->addGroup('Zdravotní omezení');
-		$frm->addTextArea('health', 'Zdravotní omezení a alergie')
-            ->setOption('description', Html::el('')->setHtml('Pokud máte nějaký handicap a potřebujete více informací, může se kdykoliv ozvat zde: Ladislava Blažková <a href="mailto:ladkablazkova@gmail.com">ladkablazkova@gmail.com</a> | +420 728 120 498'))
-			->setDefaultValue($this->item ? $this->item->getHealth() : null);
-
-		$frm->addCheckbox('admin', 'Administrátor skupiny')
-			->setDefaultValue($this->item ? $this->item->isAdmin() : null);
-
-		$frm->addTextArea('noteInternal', 'Interní poznámka')
-			->setDefaultValue($this->item ? $this->item->getNoteInternal() : null);
-
-		$frm->addGroup('Přihlášení');
-//		$frm->addText('skautisPersonId', 'Skautis PersonID')
-//			->setRequired(false)
-//			->addRule(Form::INTEGER)
-//			->setDefaultValue($this->item ? $this->item->skautisPersonId : null);
-
-		$frm->addText('skautisUserId', 'Skautis UserID')
-			->setRequired(false)
-			->addRule(Form::INTEGER)
-			->setDefaultValue($this->item ? $this->item->getSkautisUserId() : null);
-
-		$frm->addSubmit('send', 'Uložit')->setAttribute('class', 'btn btn-success btn-lg btn-block');
+        $frm = $this->createComponentFrm();
 
 		$frm->onSuccess[] = [$this, 'frmEditSubmitted'];
 
 		return $frm;
 	}
+
+    /**
+     * Továrna na komponentu formuláře přidáné nového uřastníka místo jiného učastníka
+     *
+     * @return Form
+     *
+     * @throws \Exception
+     */
+    public function createComponentFrmCreateInsteadOf()
+    {
+        $frm = $this->createComponentFrm();
+        $frm->setDefaults([], true);
+        /** @var BaseControl $control */
+        $control = $frm->getComponent('group');
+        $control->setDisabled(true);
+        $control->setDefaultValue($this->item->getGroup()->getId());
+
+        $control = $frm->getComponent('skautisUserId');
+        $control->setDefaultValue(0);
+
+        $frm->onSuccess[] = [$this, 'frmCreateInsteadOf'];
+
+        return $frm;
+    }
+
+
+    /**
+     * Akce po odeslání formuláře
+     *
+     * @param Form $frm
+     *
+     * @throws \Nette\Application\AbortException
+     */
+    public function frmCreateInsteadOf(Form $frm)
+    {
+        $values = $frm->getValues();
+
+        if (!$this->item)
+        {
+            $this->item = new Participant();
+            $this->em->persist($this->item);
+        }
+
+
+        $participant = new Participant();
+        foreach ($values as $key => $value)
+        {
+            $participant->$key = $value;
+        }
+
+        // skupinu od puvodniho ucastnika
+        $participant->setGroup($this->item->getGroup());
+        // ucast taky
+        $participant->setConfirmed($this->item->isConfirmed());
+        $this->item->setConfirmed(false);
+        // platbu taky
+        $participant->setPaid($this->item->isPaid());
+        $this->item->setPaid(false);
+
+        // převést program
+        foreach ($this->item->getPrograms() as $program)
+        {
+            $participant->attendeeProgramOverCapacity($program);
+            $this->item->unattendeeProgram($program);
+        }
+
+        $this->em->persist($participant);
+        $this->em->flush();
+
+        $this->flashMessage('Nový účastník úspěšně vytvořený a program i platba převedeny', 'success');
+        $this->redirect('detail', $this->item->getGroup()->getId());
+
+    }
 
 
     /**

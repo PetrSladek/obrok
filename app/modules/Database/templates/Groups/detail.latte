@@ -166,7 +166,11 @@
                                                     <i n:class="$participant->left ? ficon-flag-yellow : ficon-flag-gray"></i> Odjel
                                                 </a>
                                             </div>
-
+                                            <div>
+                                                <a class="btn btn-default btn-xs ajax" n:href="Participants:createInsteadOf $participant->id">
+                                                    <i></i> Vyměnit za novou osobu
+                                                </a>
+                                            </div>
                                         </td>
                                     </tr>
                                 {/define}
