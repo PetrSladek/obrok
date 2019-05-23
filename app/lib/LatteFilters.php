@@ -47,10 +47,10 @@ class LatteFilters
 	 */
 	public static function day(\DateTime $datetime)
 	{
-		$day = $datetime->format('N');
+		$day = (int) $datetime->format('N');
 		$days = ['Neděle', 'Pondělí', 'Úterý', 'Středa', 'Čtvrtek', 'Pátek', 'Sobota'];
 
-		return @$days[$day];
+		return $days[$day] ?? null;
 	}
 
 
