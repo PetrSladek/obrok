@@ -63,16 +63,31 @@ class ProgramsQuery extends BaseQuery
 
 
 
-	public function withoutKrinspiro()
-	{
-		$this->filter[] = function (QueryBuilder $qb)
-		{
-			$qb->andWhere('p.section != :krinspiro')->setParameter('krinspiro', ProgramSection::KRINSPIRO);
-		};
+//	public function withoutKrinspiro()
+//	{
+//		$this->filter[] = function (QueryBuilder $qb)
+//		{
+//			$qb->andWhere('p.section != :krinspiro')->setParameter('krinspiro', ProgramSection::KRINSPIRO);
+//		};
+//
+//		return $this;
+//	}
 
-		return $this;
-	}
+    /**
+     * Prida do selektu Sekci programu
+     *
+     * @return $this
+     */
+    public function withSection()
+    {
+        $this->select[] = function (QueryBuilder $qb)
+        {
+            $qb->addSelect('s')
+                ->leftJoin('p.section', 's');
+        };
 
+        return $this;
+    }
 
 	/**
 	 * Vyhleda podle jmena

@@ -68,7 +68,7 @@ class ProgramPresenter extends DatabaseBasePresenter
 		$grid->addColumn('time', 'Den a čas')->enableSort();
 
 		$grid->addColumn('name', 'Název')->enableSort();
-		$grid->addColumn('capacity', 'Obsazeno');//->enableSort();
+		$grid->addColumn('capacity', 'Obsazeno')->enableSort();
 
 		$grid->setFilterFormFactory(function ()
 		{
@@ -125,10 +125,26 @@ class ProgramPresenter extends DatabaseBasePresenter
 			{
 				$result->applyPaging($paginator->getOffset(), $paginator->getLength());
 			}
-//            if($sorting) {
-//                list($key, $val) = $sorting;
-//                $result->applySorting([$key => $val]);
-//            }
+            if($sorting)
+            {
+                list($column, $order) = $sorting;
+
+                // TODO capcaity by mohlo radit podle obsazenosti
+                if ($column == 'time')
+                {
+                    $column = 'p.start';
+                }
+                else if ($column == 'section')
+                {
+                    $column = 's.title';
+                }
+                else
+                {
+                    $column = 'p.' . $column;
+                }
+
+                $result->applySorting([$column => $order]);
+            }
 
 			return $result;
 		});
@@ -150,6 +166,7 @@ class ProgramPresenter extends DatabaseBasePresenter
 	public function getFilteredQuery($filter)
 	{
 		$query = new ProgramsQuery();
+		$query->withSection();
 
 		foreach ($filter as $key => $val)
 		{

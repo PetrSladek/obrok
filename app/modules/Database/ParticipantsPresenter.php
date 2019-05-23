@@ -708,11 +708,11 @@ class ParticipantsPresenter extends DatabaseBasePresenter
 		$grid->addCellsTemplate(__DIR__ . '/templates/Program/grid.cols.latte');
 		$grid->addCellsTemplate(__DIR__ . '/templates/Participants/programs.cols.latte');
 
-		$grid->addColumn('id', 'ID');
-		$grid->addColumn('section', 'Sekce');
-		$grid->addColumn('time', 'Den a čas');
-		$grid->addColumn('name', 'Název');
-		$grid->addColumn('capacity', 'Obsazeno');//->enableSort();
+		$grid->addColumn('id', 'ID')->enableSort();
+		$grid->addColumn('section', 'Sekce')->enableSort();
+		$grid->addColumn('time', 'Den a čas')->enableSort();
+		$grid->addColumn('name', 'Název')->enableSort();
+		$grid->addColumn('capacity', 'Obsazeno')->enableSort();
 		$grid->addColumn('registration', '');
 
 		$grid->setFilterFormFactory(function ()
@@ -749,7 +749,8 @@ class ParticipantsPresenter extends DatabaseBasePresenter
 		{
 
 			$query = new ProgramsQuery();
-			$query->withoutKrinspiro();
+			$query->withSection();
+//			$query->withoutKrinspiro();
 
 			foreach ($filter as $key => $val)
 			{
@@ -772,6 +773,27 @@ class ParticipantsPresenter extends DatabaseBasePresenter
 			}
 
 			$result = $this->repository->fetch($query);
+
+            if($sorting)
+            {
+                list($column, $order) = $sorting;
+
+                // TODO capcaity by mohlo radit podle obsazenosti
+                if ($column == 'time')
+                {
+                    $column = 'p.start';
+                }
+                else if ($column == 'section')
+                {
+                    $column = 's.title';
+                }
+                else
+                {
+                    $column = 'p.' . $column;
+                }
+
+                $result->applySorting([$column => $order]);
+            }
 
 			return $result;
 		});

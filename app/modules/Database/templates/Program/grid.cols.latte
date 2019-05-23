@@ -5,8 +5,8 @@
 </td>
 {/define}
 {define col-time}
-<td width="90">
-    {$row->start|day}
+<td width="100">
+    {$row->start|day} {$row->start->format('j.n.')}
     <br /><small>{$row->start->format('H:i')} - {$row->end->format('H:i')}</small>
 </td>
 {/define}
